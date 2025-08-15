@@ -25,7 +25,7 @@ const AdminRoutes: RouteObject[] = [
     children: [
       {
         index: true,
-        element: <OverviwSection />,  // Default /admin
+        element: <DevicesListSections />,  // Default /admin
       },
       {
         path: 'machines',

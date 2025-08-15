@@ -5,10 +5,10 @@ import {
   import type { MenuItem, UserProfile } from '@shared/side-navbar/types/MenuItem.types';
   
   export const AdminLayoutSideNavItems: MenuItem[] = [
-    { label: 'Overview', route: '/admin', icon: Home,
-      isActive: true, iconColor: 'var(--primary-color)', iconActiveColor: 'var(--primary-dark)' },
+    /* { label: 'Overview', route: '/admin', icon: Home,
+      isActive: true, iconColor: 'var(--primary-color)', iconActiveColor: 'var(--primary-dark)' }, */
   
-    { label: 'Machines', route: '/admin/machines', icon: WashingMachine,
+    { label: 'Machines', route: '/admin', icon: WashingMachine,
       iconColor: 'var(--success-color)', iconActiveColor: 'var(--success-dark)' },
   
     { label: 'Users', route: '/admin/users', icon: Users, badge: '12',
