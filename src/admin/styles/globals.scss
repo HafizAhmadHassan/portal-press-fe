@@ -1,0 +1,188 @@
+/* =========================================
+   Global design tokens + theming
+   – Supporta sia .darkMode che [data-theme="dark"]
+   ========================================= */
+
+/* Light theme (default) */
+:root,
+:root[data-theme="light"] {
+  /* Primary Colors */
+  --primary-color: #3b82f6;
+  --primary-light: #dbeafe;
+  --primary-dark: #1d4ed8;
+
+  --success-color: #10b981;
+  --success-light: #d1fae5;
+  --success-dark: #059669;
+
+  --warning-color: #f59e0b;
+  --warning-light: #fef3c7;
+  --warning-dark: #d97706;
+
+  --error-color: #ef4444;
+  --error-light: #fee2e2;
+  --error-dark: #dc2626;
+
+  --purple-color: #8b5cf6;
+  --purple-light: #ede9fe;
+  --purple-dark: #7c3aed;
+
+  --orange-color: #f97316;
+  --orange-light: #fed7aa;
+  --orange-dark: #ea580c;
+
+  /* Grays */
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+  --white: #ffffff;
+
+  /* Semantic */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9fafb;
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+  --text-on-primary: #ffffff; /* aggiunta sicura */
+  --border-color: #e5e7eb;
+
+  /* Layout */
+  --border-radius: 16px;
+  --border-radius-sm: 8px;
+  --border-radius-lg: 24px;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1),
+    0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.2);
+
+  /* Alias non invasivo per i moduli che usano --radius-md */
+  --radius-md: 12px;
+
+  /* =========================
+     Map tokens (LIGHT)
+     seppia lieve come richiesto
+     ========================= */
+  --map-hue: 0deg;
+  --map-saturation: 1.05;
+  --map-brightness: 1;
+  --map-contrast: 1;
+  --map-sepia: 0.15; /* un po’ di seppia */
+  --map-invert: 0;
+  --map-filter: sepia(var(--map-sepia)) hue-rotate(var(--map-hue))
+    saturate(var(--map-saturation)) brightness(var(--map-brightness))
+    contrast(var(--map-contrast)) invert(var(--map-invert));
+  --map-tint: var(--primary-color);
+  --map-tint-opacity: 0.12;
+}
+
+/* Dark theme */
+html[data-theme="dark"],
+.darkMode {
+  --gray-50: #1f2937;
+  --gray-100: #374151;
+  --gray-200: #4b5563;
+  --gray-300: #6b7280;
+  --gray-400: #9ca3af;
+  --gray-500: #d1d5db;
+  --gray-600: #e5e7eb;
+  --gray-700: #f3f4f6;
+  --gray-800: #f9fafb;
+  --gray-900: #ffffff;
+  --white: #111827;
+
+  --glass-bg: rgba(31, 41, 55, 0.85);
+  --glass-border: rgba(75, 85, 99, 0.2);
+
+  --bg-primary: #111827;
+  --bg-secondary: #1f2937;
+  --text-primary: #ffffff;
+  --text-secondary: #d1d5db;
+  --text-on-primary: #0b1220;
+  --border-color: #374151;
+
+  --primary-light: rgba(59, 130, 246, 0.1);
+  --success-light: rgba(16, 185, 129, 0.1);
+  --warning-light: rgba(245, 158, 11, 0.1);
+  --error-light: rgba(239, 68, 68, 0.1);
+  --purple-light: rgba(139, 92, 246, 0.1);
+  --orange-light: rgba(249, 115, 22, 0.1);
+
+  /* =========================
+     Map tokens (DARK)
+     blu tenue, niente seppia
+     ========================= */
+  --map-hue: 200deg; /* viraggio blu */
+  --map-saturation: 1.1;
+  --map-brightness: 0.92;
+  --map-contrast: 1.06;
+  --map-sepia: 0;
+  --map-invert: 0;
+  --map-filter: sepia(var(--map-sepia)) hue-rotate(var(--map-hue))
+    saturate(var(--map-saturation)) brightness(var(--map-brightness))
+    contrast(var(--map-contrast)) invert(var(--map-invert));
+  --map-tint: var(--primary-color);
+  --map-tint-opacity: 0.22;
+}
+
+/* Base reset (lasciati come nel tuo file) */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter",
+    sans-serif;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+/* Utilities */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}

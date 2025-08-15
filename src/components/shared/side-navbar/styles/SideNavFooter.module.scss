@@ -1,0 +1,12 @@
+@use '../../../../admin/styles/globals.scss';
+
+.footer {
+  border-top: 1px solid var(--sidenav-border);
+  padding: 1rem;
+  background: var(--sidenav-bg);
+}
+
+.customFooter {
+  padding: 1rem;
+  border-top: 1px solid var(--sidenav-border);
+}

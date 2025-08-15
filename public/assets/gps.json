@@ -1,0 +1,2162 @@
+[
+  {
+    "id": 553,
+    "codice": "1202",
+    "gps_x": "45.4303",
+    "gps_y": "11.795813",
+    "municipility": "RUBANO (PD)",
+    "customer": "etra",
+    "waste": "carta",
+    "address": "VIA PORDENONE"
+  },
+  {
+    "id": 554,
+    "codice": "1204",
+    "gps_x": "45.422954",
+    "gps_y": "11.813733",
+    "municipility": "RUBANO (PD)",
+    "customer": "etra",
+    "waste": "carta",
+    "address": "VIA TICINO SUP"
+  },
+  {
+    "id": 555,
+    "codice": "1206",
+    "gps_x": "45.425185",
+    "gps_y": "11.817853",
+    "municipility": "RUBANO (PD)",
+    "customer": "etra",
+    "waste": "carta",
+    "address": "VIALE BRENTA"
+  },
+  {
+    "id": 556,
+    "codice": "1209",
+    "gps_x": "45.429848",
+    "gps_y": "11.786985",
+    "municipility": "RUBANO (PD)",
+    "customer": "etra",
+    "waste": "carta",
+    "address": "VIA TRIESTE"
+  },
+  {
+    "id": 557,
+    "codice": "1213",
+    "gps_x": "45.427916",
+    "gps_y": "11.810757",
+    "municipility": "RUBANO (PD)",
+    "customer": "etra",
+    "waste": "carta",
+    "address": "VIA GRONCHI"
+  },
+  {
+    "id": 558,
+    "codice": "1215",
+    "gps_x": "45.43089",
+    "gps_y": "11.780787",
+    "municipility": "RUBANO (PD)",
+    "customer": "etra",
+    "waste": "carta",
+    "address": "VIA NARDI"
+  },
+  {
+    "id": 559,
+    "codice": "1216",
+    "gps_x": "45.420865",
+    "gps_y": "11.805895",
+    "municipility": "RUBANO (PD)",
+    "customer": "etra",
+    "waste": "carta",
+    "address": "VIA DANTE"
+  },
+  {
+    "id": 560,
+    "codice": "1217",
+    "gps_x": "45.426605",
+    "gps_y": "11.806892",
+    "municipility": "RUBANO (PD)",
+    "customer": "etra",
+    "waste": "carta",
+    "address": "VIA TOSCANA"
+  },
+  {
+    "id": 561,
+    "codice": "1301",
+    "gps_x": "45.427171",
+    "gps_y": "11.789426",
+    "municipility": "RUBANO (PD)",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA GENOVA"
+  },
+  {
+    "id": 562,
+    "codice": "1302",
+    "gps_x": "45.4303",
+    "gps_y": "11.795813",
+    "municipility": "RUBANO (PD)",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA PORDENONE"
+  },
+  {
+    "id": 563,
+    "codice": "1304",
+    "gps_x": "45.422954",
+    "gps_y": "11.813733",
+    "municipility": "RUBANO (PD)",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA TICINO SUP"
+  },
+  {
+    "id": 564,
+    "codice": "1306",
+    "gps_x": "45.425185",
+    "gps_y": "11.817853",
+    "municipility": "RUBANO (PD)",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIALE BRENTA"
+  },
+  {
+    "id": 565,
+    "codice": "1307",
+    "gps_x": "45.420709",
+    "gps_y": "11.824836",
+    "municipility": "RUBANO (PD)",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA ROLANDINO"
+  },
+  {
+    "id": 566,
+    "codice": "1308",
+    "gps_x": "45.422505",
+    "gps_y": "11.812698",
+    "municipility": "RUBANO (PD)",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA LAZIO"
+  },
+  {
+    "id": 567,
+    "codice": "1309",
+    "gps_x": "45.429848",
+    "gps_y": "11.786985",
+    "municipility": "RUBANO (PD)",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA TRIESTE"
+  },
+  {
+    "id": 568,
+    "codice": "1311",
+    "gps_x": "45.443217",
+    "gps_y": "11.797391",
+    "municipility": "RUBANO (PD)",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA CAVALLOTTO"
+  },
+  {
+    "id": 569,
+    "codice": "1313",
+    "gps_x": "45.427916",
+    "gps_y": "11.810757",
+    "municipility": "RUBANO (PD)",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA GRONCHI"
+  },
+  {
+    "id": 570,
+    "codice": "1315",
+    "gps_x": "45.43089",
+    "gps_y": "11.780787",
+    "municipility": "RUBANO (PD)",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA NARDI"
+  },
+  {
+    "id": 571,
+    "codice": "1316",
+    "gps_x": "45.420865",
+    "gps_y": "11.805895",
+    "municipility": "RUBANO (PD)",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA DANTE"
+  },
+  {
+    "id": 572,
+    "codice": "1317",
+    "gps_x": "45.426605",
+    "gps_y": "11.806892",
+    "municipility": "RUBANO (PD)",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA TOSCANA"
+  },
+  {
+    "id": 573,
+    "codice": "1502",
+    "gps_x": "45.4303",
+    "gps_y": "11.795813",
+    "municipility": "RUBANO (PD)",
+    "customer": "etra",
+    "waste": "plastica",
+    "address": "VIA PORDENONE"
+  },
+  {
+    "id": 574,
+    "codice": "1504",
+    "gps_x": "45.422954",
+    "gps_y": "11.813733",
+    "municipility": "RUBANO (PD)",
+    "customer": "etra",
+    "waste": "plastica",
+    "address": "VIA TICINO SUP"
+  },
+  {
+    "id": 575,
+    "codice": "1513",
+    "gps_x": "45.427916",
+    "gps_y": "11.810757",
+    "municipility": "RUBANO (PD)",
+    "customer": "etra",
+    "waste": "plastica",
+    "address": "VIA GRONCHI"
+  },
+  {
+    "id": 576,
+    "codice": "1515",
+    "gps_x": "45.43089",
+    "gps_y": "11.780787",
+    "municipility": "RUBANO (PD)",
+    "customer": "etra",
+    "waste": "plastica",
+    "address": "VIA NARDI"
+  },
+  {
+    "id": 577,
+    "codice": "1517",
+    "gps_x": "45.426605",
+    "gps_y": "11.806892",
+    "municipility": "RUBANO (PD)",
+    "customer": "etra",
+    "waste": "plastica",
+    "address": "VIA TOSCANA"
+  },
+  {
+    "id": 578,
+    "codice": "2202",
+    "gps_x": "45.466165",
+    "gps_y": "11.906316",
+    "municipility": "CADONEGHE (PD)",
+    "customer": "etra",
+    "waste": "carta",
+    "address": "VIA VECELLIO"
+  },
+  {
+    "id": 579,
+    "codice": "2205",
+    "gps_x": "45.460411",
+    "gps_y": "11.898763",
+    "municipility": "CADONEGHE (PD)",
+    "customer": "etra",
+    "waste": "carta",
+    "address": "VIA BRAGNI"
+  },
+  {
+    "id": 580,
+    "codice": "2209",
+    "gps_x": "45.44855",
+    "gps_y": "11.90107",
+    "municipility": "CADONEGHE (PD)",
+    "customer": "etra",
+    "waste": "carta",
+    "address": "VIA BORDIN"
+  },
+  {
+    "id": 581,
+    "codice": "2213",
+    "gps_x": "45.440605",
+    "gps_y": "11.923271",
+    "municipility": "CADONEGHE (PD)",
+    "customer": "etra",
+    "waste": "carta",
+    "address": "VIA RIGOTTI"
+  },
+  {
+    "id": 582,
+    "codice": "2215",
+    "gps_x": "45.460721",
+    "gps_y": "11.906786",
+    "municipility": "CADONEGHE (PD)",
+    "customer": "etra",
+    "waste": "carta",
+    "address": "VIA PISANA"
+  },
+  {
+    "id": 583,
+    "codice": "2216",
+    "gps_x": "45.45279",
+    "gps_y": "11.900113",
+    "municipility": "CADONEGHE (PD)",
+    "customer": "etra",
+    "waste": "carta",
+    "address": "VIA LA MALFA"
+  },
+  {
+    "id": 584,
+    "codice": "2221",
+    "gps_x": "45.451443",
+    "gps_y": "11.908563",
+    "municipility": "CADONEGHE (PD)",
+    "customer": "etra",
+    "waste": "carta",
+    "address": "VIA LEOPARDI"
+  },
+  {
+    "id": 585,
+    "codice": "2222",
+    "gps_x": "45.461965",
+    "gps_y": "11.897241",
+    "municipility": "CADONEGHE (PD)",
+    "customer": "etra",
+    "waste": "carta",
+    "address": "VIA VERRAZZANO"
+  },
+  {
+    "id": 586,
+    "codice": "2301",
+    "gps_x": "45.473416",
+    "gps_y": "11.899898",
+    "municipility": "CADONEGHE (PD)",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA EINSTEIN"
+  },
+  {
+    "id": 587,
+    "codice": "2302",
+    "gps_x": "45.466165",
+    "gps_y": "11.906316",
+    "municipility": "CADONEGHE (PD)",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA VECELLIO"
+  },
+  {
+    "id": 588,
+    "codice": "2305",
+    "gps_x": "45.460411",
+    "gps_y": "11.898763",
+    "municipility": "CADONEGHE (PD)",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA BRAGNI"
+  },
+  {
+    "id": 589,
+    "codice": "2309",
+    "gps_x": "45.44855",
+    "gps_y": "11.90107",
+    "municipility": "CADONEGHE (PD)",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA BORDIN"
+  },
+  {
+    "id": 590,
+    "codice": "2313",
+    "gps_x": "45.440605",
+    "gps_y": "11.923271",
+    "municipility": "CADONEGHE (PD)",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA RIGOTTI"
+  },
+  {
+    "id": 591,
+    "codice": "2314",
+    "gps_x": "45.437625",
+    "gps_y": "11.927475",
+    "municipility": "CADONEGHE (PD)",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA GARIBALDI"
+  },
+  {
+    "id": 592,
+    "codice": "2315",
+    "gps_x": "45.460541",
+    "gps_y": "11.906735",
+    "municipility": "CADONEGHE (PD)",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA PISANA"
+  },
+  {
+    "id": 593,
+    "codice": "2316",
+    "gps_x": "45.45279",
+    "gps_y": "11.900113",
+    "municipility": "CADONEGHE (PD)",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA LA MALFA"
+  },
+  {
+    "id": 594,
+    "codice": "2321",
+    "gps_x": "45.451443",
+    "gps_y": "11.908563",
+    "municipility": "CADONEGHE (PD)",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA LEOPARDI"
+  },
+  {
+    "id": 595,
+    "codice": "2505",
+    "gps_x": "45.460411",
+    "gps_y": "11.898763",
+    "municipility": "CADONEGHE (PD)",
+    "customer": "etra",
+    "waste": "plastica",
+    "address": "VIA BRAGNI"
+  },
+  {
+    "id": 596,
+    "codice": "2509",
+    "gps_x": "45.44855",
+    "gps_y": "11.90107",
+    "municipility": "CADONEGHE (PD)",
+    "customer": "etra",
+    "waste": "plastica",
+    "address": "VIA BORDIN"
+  },
+  {
+    "id": 597,
+    "codice": "2511",
+    "gps_x": "45.452549",
+    "gps_y": "11.905185",
+    "municipility": "CADONEGHE (PD)",
+    "customer": "etra",
+    "waste": "plastica",
+    "address": "VIA FRANCO"
+  },
+  {
+    "id": 598,
+    "codice": "2513",
+    "gps_x": "45.440605",
+    "gps_y": "11.923271",
+    "municipility": "CADONEGHE (PD)",
+    "customer": "etra",
+    "waste": "plastica",
+    "address": "VIA RIGOTTI"
+  },
+  {
+    "id": 599,
+    "codice": "2515",
+    "gps_x": "45.460721",
+    "gps_y": "11.906786",
+    "municipility": "CADONEGHE (PD)",
+    "customer": "etra",
+    "waste": "plastica",
+    "address": "VIA PISANA"
+  },
+  {
+    "id": 600,
+    "codice": "2521",
+    "gps_x": "45.451443",
+    "gps_y": "11.908563",
+    "municipility": "CADONEGHE (PD)",
+    "customer": "etra",
+    "waste": "plastica",
+    "address": "VIA LEOPARDI"
+  },
+  {
+    "id": 601,
+    "codice": "3302",
+    "gps_x": "45.876075",
+    "gps_y": "11.506706",
+    "municipility": "ASIAGO (VI)",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA BRIGATA SASSARI"
+  },
+  {
+    "id": 602,
+    "codice": "3302",
+    "gps_x": "45.876075",
+    "gps_y": "11.506706",
+    "municipility": "ASIAGO (VI)",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA BRIGATA SASSARI"
+  },
+  {
+    "id": 603,
+    "codice": "3501",
+    "gps_x": "45.878036",
+    "gps_y": "11.511464",
+    "municipility": "ASIAGO (VI)",
+    "customer": "etra",
+    "waste": "plastica",
+    "address": "VIA BATTISTI"
+  },
+  {
+    "id": 604,
+    "codice": "12201",
+    "gps_x": "45.799781",
+    "gps_y": "11.725831",
+    "municipility": "POVE DEL GRAPPA",
+    "customer": "etra",
+    "waste": "carta",
+    "address": "VIA ROMANELLE"
+  },
+  {
+    "id": 605,
+    "codice": "12301",
+    "gps_x": "45.799781",
+    "gps_y": "11.725831",
+    "municipility": "POVE DEL GRAPPA",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA ROMANELLE"
+  },
+  {
+    "id": 606,
+    "codice": "12501",
+    "gps_x": "45.799781",
+    "gps_y": "11.725831",
+    "municipility": "POVE DEL GRAPPA",
+    "customer": "etra",
+    "waste": "plastica",
+    "address": "VIA ROMANELLE"
+  },
+  {
+    "id": 607,
+    "codice": "14201",
+    "gps_x": "45.760499",
+    "gps_y": "11.714594",
+    "municipility": "BASSANO DEL GRA",
+    "customer": "etra",
+    "waste": "carta",
+    "address": "VIA SARDEGNA"
+  },
+  {
+    "id": 608,
+    "codice": "14204",
+    "gps_x": "45.777345",
+    "gps_y": "11.749509",
+    "municipility": "BASSANO DEL GRA",
+    "customer": "etra",
+    "waste": "carta",
+    "address": "VIA G.COGO"
+  },
+  {
+    "id": 609,
+    "codice": "14205",
+    "gps_x": "45.768605",
+    "gps_y": "11.712311",
+    "municipility": "BASSANO DEL GRA",
+    "customer": "etra",
+    "waste": "carta",
+    "address": "VIA XXV APRILE"
+  },
+  {
+    "id": 610,
+    "codice": "14301",
+    "gps_x": "45.760499",
+    "gps_y": "11.714594",
+    "municipility": "BASSANO DEL GRA",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA SARDEGNA"
+  },
+  {
+    "id": 611,
+    "codice": "14304",
+    "gps_x": "45.777345",
+    "gps_y": "11.749509",
+    "municipility": "BASSANO DEL GRA",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA G.COGO"
+  },
+  {
+    "id": 612,
+    "codice": "14305",
+    "gps_x": "45.768605",
+    "gps_y": "11.712311",
+    "municipility": "BASSANO DEL GRA",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA XXV APRILE"
+  },
+  {
+    "id": 613,
+    "codice": "14501",
+    "gps_x": "45.760499",
+    "gps_y": "11.714594",
+    "municipility": "BASSANO DEL GRA",
+    "customer": "etra",
+    "waste": "plastica",
+    "address": "VIA SARDEGNA"
+  },
+  {
+    "id": 614,
+    "codice": "14504",
+    "gps_x": "45.777345",
+    "gps_y": "11.749509",
+    "municipility": "BASSANO DEL GRA",
+    "customer": "etra",
+    "waste": "plastica",
+    "address": "VIA G.COGO"
+  },
+  {
+    "id": 615,
+    "codice": "14505",
+    "gps_x": "45.768605",
+    "gps_y": "11.712311",
+    "municipility": "BASSANO DEL GRA",
+    "customer": "etra",
+    "waste": "plastica",
+    "address": "VIA XXV APRILE"
+  },
+  {
+    "id": 616,
+    "codice": "15201",
+    "gps_x": "45.620538",
+    "gps_y": "11.6918",
+    "municipility": "CARMIGNANO DI B",
+    "customer": "etra",
+    "waste": "carta",
+    "address": "VIA DELL'INDUSTRIA"
+  },
+  {
+    "id": 617,
+    "codice": "15301",
+    "gps_x": "45.620538",
+    "gps_y": "11.6918",
+    "municipility": "CARMIGNANO DI B",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA DELL'INDUSTRIA"
+  },
+  {
+    "id": 618,
+    "codice": "15501",
+    "gps_x": "45.620538",
+    "gps_y": "11.6918",
+    "municipility": "CARMIGNANO DI B",
+    "customer": "etra",
+    "waste": "plastica",
+    "address": "VIA DELL'INDUSTRIA"
+  },
+  {
+    "id": 619,
+    "codice": "16201",
+    "gps_x": "45.707832",
+    "gps_y": "11.67981",
+    "municipility": "NOVE (VI)",
+    "customer": "etra",
+    "waste": "carta",
+    "address": "VIA NODARI"
+  },
+  {
+    "id": 620,
+    "codice": "16301",
+    "gps_x": "45.707832",
+    "gps_y": "11.67981",
+    "municipility": "NOVE (VI)",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA NODARI"
+  },
+  {
+    "id": 621,
+    "codice": "16501",
+    "gps_x": "45.707832",
+    "gps_y": "11.67981",
+    "municipility": "NOVE (VI)",
+    "customer": "etra",
+    "waste": "plastica",
+    "address": "VIA NODARI"
+  },
+  {
+    "id": 622,
+    "codice": "23203",
+    "gps_x": "45.506128",
+    "gps_y": "11.909253",
+    "municipility": "CAMPODARSEGO (P",
+    "customer": "etra",
+    "waste": "carta",
+    "address": "VIA PUCCINI"
+  },
+  {
+    "id": 623,
+    "codice": "23303",
+    "gps_x": "45.506128",
+    "gps_y": "11.909253",
+    "municipility": "CAMPODARSEGO (P",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA PUCCINI"
+  },
+  {
+    "id": 624,
+    "codice": "23503",
+    "gps_x": "45.506128",
+    "gps_y": "11.909253",
+    "municipility": "CAMPODARSEGO (P",
+    "customer": "etra",
+    "waste": "plastica",
+    "address": "VIA PUCCINI"
+  },
+  {
+    "id": 625,
+    "codice": "24201",
+    "gps_x": "45.5222",
+    "gps_y": "11.784775",
+    "municipility": "PIAZZOLA SUL BR",
+    "customer": "etra",
+    "waste": "carta",
+    "address": "VIA MATTEI"
+  },
+  {
+    "id": 626,
+    "codice": "24201",
+    "gps_x": "45.5222",
+    "gps_y": "11.784775",
+    "municipility": "PIAZZOLA SUL BR",
+    "customer": "etra",
+    "waste": "carta",
+    "address": "VIA MATTEI"
+  },
+  {
+    "id": 627,
+    "codice": "24301",
+    "gps_x": "45.522468",
+    "gps_y": "11.784896",
+    "municipility": "PIAZZOLA SUL BR",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA MATTEI"
+  },
+  {
+    "id": 628,
+    "codice": "24501",
+    "gps_x": "45.5222",
+    "gps_y": "11.784775",
+    "municipility": "PIAZZOLA SUL BR",
+    "customer": "etra",
+    "waste": "plastica",
+    "address": "VIA MATTEI"
+  },
+  {
+    "id": 629,
+    "codice": "24501",
+    "gps_x": "45.522468",
+    "gps_y": "11.784896",
+    "municipility": "PIAZZOLA SUL BR",
+    "customer": "etra",
+    "waste": "plastica",
+    "address": "VIA MATTEI"
+  },
+  {
+    "id": 630,
+    "codice": "28201",
+    "gps_x": "45.640327",
+    "gps_y": "11.802015",
+    "municipility": "CITTADELLA (PD)",
+    "customer": "etra",
+    "waste": "carta",
+    "address": "VIA VENETO"
+  },
+  {
+    "id": 631,
+    "codice": "28301",
+    "gps_x": "45.640327",
+    "gps_y": "11.802015",
+    "municipility": "CITTADELLA (PD)",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA VENETO"
+  },
+  {
+    "id": 632,
+    "codice": "28501",
+    "gps_x": "45.640327",
+    "gps_y": "11.802015",
+    "municipility": "CITTADELLA (PD)",
+    "customer": "etra",
+    "waste": "plastica",
+    "address": "VIA VENETO"
+  },
+  {
+    "id": 633,
+    "codice": "29201",
+    "gps_x": "45.694021",
+    "gps_y": "11.653138",
+    "municipility": "SCHIAVON (VI)",
+    "customer": "etra",
+    "waste": "carta",
+    "address": "VIA OLMI"
+  },
+  {
+    "id": 634,
+    "codice": "29501",
+    "gps_x": "45.461965",
+    "gps_y": "11.897241",
+    "municipility": "CADONEGHE (PD)",
+    "customer": "etra",
+    "waste": "plastica",
+    "address": "VIA OLMI"
+  },
+  {
+    "id": 635,
+    "codice": "30201",
+    "gps_x": "45.81724",
+    "gps_y": "11.719345",
+    "municipility": "SOLAGNA (VI)",
+    "customer": "etra",
+    "waste": "carta",
+    "address": "VIA IV NOVEMBRE"
+  },
+  {
+    "id": 636,
+    "codice": "30301",
+    "gps_x": "45.81724",
+    "gps_y": "11.719345",
+    "municipility": "SOLAGNA (VI)",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA IV NOVEMBRE"
+  },
+  {
+    "id": 637,
+    "codice": "30501",
+    "gps_x": "45.81724",
+    "gps_y": "11.719345",
+    "municipility": "SOLAGNA (VI)",
+    "customer": "etra",
+    "waste": "plastica",
+    "address": "VIA IV NOVEMBRE"
+  },
+  {
+    "id": 638,
+    "codice": "31201",
+    "gps_x": "45.327259",
+    "gps_y": "11.791393",
+    "municipility": "MONTEGROTTO TER",
+    "customer": "etra",
+    "waste": "carta",
+    "address": "VIA SAN MAURO"
+  },
+  {
+    "id": 639,
+    "codice": "31301",
+    "gps_x": "45.327259",
+    "gps_y": "11.791393",
+    "municipility": "MONTEGROTTO TER",
+    "customer": "etra",
+    "waste": "secco",
+    "address": "VIA SAN MAURO"
+  },
+  {
+    "id": 640,
+    "codice": "31501",
+    "gps_x": "45.327259",
+    "gps_y": "11.791393",
+    "municipility": "MONTEGROTTO TER",
+    "customer": "etra",
+    "waste": "plastica",
+    "address": "VIA SAN MAURO"
+  },
+  {
+    "id": 641,
+    "codice": "61201",
+    "gps_x": "42.507549",
+    "gps_y": "14.122204",
+    "municipility": "SANT'ANGELO (PE",
+    "customer": "ambiente",
+    "waste": "carta",
+    "address": "STR. LUNGOFINO"
+  },
+  {
+    "id": 642,
+    "codice": "61202",
+    "gps_x": "42.4918131",
+    "gps_y": "14.1825398",
+    "municipility": "PESCARA (PE)",
+    "customer": "ambiente",
+    "waste": "carta",
+    "address": "VIA P.P. PASOLINI"
+  },
+  {
+    "id": 643,
+    "codice": "61301",
+    "gps_x": "42.507549",
+    "gps_y": "14.122204",
+    "municipility": "SANT'ANGELO (PE",
+    "customer": "ambiente",
+    "waste": "secco",
+    "address": "STR. LUNGOFINO"
+  },
+  {
+    "id": 644,
+    "codice": "61302",
+    "gps_x": "42.4918131",
+    "gps_y": "14.1825398",
+    "municipility": "PESCARA (PE)",
+    "customer": "ambiente",
+    "waste": "secco",
+    "address": "VIA P.P. PASOLINI"
+  },
+  {
+    "id": 645,
+    "codice": "61501",
+    "gps_x": "42.507549",
+    "gps_y": "14.122204",
+    "municipility": "SANT'ANGELO (PE",
+    "customer": "ambiente",
+    "waste": "multimateriale",
+    "address": "STR. LUNGOFINO"
+  },
+  {
+    "id": 646,
+    "codice": "61502",
+    "gps_x": "42.4918131",
+    "gps_y": "14.1825398",
+    "municipility": "PESCARA (PE)",
+    "customer": "ambiente",
+    "waste": "multimateriale",
+    "address": "VIA P.P. PASOLINI"
+  },
+  {
+    "id": 647,
+    "codice": "66201",
+    "gps_x": "46.577111",
+    "gps_y": "12.25309",
+    "municipility": "MISURINA (BL)",
+    "customer": "ecomont",
+    "waste": "carta",
+    "address": "VIA M.PIANA"
+  },
+  {
+    "id": 648,
+    "codice": "66201",
+    "gps_x": "46.577111",
+    "gps_y": "12.25309",
+    "municipility": "MISURINA (BL)",
+    "customer": "ecomont",
+    "waste": "carta",
+    "address": "VIA M.PIANA"
+  },
+  {
+    "id": 649,
+    "codice": "66202",
+    "gps_x": "46.259301",
+    "gps_y": "12.301208",
+    "municipility": "MAGAZZINO",
+    "customer": "ecomont",
+    "waste": "carta",
+    "address": "MAGAZZINO"
+  },
+  {
+    "id": 650,
+    "codice": "66203",
+    "gps_x": "46.515898",
+    "gps_y": "12.467484",
+    "municipility": "AURONZO (BL)",
+    "customer": "ecomont",
+    "waste": "carta",
+    "address": "ECO AURONZO"
+  },
+  {
+    "id": 651,
+    "codice": "66204",
+    "gps_x": "46.421404",
+    "gps_y": "12.357746",
+    "municipility": "TAI DI CADORE (",
+    "customer": "ecomont",
+    "waste": "carta",
+    "address": "STADIO_G"
+  },
+  {
+    "id": 652,
+    "codice": "66205",
+    "gps_x": "46.556963",
+    "gps_y": "12.551424",
+    "municipility": "SANTO STEFANO D",
+    "customer": "ecomont",
+    "waste": "carta",
+    "address": "VIALE LUCIANI"
+  },
+  {
+    "id": 653,
+    "codice": "66206",
+    "gps_x": "46.614847",
+    "gps_y": "12.47504",
+    "municipility": "PADOLA-COMELICO",
+    "customer": "ecomont",
+    "waste": "carta",
+    "address": "VIA VALGRANDE"
+  },
+  {
+    "id": 654,
+    "codice": "66207",
+    "gps_x": "46.496896",
+    "gps_y": "12.478463",
+    "municipility": "VIGO DI CADORE ",
+    "customer": "ecomont",
+    "waste": "carta",
+    "address": "PIAZZALE LAGGIO DI CADORE"
+  },
+  {
+    "id": 655,
+    "codice": "66301",
+    "gps_x": "46.577111",
+    "gps_y": "12.25309",
+    "municipility": "MISURINA (BL)",
+    "customer": "ecomont",
+    "waste": "secco",
+    "address": "VIA M.PIANA"
+  },
+  {
+    "id": 656,
+    "codice": "66302",
+    "gps_x": "46.259301",
+    "gps_y": "12.301208",
+    "municipility": "MAGAZZINO",
+    "customer": "ecomont",
+    "waste": "secco",
+    "address": "MAGAZZINO"
+  },
+  {
+    "id": 657,
+    "codice": "66303",
+    "gps_x": "46.515898",
+    "gps_y": "12.467484",
+    "municipility": "AURONZO (BL)",
+    "customer": "ecomont",
+    "waste": "secco",
+    "address": "ECO AURONZO"
+  },
+  {
+    "id": 658,
+    "codice": "66304",
+    "gps_x": "46.421404",
+    "gps_y": "12.357746",
+    "municipility": "TAI DI CADORE (",
+    "customer": "ecomont",
+    "waste": "secco",
+    "address": "STADIO_G"
+  },
+  {
+    "id": 659,
+    "codice": "66305",
+    "gps_x": "46.556963",
+    "gps_y": "12.551424",
+    "municipility": "SANTO STEFANO D",
+    "customer": "ecomont",
+    "waste": "secco",
+    "address": "VIALE LUCIANI"
+  },
+  {
+    "id": 660,
+    "codice": "66306",
+    "gps_x": "46.614847",
+    "gps_y": "12.47504",
+    "municipility": "PADOLA-COMELICO",
+    "customer": "ecomont",
+    "waste": "secco",
+    "address": "VIA VALGRANDE"
+  },
+  {
+    "id": 661,
+    "codice": "66307",
+    "gps_x": "46.496896",
+    "gps_y": "12.478463",
+    "municipility": "VIGO DI CADORE ",
+    "customer": "ecomont",
+    "waste": "secco",
+    "address": "PIAZZALE LAGGIO DI CADORE"
+  },
+  {
+    "id": 662,
+    "codice": "66601",
+    "gps_x": "46.577111",
+    "gps_y": "12.25309",
+    "municipility": "MISURINA (BL)",
+    "customer": "ecomont",
+    "waste": "vpl",
+    "address": "VIA M.PIANA"
+  },
+  {
+    "id": 663,
+    "codice": "66602",
+    "gps_x": "46.259301",
+    "gps_y": "12.301208",
+    "municipility": "MAGAZZINO",
+    "customer": "ecomont",
+    "waste": "vpl",
+    "address": "MAGAZZINO"
+  },
+  {
+    "id": 664,
+    "codice": "66603",
+    "gps_x": "46.515898",
+    "gps_y": "12.467484",
+    "municipility": "AURONZO (BL)",
+    "customer": "ecomont",
+    "waste": "vpl",
+    "address": "ECO AURONZO"
+  },
+  {
+    "id": 665,
+    "codice": "66604",
+    "gps_x": "46.421404",
+    "gps_y": "12.357746",
+    "municipility": "TAI DI CADORE (",
+    "customer": "ecomont",
+    "waste": "vpl",
+    "address": "STADIO_G"
+  },
+  {
+    "id": 666,
+    "codice": "66605",
+    "gps_x": "46.556963",
+    "gps_y": "12.551424",
+    "municipility": "SANTO STEFANO D",
+    "customer": "ecomont",
+    "waste": "vpl",
+    "address": "VIALE LUCIANI"
+  },
+  {
+    "id": 667,
+    "codice": "66606",
+    "gps_x": "46.614847",
+    "gps_y": "12.47504",
+    "municipility": "PADOLA-COMELICO",
+    "customer": "ecomont",
+    "waste": "vpl",
+    "address": "VIA VALGRANDE"
+  },
+  {
+    "id": 668,
+    "codice": "66607",
+    "gps_x": "46.496896",
+    "gps_y": "12.478463",
+    "municipility": "VIGO DI CADORE ",
+    "customer": "ecomont",
+    "waste": "vpl",
+    "address": "PIAZZALE LAGGIO DI CADORE"
+  },
+  {
+    "id": 669,
+    "codice": "77201",
+    "gps_x": "45.617828",
+    "gps_y": "11.465454",
+    "municipility": "ISOLA VICENTINA",
+    "customer": "soraris",
+    "waste": "carta",
+    "address": "ISOLA VICENTINA"
+  },
+  {
+    "id": 670,
+    "codice": "77202",
+    "gps_x": "45.616268",
+    "gps_y": "11.492433",
+    "municipility": "CALDOGNO (VI)",
+    "customer": "soraris",
+    "waste": "carta",
+    "address": "CALDOGNO"
+  },
+  {
+    "id": 671,
+    "codice": "77203",
+    "gps_x": "45.607528",
+    "gps_y": "11.56505",
+    "municipility": "MONTICELLO CONT",
+    "customer": "soraris",
+    "waste": "carta",
+    "address": "MONTICELLO"
+  },
+  {
+    "id": 672,
+    "codice": "88201",
+    "gps_x": "46.136778",
+    "gps_y": "11.087617",
+    "municipility": "LAVIS (TN)",
+    "customer": "asia",
+    "waste": "carta",
+    "address": "VIA G.DI VITTORIO"
+  },
+  {
+    "id": 673,
+    "codice": "88202",
+    "gps_x": "46.163236",
+    "gps_y": "10.998737",
+    "municipility": "ANDALO (TN)",
+    "customer": "asia",
+    "waste": "carta",
+    "address": "ANDALO"
+  },
+  {
+    "id": 674,
+    "codice": "88203",
+    "gps_x": "46.064386",
+    "gps_y": "10.940783",
+    "municipility": "VALLELAGHI (TN)",
+    "customer": "asia",
+    "waste": "carta",
+    "address": "ST. S.VIGILIO"
+  },
+  {
+    "id": 675,
+    "codice": "88204",
+    "gps_x": "46.139993",
+    "gps_y": "11.106919",
+    "municipility": "LAVIS (TN)",
+    "customer": "asia",
+    "waste": "carta",
+    "address": "VIA NAZIONALE"
+  },
+  {
+    "id": 676,
+    "codice": "88205",
+    "gps_x": "46.216018",
+    "gps_y": "11.087447",
+    "municipility": "MEZZOLOMBARDO (",
+    "customer": "asia",
+    "waste": "carta",
+    "address": "VIA G.GARIBALDI"
+  },
+  {
+    "id": 677,
+    "codice": "88206",
+    "gps_x": "46.175998",
+    "gps_y": "11.077381",
+    "municipility": "FAI DELLA PAGAN",
+    "customer": "asia",
+    "waste": "carta",
+    "address": "LOC VANESOLA VIA AL DOS CIASTEL"
+  },
+  {
+    "id": 678,
+    "codice": "88207",
+    "gps_x": "46.20652",
+    "gps_y": "11.118489",
+    "municipility": "MEZZOCORONA (TN",
+    "customer": "asia",
+    "waste": "carta",
+    "address": "VIALE FENICE"
+  },
+  {
+    "id": 679,
+    "codice": "88301",
+    "gps_x": "46.136778",
+    "gps_y": "11.087617",
+    "municipility": "LAVIS (TN)",
+    "customer": "asia",
+    "waste": "secco",
+    "address": "VIA G.DI VITTORIO"
+  },
+  {
+    "id": 680,
+    "codice": "88302",
+    "gps_x": "46.163236",
+    "gps_y": "10.998737",
+    "municipility": "ANDALO (TN)",
+    "customer": "asia",
+    "waste": "secco",
+    "address": "ANDALO"
+  },
+  {
+    "id": 681,
+    "codice": "88303",
+    "gps_x": "46.064386",
+    "gps_y": "10.940783",
+    "municipility": "VALLELAGHI (TN)",
+    "customer": "asia",
+    "waste": "secco",
+    "address": "ST. S.VIGILIO"
+  },
+  {
+    "id": 682,
+    "codice": "88304",
+    "gps_x": "46.139993",
+    "gps_y": "11.106919",
+    "municipility": "LAVIS (TN)",
+    "customer": "asia",
+    "waste": "secco",
+    "address": "VIA NAZIONALE"
+  },
+  {
+    "id": 683,
+    "codice": "88305",
+    "gps_x": "46.216018",
+    "gps_y": "11.087447",
+    "municipility": "MEZZOLOMBARDO (",
+    "customer": "asia",
+    "waste": "secco",
+    "address": "VIA G.GARIBALDI"
+  },
+  {
+    "id": 684,
+    "codice": "88501",
+    "gps_x": "46.136778",
+    "gps_y": "11.087617",
+    "municipility": "LAVIS (TN)",
+    "customer": "asia",
+    "waste": "plastica",
+    "address": "VIA G.DI VITTORIO"
+  },
+  {
+    "id": 685,
+    "codice": "88502",
+    "gps_x": "46.163236",
+    "gps_y": "10.998737",
+    "municipility": "ANDALO (TN)",
+    "customer": "asia",
+    "waste": "plastica",
+    "address": "ANDALO"
+  },
+  {
+    "id": 686,
+    "codice": "88503",
+    "gps_x": "46.064386",
+    "gps_y": "10.940783",
+    "municipility": "VALLELAGHI (TN)",
+    "customer": "asia",
+    "waste": "plastica",
+    "address": "ST. S.VIGILIO"
+  },
+  {
+    "id": 687,
+    "codice": "88504",
+    "gps_x": "46.139993",
+    "gps_y": "11.106919",
+    "municipility": "LAVIS (TN)",
+    "customer": "asia",
+    "waste": "plastica",
+    "address": "VIA NAZIONALE"
+  },
+  {
+    "id": 688,
+    "codice": "88505",
+    "gps_x": "46.216018",
+    "gps_y": "11.087447",
+    "municipility": "MEZZOLOMBARDO (",
+    "customer": "asia",
+    "waste": "plastica",
+    "address": "VIA G.GARIBALDI"
+  },
+  {
+    "id": 689,
+    "codice": "88506",
+    "gps_x": "46.175998",
+    "gps_y": "11.077381",
+    "municipility": "FAI DELLA PAGAN",
+    "customer": "asia",
+    "waste": "plastica",
+    "address": "LOC VANESOLA VIA AL DOS CIASTEL"
+  },
+  {
+    "id": 690,
+    "codice": "88507",
+    "gps_x": "46.20652",
+    "gps_y": "11.118489",
+    "municipility": "MEZZOCORONA (TN",
+    "customer": "asia",
+    "waste": "plastica",
+    "address": "VIALE FENICE"
+  },
+  {
+    "id": 691,
+    "codice": "88601",
+    "gps_x": "46.136778",
+    "gps_y": "11.087617",
+    "municipility": "LAVIS (TN)",
+    "customer": "asia",
+    "waste": "vpl",
+    "address": "VIA G.DI VITTORIO"
+  },
+  {
+    "id": 692,
+    "codice": "88602",
+    "gps_x": "46.163236",
+    "gps_y": "10.998737",
+    "municipility": "ANDALO (TN)",
+    "customer": "asia",
+    "waste": "vpl",
+    "address": "ANDALO"
+  },
+  {
+    "id": 693,
+    "codice": "88603",
+    "gps_x": "46.064386",
+    "gps_y": "10.940783",
+    "municipility": "VALLELAGHI (TN)",
+    "customer": "asia",
+    "waste": "vpl",
+    "address": "ST. S.VIGILIO"
+  },
+  {
+    "id": 694,
+    "codice": "88604",
+    "gps_x": "46.139993",
+    "gps_y": "11.106919",
+    "municipility": "LAVIS (TN)",
+    "customer": "asia",
+    "waste": "vpl",
+    "address": "VIA NAZIONALE"
+  },
+  {
+    "id": 695,
+    "codice": "88605",
+    "gps_x": "46.216018",
+    "gps_y": "11.087447",
+    "municipility": "MEZZOLOMBARDO (",
+    "customer": "asia",
+    "waste": "vpl",
+    "address": "VIA G.GARIBALDI"
+  },
+  {
+    "id": 696,
+    "codice": "90201",
+    "gps_x": "44.549305",
+    "gps_y": "11.192185",
+    "municipility": "ANZOLA DELL'EMI",
+    "customer": "geovest",
+    "waste": "carta",
+    "address": "VIA CALANCHI"
+  },
+  {
+    "id": 697,
+    "codice": "90203",
+    "gps_x": "44.588008",
+    "gps_y": "11.36813",
+    "municipility": "ARGELATO (BO)",
+    "customer": "geovest",
+    "waste": "carta",
+    "address": "VIA DON PASTI"
+  },
+  {
+    "id": 698,
+    "codice": "90205",
+    "gps_x": "44.560245",
+    "gps_y": "11.26666",
+    "municipility": "CALDERARA (BO)",
+    "customer": "geovest",
+    "waste": "carta",
+    "address": "VIA 11 SETTEMBRE"
+  },
+  {
+    "id": 699,
+    "codice": "90206",
+    "gps_x": "44.580069",
+    "gps_y": "11.367568",
+    "municipility": "CASTEL MAGGIORE",
+    "customer": "geovest",
+    "waste": "carta",
+    "address": "VIA GRAMSCI"
+  },
+  {
+    "id": 700,
+    "codice": "90208",
+    "gps_x": "44.72518",
+    "gps_y": "11.149618",
+    "municipility": "CREVALCORE (BO)",
+    "customer": "geovest",
+    "waste": "carta",
+    "address": "PIAZZALE PARCO NORD"
+  },
+  {
+    "id": 701,
+    "codice": "90209",
+    "gps_x": "44.713759",
+    "gps_y": "11.152377",
+    "municipility": "CREVALCORE (BO)",
+    "customer": "geovest",
+    "waste": "carta",
+    "address": "VIA CADUTI DI VIA FANI"
+  },
+  {
+    "id": 702,
+    "codice": "90210",
+    "gps_x": "44.769653",
+    "gps_y": "11.254831",
+    "municipility": "CREVALCORE (BO)",
+    "customer": "geovest",
+    "waste": "carta",
+    "address": "VIA UGO LA MALFA"
+  },
+  {
+    "id": 703,
+    "codice": "90211",
+    "gps_x": "44.836662",
+    "gps_y": "11.279715",
+    "municipility": "FINALE EMILIA (",
+    "customer": "geovest",
+    "waste": "carta",
+    "address": "VIA FRATELLI ROSSELLI"
+  },
+  {
+    "id": 704,
+    "codice": "90212",
+    "gps_x": "44.836938",
+    "gps_y": "11.303684",
+    "municipility": "FINALE EMILIA (",
+    "customer": "geovest",
+    "waste": "carta",
+    "address": "VIA DEGLI AGOSTINIANI"
+  },
+  {
+    "id": 705,
+    "codice": "90213",
+    "gps_x": "44.848246",
+    "gps_y": "11.211375",
+    "municipility": "FINALE EMILIA (",
+    "customer": "geovest",
+    "waste": "carta",
+    "address": "VIA MONTE BIANCO"
+  },
+  {
+    "id": 706,
+    "codice": "90214",
+    "gps_x": "44.679528",
+    "gps_y": "11.035936",
+    "municipility": "NONANTOLA (MO)",
+    "customer": "geovest",
+    "waste": "carta",
+    "address": "VIA GINZBURG"
+  },
+  {
+    "id": 707,
+    "codice": "90215",
+    "gps_x": "44.675818",
+    "gps_y": "11.016355",
+    "municipility": "NONANTOLA (MO)",
+    "customer": "geovest",
+    "waste": "carta",
+    "address": "VIA COPERNICO"
+  },
+  {
+    "id": 708,
+    "codice": "90218",
+    "gps_x": "44.70806",
+    "gps_y": "11.23345",
+    "municipility": "SAN GIOVANNI IN",
+    "customer": "geovest",
+    "waste": "carta",
+    "address": "VIA CIMITERO"
+  },
+  {
+    "id": 709,
+    "codice": "90219",
+    "gps_x": "44.629468",
+    "gps_y": "11.185853",
+    "municipility": "SAN GIOVANNI IN",
+    "customer": "geovest",
+    "waste": "carta",
+    "address": "VIA ENRICO FERMI"
+  },
+  {
+    "id": 710,
+    "codice": "90220",
+    "gps_x": "44.645335",
+    "gps_y": "11.179451",
+    "municipility": "SAN GIOVANNI IN",
+    "customer": "geovest",
+    "waste": "carta",
+    "address": "VIA DE GASPERI"
+  },
+  {
+    "id": 711,
+    "codice": "90221",
+    "gps_x": "44.592185",
+    "gps_y": "11.180897",
+    "municipility": "SAN GIOVANNI IN",
+    "customer": "geovest",
+    "waste": "carta",
+    "address": "VIA SANTA CLELIA"
+  },
+  {
+    "id": 712,
+    "codice": "90222",
+    "gps_x": "44.663435",
+    "gps_y": "11.173665",
+    "municipility": "SAN GIOVANNI IN",
+    "customer": "geovest",
+    "waste": "carta",
+    "address": "VIA DE ANDRE'"
+  },
+  {
+    "id": 713,
+    "codice": "90223",
+    "gps_x": "44.665478",
+    "gps_y": "11.137775",
+    "municipility": "SANT'AGATA BOLO",
+    "customer": "geovest",
+    "waste": "carta",
+    "address": "VIA RUBIERA"
+  },
+  {
+    "id": 714,
+    "codice": "90224",
+    "gps_x": "44.65798",
+    "gps_y": "11.140061",
+    "municipility": "SANT'AGATA BOLO",
+    "customer": "geovest",
+    "waste": "carta",
+    "address": "VIA TOGLIATTI"
+  },
+  {
+    "id": 715,
+    "codice": "90225",
+    "gps_x": "44.717657",
+    "gps_y": "11.18468",
+    "municipility": "CREVALCORE (BO)",
+    "customer": "geovest",
+    "waste": "carta",
+    "address": "VIA DELL'OASI"
+  },
+  {
+    "id": 716,
+    "codice": "90301",
+    "gps_x": "44.549305",
+    "gps_y": "11.192185",
+    "municipility": "ANZOLA DELL'EMI",
+    "customer": "geovest",
+    "waste": "indifferenziato",
+    "address": "VIA CALANCHI"
+  },
+  {
+    "id": 717,
+    "codice": "90302",
+    "gps_x": "44.535155",
+    "gps_y": "11.227378",
+    "municipility": "ANZOLA DELL'EMI",
+    "customer": "geovest",
+    "waste": "indifferenziato",
+    "address": "VIA RAGAZZI"
+  },
+  {
+    "id": 718,
+    "codice": "90303",
+    "gps_x": "44.588008",
+    "gps_y": "11.36813",
+    "municipility": "ARGELATO (BO)",
+    "customer": "geovest",
+    "waste": "indifferenziato",
+    "address": "VIA DON PASTI"
+  },
+  {
+    "id": 719,
+    "codice": "90304",
+    "gps_x": "44.63316",
+    "gps_y": "11.358024",
+    "municipility": "ARGELATO (BO)",
+    "customer": "geovest",
+    "waste": "indifferenziato",
+    "address": "VIA STIATICO"
+  },
+  {
+    "id": 720,
+    "codice": "90305",
+    "gps_x": "44.560245",
+    "gps_y": "11.26666",
+    "municipility": "CALDERARA (BO)",
+    "customer": "geovest",
+    "waste": "indifferenziato",
+    "address": "VIA 11 SETTEMBRE"
+  },
+  {
+    "id": 721,
+    "codice": "90306",
+    "gps_x": "44.580069",
+    "gps_y": "11.367568",
+    "municipility": "CASTEL MAGGIORE",
+    "customer": "geovest",
+    "waste": "indifferenziato",
+    "address": "VIA GRAMSCI"
+  },
+  {
+    "id": 722,
+    "codice": "90307",
+    "gps_x": "44.560067",
+    "gps_y": "11.323431",
+    "municipility": "CASTEL MAGGIORE",
+    "customer": "geovest",
+    "waste": "indifferenziato",
+    "address": "VIA LAME"
+  },
+  {
+    "id": 723,
+    "codice": "90308",
+    "gps_x": "44.72518",
+    "gps_y": "11.149618",
+    "municipility": "CREVALCORE (BO)",
+    "customer": "geovest",
+    "waste": "indifferenziato",
+    "address": "PIAZZALE PARCO NORD"
+  },
+  {
+    "id": 724,
+    "codice": "90309",
+    "gps_x": "44.713759",
+    "gps_y": "11.152377",
+    "municipility": "CREVALCORE (BO)",
+    "customer": "geovest",
+    "waste": "indifferenziato",
+    "address": "VIA CADUTI DI VIA FANI"
+  },
+  {
+    "id": 725,
+    "codice": "90310",
+    "gps_x": "44.769653",
+    "gps_y": "11.254831",
+    "municipility": "CREVALCORE (BO)",
+    "customer": "geovest",
+    "waste": "indifferenziato",
+    "address": "VIA UGO LA MALFA"
+  },
+  {
+    "id": 726,
+    "codice": "90311",
+    "gps_x": "44.836662",
+    "gps_y": "11.279715",
+    "municipility": "FINALE EMILIA (",
+    "customer": "geovest",
+    "waste": "indifferenziato",
+    "address": "VIA FRATELLI ROSSELLI"
+  },
+  {
+    "id": 727,
+    "codice": "90312",
+    "gps_x": "44.836938",
+    "gps_y": "11.303684",
+    "municipility": "FINALE EMILIA (",
+    "customer": "geovest",
+    "waste": "indifferenziato",
+    "address": "VIA DEGLI AGOSTINIANI"
+  },
+  {
+    "id": 728,
+    "codice": "90313",
+    "gps_x": "44.848246",
+    "gps_y": "11.211375",
+    "municipility": "FINALE EMILIA (",
+    "customer": "geovest",
+    "waste": "indifferenziato",
+    "address": "VIA MONTE BIANCO"
+  },
+  {
+    "id": 729,
+    "codice": "90314",
+    "gps_x": "44.679528",
+    "gps_y": "11.035936",
+    "municipility": "NONANTOLA (MO)",
+    "customer": "geovest",
+    "waste": "indifferenziato",
+    "address": "VIA GINZBURG"
+  },
+  {
+    "id": 730,
+    "codice": "90315",
+    "gps_x": "44.675818",
+    "gps_y": "11.016355",
+    "municipility": "NONANTOLA (MO)",
+    "customer": "geovest",
+    "waste": "indifferenziato",
+    "address": "VIA COPERNICO"
+  },
+  {
+    "id": 731,
+    "codice": "90316",
+    "gps_x": "44.724297",
+    "gps_y": "11.094799",
+    "municipility": "RAVARINO (MO)",
+    "customer": "geovest",
+    "waste": "indifferenziato",
+    "address": "VIA GALVANI"
+  },
+  {
+    "id": 732,
+    "codice": "90317",
+    "gps_x": "44.583062",
+    "gps_y": "11.234657",
+    "municipility": "SALA BOLOGNESE ",
+    "customer": "geovest",
+    "waste": "indifferenziato",
+    "address": "VIA DE GASPERI"
+  },
+  {
+    "id": 733,
+    "codice": "90318",
+    "gps_x": "44.70806",
+    "gps_y": "11.23345",
+    "municipility": "SAN GIOVANNI IN",
+    "customer": "geovest",
+    "waste": "indifferenziato",
+    "address": "VIA CIMITERO"
+  },
+  {
+    "id": 734,
+    "codice": "90319",
+    "gps_x": "44.629468",
+    "gps_y": "11.185853",
+    "municipility": "SAN GIOVANNI IN",
+    "customer": "geovest",
+    "waste": "indifferenziato",
+    "address": "VIA ENRICO FERMI"
+  },
+  {
+    "id": 735,
+    "codice": "90320",
+    "gps_x": "44.645335",
+    "gps_y": "11.179451",
+    "municipility": "SAN GIOVANNI IN",
+    "customer": "geovest",
+    "waste": "indifferenziato",
+    "address": "VIA DE GASPERI"
+  },
+  {
+    "id": 736,
+    "codice": "90321",
+    "gps_x": "44.592185",
+    "gps_y": "11.180897",
+    "municipility": "SAN GIOVANNI IN",
+    "customer": "geovest",
+    "waste": "indifferenziato",
+    "address": "VIA SANTA CLELIA"
+  },
+  {
+    "id": 737,
+    "codice": "90322",
+    "gps_x": "44.663435",
+    "gps_y": "11.173665",
+    "municipility": "SAN GIOVANNI IN",
+    "customer": "geovest",
+    "waste": "indifferenziato",
+    "address": "VIA DE ANDRE'"
+  },
+  {
+    "id": 738,
+    "codice": "90323",
+    "gps_x": "44.665478",
+    "gps_y": "11.137775",
+    "municipility": "SANT'AGATA BOLO",
+    "customer": "geovest",
+    "waste": "indifferenziato",
+    "address": "VIA RUBIERA"
+  },
+  {
+    "id": 739,
+    "codice": "90324",
+    "gps_x": "44.65798",
+    "gps_y": "11.140061",
+    "municipility": "SANT'AGATA BOLO",
+    "customer": "geovest",
+    "waste": "indifferenziato",
+    "address": "VIA TOGLIATTI"
+  },
+  {
+    "id": 740,
+    "codice": "90325",
+    "gps_x": "44.717657",
+    "gps_y": "11.18468",
+    "municipility": "CREVALCORE (BO)",
+    "customer": "geovest",
+    "waste": "indifferenziato",
+    "address": "VIA DELL'OASI"
+  },
+  {
+    "id": 741,
+    "codice": "90501",
+    "gps_x": "44.549305",
+    "gps_y": "11.192185",
+    "municipility": "ANZOLA DELL'EMI",
+    "customer": "geovest",
+    "waste": "plastica",
+    "address": "VIA CALANCHI"
+  },
+  {
+    "id": 742,
+    "codice": "90502",
+    "gps_x": "44.535155",
+    "gps_y": "11.227378",
+    "municipility": "ANZOLA DELL'EMI",
+    "customer": "geovest",
+    "waste": "plastica",
+    "address": "VIA RAGAZZI"
+  },
+  {
+    "id": 743,
+    "codice": "90503",
+    "gps_x": "44.588008",
+    "gps_y": "11.36813",
+    "municipility": "ARGELATO (BO)",
+    "customer": "geovest",
+    "waste": "plastica",
+    "address": "VIA DON PASTI"
+  },
+  {
+    "id": 744,
+    "codice": "90504",
+    "gps_x": "44.63316",
+    "gps_y": "11.358024",
+    "municipility": "ARGELATO (BO)",
+    "customer": "geovest",
+    "waste": "plastica",
+    "address": "VIA STIATICO"
+  },
+  {
+    "id": 745,
+    "codice": "90505",
+    "gps_x": "44.560245",
+    "gps_y": "11.26666",
+    "municipility": "CALDERARA (BO)",
+    "customer": "geovest",
+    "waste": "plastica",
+    "address": "VIA 11 SETTEMBRE"
+  },
+  {
+    "id": 746,
+    "codice": "90506",
+    "gps_x": "44.580069",
+    "gps_y": "11.367568",
+    "municipility": "CASTEL MAGGIORE",
+    "customer": "geovest",
+    "waste": "plastica",
+    "address": "VIA GRAMSCI"
+  },
+  {
+    "id": 747,
+    "codice": "90507",
+    "gps_x": "44.560067",
+    "gps_y": "11.323431",
+    "municipility": "CASTEL MAGGIORE",
+    "customer": "geovest",
+    "waste": "plastica",
+    "address": "VIA LAME"
+  },
+  {
+    "id": 748,
+    "codice": "90508",
+    "gps_x": "44.72518",
+    "gps_y": "11.149618",
+    "municipility": "CREVALCORE (BO)",
+    "customer": "geovest",
+    "waste": "plastica",
+    "address": "PIAZZALE PARCO NORD"
+  },
+  {
+    "id": 749,
+    "codice": "90509",
+    "gps_x": "44.713759",
+    "gps_y": "11.152377",
+    "municipility": "CREVALCORE (BO)",
+    "customer": "geovest",
+    "waste": "plastica",
+    "address": "VIA CADUTI DI VIA FANI"
+  },
+  {
+    "id": 750,
+    "codice": "90510",
+    "gps_x": "44.769653",
+    "gps_y": "11.254831",
+    "municipility": "CREVALCORE (BO)",
+    "customer": "geovest",
+    "waste": "plastica",
+    "address": "VIA UGO LA MALFA"
+  },
+  {
+    "id": 751,
+    "codice": "90511",
+    "gps_x": "44.836662",
+    "gps_y": "11.279715",
+    "municipility": "FINALE EMILIA (",
+    "customer": "geovest",
+    "waste": "plastica",
+    "address": "VIA FRATELLI ROSSELLI"
+  },
+  {
+    "id": 752,
+    "codice": "90512",
+    "gps_x": "44.836938",
+    "gps_y": "11.303684",
+    "municipility": "FINALE EMILIA (",
+    "customer": "geovest",
+    "waste": "plastica",
+    "address": "VIA DEGLI AGOSTINIANI"
+  },
+  {
+    "id": 753,
+    "codice": "90513",
+    "gps_x": "44.848246",
+    "gps_y": "11.211375",
+    "municipility": "FINALE EMILIA (",
+    "customer": "geovest",
+    "waste": "plastica",
+    "address": "VIA MONTE BIANCO"
+  },
+  {
+    "id": 754,
+    "codice": "90514",
+    "gps_x": "44.679528",
+    "gps_y": "11.035936",
+    "municipility": "NONANTOLA (MO)",
+    "customer": "geovest",
+    "waste": "plastica",
+    "address": "VIA GINZBURG"
+  },
+  {
+    "id": 755,
+    "codice": "90515",
+    "gps_x": "44.675818",
+    "gps_y": "11.016355",
+    "municipility": "NONANTOLA (MO)",
+    "customer": "geovest",
+    "waste": "plastica",
+    "address": "VIA COPERNICO"
+  },
+  {
+    "id": 756,
+    "codice": "90516",
+    "gps_x": "44.724297",
+    "gps_y": "11.094799",
+    "municipility": "RAVARINO (MO)",
+    "customer": "geovest",
+    "waste": "plastica",
+    "address": "VIA GALVANI"
+  },
+  {
+    "id": 757,
+    "codice": "90517",
+    "gps_x": "44.583062",
+    "gps_y": "11.234657",
+    "municipility": "SALA BOLOGNESE ",
+    "customer": "geovest",
+    "waste": "plastica",
+    "address": "VIA DE GASPERI"
+  },
+  {
+    "id": 758,
+    "codice": "90518",
+    "gps_x": "44.70806",
+    "gps_y": "11.23345",
+    "municipility": "SAN GIOVANNI IN",
+    "customer": "geovest",
+    "waste": "plastica",
+    "address": "VIA CIMITERO"
+  },
+  {
+    "id": 759,
+    "codice": "90519",
+    "gps_x": "44.629468",
+    "gps_y": "11.185853",
+    "municipility": "SAN GIOVANNI IN",
+    "customer": "geovest",
+    "waste": "plastica",
+    "address": "VIA ENRICO FERMI"
+  },
+  {
+    "id": 760,
+    "codice": "90520",
+    "gps_x": "44.645335",
+    "gps_y": "11.179451",
+    "municipility": "SAN GIOVANNI IN",
+    "customer": "geovest",
+    "waste": "plastica",
+    "address": "VIA DE GASPERI"
+  },
+  {
+    "id": 761,
+    "codice": "90521",
+    "gps_x": "44.592185",
+    "gps_y": "11.180897",
+    "municipility": "SAN GIOVANNI IN",
+    "customer": "geovest",
+    "waste": "plastica",
+    "address": "VIA SANTA CLELIA"
+  },
+  {
+    "id": 762,
+    "codice": "90522",
+    "gps_x": "44.663435",
+    "gps_y": "11.173665",
+    "municipility": "SAN GIOVANNI IN",
+    "customer": "geovest",
+    "waste": "plastica",
+    "address": "VIA DE ANDRE'"
+  },
+  {
+    "id": 763,
+    "codice": "90523",
+    "gps_x": "44.665478",
+    "gps_y": "11.137775",
+    "municipility": "SANT'AGATA BOLO",
+    "customer": "geovest",
+    "waste": "plastica",
+    "address": "VIA RUBIERA"
+  },
+  {
+    "id": 764,
+    "codice": "90524",
+    "gps_x": "44.65798",
+    "gps_y": "11.140061",
+    "municipility": "SANT'AGATA BOLO",
+    "customer": "geovest",
+    "waste": "plastica",
+    "address": "VIA TOGLIATTI"
+  },
+  {
+    "id": 765,
+    "codice": "90525",
+    "gps_x": "44.717657",
+    "gps_y": "11.18468",
+    "municipility": "CREVALCORE (BO)",
+    "customer": "geovest",
+    "waste": "plastica",
+    "address": "VIA DELL'OASI"
+  },
+  {
+    "id": 766,
+    "codice": "99216",
+    "gps_x": "45.653763",
+    "gps_y": "11.563415",
+    "municipility": "KGN TEST",
+    "customer": "kgn",
+    "waste": "carta01",
+    "address": "VIA KGN TEST"
+  },
+  {
+    "id": 767,
+    "codice": "99316",
+    "gps_x": "45.653763",
+    "gps_y": "11.563415",
+    "municipility": "KGN TEST",
+    "customer": "kgn",
+    "waste": "secco",
+    "address": "VIA KGN TEST"
+  },
+  {
+    "id": 768,
+    "codice": "99516",
+    "gps_x": "45.653763",
+    "gps_y": "11.563415",
+    "municipility": "KGN TEST",
+    "customer": "kgn",
+    "waste": "plastica",
+    "address": "VIA KGN TEST"
+  }
+]

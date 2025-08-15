@@ -1,0 +1,58 @@
+/* Block button (full width) */
+.btn-block {
+  display: flex;
+  width: 100%;
+}
+
+/* Rounded button (pill shape) */
+.btn-rounded {
+  border-radius: 50px !important;
+}
+
+/* Square button (no border radius) */
+.btn-square {
+  border-radius: 0 !important;
+}
+
+/* Raised button (with shadow) */
+.btn-raised {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-raised:hover:not(:disabled):not(.loading) {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.btn-raised:active:not(:disabled):not(.loading) {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transform: translateY(0);
+}
+
+/* Icon-only button */
+.btn-icon {
+  padding: 0.5rem;
+  aspect-ratio: 1;
+  min-width: 40px;
+  justify-content: center;
+}
+
+.btn-icon.btn-xs {
+  padding: 0.25rem;
+  min-width: 28px;
+}
+
+.btn-icon.btn-sm {
+  padding: 0.375rem;
+  min-width: 32px;
+}
+
+.btn-icon.btn-lg {
+  padding: 0.75rem;
+  min-width: 48px;
+}
+
+.btn-icon.btn-xl {
+  padding: 1rem;
+  min-width: 56px;
+}

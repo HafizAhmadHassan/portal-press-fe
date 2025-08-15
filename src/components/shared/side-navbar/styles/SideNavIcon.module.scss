@@ -1,0 +1,14 @@
+@use "../../../../admin/styles/globals.scss";
+
+.icon {
+  flex-shrink: 0;
+  opacity: 0.9;
+  /* 👇 per-item con fallback ai token globali esistenti */
+  color: var(--nav-icon-color, var(--sidenav-muted));
+  transition: var(--sidenav-transition);
+
+  .active & {
+    opacity: 1;
+    color: var(--nav-icon-active-color, var(--sidenav-active-text));
+  }
+}

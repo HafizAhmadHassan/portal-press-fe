@@ -1,0 +1,39 @@
+@use '../../../../admin/styles/globals.scss';
+
+.userMenu {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  background: var(--sidenav-bg);
+  border: 1px solid var(--sidenav-border);
+  border-radius: var(--border-radius);
+  box-shadow: var(--sidenav-shadow);
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  z-index: 10;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  background: none;
+  color: var(--sidenav-text);
+  cursor: pointer;
+  border-radius: var(--border-radius-sm);
+  transition: var(--sidenav-transition);
+  font-size: 0.875rem;
+
+  &:hover {
+    background: var(--sidenav-hover-bg);
+  }
+
+  &:last-child:hover {
+    background: var(--error-light);
+    color: var(--error-dark);
+  }
+}

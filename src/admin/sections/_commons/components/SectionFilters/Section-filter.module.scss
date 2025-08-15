@@ -1,0 +1,89 @@
+@use '../../../../styles/globals.scss';
+
+/* Section-filter.module.scss
+   - Usa i token globali (globals.scss) per supportare light/dark
+   - Nessun colore hardcoded
+*/
+
+.sectionFilter {
+  display: grid;
+  grid-template-columns: 1fr;        /* mobile first */
+  gap: 1rem;
+  padding: 1.5rem;
+
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  color: var(--text-primary);
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem 1rem; /* row-gap column-gap */
+  }
+
+  @media (min-width: 1024px) {
+    gap: 1.5rem;
+  }
+
+  /* Rimuove il margin-bottom dei componenti interni (Input/Select condivisi) */
+  :global {
+    .inputContainer,
+    .selectContainer {
+      margin-bottom: 0;
+    }
+  }
+}
+
+/* Wrapper per bottone di reset */
+.resetButtonWrapper {
+  grid-column: 1 / -1;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: center;
+
+  @media (min-width: 768px) {
+    justify-content: flex-end;
+  }
+}
+
+/* (Opzionale) Stile inline per un eventuale bottone senza SimpleButton */
+.resetButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: 1px solid var(--error-color);
+  border-radius: var(--border-radius-sm);
+  color: var(--error-color);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: var(--error-light);
+    color: var(--error-dark);
+    border-color: var(--error-dark);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--error-color);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  svg { flex-shrink: 0; }
+}

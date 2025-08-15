@@ -1,0 +1,92 @@
+@use "../../../../admin/styles/globals.scss";
+
+/* Container for the centered search */
+.searchGroup {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+/* The "pill" that wraps select + input */
+.pill {
+  display: flex;
+  align-items: center;
+  background: var(--gray-100);
+  border-radius: 9999px;
+  overflow: hidden;
+  max-width: 600px;
+  width: 100%;
+  border: 1px solid var(--border-color);
+}
+
+/* Filter select on the left */
+.pillSelect {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0 0.75rem;
+  background: transparent;
+
+  select {
+    appearance: none;
+    border: none;
+    background: transparent;
+    padding: 0.5rem 1.5rem 0.5rem 0;
+    font-size: 1rem;
+    color: var(--text-primary);
+    cursor: pointer;
+    outline: none;
+  }
+
+  /* Chevron icon passed as React node */
+  svg {
+    position: absolute;
+    right: 0.5rem;
+    width: 16px;
+    height: 16px;
+    color: var(--text-secondary);
+    pointer-events: none;
+  }
+}
+
+/* Search input on the right */
+.pillInput {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: transparent;
+
+  /* Search icon passed as React node */
+  svg {
+    position: absolute;
+    left: 0.75rem;
+    width: 16px;
+    height: 16px;
+    color: var(--text-secondary);
+  }
+
+  input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 0.5rem 0.75rem 0.5rem 2.5rem;
+    font-size: 1rem;
+    color: var(--text-primary);
+    outline: none;
+
+    &::placeholder {
+      color: var(--text-secondary);
+    }
+
+    &:focus {
+      outline: 2px solid var(--primary-color);
+      outline-offset: -2px;
+      border-radius: 9999px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .searchGroup { display: none; }
+}

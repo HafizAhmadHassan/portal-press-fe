@@ -1,0 +1,28 @@
+@use '../../../../admin/styles/globals.scss';
+
+/* Keep only structural styles here (colors come from Link/Label modules) */
+.navItem {
+  width: 100%;
+}
+
+.label {
+  margin-left: 0.75rem;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+}
+
+.chevron {
+  margin-left: auto;
+  transition: transform 0.3s ease;
+}
+
+.hasChildren.open .chevron {
+  transform: rotate(90deg);
+}
+
+.hasChildren.open .subNav {
+  display: block;
+}

@@ -1,0 +1,54 @@
+@use "../../../../admin/styles/globals.scss";
+/* styles/MapContainer.module.scss */
+
+/* :root {
+  --leaflet-tile-filter: brightness(0.6) invert(1) contrast(3)
+    hue-rotate(200deg) saturate(0.3) brightness(0.7);
+}
+
+@media (prefers-color-scheme: dark) {
+  .leaflet-tile {
+    filter: var(--leaflet-tile-filter, none);
+  }
+
+  .leaflet-container {
+    background: #303030;
+  }
+}
+ */
+/* Contenitore coerente col tema (niente bagliori bianchi durante il loading) */
+.mapContainer {
+  background: var(--bg-primary);
+}
+
+/* Tingitura blu per i tile (solo sulle immagini dei tile — marker & popup restano intatti) */
+.tileBlue {
+  background: var(--bg-primary);
+}
+
+.tileBlueDark {
+  /* versione per dark: leggermente meno luminosa e più satura */
+  filter: brightness(0.6) invert(1) contrast(3) hue-rotate(250deg) saturate(0.3)
+    brightness(0.7);
+  will-change: filter;
+}
+
+:global(.leaflet-control-attribution) {
+  background: color-mix(in srgb, var(--bg-secondary) 80%, transparent);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+/* Popup base (se usato) */
+:global(.leaflet-popup-content-wrapper) {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  box-shadow: var(--shadow-lg);
+}
+
+:global(.leaflet-popup-tip) {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+}

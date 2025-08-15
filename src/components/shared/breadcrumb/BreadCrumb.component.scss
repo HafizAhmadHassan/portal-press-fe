@@ -1,0 +1,108 @@
+.kgn-breadcrumb {
+  margin: 0 1rem;
+
+  .kgn-breadcrumb-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 0.5rem;
+
+    li {
+      padding: 8px 0;
+      &.active {
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.kgn-subnav {
+  width: 100%;
+  display: flex;
+  background-color: #fff;
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+
+  .kgn-subnav-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0 1rem;
+    display: flex;
+    flex-wrap: nowrap; /* Mantiene gli elementi sulla stessa riga */
+    align-items: center;
+    width: 100%;
+    overflow-x: auto; /* Abilita scroll orizzontale */
+    -webkit-overflow-scrolling: touch; /* Scroll fluido su iOS */
+
+    /* Nasconde la scrollbar per browser desktop */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+    &::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
+    }
+
+    .nav-item {
+      margin-right: 1rem;
+      list-style: none;
+
+      .nav-link {
+        text-decoration: none;
+        color: inherit;
+        padding: 5px 0;
+        min-width: max-content;
+        list-style: none;
+
+        &:hover {
+          text-decoration: none; /* togli underline normale */
+          /*  border-bottom: 2px solid $brand-primary; */ /* sottolineatura colorata */
+        }
+
+        &.active {
+          text-decoration: none; /* togli underline normale */
+          /*  border-bottom: 2px solid $brand-primary; */ /* sottolineatura colorata */
+        }
+      }
+    }
+
+    /* Spacer per creare lo spazio tra i gruppi */
+    .spacer {
+      flex-grow: 1;
+    }
+  }
+}
+
+.breadcrumb-codex {
+  display: flex;
+  box-shadow: inset 0 -1px 0 #ccc;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #eee;
+  height: 42px;
+
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
+
+  .breadcrumb-list {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px 24px;
+    list-style: none;
+  }
+  .breadcrumb-item {
+    &:active {
+      color: #6c757d;
+    }
+    &:not(:first-child):before {
+      display: inline-block;
+      padding-right: 0.5rem;
+      padding-left: 0.5rem;
+      color: #6c757d;
+      content: "/";
+    }
+    a {
+      text-decoration: none;
+      color: #007bff;
+    }
+  }
+}

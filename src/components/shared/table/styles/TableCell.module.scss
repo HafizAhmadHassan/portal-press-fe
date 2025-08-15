@@ -1,0 +1,130 @@
+@use '../../../../admin/styles/globals.scss';
+
+/* TableCell.module.scss — light/dark via globals.scss */
+
+
+.bodyCell {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.textCell {
+  font-size: 0.875rem;
+  color: var(--text-primary);
+}
+
+.notAvailable {
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* Avatar cell */
+.avatarContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.avatarWrapper { flex-shrink: 0; }
+
+.avatarImage { border-radius: 50%; }
+
+.avatarPlaceholder {
+  border-radius: 50%;
+  background: var(--gray-300);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.placeholderText {
+  color: var(--gray-600);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.avatarInfo { display: flex; flex-direction: column; }
+.avatarName { font-size: 0.875rem; font-weight: 600; color: var(--text-primary); }
+.avatarEmail { font-size: 0.75rem; color: var(--text-secondary); }
+
+/* Avatar sizes */
+.avatarImage,
+.avatarPlaceholder {
+  &.sm { width: 2rem; height: 2rem; }
+  &.md { width: 2.5rem; height: 2.5rem; }
+  &.lg { width: 3rem; height: 3rem; }
+}
+
+/* Badge */
+.badge {
+  display: inline-flex;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.default {
+  background: var(--gray-100);
+  color: var(--gray-800);
+  border-color: var(--gray-200);
+}
+
+/* Status badge variants */
+.success {
+  background: var(--success-light);
+  color: var(--success-dark);
+  border: 1px solid color-mix(in oklab, var(--success-color) 35%, transparent);
+}
+.danger {
+  background: var(--error-light);
+  color: var(--error-dark);
+  border: 1px solid color-mix(in oklab, var(--error-color) 35%, transparent);
+}
+
+/* Select cell */
+.selectInput {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: box-shadow .15s ease, border-color .15s ease;
+}
+.selectInput:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary-color) 20%, transparent);
+}
+
+/* Boolean cell */
+.booleanText { font-size: 0.875rem; font-weight: 600; }
+.true { color: var(--success-color); }
+.false { color: var(--error-color); }
+
+/* Actions */
+.actionsContainer { display: flex; gap: 0.5rem; }
+.actionButton {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  border: none;
+  background: none;
+  color: var(--primary-color);
+}
+.actionButton:hover:not(:disabled) {
+  background: var(--primary-light);
+}
+.actionButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.actionIcon { margin-right: 0.25rem; }

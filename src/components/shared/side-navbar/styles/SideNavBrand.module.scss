@@ -1,0 +1,46 @@
+@use '../../../../admin/styles/globals.scss';
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+
+  .logo {
+    width: 64px;
+    height: 64px;
+    border-radius: 6px;
+    object-fit: contain;
+    flex-shrink: 0;
+    border: 1px solid var(--border-color);
+    padding: 4px;
+    background: var(--bg-primary);
+  }
+
+  .brandText {
+    flex: 1;
+    min-width: 0;
+    transition: var(--sidenav-transition);
+  }
+
+  .title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 2px 0;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .subtitle {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

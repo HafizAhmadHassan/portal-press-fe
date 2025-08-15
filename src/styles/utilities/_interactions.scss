@@ -1,0 +1,96 @@
+/* ==========================================================================
+   Interaction Utilities
+   ========================================================================== */
+
+// Cursor Utilities
+.cursor-auto {
+  cursor: auto !important;
+}
+.cursor-pointer {
+  cursor: pointer !important;
+}
+.cursor-wait {
+  cursor: wait !important;
+}
+.cursor-text {
+  cursor: text !important;
+}
+.cursor-move {
+  cursor: move !important;
+}
+.cursor-not-allowed {
+  cursor: not-allowed !important;
+}
+.cursor-help {
+  cursor: help !important;
+}
+.cursor-crosshair {
+  cursor: crosshair !important;
+}
+
+// User Select Utilities
+.user-select-all {
+  user-select: all !important;
+}
+.user-select-auto {
+  user-select: auto !important;
+}
+.user-select-none {
+  user-select: none !important;
+}
+
+// Pointer Events Utilities
+.pe-none {
+  pointer-events: none !important;
+}
+.pe-auto {
+  pointer-events: auto !important;
+}
+
+// Scroll Behavior
+.scroll-smooth {
+  scroll-behavior: smooth !important;
+}
+.scroll-auto {
+  scroll-behavior: auto !important;
+}
+
+// Overflow Utilities
+.overflow-auto {
+  overflow: auto !important;
+}
+.overflow-hidden {
+  overflow: hidden !important;
+}
+.overflow-visible {
+  overflow: visible !important;
+}
+.overflow-scroll {
+  overflow: scroll !important;
+}
+
+.overflow-x-auto {
+  overflow-x: auto !important;
+}
+.overflow-x-hidden {
+  overflow-x: hidden !important;
+}
+.overflow-x-visible {
+  overflow-x: visible !important;
+}
+.overflow-x-scroll {
+  overflow-x: scroll !important;
+}
+
+.overflow-y-auto {
+  overflow-y: auto !important;
+}
+.overflow-y-hidden {
+  overflow-y: hidden !important;
+}
+.overflow-y-visible {
+  overflow-y: visible !important;
+}
+.overflow-y-scroll {
+  overflow-y: scroll !important;
+}

@@ -1,0 +1,417 @@
+[
+  {
+    "id": 1,
+    "title": "Sistema di login non funziona",
+    "description": "Gli utenti non riescono ad accedere al sistema",
+    "status": "open",
+    "category": ["DATABASE", "ELECTRIC"],
+    "opened_by": {
+      "id": 1,
+      "full_name": "Marco Rossi",
+      "email": "marco.rossi@example.com",
+      "avatar": null
+    },
+    "created_by": {
+      "id": 2,
+      "full_name": "Giulia Bianchi",
+      "email": "giulia.bianchi@example.com"
+    },
+    "created_at": "2024-08-01T09:15:00Z",
+    "updated_at": "2024-08-01T14:30:00Z"
+  },
+  {
+    "id": 2,
+    "title": "Richiesta nuova funzionalità dashboard",
+    "description": "Aggiungere widget per statistiche in tempo reale",
+    "status": "in_progress",
+    "priority": "medium",
+    "category": ["DATABASE"],
+    "opened_by": {
+      "id": 3,
+      "full_name": "Andrea Verdi",
+      "email": "andrea.verdi@example.com",
+      "avatar": null
+    },
+    "created_by": {
+      "id": 4,
+      "full_name": "Sara Neri",
+      "email": "sara.neri@example.com"
+    },
+    "created_at": "2024-07-30T11:20:00Z",
+    "updated_at": "2024-08-01T10:45:00Z"
+  },
+  {
+    "id": 3,
+    "title": "Perdita d'acqua dal rubinetto principale",
+    "description": "Il rubinetto principale della cucina perde acqua continuamente",
+    "status": "open",
+    "priority": "critical",
+    "category": ["HYDRAULIC"],
+    "opened_by": {
+      "id": 5,
+      "full_name": "Luca Ferrari",
+      "email": "luca.ferrari@example.com",
+      "avatar": null
+    },
+    "created_by": {
+      "id": 1,
+      "full_name": "Marco Rossi",
+      "email": "marco.rossi@example.com"
+    },
+    "created_at": "2024-08-01T06:00:00Z",
+    "updated_at": "2024-08-01T06:15:00Z"
+  },
+  {
+    "id": 4,
+    "title": "Miglioramento interfaccia mobile",
+    "description": "Ottimizzare l'interfaccia per dispositivi mobile",
+    "status": "closed",
+    "priority": "low",
+    "category": ["DATABASE", "ELECTRIC"],
+    "opened_by": {
+      "id": 6,
+      "full_name": "Elena Gialli",
+      "email": "elena.gialli@example.com",
+      "avatar": null
+    },
+    "created_by": {
+      "id": 7,
+      "full_name": "Roberto Blu",
+      "email": "roberto.blu@example.com"
+    },
+    "created_at": "2024-07-25T14:30:00Z",
+    "updated_at": "2024-07-31T16:45:00Z"
+  },
+  {
+    "id": 5,
+    "title": "Cortocircuito nell'impianto elettrico",
+    "description": "Si è verificato un cortocircuito nel quadro elettrico principale",
+    "status": "in_progress",
+    "category": ["ELECTRIC", "MECHANIC"],
+    "opened_by": {
+      "id": 8,
+      "full_name": "Francesca Rosa",
+      "email": "francesca.rosa@example.com",
+      "avatar": null
+    },
+    "created_by": {
+      "id": 2,
+      "full_name": "Giulia Bianchi",
+      "email": "giulia.bianchi@example.com"
+    },
+    "created_at": "2024-07-29T13:45:00Z",
+    "updated_at": "2024-08-01T09:20:00Z"
+  },
+  {
+    "id": 6,
+    "title": "Manutenzione motore principale",
+    "description": "Il motore principale necessita di manutenzione ordinaria",
+    "status": "open",
+    "priority": "medium",
+    "category": ["MECHANIC", "HYDRAULIC"],
+    "opened_by": {
+      "id": 9,
+      "full_name": "Matteo Viola",
+      "email": "matteo.viola@example.com",
+      "avatar": null
+    },
+    "created_by": {
+      "id": 10,
+      "full_name": "Chiara Arancio",
+      "email": "chiara.arancio@example.com"
+    },
+    "created_at": "2024-07-28T10:15:00Z",
+    "updated_at": "2024-07-30T15:30:00Z"
+  },
+  {
+    "id": 7,
+    "title": "Ottimizzazione sistema database",
+    "description": "Il database risponde lentamente alle query",
+    "status": "in_progress",
+    "priority": "medium",
+    "category": ["DATABASE"],
+    "opened_by": {
+      "id": 3,
+      "full_name": "Andrea Verdi",
+      "email": "andrea.verdi@example.com",
+      "avatar": null
+    },
+    "created_by": {
+      "id": 11,
+      "full_name": "Paolo Marrone",
+      "email": "paolo.marrone@example.com"
+    },
+    "created_at": "2024-07-27T16:20:00Z",
+    "updated_at": "2024-08-01T11:10:00Z"
+  },
+  {
+    "id": 8,
+    "title": "Sostituzione lampade a LED",
+    "description": "Sostituire tutte le lampade con LED a basso consumo",
+    "status": "open",
+    "priority": "low",
+    "category": ["ELECTRIC"],
+    "opened_by": {
+      "id": 12,
+      "full_name": "Valentina Verde",
+      "email": "valentina.verde@example.com",
+      "avatar": null
+    },
+    "created_by": {
+      "id": 4,
+      "full_name": "Sara Neri",
+      "email": "sara.neri@example.com"
+    },
+    "created_at": "2024-07-26T12:00:00Z",
+    "updated_at": "2024-07-28T14:25:00Z"
+  },
+  {
+    "id": 9,
+    "title": "Riparazione sistema frenante",
+    "description": "I freni del macchinario principale non funzionano correttamente",
+    "status": "closed",
+    "category": ["MECHANIC", "HYDRAULIC", "ELECTRIC"],
+    "opened_by": {
+      "id": 5,
+      "full_name": "Luca Ferrari",
+      "email": "luca.ferrari@example.com",
+      "avatar": null
+    },
+    "created_by": {
+      "id": 13,
+      "full_name": "Simone Grigio",
+      "email": "simone.grigio@example.com"
+    },
+    "created_at": "2024-07-24T09:30:00Z",
+    "updated_at": "2024-07-29T17:45:00Z"
+  },
+  {
+    "id": 10,
+    "title": "Installazione nuovo server",
+    "description": "Installare e configurare il nuovo server per il backup",
+    "status": "in_progress",
+    "priority": "low",
+    "category": ["DATABASE", "ELECTRIC"],
+    "opened_by": {
+      "id": 6,
+      "full_name": "Elena Gialli",
+      "email": "elena.gialli@example.com",
+      "avatar": null
+    },
+    "created_by": {
+      "id": 14,
+      "full_name": "Alberto Azzurro",
+      "email": "alberto.azzurro@example.com"
+    },
+    "created_at": "2024-07-23T15:45:00Z",
+    "updated_at": "2024-08-01T13:20:00Z"
+  },
+  {
+    "id": 11,
+    "title": "Riparazione perdita serbatoio",
+    "description": "Il serbatoio dell'acqua presenta una perdita nella parte inferiore",
+    "status": "open",
+    "priority": "medium",
+    "category": ["HYDRAULIC", "MECHANIC"],
+    "opened_by": {
+      "id": 8,
+      "full_name": "Francesca Rosa",
+      "email": "francesca.rosa@example.com",
+      "avatar": null
+    },
+    "created_by": {
+      "id": 15,
+      "full_name": "Monica Indaco",
+      "email": "monica.indaco@example.com"
+    },
+    "created_at": "2024-07-22T11:15:00Z",
+    "updated_at": "2024-07-25T16:30:00Z"
+  },
+  {
+    "id": 12,
+    "title": "Installazione nuovo quadro elettrico",
+    "description": "Installare un nuovo quadro elettrico per l'area produzione",
+    "status": "in_progress",
+    "priority": "critical",
+    "category": ["ELECTRIC"],
+    "opened_by": {
+      "id": 9,
+      "full_name": "Matteo Viola",
+      "email": "matteo.viola@example.com",
+      "avatar": null
+    },
+    "created_by": {
+      "id": 1,
+      "full_name": "Marco Rossi",
+      "email": "marco.rossi@example.com"
+    },
+    "created_at": "2024-07-21T08:00:00Z",
+    "updated_at": "2024-08-01T12:15:00Z"
+  },
+  {
+    "id": 13,
+    "title": "Revisione compressore aria",
+    "description": "Il compressore dell'aria compressa necessita di revisione completa",
+    "status": "open",
+    "priority": "medium",
+    "category": ["MECHANIC", "ELECTRIC", "HYDRAULIC"],
+    "opened_by": {
+      "id": 10,
+      "full_name": "Chiara Arancio",
+      "email": "chiara.arancio@example.com",
+      "avatar": null
+    },
+    "created_by": {
+      "id": 3,
+      "full_name": "Andrea Verdi",
+      "email": "andrea.verdi@example.com"
+    },
+    "created_at": "2024-07-20T14:20:00Z",
+    "updated_at": "2024-07-22T10:45:00Z"
+  },
+  {
+    "id": 14,
+    "title": "Backup completo database",
+    "description": "Eseguire backup completo di tutti i database aziendali",
+    "status": "closed",
+    "priority": "low",
+    "category": ["DATABASE"],
+    "opened_by": {
+      "id": 12,
+      "full_name": "Valentina Verde",
+      "email": "valentina.verde@example.com",
+      "avatar": null
+    },
+    "created_by": {
+      "id": 7,
+      "full_name": "Roberto Blu",
+      "email": "roberto.blu@example.com"
+    },
+    "created_at": "2024-07-19T13:30:00Z",
+    "updated_at": "2024-07-26T15:20:00Z"
+  },
+  {
+    "id": 15,
+    "title": "Sostituzione tubature bagno",
+    "description": "Sostituire le tubature del bagno principale che sono obsolete",
+    "status": "open",
+    "category": ["HYDRAULIC", "MECHANIC"],
+    "opened_by": {
+      "id": 11,
+      "full_name": "Paolo Marrone",
+      "email": "paolo.marrone@example.com",
+      "avatar": null
+    },
+    "created_by": {
+      "id": 16,
+      "full_name": "Federica Magenta",
+      "email": "federica.magenta@example.com"
+    },
+    "created_at": "2024-07-18T09:45:00Z",
+    "updated_at": "2024-07-20T14:10:00Z"
+  },
+  {
+    "id": 16,
+    "title": "Riparazione trasmissione principale",
+    "description": "La trasmissione del macchinario principale presenta anomalie",
+    "status": "in_progress",
+    "priority": "medium",
+    "category": ["MECHANIC"],
+    "opened_by": {
+      "id": 13,
+      "full_name": "Simone Grigio",
+      "email": "simone.grigio@example.com",
+      "avatar": null
+    },
+    "created_by": {
+      "id": 2,
+      "full_name": "Giulia Bianchi",
+      "email": "giulia.bianchi@example.com"
+    },
+    "created_at": "2024-07-17T16:25:00Z",
+    "updated_at": "2024-08-01T08:30:00Z"
+  },
+  {
+    "id": 17,
+    "title": "Migrazione server principale",
+    "description": "Migrare tutti i dati dal vecchio server al nuovo sistema cloud",
+    "status": "open",
+    "priority": "critical",
+    "category": ["DATABASE", "ELECTRIC"],
+    "opened_by": {
+      "id": 14,
+      "full_name": "Alberto Azzurro",
+      "email": "alberto.azzurro@example.com",
+      "avatar": null
+    },
+    "created_by": {
+      "id": 5,
+      "full_name": "Luca Ferrari",
+      "email": "luca.ferrari@example.com"
+    },
+    "created_at": "2024-07-16T10:10:00Z",
+    "updated_at": "2024-07-18T12:25:00Z"
+  },
+  {
+    "id": 18,
+    "title": "Installazione sistema di allarme",
+    "description": "Installare nuovo sistema di allarme elettrico per la sicurezza",
+    "status": "in_progress",
+    "priority": "low",
+    "category": ["ELECTRIC", "DATABASE"],
+    "opened_by": {
+      "id": 15,
+      "full_name": "Monica Indaco",
+      "email": "monica.indaco@example.com",
+      "avatar": null
+    },
+    "created_by": {
+      "id": 6,
+      "full_name": "Elena Gialli",
+      "email": "elena.gialli@example.com"
+    },
+    "created_at": "2024-07-15T12:50:00Z",
+    "updated_at": "2024-07-31T09:15:00Z"
+  },
+  {
+    "id": 19,
+    "title": "Riparazione sistema di scarico",
+    "description": "Il sistema di scarico della cucina è intasato e necessita riparazione",
+    "status": "closed",
+    "priority": "medium",
+    "category": ["HYDRAULIC"],
+    "opened_by": {
+      "id": 16,
+      "full_name": "Federica Magenta",
+      "email": "federica.magenta@example.com",
+      "avatar": null
+    },
+    "created_by": {
+      "id": 8,
+      "full_name": "Francesca Rosa",
+      "email": "francesca.rosa@example.com"
+    },
+    "created_at": "2024-07-14T15:35:00Z",
+    "updated_at": "2024-07-28T11:40:00Z"
+  },
+  {
+    "id": 20,
+    "title": "Manutenzione pompa olio",
+    "description": "La pompa dell'olio del sistema idraulico necessita manutenzione",
+    "status": "open",
+    "category": ["MECHANIC", "HYDRAULIC", "ELECTRIC", "DATABASE"],
+    "opened_by": {
+      "id": 17,
+      "full_name": "Giorgio Ciano",
+      "email": "giorgio.ciano@example.com",
+      "avatar": null
+    },
+    "created_by": {
+      "id": 9,
+      "full_name": "Matteo Viola",
+      "email": "matteo.viola@example.com"
+    },
+    "created_at": "2024-07-13T11:00:00Z",
+    "updated_at": "2024-07-16T14:55:00Z"
+  }
+]

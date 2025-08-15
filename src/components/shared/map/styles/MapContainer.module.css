@@ -1,0 +1,13 @@
+.mapContainer {
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+}
+.mapContainer .leaflet-control-geocoder {
+  margin-top: 60px !important;
+}
+.mapContainer :global(.leaflet-control-attribution) {
+  display: none !important;
+}
+
+/*# sourceMappingURL=MapContainer.module.css.map */

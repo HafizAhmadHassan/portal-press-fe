@@ -1,0 +1,178 @@
+/* Fix per i cluster di Leaflet - da aggiungere in _styles.scss */
+.kgn-cluster-icon {
+  background: transparent !important;
+  border: none !important;
+
+  .kgn-cluster-inner {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: white !important;
+    font-weight: bold !important;
+    border-radius: 50% !important;
+  }
+
+  // =====================================
+  // CLUSTER NORMALI (BLU) - tutti attivi
+  // =====================================
+  &.kgn-cluster-normal {
+    &.kgn-cluster-small .kgn-cluster-inner {
+      background: #3b82f6 !important;
+      width: 40px !important;
+      height: 40px !important;
+      box-shadow: 0 0 0 8px rgba(59, 130, 246, 0.25) !important;
+    }
+
+    &.kgn-cluster-medium .kgn-cluster-inner {
+      background: #2563eb !important;
+      width: 45px !important;
+      height: 45px !important;
+      box-shadow: 0 0 0 10px rgba(37, 99, 235, 0.25) !important;
+    }
+
+    &.kgn-cluster-large .kgn-cluster-inner {
+      background: #1d4ed8 !important;
+      width: 50px !important;
+      height: 50px !important;
+      box-shadow: 0 0 0 12px rgba(29, 78, 216, 0.25) !important;
+    }
+  }
+
+  // =====================================
+  // CLUSTER WARNING (ARANCIONE) - almeno uno inattivo
+  // =====================================
+  &.kgn-cluster-warning {
+    &.kgn-cluster-small .kgn-cluster-inner {
+      background: #f97316 !important;
+      width: 40px !important;
+      height: 40px !important;
+      box-shadow: 0 0 0 8px rgba(249, 115, 22, 0.25) !important;
+    }
+
+    &.kgn-cluster-medium .kgn-cluster-inner {
+      background: #ea580c !important;
+      width: 45px !important;
+      height: 45px !important;
+      box-shadow: 0 0 0 10px rgba(234, 88, 12, 0.25) !important;
+    }
+
+    &.kgn-cluster-large .kgn-cluster-inner {
+      background: #c2410c !important;
+      width: 50px !important;
+      height: 50px !important;
+      box-shadow: 0 0 0 12px rgba(194, 65, 12, 0.25) !important;
+    }
+  }
+
+  // =====================================
+  // CLUSTER CRITICI (ROSSO) - tutti inattivi (opzionale)
+  // =====================================
+  &.kgn-cluster-critical {
+    &.kgn-cluster-small .kgn-cluster-inner {
+      background: #dc2626 !important;
+      width: 40px !important;
+      height: 40px !important;
+      box-shadow: 0 0 0 8px rgba(220, 38, 38, 0.25) !important;
+    }
+
+    &.kgn-cluster-medium .kgn-cluster-inner {
+      background: #b91c1c !important;
+      width: 45px !important;
+      height: 45px !important;
+      box-shadow: 0 0 0 10px rgba(185, 28, 28, 0.25) !important;
+    }
+
+    &.kgn-cluster-large .kgn-cluster-inner {
+      background: #991b1b !important;
+      width: 50px !important;
+      height: 50px !important;
+      box-shadow: 0 0 0 12px rgba(153, 27, 27, 0.25) !important;
+    }
+  }
+}
+
+/* Rimuovi gli stili di default di MarkerCluster */
+.marker-cluster-small,
+.marker-cluster-medium,
+.marker-cluster-large {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+
+  div {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  span {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+}
+
+/* Override forzato per tutti i possibili selettori di leaflet */
+.leaflet-marker-icon.marker-cluster {
+  background: transparent !important;
+
+  div {
+    background: transparent !important;
+  }
+}
+
+// =====================================
+// ANIMAZIONI
+// =====================================
+
+@keyframes cluster-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.75;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.kgn-cluster-icon .kgn-cluster-inner {
+  animation: cluster-pulse 2s ease-in-out infinite;
+  transition: all 0.2s ease-in-out;
+
+  // Effetto hover
+  &:hover {
+    transform: scale(1.1) !important;
+    animation-play-state: paused;
+  }
+}
+
+// =====================================
+// RESPONSIVE
+// =====================================
+
+@media (max-width: 768px) {
+  .kgn-cluster-icon {
+    &.kgn-cluster-small .kgn-cluster-inner {
+      width: 35px !important;
+      height: 35px !important;
+      font-size: 12px !important;
+    }
+
+    &.kgn-cluster-medium .kgn-cluster-inner {
+      width: 40px !important;
+      height: 40px !important;
+      font-size: 13px !important;
+    }
+
+    &.kgn-cluster-large .kgn-cluster-inner {
+      width: 45px !important;
+      height: 45px !important;
+      font-size: 14px !important;
+    }
+  }
+}

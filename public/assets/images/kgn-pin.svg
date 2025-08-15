@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg
+  width="32"
+  height="40"
+  viewBox="0 0 32 40"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <!-- Ombra -->
+  <ellipse
+    cx="16"
+    cy="35"
+    rx="10"
+    ry="3"
+    fill="rgba(0,0,0,0.2)"
+  />
+  <!-- Corpo del pin -->
+  <path
+    d="M16 0
+       C24 0, 30 6, 30 14
+       C30 26, 16 40, 16 40
+       C16 40, 2 26, 2 14
+       C2 6, 8 0, 16 0 Z"
+    fill="#3b82f6"
+  />
+  <!-- Cerchio interno bianco -->
+  <circle
+    cx="16"
+    cy="14"
+    r="6"
+    fill="#ffffff"
+  />
+</svg>

@@ -1,0 +1,437 @@
+@use "sass:math";
+@use "sass:map";
+@use "../variables" as v;
+@use "../colors" as c;
+@use "../mixins" as m;
+
+// Container
+.container,
+.container-fluid,
+.container-sm,
+.container-md,
+.container-lg,
+.container-xl,
+.container-xxl {
+  width: 100%;
+  padding-right: v.$space-4;
+  padding-left: v.$space-4;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.container-sm {
+  @include m.breakpoint(sm) {
+    max-width: v.$breakpoint-sm;
+  }
+}
+
+.container-md {
+  @include m.breakpoint(sm) {
+    max-width: v.$breakpoint-sm;
+  }
+  @include m.breakpoint(md) {
+    max-width: v.$breakpoint-md;
+  }
+}
+
+.container-lg {
+  @include m.breakpoint(sm) {
+    max-width: v.$breakpoint-sm;
+  }
+  @include m.breakpoint(md) {
+    max-width: v.$breakpoint-md;
+  }
+  @include m.breakpoint(lg) {
+    max-width: v.$breakpoint-lg;
+  }
+}
+
+.container-xl {
+  @include m.breakpoint(sm) {
+    max-width: v.$breakpoint-sm;
+  }
+  @include m.breakpoint(md) {
+    max-width: v.$breakpoint-md;
+  }
+  @include m.breakpoint(lg) {
+    max-width: v.$breakpoint-lg;
+  }
+  @include m.breakpoint(xl) {
+    max-width: v.$breakpoint-xl;
+  }
+}
+
+.container-xxl {
+  @include m.breakpoint(sm) {
+    max-width: v.$breakpoint-sm;
+  }
+  @include m.breakpoint(md) {
+    max-width: v.$breakpoint-md;
+  }
+  @include m.breakpoint(lg) {
+    max-width: v.$breakpoint-lg;
+  }
+  @include m.breakpoint(xl) {
+    max-width: v.$breakpoint-xl;
+  }
+  @include m.breakpoint(2xl) {
+    max-width: v.$breakpoint-2xl;
+  }
+}
+
+// Grid System
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: calc(-1 * #{v.$space-3});
+  margin-left: calc(-1 * #{v.$space-3});
+}
+
+.col {
+  flex: 1 0 0%;
+  padding-right: v.$space-3;
+  padding-left: v.$space-3;
+}
+
+.col-auto {
+  flex: 0 0 auto;
+  width: auto;
+  padding-right: v.$space-3;
+  padding-left: v.$space-3;
+}
+
+// Generate column classes
+@for $i from 1 through 12 {
+  .col-#{$i} {
+    flex: 0 0 auto;
+    width: math.percentage(math.div($i, 12));
+    padding-right: v.$space-3;
+    padding-left: v.$space-3;
+  }
+}
+
+// Responsive columns
+@each $breakpoint, $value in v.$breakpoints {
+  @include m.breakpoint($breakpoint) {
+    .col-#{$breakpoint} {
+      flex: 1 0 0%;
+      padding-right: v.$space-3;
+      padding-left: v.$space-3;
+    }
+
+    .col-#{$breakpoint}-auto {
+      flex: 0 0 auto;
+      width: auto;
+      padding-right: v.$space-3;
+      padding-left: v.$space-3;
+    }
+
+    @for $i from 1 through 12 {
+      .col-#{$breakpoint}-#{$i} {
+        flex: 0 0 auto;
+        width: math.percentage(math.div($i, 12));
+        padding-right: v.$space-3;
+        padding-left: v.$space-3;
+      }
+    }
+  }
+}
+
+// Offset classes
+@for $i from 0 through 11 {
+  .offset-#{$i} {
+    margin-left: math.percentage(math.div($i, 12));
+  }
+}
+
+@each $breakpoint, $value in v.$breakpoints {
+  @include m.breakpoint($breakpoint) {
+    @for $i from 0 through 11 {
+      .offset-#{$breakpoint}-#{$i} {
+        margin-left: math.percentage(math.div($i, 12));
+      }
+    }
+  }
+}
+
+// Gutters
+.g-0,
+.gx-0 {
+  --gutter-x: 0;
+  margin-right: 0;
+  margin-left: 0;
+
+  > .col,
+  > [class*="col-"] {
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
+
+.g-0,
+.gy-0 {
+  --gutter-y: 0;
+
+  > .col,
+  > [class*="col-"] {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+$gutters: (
+  1: v.$space-1,
+  2: v.$space-2,
+  3: v.$space-3,
+  4: v.$space-4,
+  5: v.$space-5,
+);
+
+@each $size, $length in $gutters {
+  .g-#{$size},
+  .gx-#{$size} {
+    --gutter-x: #{$length};
+    margin-right: calc(-0.5 * #{$length});
+    margin-left: calc(-0.5 * #{$length});
+
+    > .col,
+    > [class*="col-"] {
+      padding-right: calc(0.5 * #{$length});
+      padding-left: calc(0.5 * #{$length});
+    }
+  }
+
+  .g-#{$size},
+  .gy-#{$size} {
+    --gutter-y: #{$length};
+
+    > .col,
+    > [class*="col-"] {
+      padding-top: calc(0.5 * #{$length});
+      padding-bottom: calc(0.5 * #{$length});
+    }
+  }
+}
+
+// Main Layout Structure
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-header {
+  flex-shrink: 0;
+  background-color: c.$white;
+  border-bottom: v.$border solid c.$border-light;
+  box-shadow: v.$shadow-sm;
+  z-index: v.$z-index-sticky;
+}
+
+.app-main {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.app-sidebar {
+  flex-shrink: 0;
+  width: 280px;
+  background-color: c.$white;
+  border-right: v.$border solid c.$border-light;
+  overflow-y: auto;
+  transition: v.$transition-all;
+
+  &.collapsed {
+    width: 80px;
+  }
+
+  @include m.breakpoint-down(lg) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: v.$z-index-modal;
+    transform: translateX(-100%);
+
+    &.show {
+      transform: translateX(0);
+    }
+  }
+}
+
+.app-content {
+  flex: 1;
+  padding: v.$space-6;
+  overflow-y: auto;
+  background-color: c.$bg-muted;
+
+  @include m.breakpoint-down(md) {
+    padding: v.$space-4;
+  }
+}
+
+.app-footer {
+  flex-shrink: 0;
+  padding: v.$space-4 v.$space-6;
+  background-color: c.$white;
+  border-top: v.$border solid c.$border-light;
+  color: c.$text-muted;
+  font-size: v.$font-size-sm;
+}
+
+// DashboardSideBar Overlay
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(c.$black, 0.5);
+  z-index: v.$z-index-modal - 1;
+  opacity: 0;
+  visibility: hidden;
+  transition: v.$transition-all;
+
+  &.show {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  @include m.breakpoint(lg) {
+    display: none;
+  }
+}
+
+// Section Headers
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: v.$space-6;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+    color: c.$text-primary;
+  }
+}
+
+.section-title {
+  font-size: v.$font-size-2xl;
+  font-weight: v.$font-weight-bold;
+  color: c.$text-primary;
+}
+
+.section-subtitle {
+  margin-top: v.$space-1;
+  color: c.$text-muted;
+  font-size: v.$font-size-base;
+}
+
+// Page Header
+.page-header {
+  background-color: c.$white;
+  border-bottom: v.$border solid c.$border-light;
+  padding: v.$space-6;
+  margin-bottom: v.$space-6;
+
+  .page-title {
+    font-size: v.$font-size-3xl;
+    font-weight: v.$font-weight-bold;
+    color: c.$text-primary;
+    margin: 0;
+  }
+
+  .page-subtitle {
+    margin-top: v.$space-2;
+    color: c.$text-muted;
+    font-size: v.$font-size-lg;
+  }
+
+  .page-actions {
+    margin-top: v.$space-4;
+    display: flex;
+    gap: v.$space-2;
+
+    @include m.breakpoint(md) {
+      margin-top: 0;
+      align-self: flex-start;
+    }
+  }
+}
+
+// Content Blocks
+.content-block {
+  background-color: c.$white;
+  border-radius: v.$radius-lg;
+  box-shadow: v.$shadow-sm;
+  padding: v.$space-6;
+  margin-bottom: v.$space-6;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Sticky Elements
+.sticky-top {
+  position: sticky;
+  top: 0;
+  z-index: v.$z-index-sticky;
+}
+
+.sticky-bottom {
+  position: sticky;
+  bottom: 0;
+  z-index: v.$z-index-sticky;
+}
+
+// Responsive Spacers
+@each $breakpoint, $value in v.$breakpoints {
+  @include m.breakpoint($breakpoint) {
+    .section-#{$breakpoint} {
+      margin-bottom: v.$space-8;
+    }
+  }
+}
+
+// Layout Modifiers
+.layout-boxed {
+  .app-main {
+    max-width: 1400px;
+    margin: 0 auto;
+    box-shadow: v.$shadow-lg;
+  }
+}
+
+.layout-fluid {
+  .container,
+  .container-sm,
+  .container-md,
+  .container-lg,
+  .container-xl,
+  .container-xxl {
+    max-width: none;
+  }
+}
+
+.d-flex {
+  display: flex !important;
+}
+.h-100 {
+  height: 100% !important;
+}
+
+.row {
+  margin-left: 0;
+  margin-right: 0;
+}
+.col {
+  padding-left: v.$space-3;
+  padding-right: v.$space-3;
+}

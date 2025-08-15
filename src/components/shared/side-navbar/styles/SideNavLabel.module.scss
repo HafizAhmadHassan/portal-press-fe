@@ -1,0 +1,11 @@
+@use '../../../../admin/styles/globals.scss';
+
+.label {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: var(--sidenav-transition);
+  line-height: 1.2;
+  color: var(--sidenav-text);
+}

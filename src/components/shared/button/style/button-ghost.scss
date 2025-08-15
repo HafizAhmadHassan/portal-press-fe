@@ -1,0 +1,100 @@
+.btn-ghost-primary {
+  color: #667eea;
+  background: rgba(102, 126, 234, 0.1);
+  border: none;
+}
+
+.btn-ghost-primary:hover:not(:disabled):not(.loading) {
+  background: rgba(102, 126, 234, 0.2);
+  transform: translateY(-1px);
+}
+
+.btn-ghost-primary:active:not(:disabled):not(.loading) {
+  background: rgba(90, 103, 216, 0.3);
+  transform: translateY(0);
+}
+
+/* Ghost Secondary */
+.btn-ghost-secondary {
+  color: #6c757d;
+  background: rgba(108, 117, 125, 0.1);
+  border: none;
+}
+
+.btn-ghost-secondary:hover:not(:disabled):not(.loading) {
+  background: rgba(108, 117, 125, 0.2);
+  transform: translateY(-1px);
+}
+
+.btn-ghost-secondary:active:not(:disabled):not(.loading) {
+  background: rgba(90, 98, 104, 0.3);
+  transform: translateY(0);
+}
+
+/* Ghost Success */
+.btn-ghost-success {
+  color: #51cf66;
+  background: rgba(81, 207, 102, 0.1);
+  border: none;
+}
+
+.btn-ghost-success:hover:not(:disabled):not(.loading) {
+  background: rgba(81, 207, 102, 0.2);
+  transform: translateY(-1px);
+}
+
+.btn-ghost-success:active:not(:disabled):not(.loading) {
+  background: rgba(64, 192, 87, 0.3);
+  transform: translateY(0);
+}
+
+/* Ghost Danger */
+.btn-ghost-danger {
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.1);
+  border: none;
+}
+
+.btn-ghost-danger:hover:not(:disabled):not(.loading) {
+  background: rgba(255, 107, 107, 0.2);
+  transform: translateY(-1px);
+}
+
+.btn-ghost-danger:active:not(:disabled):not(.loading) {
+  background: rgba(255, 82, 82, 0.3);
+  transform: translateY(0);
+}
+
+/* Ghost Warning */
+.btn-ghost-warning {
+  color: #fab005;
+  background: rgba(250, 176, 5, 0.1);
+  border: none;
+}
+
+.btn-ghost-warning:hover:not(:disabled):not(.loading) {
+  background: rgba(250, 176, 5, 0.2);
+  transform: translateY(-1px);
+}
+
+.btn-ghost-warning:active:not(:disabled):not(.loading) {
+  background: rgba(245, 159, 0, 0.3);
+  transform: translateY(0);
+}
+
+/* Ghost Info */
+.btn-ghost-info {
+  color: #339af0;
+  background: rgba(51, 154, 240, 0.1);
+  border: none;
+}
+
+.btn-ghost-info:hover:not(:disabled):not(.loading) {
+  background: rgba(51, 154, 240, 0.2);
+  transform: translateY(-1px);
+}
+
+.btn-ghost-info:active:not(:disabled):not(.loading) {
+  background: rgba(34, 139, 230, 0.3);
+  transform: translateY(0);
+}

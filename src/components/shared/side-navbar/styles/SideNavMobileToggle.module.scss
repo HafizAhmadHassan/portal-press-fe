@@ -1,0 +1,23 @@
+@use '../../../../admin/styles/globals.scss';
+
+.mobileToggle {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1001;
+  background: var(--sidenav-bg);
+  border: 1px solid var(--sidenav-border);
+  border-radius: var(--border-radius-sm, 8px);
+  padding: 8px;
+  color: var(--sidenav-text);
+  cursor: pointer;
+  box-shadow: var(--sidenav-shadow);
+  transition: var(--sidenav-transition);
+
+  @media (min-width: 769px) { display: none; }
+
+  &:hover {
+    background: var(--sidenav-hover-bg);
+    transform: scale(1.05);
+  }
+}

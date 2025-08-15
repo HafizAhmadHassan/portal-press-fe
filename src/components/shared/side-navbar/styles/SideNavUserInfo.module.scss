@@ -1,0 +1,42 @@
+@use '../../../../admin/styles/globals.scss';
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.userDetails {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.userName {
+  display: block;
+  font-weight: 600;
+  color: var(--sidenav-text);
+  font-size: 0.875rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userRole {
+  display: block;
+  color: var(--sidenav-muted);
+  font-size: 0.75rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.menuToggle {
+  color: var(--sidenav-muted);
+  transition: var(--sidenav-transition);
+}

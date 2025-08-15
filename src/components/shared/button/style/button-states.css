@@ -1,0 +1,68 @@
+/* Focus state */
+.btn:focus {
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+/* Disabled state */
+.btn:disabled,
+.btn.disabled {
+  pointer-events: none;
+  opacity: 0.6;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Loading state */
+.btn.loading {
+  position: relative;
+  pointer-events: none;
+  color: transparent !important;
+}
+
+.btn.loading::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Loading spinner sizes */
+.btn.loading.btn-xs::after {
+  width: 14px;
+  height: 14px;
+  border-width: 1.5px;
+}
+
+.btn.loading.btn-sm::after {
+  width: 16px;
+  height: 16px;
+  border-width: 1.5px;
+}
+
+.btn.loading.btn-lg::after {
+  width: 24px;
+  height: 24px;
+  border-width: 2.5px;
+}
+
+.btn.loading.btn-xl::after {
+  width: 28px;
+  height: 28px;
+  border-width: 3px;
+}
+
+/* Hide content during loading */
+.btn.loading .btn-text,
+.btn.loading .btn-icon {
+  opacity: 0;
+}
+
+/*# sourceMappingURL=button-states.css.map */

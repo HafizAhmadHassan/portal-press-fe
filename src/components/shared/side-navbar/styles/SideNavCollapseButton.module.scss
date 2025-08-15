@@ -1,0 +1,24 @@
+@use '../../../../admin/styles/globals.scss';
+
+.collapseButton {
+  position: absolute;
+  top: 1.5rem;
+  right: 1rem;
+  background: var(--sidenav-hover-bg);
+  border: 1px solid var(--sidenav-border);
+  border-radius: var(--border-radius-sm, 8px);
+  padding: 4px;
+  color: var(--sidenav-muted);
+  cursor: pointer;
+  transition: var(--sidenav-transition);
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+
+  &:hover {
+    background: var(--sidenav-active-bg);
+    color: var(--sidenav-active-text);
+    transform: scale(1.06);
+  }
+}

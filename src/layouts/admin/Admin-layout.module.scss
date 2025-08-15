@@ -1,0 +1,538 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  background-color: #f5f5f5;
+  position: relative;
+  scroll-behavior: smooth;
+  transition: all 0.3s ease;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #2563eb;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  scrollbar-width: thin;
+  scrollbar-color: #2563eb transparent;
+}
+
+// Classe per quando la sidebar è chiusa
+.sidebarCollapsed {
+  // Styles specifici quando la sidebar è collassata
+  // Il CSS grid si adatterà automaticamente con più spazio disponibile
+}
+
+/* === SEZIONE DISPOSITIVI === */
+.devicesListSection {
+  position: relative;
+  min-height: 400px;
+  padding: 0 20px ;
+  background: #f5f5f5;
+  scroll-margin-top: 20px;
+}
+
+.viewContainer {
+  position: relative;
+  width: 100%;
+  min-height: 400px;
+}
+
+.tableSection {
+  padding: 1rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  animation: slideInFromRight 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+
+  &.exiting {
+    animation: slideOutToLeft 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+}
+
+/* === GRID DISPOSITIVI RESPONSIVE === */
+.devicesGrid {
+  display: grid;
+  gap: 20px;
+  animation: slideInFromLeft 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+
+  &.exiting {
+    animation: slideOutToRight 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  // Desktop con sidebar aperta (larghezza ridotta) - 3 colonne
+  // Con sidebar aperta abbiamo meno spazio quindi meno colonne
+  grid-template-columns: repeat(3, 1fr);
+
+  // Desktop con sidebar chiusa (più spazio disponibile) - 4 colonne
+  // Quando la sidebar è chiusa, abbiamo più spazio per le card
+  .content.sidebarCollapsed & {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  // Large desktop (>1600px) - più colonne anche con sidebar aperta
+  @media (min-width: 1600px) {
+    grid-template-columns: repeat(4, 1fr);
+
+    .content.sidebarCollapsed & {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+
+  // Desktop medio (1200px - 1400px) - comportamento standard
+  @media (max-width: 1400px) {
+    grid-template-columns: repeat(3, 1fr);
+
+    .content.sidebarCollapsed & {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  // Desktop piccolo/Laptop (900px - 1200px) - riduce le colonne
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+
+    .content.sidebarCollapsed & {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  // Tablet (768px - 900px) - 2 colonne sempre
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+
+    .content.sidebarCollapsed & {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  // Mobile landscape (600px - 768px) - 2 colonne più strette
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  // Mobile portrait (fino a 600px) - 1 colonna
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+// Animazione per le singole card - SOLO fadeIn senza movimento verticale
+.devicesGrid > * {
+  animation: fadeInStaggered 0.4s ease-out forwards;
+  animation-delay: calc(var(--index, 0) * 0.03s); // Ridotto il delay per più card
+  opacity: 0;
+
+  // Assicura che le card abbiano una dimensione minima
+  min-width: 0; // Permette alle card di ridursi se necessario
+  min-height: 200px; // Altezza minima per mantenere proporzioni
+}
+
+/* === LOADING STATE === */
+.loadingState {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  height: 400px;
+  color: #64748b;
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #e2e8f0;
+    border-top: 3px solid #3b82f6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 12px;
+  }
+}
+
+/* === STATISTICHE === */
+.statsContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.statCard {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  &.statSuccess {
+    border-top: 4px solid #10b981;
+    .statNumber { color: #10b981; }
+  }
+
+  &.statDanger {
+    border-top: 4px solid #ef4444;
+    .statNumber { color: #ef4444; }
+  }
+
+  &.statInfo {
+    border-top: 4px solid #3b82f6;
+    .statNumber { color: #3b82f6; }
+  }
+
+  &.statPrimary {
+    border-top: 4px solid #8b5cf6;
+    .statNumber { color: #8b5cf6; }
+  }
+}
+
+.statNumber {
+  display: block;
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.statLabel {
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* === STATO VUOTO === */
+.noDevices {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 12px;
+  border: 2px dashed #cbd5e1;
+  color: #64748b;
+
+  .noDevicesIcon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+  }
+
+  p {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+  }
+
+  small {
+    font-size: 14px;
+    opacity: 0.8;
+  }
+}
+
+/* === FILTRI E CONTROLLI === */
+.controlsSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 16px;
+  flex-wrap: wrap;
+
+  .filterControls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .viewToggle {
+    display: flex;
+    gap: 8px;
+  }
+}
+
+.filterButton {
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  background: white;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #f3f4f6;
+    border-color: #9ca3af;
+  }
+
+  &.active {
+    background: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+  }
+}
+
+.toggleButton {
+  padding: 8px 16px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: #2563eb;
+  }
+
+  &:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+  }
+}
+
+/* === STILI MODAL GENERICMODAL === */
+.modalTriggerIcon {
+  color: #3b82f6;
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #1d4ed8;
+  }
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+
+  @media (min-width: 640px) {
+    font-size: 1rem;
+  }
+}
+
+.modalField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  strong {
+    font-weight: 600;
+    color: #111827;
+  }
+}
+
+.modalValue {
+  color: #374151;
+  font-weight: 400;
+}
+
+.modalList {
+  list-style-type: disc;
+  list-style-position: inside;
+  color: #374151;
+  margin-top: 0.25rem;
+  padding-left: 1rem;
+
+  li {
+    margin-bottom: 0.125rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+/* === KEYFRAMES === */
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutToLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+}
+
+@keyframes slideOutToRight {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+}
+
+// Nuova animazione solo per le card - SOLO fade senza movimento
+@keyframes fadeInStaggered {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 992px) {
+  .devicesListSection {
+    padding: 16px;
+  }
+
+  .statsContainer {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+  }
+
+  .statCard {
+    padding: 16px;
+  }
+
+  .statNumber {
+    font-size: 24px;
+  }
+
+  .controlsSection {
+    flex-direction: column;
+    align-items: stretch;
+
+    .filterControls {
+      justify-content: center;
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .statsContainer {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .statCard {
+    padding: 12px;
+  }
+
+  .statNumber {
+    font-size: 20px;
+  }
+
+  .statLabel {
+    font-size: 12px;
+  }
+
+  .filterControls {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .filterButton, .toggleButton {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+
+  .devicesListSection {
+    padding: 16px 12px;
+  }
+
+  // Responsive per il modal content su mobile
+  .modalContent {
+    font-size: 0.8rem;
+    gap: 0.5rem;
+  }
+
+  .modalField {
+    gap: 0.125rem;
+  }
+}

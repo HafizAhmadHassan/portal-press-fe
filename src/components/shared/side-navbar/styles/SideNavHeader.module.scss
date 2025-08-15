@@ -1,0 +1,8 @@
+@use '../../../../admin/styles/globals.scss';
+
+.header {
+  position: relative;
+  padding: 1.5rem 1rem 1rem;
+  border-bottom: 1px solid var(--sidenav-border);
+  background: var(--sidenav-bg);
+}

@@ -1,0 +1,149 @@
+@use '../../../../admin/styles/globals.scss';
+
+/* GenericTable.module.scss — light/dark via globals.scss */
+/* GenericTable.module.scss - dark-mode ready using globals CSS variables */
+
+.tableContainer {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.loadingContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 16rem;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+}
+
+.loadingSpinner {
+  animation: spin 1s linear infinite;
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+  border: 2px solid transparent;
+  border-bottom-color: var(--primary-color);
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+
+  thead {
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  tbody {
+    background: var(--bg-primary);
+  }
+}
+
+/* Sticky header + zebra rows */
+.table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--bg-secondary);
+}
+
+.table tbody tr:nth-child(even) {
+  background: color-mix(in oklab, var(--bg-secondary) 85%, transparent);
+}
+
+.table tbody tr:hover {
+  background: var(--gray-50);
+}
+
+.tableHeader {}
+.headerRow {}
+
+.headerCell {
+  padding: 1rem 1.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.headerCell.sortable {
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+}
+.headerCell.sortable:hover {
+  background: var(--gray-100);
+}
+
+/* Fixed width for selection column */
+.selectionCell {
+  width: 60px;
+  padding: 1rem 0.5rem !important;
+  text-align: center;
+}
+
+.checkbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--primary-color);
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sortIcon {
+  margin-left: 0.5rem;
+  opacity: 0.6;
+}
+
+.tableBody {}
+
+.bodyRow {
+  transition: background-color 0.15s ease-in-out;
+}
+
+.selected {
+  background: var(--primary-light) !important;
+}
+
+.table td {
+  padding: 1rem 1.5rem;
+  text-align: left;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.emptyState {
+  padding: 3rem 1.5rem;
+  text-align: center;
+  background: var(--bg-primary);
+}
+
+.emptyTitle {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.emptyMessage {
+  color: var(--text-secondary);
+  margin: 0;
+}

@@ -1,0 +1,124 @@
+/* ==========================================================================
+   Spacing Utilities
+   ========================================================================== */
+
+@use "../variables" as v;
+@use "../mixins" as m;
+
+// Spacing Values
+$spacers: (
+  0: 0,
+  1: v.$space-1,
+  2: v.$space-2,
+  3: v.$space-3,
+  4: v.$space-4,
+  5: v.$space-5,
+  6: v.$space-6,
+  8: v.$space-8,
+  10: v.$space-10,
+  12: v.$space-12,
+  16: v.$space-16,
+  20: v.$space-20,
+  24: v.$space-24,
+  auto: auto,
+);
+
+// Generate Margin and Padding Classes
+@each $prop, $abbrev in (margin: m, padding: p) {
+  @each $size, $length in $spacers {
+    .#{$abbrev}-#{$size} {
+      #{$prop}: $length !important;
+    }
+    .#{$abbrev}t-#{$size},
+    .#{$abbrev}y-#{$size} {
+      #{$prop}-top: $length !important;
+    }
+    .#{$abbrev}r-#{$size},
+    .#{$abbrev}x-#{$size} {
+      #{$prop}-right: $length !important;
+    }
+    .#{$abbrev}b-#{$size},
+    .#{$abbrev}y-#{$size} {
+      #{$prop}-bottom: $length !important;
+    }
+    .#{$abbrev}l-#{$size},
+    .#{$abbrev}x-#{$size} {
+      #{$prop}-left: $length !important;
+    }
+  }
+}
+
+// Negative Margins
+@each $size, $length in $spacers {
+  @if $size != auto {
+    .m-n#{$size} {
+      margin: -$length !important;
+    }
+    .mt-n#{$size},
+    .my-n#{$size} {
+      margin-top: -$length !important;
+    }
+    .mr-n#{$size},
+    .mx-n#{$size} {
+      margin-right: -$length !important;
+    }
+    .mb-n#{$size},
+    .my-n#{$size} {
+      margin-bottom: -$length !important;
+    }
+    .ml-n#{$size},
+    .mx-n#{$size} {
+      margin-left: -$length !important;
+    }
+  }
+}
+
+// Responsive Spacing Utilities
+@each $breakpoint, $value in v.$breakpoints {
+  @include m.breakpoint($breakpoint) {
+    @each $prop, $abbrev in (margin: m, padding: p) {
+      @each $size, $length in $spacers {
+        .#{$abbrev}-#{$breakpoint}-#{$size} {
+          #{$prop}: $length !important;
+        }
+        .#{$abbrev}t-#{$breakpoint}-#{$size},
+        .#{$abbrev}y-#{$breakpoint}-#{$size} {
+          #{$prop}-top: $length !important;
+        }
+        .#{$abbrev}r-#{$breakpoint}-#{$size},
+        .#{$abbrev}x-#{$breakpoint}-#{$size} {
+          #{$prop}-right: $length !important;
+        }
+        .#{$abbrev}b-#{$breakpoint}-#{$size},
+        .#{$abbrev}y-#{$breakpoint}-#{$size} {
+          #{$prop}-bottom: $length !important;
+        }
+        .#{$abbrev}l-#{$breakpoint}-#{$size},
+        .#{$abbrev}x-#{$breakpoint}-#{$size} {
+          #{$prop}-left: $length !important;
+        }
+      }
+    }
+  }
+}
+
+// Stack Utilities
+.stack-sm > * + * {
+  margin-top: v.$space-2 !important;
+}
+.stack-md > * + * {
+  margin-top: v.$space-4 !important;
+}
+.stack-lg > * + * {
+  margin-top: v.$space-6 !important;
+}
+
+.stack-h-sm > * + * {
+  margin-left: v.$space-2 !important;
+}
+.stack-h-md > * + * {
+  margin-left: v.$space-4 !important;
+}
+.stack-h-lg > * + * {
+  margin-left: v.$space-6 !important;
+}

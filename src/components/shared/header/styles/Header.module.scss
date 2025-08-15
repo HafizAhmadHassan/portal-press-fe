@@ -1,0 +1,41 @@
+@use "../../../../admin/styles/globals.scss";
+
+/* Header bar aligned to global theme tokens */
+.kgnHeader {
+  display: flex;
+  align-items: center;
+  height: 60px;
+  padding: 0 1rem;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-color);
+  width: 100%;
+  color: var(--text-primary);
+}
+
+/* Menu / Toggle button (works for both desktop collapse and mobile open) */
+.toggleBtn {
+  all: unset;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  color: var(--text-primary);
+  border-radius: var(--border-radius-sm, 8px);
+  transition: background 0.2s ease, transform 0.15s ease;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  &:hover {
+    background: var(--primary-light);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}

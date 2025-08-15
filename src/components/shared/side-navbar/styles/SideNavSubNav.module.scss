@@ -1,0 +1,16 @@
+@use '../../../../admin/styles/globals.scss';
+
+.subNav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+  opacity: 0;
+
+  &.open {
+    max-height: 1000px;
+    opacity: 1;
+  }
+}

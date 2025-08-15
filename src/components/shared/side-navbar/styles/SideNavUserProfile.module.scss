@@ -1,0 +1,45 @@
+@use '../../../../admin/styles/globals.scss';
+
+.userProfile {
+  position: relative;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  border-radius: var(--border-radius-sm, 8px);
+  cursor: pointer;
+  transition: var(--sidenav-transition);
+  gap: 0.75rem;
+
+  &:hover {
+    background: var(--sidenav-hover-bg);
+  }
+
+  &.collapsed {
+    justify-content: center;
+    padding: 1rem 0.75rem;
+  }
+}
+
+.quickLogout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.75rem;
+  background: none;
+  border: 1px solid var(--sidenav-border);
+  border-radius: var(--border-radius-sm, 8px);
+  color: var(--sidenav-muted);
+  cursor: pointer;
+  transition: var(--sidenav-transition);
+  margin-top: 0.5rem;
+
+  &:hover {
+    background: var(--error-light);
+    color: var(--error-dark);
+    border-color: var(--error-light);
+  }
+}

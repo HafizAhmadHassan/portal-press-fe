@@ -1,0 +1,67 @@
+@use "../../../../admin/styles/globals.scss";
+
+/* Wrapper base: usa i token globali */
+.mapWrapper {
+  position: relative;
+  width: 100%;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  /* border-radius: var(--border-radius); */
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+
+  /* Variabili per il colore mappa (light di default) */
+  /*  --map-filter: none;
+  --map-tint-opacity: 0; */
+
+  /* Applica il filtro ai tiles */
+  :global(.leaflet-tile-pane) {
+    filter: var(--map-filter);
+    transition: filter 220ms ease-in-out;
+    will-change: filter;
+  }
+
+  /* Velo blu in multiply: perfeziona la tinta senza toccare marker/popup */
+  :global(.leaflet-tile-pane)::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: var(--primary-color, #3b82f6);
+    opacity: var(--map-tint-opacity);
+    mix-blend-mode: multiply;
+    transition: opacity 220ms ease-in-out;
+  }
+
+  /* Piccolo shadow ai controlli flottanti */
+  :global(.leaflet-top .leaflet-control) {
+    filter: drop-shadow(var(--shadow-sm));
+  }
+}
+
+/* Override in dark: viraggio verso il blu brand */
+.mapWrapperDark {
+  background: var(--bg-primary);
+  border-color: var(--border-color);
+
+  /* Viraggio “blue” (tweak se vuoi più/meno blu) */
+  --map-filter: invert(1) sepia(0.84) saturate(2.9) hue-rotate(195deg)
+    brightness(3.86) contrast(0.86);
+  --map-tint-opacity: 0.22;
+
+  /* (opzionale) leggera regolazione dei controlli su dark */
+  :global(.leaflet-control-zoom a) {
+    filter: brightness(0.95);
+  }
+  :global(.leaflet-control-attribution) {
+    opacity: 0.8;
+  }
+}
+
+/* Accessibilità: niente animazioni se richiesto */
+@media (prefers-reduced-motion: reduce) {
+  .mapWrapper :global(.leaflet-tile-pane),
+  .mapWrapper :global(.leaflet-tile-pane)::after {
+    transition: none !important;
+  }
+}

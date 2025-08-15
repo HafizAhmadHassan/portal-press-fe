@@ -1,0 +1,116 @@
+@use "../../../admin/styles/globals.scss";
+
+/* Input.module.scss
+   - Dark-mode ready via global CSS variables (globals.scss)
+   - Shared styles for <input> and <textarea>
+*/
+
+.inputContainer {
+  margin-bottom: 1rem;
+
+  .inputLabel {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+}
+
+.inputWrapper {
+  position: relative;
+}
+
+.field {
+  width: 100%;
+  padding: 1rem 3rem !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--border-radius) !important;
+  font-size: 0.9375rem;
+  transition: all 0.2s ease;
+  background: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+  box-sizing: border-box;
+  box-shadow: var(--shadow-sm);
+  min-height: 44px;
+
+  &::placeholder {
+    color: var(--text-secondary);
+  }
+
+  &:hover:not(:disabled) {
+    background: var(--bg-primary);
+    border-color: var(--border-color);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: var(--bg-secondary);
+  }
+}
+
+/* Textarea tweaks */
+textarea.field {
+  min-height: 120px;
+  resize: vertical;
+  line-height: 1.4;
+}
+
+/* Icon */
+.inputIcon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconLeft {
+  .field {
+    padding-left: 3rem;
+  }
+  .inputIcon {
+    left: 1rem;
+  }
+}
+
+.iconRight {
+  .field {
+    padding-right: 3rem;
+  }
+  .inputIcon {
+    right: 1rem;
+  }
+}
+
+/* Error state */
+.hasError {
+  .field {
+    border-color: var(--error-color);
+    box-shadow: 0 0 0 3px
+      color-mix(in oklab, var(--error-color) 20%, transparent);
+  }
+  .inputIcon {
+    color: var(--error-color);
+  }
+}
+
+.errorText {
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+  line-height: 1.3;
+  color: var(--error-dark);
+  background: var(--error-light);
+  border: 1px solid color-mix(in oklab, var(--error-color) 40%, transparent);
+  border-radius: var(--border-radius-sm);
+  padding: 0.5rem 0.75rem;
+}

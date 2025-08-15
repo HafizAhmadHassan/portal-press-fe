@@ -1,0 +1,52 @@
+@use '../../../../styles/globals.scss';
+
+
+.sectionHeader {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  
+  box-shadow: var(--shadow-sm);
+  padding: 0.5rem 1rem;
+
+  @media (min-width: 768px) {
+    padding: 1rem 1.5rem;
+  }
+}
+
+.sectionHeaderContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.sectionHeaderTitleSection {
+  flex: 1;
+  min-width: 240px;
+}
+
+.sectionHeaderTitle {
+  font-size: 1.875rem; /* 30px */
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.2;
+}
+
+.sectionHeaderSubtitle {
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.sectionHeaderActions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+
+  /* Nel caso servano custom component contenitori */
+  .customComponent {
+    display: inline-flex;
+    align-items: center;
+  }
+}

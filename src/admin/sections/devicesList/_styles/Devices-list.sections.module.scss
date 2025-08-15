@@ -1,0 +1,431 @@
+@use "../../../styles/globals.scss";
+
+/* Devices-list.sections.module.scss
+   Tema basato su globals.scss (CSS variables).
+   Funziona in dark mode senza override speciali.
+*/
+
+/* ===== Root page ===== */
+.devices-list-page {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* ===== Sezione dispositivi ===== */
+.devicesListSection {
+  position: relative;
+  min-height: 400px;
+  padding: 2rem;
+  background: var(--bg-secondary);
+  scroll-margin-top: 20px;
+
+  @media (min-width: 1600px) {
+    adding: 2rem;
+  }
+  @media (min-width: 1200px) and (max-width: 1599px) {
+    adding: 1.5rem;
+  }
+  @media (min-width: 768px) and (max-width: 1199px) {
+    adding: 1rem;
+  }
+  @media (max-width: 767px) {
+    adding: 1rem;
+  }
+}
+
+.viewContainer {
+  position: relative;
+  width: 100%;
+  min-height: 400px;
+}
+
+/* ===== Tabella ===== */
+.tableSection {
+  padding: 1rem;
+  background-color: var(--bg-primary);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  animation: slideInFromRight 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+
+  &.exiting {
+    animation: slideOutToLeft 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+}
+
+/* ===== Griglia card compatte ===== */
+.devicesGrid {
+  display: grid;
+  gap: 16px;
+  animation: slideInFromLeft 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+
+  &.exiting {
+    animation: slideOutToRight 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  /* Fallback default */
+  grid-template-columns: repeat(4, 1fr);
+
+  /* Quando il layout globale ha la sidebar collassata */
+  :global(.content.sidebarCollapsed) & {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  /* Desktop molto grande (1920+) */
+  @media (min-width: 1920px) {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 20px;
+    :global(.content.sidebarCollapsed) & {
+      grid-template-columns: repeat(7, 1fr);
+    }
+  }
+
+  /* Desktop grande (1600–1919) */
+  @media (min-width: 1600px) and (max-width: 1919px) {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 18px;
+    :global(.content.sidebarCollapsed) & {
+      grid-template-columns: repeat(6, 1fr);
+    }
+  }
+
+  /* Desktop standard (1400–1599) */
+  @media (min-width: 1400px) and (max-width: 1599px) {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    :global(.content.sidebarCollapsed) & {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+
+  /* Desktop medio (1200–1399) */
+  @media (min-width: 1200px) and (max-width: 1399px) {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    :global(.content.sidebarCollapsed) & {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+
+  /* Laptop (900–1199) */
+  @media (min-width: 900px) and (max-width: 1199px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    :global(.content.sidebarCollapsed) & {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  /* Tablet orizzontale (768–899) */
+  @media (min-width: 768px) and (max-width: 899px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    :global(.content.sidebarCollapsed) & {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  /* Tablet verticale (600–767) */
+  @media (min-width: 600px) and (max-width: 767px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  /* Mobile (≤599) */
+  @media (max-width: 599px) {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+
+/* Ottimizzazioni card */
+.devicesGrid > * {
+  animation: fadeInStaggered 0.4s ease-out forwards;
+  animation-delay: calc(var(--index, 0) * 0.02s);
+  opacity: 0;
+  min-width: 0;
+  min-height: 120px;
+  max-width: 300px;
+  margin: 0 auto;
+  transform: translateZ(0);
+  will-change: opacity, transform;
+}
+
+/* Ultra-wide */
+@media (min-width: 2560px) {
+  .devicesGrid {
+    grid-template-columns: repeat(8, 1fr);
+    gap: 24px;
+    max-width: 2400px;
+    margin: 0 auto;
+    :global(.content.sidebarCollapsed) & {
+      grid-template-columns: repeat(9, 1fr);
+    }
+  }
+}
+
+/* 4K */
+@media (min-width: 2048px) and (max-width: 2559px) {
+  .devicesGrid {
+    grid-template-columns: repeat(7, 1fr);
+    gap: 22px;
+    :global(.content.sidebarCollapsed) & {
+      grid-template-columns: repeat(8, 1fr);
+    }
+  }
+}
+
+/* ===== Stati caricamento/errore ===== */
+.loadingState {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  height: 400px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  color: var(--text-secondary);
+  flex-direction: column;
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border-color);
+    border-top: 3px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 12px;
+  }
+}
+
+.errorState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  background: color-mix(in srgb, var(--error-light) 65%, transparent);
+  border: 1px solid var(--error-color);
+  border-radius: var(--border-radius);
+  padding: 32px;
+  text-align: center;
+
+  span {
+    color: var(--error-color);
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+
+  button {
+    background: var(--error-color);
+    color: var(--white);
+    border: none;
+    padding: 8px 16px;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      filter: brightness(0.9);
+    }
+  }
+}
+
+/* ===== Modal content tipografia (nei dettagli mappa) ===== */
+.modalTriggerIcon {
+  color: var(--primary-color);
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var(--primary-dark);
+  }
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+
+  @media (min-width: 640px) {
+    font-size: 1rem;
+  }
+}
+
+.modalField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  strong {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+}
+
+.modalValue {
+  color: var(--text-secondary);
+}
+.modalList {
+  list-style-type: disc;
+  list-style-position: inside;
+  color: var(--text-secondary);
+  margin-top: 0.25rem;
+  padding-left: 1rem;
+
+  li {
+    margin-bottom: 0.125rem;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+/* ===== Barra statistiche mappa ===== */
+.mapStatsBar {
+  background: color-mix(in srgb, var(--bg-secondary) 85%, transparent);
+  border: 1px solid var(--border-color);
+
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+
+  .mapStats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    align-items: center;
+    font-size: 14px;
+    color: var(--text-primary);
+
+    > span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+
+      strong {
+        color: var(--primary-color);
+      }
+    }
+
+    .wasteStats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-left: auto;
+
+      > span {
+        padding: 4px 8px;
+        background: var(--bg-primary);
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 600;
+        border: 1px solid var(--border-color);
+      }
+    }
+  }
+}
+
+/* Responsive barra mappa */
+@media (max-width: 768px) {
+  .mapStatsBar .mapStats {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+
+    .wasteStats {
+      margin-left: 0;
+      width: 100%;
+    }
+  }
+}
+
+/* ===== A11y ===== */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ===== Print ===== */
+@media print {
+  .devicesGrid {
+    display: block !important;
+
+    > * {
+      break-inside: avoid;
+      margin-bottom: 1rem;
+    }
+  }
+  .loadingState {
+    display: none;
+  }
+}
+
+/* ===== Animazioni ===== */
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px) translateZ(0);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) translateZ(0);
+  }
+}
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px) translateZ(0);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) translateZ(0);
+  }
+}
+@keyframes slideOutToLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0) translateZ(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-20px) translateZ(0);
+  }
+}
+@keyframes slideOutToRight {
+  from {
+    opacity: 1;
+    transform: translateX(0) translateZ(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(20px) translateZ(0);
+  }
+}
+@keyframes fadeInStaggered {
+  from {
+    opacity: 0;
+    transform: translateY(10px) translateZ(0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) translateZ(0);
+  }
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,26 @@
+/* ==========================================================================
+   Utilities Index - Importa tutte le utilities
+   ========================================================================== */
+
+// Layout & Display
+@use "display";
+@use "positions";
+@use "flexbox";
+
+// Spacing & Sizing
+@use "spacing";
+@use "sizing";
+
+// Typography & Colors
+@use "typography";
+@use "colors";
+
+// Visual Effects
+@use "borders";
+@use "effects";
+
+// Interactions
+@use "interactions";
+
+// Miscellaneous
+@use "misc";

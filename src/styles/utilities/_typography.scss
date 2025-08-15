@@ -1,0 +1,152 @@
+/* ==========================================================================
+   Typography Utilities
+   ========================================================================== */
+
+@use "../variables" as v;
+@use "../mixins" as m;
+
+// Text Alignment
+.text-start {
+  text-align: left !important;
+}
+.text-end {
+  text-align: right !important;
+}
+.text-center {
+  text-align: center !important;
+}
+.text-justify {
+  text-align: justify !important;
+}
+
+// Responsive Text Alignment
+@each $breakpoint, $value in v.$breakpoints {
+  @include m.breakpoint($breakpoint) {
+    .text-#{$breakpoint}-start {
+      text-align: left !important;
+    }
+    .text-#{$breakpoint}-end {
+      text-align: right !important;
+    }
+    .text-#{$breakpoint}-center {
+      text-align: center !important;
+    }
+  }
+}
+
+// Text Wrapping
+.text-wrap {
+  white-space: normal !important;
+}
+.text-nowrap {
+  white-space: nowrap !important;
+}
+
+.text-break {
+  word-wrap: break-word !important;
+  word-break: break-word !important;
+}
+
+// Text Transform
+.text-lowercase {
+  text-transform: lowercase !important;
+}
+.text-uppercase {
+  text-transform: uppercase !important;
+}
+.text-capitalize {
+  text-transform: capitalize !important;
+}
+
+// Font Weights
+.fw-light {
+  font-weight: v.$font-weight-light !important;
+}
+.fw-lighter {
+  font-weight: lighter !important;
+}
+.fw-normal {
+  font-weight: v.$font-weight-normal !important;
+}
+.fw-bold {
+  font-weight: v.$font-weight-bold !important;
+}
+.fw-semibold {
+  font-weight: v.$font-weight-semibold !important;
+}
+.fw-bolder {
+  font-weight: bolder !important;
+}
+
+// Font Sizes
+.fs-1 {
+  font-size: v.$font-size-5xl !important;
+}
+.fs-2 {
+  font-size: v.$font-size-4xl !important;
+}
+.fs-3 {
+  font-size: v.$font-size-3xl !important;
+}
+.fs-4 {
+  font-size: v.$font-size-2xl !important;
+}
+.fs-5 {
+  font-size: v.$font-size-xl !important;
+}
+.fs-6 {
+  font-size: v.$font-size-lg !important;
+}
+
+// Font Style
+.fst-italic {
+  font-style: italic !important;
+}
+.fst-normal {
+  font-style: normal !important;
+}
+
+// Line Heights
+.lh-1 {
+  line-height: 1 !important;
+}
+.lh-sm {
+  line-height: v.$line-height-tight !important;
+}
+.lh-base {
+  line-height: v.$line-height-normal !important;
+}
+.lh-lg {
+  line-height: v.$line-height-relaxed !important;
+}
+
+// Text Decoration
+.text-decoration-none {
+  text-decoration: none !important;
+}
+.text-decoration-underline {
+  text-decoration: underline !important;
+}
+.text-decoration-line-through {
+  text-decoration: line-through !important;
+}
+
+// Vertical Alignment
+.align-baseline {
+  vertical-align: baseline !important;
+}
+.align-top {
+  vertical-align: top !important;
+}
+.align-middle {
+  vertical-align: middle !important;
+}
+.align-bottom {
+  vertical-align: bottom !important;
+}
+.align-text-bottom {
+  vertical-align: text-bottom !important;
+}
+.align-text-top {
+  vertical-align: text-top !important;
+}

@@ -1,0 +1,28 @@
+.custom-cluster-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: bold;
+  color: white;
+}
+.custom-cluster-icon.cluster-small {
+  width: 30px;
+  height: 30px;
+}
+.custom-cluster-icon.cluster-medium {
+  width: 40px;
+  height: 40px;
+}
+.custom-cluster-icon.cluster-large {
+  width: 50px;
+  height: 50px;
+}
+.custom-cluster-icon.cluster-warning {
+  background-color: #ff9800 !important;
+}
+.custom-cluster-icon.cluster-normal {
+  background-color: #4caf50 !important;
+}
+
+/*# sourceMappingURL=ClusterIcon.module.css.map */

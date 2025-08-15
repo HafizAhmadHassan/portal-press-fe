@@ -1,0 +1,167 @@
+@use '../../../admin/styles/globals.scss';
+
+/* Select.module.scss
+   - Dark-mode ready via global CSS variables (globals.scss)
+   - No hardcoded colors
+*/
+
+.selectContainer {
+  margin-bottom: 1.5rem;
+
+  .selectLabel {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+}
+
+.selectWrapper {
+  position: relative;
+
+  .selectInput {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: 0.9375rem;
+    transition: all 0.2s ease;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    box-sizing: border-box;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 44px;
+    box-shadow: var(--shadow-sm);
+
+    &:hover:not(.disabled) {
+      border-color: var(--border-color);
+      background: var(--primary-light);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--primary-color);
+      outline-offset: 2px;
+    }
+  }
+
+  .selectValue {
+    flex: 1;
+    text-align: left;
+    color: var(--text-primary);
+
+    &.placeholder {
+      color: var(--text-secondary);
+    }
+  }
+
+  .chevronIcon {
+    color: var(--text-secondary);
+    transition: transform 0.2s ease;
+    margin-left: 0.5rem;
+    flex-shrink: 0;
+
+    &.rotated {
+      transform: rotate(180deg);
+    }
+  }
+
+  .selectIcon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
+
+  &.iconLeft {
+    .selectInput { padding-left: 3rem; }
+    .selectIcon { left: 1rem; }
+  }
+
+  &.iconRight {
+    .selectInput { padding-right: 3rem; }
+    .selectIcon { right: 2.5rem; } /* spazio per chevron */
+    .chevronIcon { margin-right: 0.5rem; }
+  }
+
+  &.open {
+    .selectInput {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary-color) 20%, transparent);
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+
+  &.disabled {
+    .selectInput {
+      opacity: 0.6;
+      cursor: not-allowed;
+      background-color: var(--bg-secondary);
+    }
+  }
+}
+
+.optionsContainer {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-top: none;
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+  z-index: 9999;
+  max-height: 220px;
+  overflow-y: auto;
+
+  .optionsList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .option {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-color);
+
+    &:last-child { border-bottom: none; }
+
+    &:hover { background-color: var(--gray-100); }
+
+    &.selected {
+      background-color: var(--primary-light);
+      color: var(--primary-color);
+      font-weight: 600;
+    }
+
+    &:active {
+      background-color: color-mix(in oklab, var(--primary-color) 20%, transparent);
+    }
+  }
+}
+
+/* Scrollbar */
+.optionsContainer::-webkit-scrollbar { width: 6px; }
+.optionsContainer::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 3px;
+}
+.optionsContainer::-webkit-scrollbar-thumb {
+  background: var(--gray-300);
+  border-radius: 3px;
+}
+.optionsContainer::-webkit-scrollbar-thumb:hover { background: var(--gray-400); }

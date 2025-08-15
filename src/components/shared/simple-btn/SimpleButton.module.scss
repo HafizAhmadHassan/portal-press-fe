@@ -1,0 +1,171 @@
+@use "../../../admin/styles/globals.scss";
+
+/* 
+  Button design 100% basato sui token di globals.scss.
+  - Colori: var(--primary-color), --success-color, --warning-color, --error-color, grigi.
+  - Dark mode automatica: nessun override locale, eredita dai token.
+  - Hover/focus con color-mix per evitare lighten/darken di Sass.
+*/
+
+.simpleButton {
+  /* default CSS vars (possono essere sovrascritte dai modificatori colore/variante) */
+  --btn-accent: var(--primary-color);
+  --btn-on-accent: #fff; /* usare #fff fisso (in dark il token --white non è bianco) */
+  --btn-text: var(--text-primary);
+  --btn-bg: transparent;
+  --btn-border: transparent;
+  --btn-hover-bg: color-mix(in srgb, var(--btn-accent) 85%, black);
+  --btn-hover-text: var(--btn-on-accent);
+  --btn-hover-border: var(--btn-accent);
+  --btn-focus-ring: color-mix(in srgb, var(--btn-accent) 25%, transparent);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px solid var(--btn-border);
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+  font-family: inherit;
+  background: var(--btn-bg);
+  color: var(--btn-text);
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  &:not(:disabled):hover {
+    transform: translateY(-1px);
+  }
+
+  &:not(:disabled):active {
+    transform: translateY(0);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--btn-focus-ring);
+  }
+
+  /* ====== SIZE ====== */
+  &--sm {
+    padding: 0.5rem 0.75rem;
+    font-size: 12px;
+    line-height: 1;
+  }
+
+  &--md {
+    padding: 0.625rem 1rem;
+    font-size: 15px;
+    line-height: 1.1;
+  }
+
+  &--lg {
+    padding: 1rem 1.5rem;
+    font-size: 16px;
+    line-height: 1.1;
+  }
+
+  &--bare {
+    padding: 0 !important;
+    gap: 0 !important;
+    border-radius: 0;
+    background: none;
+    border: none;
+    box-shadow: none;
+    transform: none !important;
+
+    &:hover,
+    &:active,
+    &:focus {
+      transform: none !important;
+      box-shadow: none !important;
+      background: none !important;
+    }
+  }
+
+  /* ====== COLOR MODIFIERS (impostano --btn-accent) ====== */
+  &--primary {
+    --btn-accent: var(--primary-color);
+  }
+  &--success {
+    --btn-accent: var(--success-color);
+  }
+  &--warning {
+    --btn-accent: var(--warning-color);
+  }
+  &--error,
+  &--danger {
+    --btn-accent: var(--error-color);
+  }
+  /* "secondary": non esiste un token dedicato nei globals, usiamo il grigio 600 */
+  &--secondary {
+    --btn-accent: var(--gray-600);
+  }
+
+  /* ====== VARIANTS ====== */
+
+  /* FILLED */
+  &--filled {
+    --btn-bg: var(--btn-accent);
+    --btn-text: var(--btn-on-accent);
+    --btn-border: var(--btn-accent);
+    --btn-hover-bg: color-mix(in srgb, var(--btn-accent) 85%, black);
+    --btn-hover-text: var(--btn-on-accent);
+    --btn-hover-border: var(--btn-accent);
+
+    &:not(:disabled):hover {
+      background: var(--btn-hover-bg);
+      color: var(--btn-hover-text);
+      border-color: var(--btn-hover-border);
+    }
+  }
+
+  /* OUTLINE */
+  &--outline {
+    --btn-bg: transparent;
+    --btn-text: var(--btn-accent);
+    --btn-border: var(--btn-accent);
+    --btn-hover-bg: var(--btn-accent);
+    --btn-hover-text: var(--btn-on-accent);
+    --btn-hover-border: var(--btn-accent);
+
+    &:not(:disabled):hover {
+      background: var(--btn-hover-bg);
+      color: var(--btn-hover-text);
+      border-color: var(--btn-hover-border);
+      box-shadow: 0 4px 12px
+        color-mix(in srgb, var(--btn-accent) 30%, transparent);
+    }
+  }
+
+  /* GHOST */
+  &--ghost {
+    --btn-bg: transparent;
+    --btn-text: var(--btn-accent);
+    --btn-border: transparent;
+    --btn-hover-bg: color-mix(in srgb, var(--btn-accent) 12%, transparent);
+    --btn-hover-text: var(--btn-accent);
+    --btn-hover-border: transparent;
+
+    &:not(:disabled):hover {
+      background: var(--btn-hover-bg);
+      color: var(--btn-hover-text);
+      border-color: var(--btn-hover-border);
+    }
+  }
+
+  /* ====== INTERNAL ELEMENTS ====== */
+  &__icon {
+    flex-shrink: 0;
+  }
+  &__text {
+    white-space: nowrap;
+  }
+}

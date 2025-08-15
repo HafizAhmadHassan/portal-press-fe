@@ -1,0 +1,539 @@
+// =============================================================================
+// EFFECTS LIBRARY
+// =============================================================================
+// Collezione di animazioni ed effetti riutilizzabili per l'applicazione
+
+// -----------------------------------------------------------------------------
+// SIDEBAR EFFECTS
+// -----------------------------------------------------------------------------
+@mixin sidebar-collapse(
+  $collapsed-width: 64px,
+  $duration: var(--animation-normal)
+) {
+  transition: width $duration var(--ease-in-out);
+
+  .label,
+  .section-title {
+    transition:
+      opacity $duration var(--ease-in-out),
+      visibility $duration var(--ease-in-out);
+  }
+
+  &.collapsed {
+    width: $collapsed-width;
+
+    .label,
+    .section-title {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+}
+
+@mixin sidebar-slide-in(
+  $direction: "left",
+  $duration: var(--animation-normal)
+) {
+  @if $direction == "left" {
+    transform: translateX(-100%);
+  } @else if $direction == "right" {
+    transform: translateX(100%);
+  } @else if $direction == "top" {
+    transform: translateY(-100%);
+  } @else if $direction == "bottom" {
+    transform: translateY(100%);
+  }
+
+  transition: transform $duration var(--ease-out);
+
+  &.open {
+    transform: translate(0, 0);
+  }
+}
+
+@mixin sidebar-overlay($bg-color: rgba(0, 0, 0, 0.5)) {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: $bg-color;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--animation-normal) var(--ease-out),
+    visibility var(--animation-normal) var(--ease-out);
+  z-index: 998;
+
+  &.open {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// VARIABILI GLOBALI
+// -----------------------------------------------------------------------------
+:root {
+  // Durate animazioni
+  --animation-fast: 0.15s;
+  --animation-normal: 0.3s;
+  --animation-slow: 0.5s;
+
+  // Easing functions
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+// -----------------------------------------------------------------------------
+// ACCORDION EFFECTS
+// -----------------------------------------------------------------------------
+@mixin accordion-smooth(
+  $max-height: 500px,
+  $duration: var(--animation-normal)
+) {
+  overflow: hidden;
+  max-height: 0;
+  transition:
+    max-height $duration var(--ease-in-out),
+    padding $duration var(--ease-in-out),
+    margin $duration var(--ease-in-out);
+
+  &.open {
+    max-height: $max-height;
+  }
+}
+
+@mixin accordion-chevron($duration: var(--animation-normal)) {
+  transition: transform $duration var(--ease-in-out);
+
+  &.open {
+    transform: rotate(90deg);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// HOVER EFFECTS
+// -----------------------------------------------------------------------------
+@mixin hover-lift($shadow: 0 4px 12px rgba(0, 0, 0, 0.15)) {
+  transition:
+    transform var(--animation-fast) var(--ease-out),
+    box-shadow var(--animation-fast) var(--ease-out);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow;
+  }
+}
+
+@mixin hover-scale($scale: 1.05) {
+  transition: transform var(--animation-fast) var(--ease-out);
+
+  &:hover {
+    transform: scale($scale);
+  }
+}
+
+@mixin hover-glow($color: #2563eb, $intensity: 0.2) {
+  transition: box-shadow var(--animation-fast) var(--ease-out);
+
+  &:hover {
+    box-shadow: 0 0 20px rgba($color, $intensity);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// FADE EFFECTS
+// -----------------------------------------------------------------------------
+@mixin fade-in($duration: var(--animation-normal)) {
+  opacity: 0;
+  animation: fadeIn $duration var(--ease-out) forwards;
+}
+
+@mixin fade-out($duration: var(--animation-normal)) {
+  opacity: 1;
+  animation: fadeOut $duration var(--ease-out) forwards;
+}
+
+@mixin fade-slide-in(
+  $direction: "up",
+  $distance: 20px,
+  $duration: var(--animation-normal)
+) {
+  opacity: 0;
+
+  @if $direction == "up" {
+    transform: translateY($distance);
+  } @else if $direction == "down" {
+    transform: translateY(-$distance);
+  } @else if $direction == "left" {
+    transform: translateX($distance);
+  } @else if $direction == "right" {
+    transform: translateX(-$distance);
+  }
+
+  animation: fadeSlideIn#{capitalize($direction)} $duration var(--ease-out)
+    forwards;
+}
+
+// -----------------------------------------------------------------------------
+// SLIDE EFFECTS
+// -----------------------------------------------------------------------------
+@mixin slide-toggle(
+  $direction: "vertical",
+  $duration: var(--animation-normal)
+) {
+  overflow: hidden;
+
+  @if $direction == "vertical" {
+    max-height: 0;
+    transition: max-height $duration var(--ease-in-out);
+
+    &.open {
+      max-height: 1000px;
+    }
+  } @else {
+    max-width: 0;
+    transition: max-width $duration var(--ease-in-out);
+
+    &.open {
+      max-width: 1000px;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// LOADING EFFECTS
+// -----------------------------------------------------------------------------
+@mixin pulse($color: #e5e7eb, $duration: 1.5s) {
+  background-color: $color;
+  animation: pulse $duration var(--ease-in-out) infinite;
+}
+
+@mixin spinner($size: 24px, $color: #2563eb, $duration: 1s) {
+  width: $size;
+  height: $size;
+  border: 2px solid #f3f4f6;
+  border-top: 2px solid $color;
+  border-radius: 50%;
+  animation: spin $duration linear infinite;
+}
+
+@mixin skeleton($base-color: #f3f4f6, $highlight-color: #e5e7eb) {
+  background: linear-gradient(
+    90deg,
+    $base-color 25%,
+    $highlight-color 50%,
+    $base-color 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton 1.5s ease-in-out infinite;
+}
+
+// -----------------------------------------------------------------------------
+// BUTTON EFFECTS
+// -----------------------------------------------------------------------------
+@mixin button-press($scale: 0.95) {
+  transition: transform var(--animation-fast) var(--ease-out);
+
+  &:active {
+    transform: scale($scale);
+  }
+}
+
+@mixin button-ripple($color: rgba(255, 255, 255, 0.3)) {
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: $color;
+    transform: translate(-50%, -50%);
+    transition:
+      width var(--animation-normal) var(--ease-out),
+      height var(--animation-normal) var(--ease-out);
+  }
+
+  &:active::before {
+    width: 300px;
+    height: 300px;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// MODAL EFFECTS
+// -----------------------------------------------------------------------------
+@mixin modal-backdrop($bg-color: rgba(0, 0, 0, 0.5)) {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: $bg-color;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--animation-normal) var(--ease-out),
+    visibility var(--animation-normal) var(--ease-out);
+
+  &.open {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@mixin modal-content($scale-start: 0.8) {
+  transform: scale($scale-start);
+  opacity: 0;
+  transition:
+    transform var(--animation-normal) var(--ease-bounce),
+    opacity var(--animation-normal) var(--ease-out);
+
+  &.open {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// NOTIFICATION EFFECTS
+// -----------------------------------------------------------------------------
+@mixin notification-slide($direction: "right", $distance: 100%) {
+  @if $direction == "right" {
+    transform: translateX($distance);
+  } @else if $direction == "left" {
+    transform: translateX(-$distance);
+  } @else if $direction == "top" {
+    transform: translateY(-$distance);
+  } @else if $direction == "bottom" {
+    transform: translateY($distance);
+  }
+
+  transition:
+    transform var(--animation-normal) var(--ease-out),
+    opacity var(--animation-normal) var(--ease-out);
+
+  &.show {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// KEYFRAMES
+// -----------------------------------------------------------------------------
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeSlideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeSlideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeSlideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeSlideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes skeleton {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  53%,
+  80%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  40%,
+  43% {
+    transform: translate3d(0, -30px, 0);
+  }
+  70% {
+    transform: translate3d(0, -15px, 0);
+  }
+  90% {
+    transform: translate3d(0, -4px, 0);
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-10px);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(10px);
+  }
+}
+
+@keyframes wobble {
+  0%,
+  100% {
+    transform: translateX(0%);
+  }
+  15% {
+    transform: translateX(-25%) rotate(-5deg);
+  }
+  30% {
+    transform: translateX(20%) rotate(3deg);
+  }
+  45% {
+    transform: translateX(-15%) rotate(-3deg);
+  }
+  60% {
+    transform: translateX(10%) rotate(2deg);
+  }
+  75% {
+    transform: translateX(-5%) rotate(-1deg);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// UTILITY CLASSES
+// -----------------------------------------------------------------------------
+.animate-fade-in {
+  @include fade-in();
+}
+
+.animate-fade-out {
+  @include fade-out();
+}
+
+.animate-pulse {
+  @include pulse();
+}
+
+.animate-spinner {
+  @include spinner();
+}
+
+.animate-skeleton {
+  @include skeleton();
+}
+
+.hover-lift {
+  @include hover-lift();
+}
+
+.hover-scale {
+  @include hover-scale();
+}
+
+.hover-glow {
+  @include hover-glow();
+}
+
+.accordion-smooth {
+  @include accordion-smooth();
+}
+
+.button-press {
+  @include button-press();
+}
+
+// -----------------------------------------------------------------------------
+// RESPONSIVE ANIMATIONS
+// -----------------------------------------------------------------------------
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

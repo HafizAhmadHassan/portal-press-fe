@@ -1,0 +1,476 @@
+/* DeviceCard.module.scss
+   - Tema via CSS variables (globals.scss)
+   - Niente colori hard-coded: dark mode automatica
+*/
+
+@use "../../../styles/globals.scss";
+/* ========= Base Card ========= */
+.compact-device-card {
+  --card-bg-start: var(--bg-primary);
+  --card-bg-end: color-mix(in srgb, var(--bg-secondary) 85%, var(--bg-primary));
+  --card-border: var(--border-color);
+
+  position: relative;
+  width: 100%;
+  max-width: 280px;
+  min-height: 120px;
+  background: linear-gradient(
+    135deg,
+    var(--card-bg-start) 0%,
+    var(--card-bg-end) 100%
+  );
+  border-radius: 12px;
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+
+  /* Forza visibilità (alcuni wrapper potevano nasconderla) */
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: flex !important;
+  flex-direction: column;
+  transform: translateZ(0);
+
+  &.is-hovered {
+    transform: translateY(-2px) translateZ(0);
+    box-shadow: var(--shadow-lg);
+    border-color: color-mix(in srgb, var(--border-color) 70%, transparent);
+  }
+
+  /* Stato: attivo/inattivo (solo accento a sinistra) */
+  &.is-active {
+    border-left: 3px solid var(--success-color);
+  }
+  &.is-inactive {
+    border-left: 3px solid var(--error-color);
+    --card-bg-start: color-mix(
+      in srgb,
+      var(--error-light) 65%,
+      var(--bg-primary)
+    );
+    --card-bg-end: color-mix(
+      in srgb,
+      var(--bg-secondary) 85%,
+      var(--bg-primary)
+    );
+  }
+}
+
+/* ========= Header ========= */
+.compact-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: color-mix(in srgb, var(--bg-secondary) 85%, transparent);
+  border-bottom: 1px solid var(--border-color);
+  min-height: 32px;
+  position: relative;
+  z-index: 2;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.12);
+
+  &.is-active {
+    background: var(--success-color);
+    animation: pulse-green 2s infinite;
+    box-shadow: 0 0 10px
+      color-mix(in srgb, var(--success-color) 50%, transparent);
+  }
+
+  &.is-inactive {
+    background: var(--error-color);
+    animation: pulse-red 1.6s infinite;
+    box-shadow: 0 0 12px color-mix(in srgb, var(--error-color) 60%, transparent);
+  }
+}
+
+@keyframes pulse-red {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.25);
+  }
+}
+
+.waste-badge {
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--white);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.actions-menu {
+  opacity: 0;
+  transition: opacity 0.2s;
+  position: relative;
+  z-index: 2;
+
+  .compact-device-card.is-hovered & {
+    opacity: 1;
+  }
+}
+
+.menu-btn {
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: color-mix(in srgb, var(--bg-primary) 80%, transparent);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+
+  &:hover {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transform: scale(1.1);
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+/* ========= Content ========= */
+.compact-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  flex: 1;
+  position: relative;
+  z-index: 2;
+}
+
+.device-thumb {
+  position: relative;
+  width: 48px;
+  height: 36px;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--bg-secondary) 85%, var(--bg-primary)) 0%,
+    var(--bg-secondary) 100%
+  );
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .compact-device-card.is-hovered & {
+    transform: scale(1.05);
+  }
+
+  /* accento per device inattivi */
+  .compact-device-card.is-inactive & {
+    border-color: color-mix(
+      in srgb,
+      var(--error-color) 40%,
+      var(--border-color)
+    );
+  }
+}
+
+.wifi-indicator {
+  position: absolute;
+  top: 0px;
+  right: 2px;
+  width: 14px;
+  height: 14px;
+  background: var(--success-color);
+  color: var(--white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  transition: opacity 0.2s;
+
+  .compact-device-card.is-hovered & {
+    opacity: 1;
+  }
+
+  &.is-inactive {
+    background: var(--error-color);
+  }
+}
+
+.device-info-compact {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.device-location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+
+  svg {
+    color: var(--text-secondary);
+    flex-shrink: 0;
+  }
+
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 160px;
+  }
+
+  .compact-device-card.is-inactive & {
+    color: var(--text-secondary);
+
+    svg {
+      color: color-mix(in srgb, var(--text-secondary) 70%, var(--text-primary));
+    }
+  }
+}
+
+.device-technical {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tech-detail {
+  font-size: 10px;
+  color: var(--text-secondary);
+  font-family: "Monaco", "Menlo", monospace;
+  background: var(--bg-secondary);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+
+  .compact-device-card.is-inactive & {
+    background: color-mix(in srgb, var(--error-light) 70%, var(--bg-secondary));
+    border-color: color-mix(
+      in srgb,
+      var(--error-color) 30%,
+      var(--border-color)
+    );
+    color: color-mix(in srgb, var(--error-color) 75%, var(--text-primary));
+  }
+}
+
+.status-text {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  &.is-active {
+    color: var(--success-color);
+  }
+
+  &.is-inactive {
+    color: var(--error-color);
+  }
+}
+
+/* ========= Footer ========= */
+.compact-footer {
+  display: flex;
+  gap: 4px;
+  padding: 8px 12px;
+  background: color-mix(in srgb, var(--bg-secondary) 70%, transparent);
+  border-top: 1px solid var(--border-color);
+  position: relative;
+  z-index: 2;
+
+  .compact-device-card.is-inactive & {
+    background: color-mix(in srgb, var(--error-light) 65%, transparent);
+    border-top-color: color-mix(
+      in srgb,
+      var(--error-color) 30%,
+      var(--border-color)
+    );
+  }
+}
+
+.compact-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex: 1;
+  color: var(--white);
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  /* Varianti */
+  &.primary {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--primary-color) 85%, transparent),
+      var(--primary-dark)
+    );
+  }
+
+  &.success {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--success-color) 85%, transparent),
+      var(--success-dark)
+    );
+  }
+
+  &.error {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--error-color) 85%, transparent),
+      var(--error-dark)
+    );
+
+    .compact-device-card.is-inactive & {
+      box-shadow: 0 0 0 0
+        color-mix(in srgb, var(--error-color) 40%, transparent);
+      animation: activate-pulse 1.6s ease-in-out infinite;
+      border: 1px solid
+        color-mix(in srgb, var(--error-color) 40%, var(--border-color));
+    }
+  }
+
+  &.secondary {
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+
+    &:hover:not(:disabled) {
+      background: color-mix(
+        in srgb,
+        var(--bg-secondary) 85%,
+        var(--bg-primary)
+      );
+      color: var(--text-primary);
+      border-color: color-mix(in srgb, var(--border-color) 70%, transparent);
+    }
+  }
+
+  &.warning {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--warning-color) 85%, transparent),
+      var(--warning-dark)
+    );
+  }
+}
+
+@keyframes activate-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--error-color) 45%, transparent);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 8px
+      color-mix(in srgb, var(--error-color) 10%, transparent);
+    transform: scale(1.05);
+  }
+}
+
+@keyframes pulse-green {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.15);
+  }
+}
+
+/* ========= Responsive ========= */
+@media (max-width: 768px) {
+  .compact-device-card {
+    max-width: 100%;
+    min-height: 100px;
+  }
+
+  .compact-content {
+    padding: 8px;
+    gap: 8px;
+  }
+  .device-thumb {
+    width: 40px;
+    height: 30px;
+  }
+  .device-location span {
+    max-width: 120px;
+  }
+  .compact-footer {
+    padding: 6px 8px;
+    gap: 3px;
+  }
+  .compact-btn {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .compact-device-card {
+    min-height: 90px;
+  }
+  .compact-header {
+    padding: 6px 8px;
+    min-height: 28px;
+  }
+  .device-technical {
+    display: none;
+  } /* nasconde dettagli tecnici su mobile piccolo */
+}
+
+/* ========= A11y ========= */
+.menu-btn:focus,
+.compact-btn:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 1px;
+}

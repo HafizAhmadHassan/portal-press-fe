@@ -1,0 +1,32 @@
+.btn-xs {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  min-height: 28px;
+  border-radius: 4px;
+}
+
+/* Small */
+.btn-sm {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  min-height: 32px;
+  border-radius: 5px;
+}
+
+/* Medium is default - already defined in button-base.css */
+
+/* Large */
+.btn-lg {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.125rem;
+  min-height: 48px;
+  border-radius: 8px;
+}
+
+/* Extra Large */
+.btn-xl {
+  padding: 1rem 2rem;
+  font-size: 1.25rem;
+  min-height: 56px;
+  border-radius: 10px;
+}

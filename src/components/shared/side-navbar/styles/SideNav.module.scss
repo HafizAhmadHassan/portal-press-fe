@@ -1,0 +1,87 @@
+@use '../../../../admin/styles/globals.scss';
+
+/* Base container for the SideNav. All colors come from global tokens.
+   To toggle dark mode, just add/remove `.darkMode` on <html> or <body>.
+   No [data-theme] selectors here. */
+
+.sideNav {
+  /* Local tokens mapped to global ones */
+  --sidenav-width: 280px;
+  --sidenav-collapsed-width: 72px;
+
+  --sidenav-bg: var(--bg-secondary);
+  --sidenav-border: var(--border-color);
+  --sidenav-shadow: var(--shadow-md);
+  --sidenav-text: var(--text-primary);
+  --sidenav-muted: var(--text-secondary);
+  --sidenav-hover-bg: var(--primary-light);
+  --sidenav-active-bg: var(--primary-light);
+  --sidenav-active-text: var(--primary-color);
+  --sidenav-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  position: relative;
+  top: 0;
+  height: calc(100vh - 60px);
+  width: var(--sidenav-width);
+  background: var(--sidenav-bg);
+  border-right: 1px solid var(--sidenav-border);
+  box-shadow: var(--sidenav-shadow);
+  color: var(--sidenav-text);
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  transition: var(--sidenav-transition);
+
+  /* scroll behavior */
+  overflow: hidden;
+  &:hover { overflow-y: auto; }
+  &::-webkit-scrollbar { width: 8px; }
+  &::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 999px; }
+  &::-webkit-scrollbar-thumb:hover { background: var(--gray-300); }
+
+  &.left {
+    left: 0;
+    transform: translateX(-100%);
+
+    @media (max-width: 768px) {
+      position: fixed;
+      top: 60px;
+      height: calc(100vh - 60px);
+      z-index: 1200;
+    }
+    @media (min-width: 769px) {
+      transform: translateX(0);
+      position: relative;
+    }
+    &.mobileOpen { transform: translateX(0); }
+    &.collapsed {
+      @media (min-width: 769px) {
+        width: var(--sidenav-collapsed-width);
+      }
+    }
+  }
+
+  &.right {
+    right: 0;
+    border-right: none;
+    border-left: 1px solid var(--sidenav-border);
+    transform: translateX(100%);
+
+    @media (max-width: 768px) {
+      position: fixed;
+      top: 60px;
+      height: calc(100vh - 60px);
+      z-index: 1200;
+    }
+    @media (min-width: 769px) {
+      transform: translateX(0);
+      position: relative;
+    }
+    &.mobileOpen { transform: translateX(0); }
+    &.collapsed {
+      @media (min-width: 769px) {
+        width: var(--sidenav-collapsed-width);
+      }
+    }
+  }
+}

@@ -1,0 +1,79 @@
+/* Usa i token di globals.scss: var(--bg-*), var(--text-*), var(--border-color), var(--primary-color) ecc. */
+
+.nameCell {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.muted {
+  color: var(--text-secondary);
+}
+
+.wasteCell {
+  display: flex;
+  align-items: center;
+}
+
+/* Badge base */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+/* Varianti semantiche (ok / ko / danger) */
+.badge--ok {
+  background: color-mix(in srgb, var(--success-color) 12%, transparent);
+  border-color: color-mix(
+    in srgb,
+    var(--success-color) 40%,
+    var(--border-color)
+  );
+  color: color-mix(in srgb, var(--success-color) 85%, white);
+}
+
+.badge--ko {
+  background: color-mix(in srgb, var(--error-color) 12%, transparent);
+  border-color: color-mix(in srgb, var(--error-color) 40%, var(--border-color));
+  color: color-mix(in srgb, var(--error-color) 85%, white);
+}
+
+.badge--danger {
+  background: color-mix(in srgb, var(--error-color) 12%, transparent);
+  border-color: color-mix(in srgb, var(--error-color) 45%, var(--border-color));
+  color: color-mix(in srgb, var(--error-color) 85%, white);
+}
+
+/* Celle data */
+.dateCell {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.datePrimary {
+  font-size: 14px;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.dateSecondary {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* Riga azioni */
+.actionsRow {
+  display: flex;
+  gap: 8px;
+  justify-content: start;
+  align-items: center;
+}

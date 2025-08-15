@@ -1,0 +1,541 @@
+/* ==========================================================================
+   Buttons - Sistema completo di bottoni
+   ========================================================================== */
+
+@use "../variables" as v;
+@use "../colors" as c;
+@use "../mixins" as m;
+
+// Base Button
+.btn {
+  @include m.reset-button;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: v.$space-2;
+  padding: v.$space-2 v.$space-4;
+  font-size: v.$font-size-base;
+  font-weight: v.$font-weight-medium;
+  line-height: v.$line-height-none;
+  border: v.$border solid transparent;
+  border-radius: v.$radius-md;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  @include m.transition(all);
+
+  &:focus {
+    outline: none;
+  }
+
+  &:disabled,
+  &.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  // Icon only buttons
+  &.btn-icon {
+    padding: v.$space-2;
+    aspect-ratio: 1;
+  }
+
+  // Loading state
+  &.loading {
+    position: relative;
+    color: transparent;
+
+    &::after {
+      content: "";
+      position: absolute;
+      width: 1rem;
+      height: 1rem;
+      border: 2px solid transparent;
+      border-top: 2px solid currentColor;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+  }
+}
+
+// Button Sizes
+.btn-xs {
+  padding: v.$space-1 v.$space-2;
+  font-size: v.$font-size-xs;
+  border-radius: v.$radius-sm;
+
+  &.btn-icon {
+    padding: v.$space-1;
+  }
+}
+
+.btn-sm {
+  padding: v.$space-1-5 v.$space-3;
+  font-size: v.$font-size-sm;
+  border-radius: v.$radius-base;
+
+  &.btn-icon {
+    padding: v.$space-1-5;
+  }
+}
+
+.btn-lg {
+  padding: v.$space-3 v.$space-6;
+  font-size: v.$font-size-lg;
+  border-radius: v.$radius-lg;
+
+  &.btn-icon {
+    padding: v.$space-3;
+  }
+}
+
+.btn-xl {
+  padding: v.$space-4 v.$space-8;
+  font-size: v.$font-size-xl;
+  border-radius: v.$radius-xl;
+
+  &.btn-icon {
+    padding: v.$space-4;
+  }
+}
+
+// Primary Variants
+.btn-primary {
+  @include m.button-variant(c.$primary, c.$white);
+}
+
+.btn-secondary {
+  @include m.button-variant(c.$secondary, c.$white);
+}
+
+.btn-success {
+  @include m.button-variant(c.$success, c.$white);
+}
+
+.btn-warning {
+  @include m.button-variant(c.$warning, c.$white);
+}
+
+.btn-danger {
+  @include m.button-variant(c.$danger, c.$white);
+}
+
+.btn-info {
+  @include m.button-variant(c.$info, c.$white);
+}
+
+// Outline Variants
+.btn-outline-primary {
+  @include m.button-outline(c.$primary);
+}
+
+.btn-outline-secondary {
+  @include m.button-outline(c.$secondary);
+}
+
+.btn-outline-success {
+  @include m.button-outline(c.$success);
+}
+
+.btn-outline-warning {
+  @include m.button-outline(c.$warning);
+}
+
+.btn-outline-danger {
+  @include m.button-outline(c.$danger);
+}
+
+.btn-outline-info {
+  @include m.button-outline(c.$info);
+}
+
+// Ghost Variants
+.btn-ghost-primary {
+  @include m.button-ghost(c.$primary);
+}
+
+.btn-ghost-secondary {
+  @include m.button-ghost(c.$secondary);
+}
+
+.btn-ghost-success {
+  @include m.button-ghost(c.$success);
+}
+
+.btn-ghost-warning {
+  @include m.button-ghost(c.$warning);
+}
+
+.btn-ghost-danger {
+  @include m.button-ghost(c.$danger);
+}
+
+.btn-ghost-info {
+  @include m.button-ghost(c.$info);
+}
+
+// Special Variants
+.btn-light {
+  @include m.button-variant(c.$gray-100, c.$gray-900, c.$gray-300);
+}
+
+.btn-dark {
+  @include m.button-variant(c.$gray-900, c.$white);
+}
+
+.btn-white {
+  @include m.button-variant(c.$white, c.$gray-900, c.$gray-300);
+  box-shadow: v.$shadow-sm;
+}
+
+.btn-link {
+  @include m.button-ghost(c.$primary);
+  border-radius: 0;
+  text-decoration: underline;
+
+  &:hover:not(:disabled) {
+    background-color: transparent;
+    text-decoration-color: transparent;
+  }
+}
+
+// Block Button
+.btn-block {
+  width: 100%;
+}
+
+// Button Groups
+.btn-group {
+  display: inline-flex;
+
+  .btn {
+    border-radius: 0;
+
+    &:first-child {
+      border-top-left-radius: v.$radius-md;
+      border-bottom-left-radius: v.$radius-md;
+    }
+
+    &:last-child {
+      border-top-right-radius: v.$radius-md;
+      border-bottom-right-radius: v.$radius-md;
+    }
+
+    &:not(:first-child) {
+      margin-left: -1px;
+    }
+
+    &:hover,
+    &:focus,
+    &:active {
+      z-index: 1;
+    }
+  }
+
+  &.btn-group-sm .btn {
+    &:first-child {
+      border-top-left-radius: v.$radius-base;
+      border-bottom-left-radius: v.$radius-base;
+    }
+
+    &:last-child {
+      border-top-right-radius: v.$radius-base;
+      border-bottom-right-radius: v.$radius-base;
+    }
+  }
+
+  &.btn-group-lg .btn {
+    &:first-child {
+      border-top-left-radius: v.$radius-lg;
+      border-bottom-left-radius: v.$radius-lg;
+    }
+
+    &:last-child {
+      border-top-right-radius: v.$radius-lg;
+      border-bottom-right-radius: v.$radius-lg;
+    }
+  }
+}
+
+// Vertical Button Group
+.btn-group-vertical {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+
+  .btn {
+    width: 100%;
+    border-radius: 0;
+
+    &:first-child {
+      border-top-left-radius: v.$radius-md;
+      border-top-right-radius: v.$radius-md;
+    }
+
+    &:last-child {
+      border-bottom-left-radius: v.$radius-md;
+      border-bottom-right-radius: v.$radius-md;
+    }
+
+    &:not(:first-child) {
+      margin-top: -1px;
+    }
+
+    &:hover,
+    &:focus,
+    &:active {
+      z-index: 1;
+    }
+  }
+}
+
+// Floating Action Button
+.btn-fab {
+  position: fixed;
+  bottom: v.$space-6;
+  right: v.$space-6;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  box-shadow: v.$shadow-lg;
+  z-index: v.$z-index-sticky;
+
+  &:hover {
+    box-shadow: v.$shadow-xl;
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &.btn-fab-sm {
+    width: 2.5rem;
+    height: 2.5rem;
+    bottom: v.$space-4;
+    right: v.$space-4;
+  }
+
+  &.btn-fab-lg {
+    width: 4rem;
+    height: 4rem;
+    bottom: v.$space-8;
+    right: v.$space-8;
+  }
+}
+
+// Button with Icon
+.btn-icon-left {
+  .icon {
+    margin-right: v.$space-2;
+  }
+}
+
+.btn-icon-right {
+  .icon {
+    margin-left: v.$space-2;
+  }
+}
+
+// Toggle Button
+.btn-toggle {
+  &.active {
+    background-color: c.$primary;
+    color: c.$white;
+    border-color: c.$primary;
+    box-shadow: v.$shadow-sm;
+  }
+}
+
+// Button Toolbar
+.btn-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: v.$space-2;
+
+  .btn-group,
+  .input-group {
+    margin-right: v.$space-2;
+    margin-bottom: v.$space-2;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+// Social Buttons
+.btn-facebook {
+  @include m.button-variant(#1877f2, c.$white);
+}
+
+.btn-twitter {
+  @include m.button-variant(#1da1f2, c.$white);
+}
+
+.btn-google {
+  @include m.button-variant(#dd4b39, c.$white);
+}
+
+.btn-linkedin {
+  @include m.button-variant(#0077b5, c.$white);
+}
+
+.btn-github {
+  @include m.button-variant(#333, c.$white);
+}
+
+// Gradient Buttons
+.btn-gradient-primary {
+  background: linear-gradient(45deg, c.$primary-600, c.$primary-400);
+  border-color: transparent;
+  color: c.$white;
+
+  &:hover {
+    background: linear-gradient(45deg, c.$primary-700, c.$primary-500);
+    transform: translateY(-1px);
+    box-shadow: v.$shadow-lg;
+  }
+}
+
+.btn-gradient-success {
+  background: linear-gradient(45deg, c.$success-600, c.$success-400);
+  border-color: transparent;
+  color: c.$white;
+
+  &:hover {
+    background: linear-gradient(45deg, c.$success-700, c.$success-500);
+    transform: translateY(-1px);
+    box-shadow: v.$shadow-lg;
+  }
+}
+
+.btn-gradient-danger {
+  background: linear-gradient(45deg, c.$danger-600, c.$danger-400);
+  border-color: transparent;
+  color: c.$white;
+
+  &:hover {
+    background: linear-gradient(45deg, c.$danger-700, c.$danger-500);
+    transform: translateY(-1px);
+    box-shadow: v.$shadow-lg;
+  }
+}
+
+.btn-gradient-disabled {
+  background: linear-gradient(45deg, c.$gray-600, c.$gray-400);
+  border-color: transparent;
+  color: c.$white;
+
+  &:hover {
+    background: linear-gradient(45deg, c.$gray-700, c.$gray-500);
+    transform: translateY(-1px);
+    box-shadow: v.$shadow-lg;
+  }
+}
+
+// Raised Buttons
+.btn-raised {
+  box-shadow: v.$shadow-base;
+
+  &:hover {
+    box-shadow: v.$shadow-md;
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    box-shadow: v.$shadow-sm;
+    transform: translateY(0);
+  }
+}
+
+// Rounded Buttons
+.btn-rounded {
+  border-radius: v.$radius-full;
+}
+
+// Square Buttons
+.btn-square {
+  border-radius: 0;
+}
+
+// Animations
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+// Button with pulse animation
+.btn-pulse {
+  animation: pulse 2s infinite;
+}
+
+// Close Button
+.btn-close {
+  box-sizing: content-box;
+  width: 1em;
+  height: 1em;
+  padding: 0.25em 0.25em;
+  color: c.$black;
+  background: transparent
+    url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='m.235 1.575 5.09 5.09L.235 11.755a.75.75 0 1 0 1.06 1.06L6.385 7.725l5.09 5.09a.75.75 0 1 0 1.06-1.06L7.445 6.665l5.09-5.09a.75.75 0 1 0-1.06-1.06L6.385 5.605 1.295.515a.75.75 0 1 0-1.06 1.06z'/%3e%3c/svg%3e")
+    center/1em auto no-repeat;
+  border: 0;
+  border-radius: v.$radius-base;
+  opacity: 0.5;
+
+  &:hover,
+  &:focus {
+    color: c.$black;
+    text-decoration: none;
+    opacity: 0.75;
+  }
+
+  &:disabled,
+  &.disabled {
+    pointer-events: none;
+    user-select: none;
+    opacity: 0.25;
+  }
+}
+
+.btn-close-white {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+// Responsive Button Utilities
+@include m.breakpoint(sm) {
+  .btn-sm-block {
+    width: 100%;
+  }
+}
+
+@include m.breakpoint(md) {
+  .btn-md-block {
+    width: 100%;
+  }
+}
+
+@include m.breakpoint(lg) {
+  .btn-lg-block {
+    width: 100%;
+  }
+}

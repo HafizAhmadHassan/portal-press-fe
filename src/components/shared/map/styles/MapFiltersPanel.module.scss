@@ -1,0 +1,16 @@
+.goHomeLocation {
+  display: flex;
+  gap: 10px;
+  width: fit-content;
+
+}
+
+.goHomeLocationLabel {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .goHomeLocationLabel {
+    display: none;
+  }
+}

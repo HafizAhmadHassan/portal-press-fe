@@ -1,0 +1,155 @@
+@use '../../../styles/globals.scss';
+
+/* TicketsSection.module.scss
+   - Dark-mode ready via global CSS variables from globals.scss
+   - No hardcoded colors
+*/
+
+/* === SEZIONE TICKET OTTIMIZZATA === */
+.tickets-list-page {
+  position: relative;
+  min-height: 400px;
+  
+  color: var(--text-primary);
+  scroll-margin-top: 20px;
+  background-color: var(--bg-secondary);
+}
+
+.viewContainer {
+  position: relative;
+  width: 100%;
+  min-height: 400px;
+}
+
+/* Wrapper tabella */
+.tableSection {
+  padding: 1rem;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  /* border-radius: var(--border-radius); */
+  box-shadow: var(--shadow-sm);
+  animation: slideInFromRight 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+
+  &.exiting {
+    animation: slideOutToLeft 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+}
+
+/* Sezione wrapper tabella (compatibile con UsersList) */
+.tickets-list-page__table-wrapper {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  
+  border: 1px solid var(--border-color);
+  /* border-radius: var(--border-radius); */
+  box-shadow: var(--shadow-sm);
+}
+
+/* Stati */
+.errorState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  background: var(--error-light);
+  border: 1px solid color-mix(in oklab, var(--error-color) 40%, transparent);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+
+  span {
+    color: var(--error-dark);
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+
+  button {
+    background: var(--error-color);
+    color: var(--white);
+    border: 1px solid color-mix(in oklab, var(--error-color) 40%, transparent);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+
+    &:hover {
+      background: var(--error-dark);
+      box-shadow: var(--shadow-sm);
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--error-color);
+      outline-offset: 2px;
+    }
+  }
+}
+
+.loadingState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 400px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+
+  .spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--border-color);
+    border-top: 3px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 16px;
+  }
+
+  span {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+  }
+}
+
+/* Animazioni */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutToLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+}
+
+/* Responsive placeholder (se servirà per map stats) */
+/* @media (max-width: 768px) {
+  // aggiungere regole specifiche qui
+} */

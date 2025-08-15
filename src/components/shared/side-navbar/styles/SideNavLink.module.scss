@@ -1,0 +1,81 @@
+@use '../../../../admin/styles/globals.scss';
+
+.navLinkWrapper {
+  text-decoration: none;
+  display: block;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  margin: 0 0.5rem;
+  border-radius: var(--border-radius-sm, 8px);
+  cursor: pointer;
+  transition: var(--sidenav-transition);
+  color: var(--sidenav-text);
+  text-decoration: none;
+  position: relative;
+  min-height: 44px;
+
+  &:hover {
+    background: var(--sidenav-hover-bg);
+    transform: translateX(2px);
+  }
+
+  &.active {
+    background: var(--sidenav-active-bg);
+    color: var(--sidenav-active-text);
+    font-weight: 600;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: -0.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 20px;
+      background: var(--sidenav-active-text);
+      border-radius: 0 2px 2px 0;
+    }
+  }
+
+  &.collapsed {
+    justify-content: center;
+    padding: 1rem;
+    margin: 0 0.25rem;
+
+    &:hover { transform: scale(1.05); }
+    &.active::before { left: -0.25rem; }
+  }
+
+  &.level1 { padding-left: 2rem; font-size: 0.875rem; }
+  &.level2 { padding-left: 3rem; font-size: 0.8125rem; }
+  &.level3 { padding-left: 4rem; font-size: 0.8125rem; }
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  gap: 0.75rem;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.chevronSpace {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}

@@ -1,0 +1,411 @@
+/* === DYNAMIC CARD COMPOSABLE CSS === */
+
+/* === VARIABILI === */
+:root {
+  --dc-bg-primary: #ffffff;
+  --dc-bg-secondary: #f9fafb;
+  --dc-bg-footer: #f8fafc;
+  --dc-text-primary: #1f2937;
+  --dc-text-secondary: #4b5563;
+  --dc-text-muted: #6b7280;
+  --dc-border-light: #e5e7eb;
+
+  --dc-primary: #3b82f6;
+  --dc-primary-hover: #2563eb;
+  --dc-success: #10b981;
+  --dc-success-hover: #059669;
+  --dc-warning: #f59e0b;
+  --dc-warning-hover: #d97706;
+  --dc-danger: #ef4444;
+  --dc-danger-hover: #dc2626;
+
+  --dc-space-1: 4px;
+  --dc-space-2: 8px;
+  --dc-space-3: 12px;
+  --dc-space-4: 16px;
+  --dc-space-5: 20px;
+  --dc-space-6: 24px;
+
+  --dc-radius-sm: 4px;
+  --dc-radius-md: 6px;
+  --dc-radius-lg: 8px;
+  --dc-radius-xl: 12px;
+
+  --dc-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --dc-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --dc-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+  --dc-transition-fast: 150ms ease;
+  --dc-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* === CARD BASE === */
+.dynamic-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--dc-bg-primary);
+  border: 1px solid var(--dc-border-light);
+  font-family: var(--dc-font-family);
+  color: var(--dc-text-primary);
+  transition: all var(--dc-transition-fast);
+  overflow: hidden;
+  position: relative;
+}
+
+/* === VARIANTI === */
+.dynamic-card--default {
+  box-shadow: var(--dc-shadow-sm);
+}
+
+.dynamic-card--elevated {
+  box-shadow: var(--dc-shadow-lg);
+}
+
+.dynamic-card--outlined {
+  border: 2px solid var(--dc-border-light);
+  box-shadow: none;
+}
+
+.dynamic-card--filled {
+  background: var(--dc-bg-secondary);
+  border: none;
+  box-shadow: none;
+}
+
+/* === DIMENSIONI === */
+.dynamic-card--sm {
+  border-radius: var(--dc-radius-md);
+  max-width: 320px;
+}
+
+.dynamic-card--md {
+  border-radius: var(--dc-radius-lg);
+  max-width: 480px;
+}
+
+.dynamic-card--lg {
+  border-radius: var(--dc-radius-xl);
+  max-width: 640px;
+}
+
+.dynamic-card--xl {
+  border-radius: var(--dc-radius-xl);
+  max-width: 800px;
+}
+
+/* === DIREZIONI === */
+.dynamic-card--horizontal .card-body-container--horizontal {
+  flex-direction: row;
+}
+
+.dynamic-card--vertical .card-body-container,
+.card-body-container--vertical {
+  flex-direction: column;
+}
+
+/* === HEADER === */
+.card-header {
+  position: absolute;
+  top: var(--dc-space-3);
+  right: var(--dc-space-3);
+  z-index: 10;
+}
+
+.card-status {
+  display: flex;
+  align-items: center;
+  gap: var(--dc-space-2);
+}
+
+.card-status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  transition: all var(--dc-transition-fast);
+}
+
+.card-status-indicator--active {
+  background: var(--dc-success);
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+}
+
+.card-status-indicator--inactive {
+  background: var(--dc-danger);
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
+}
+
+.card-status-text {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card-status-text--active {
+  color: var(--dc-success);
+}
+
+.card-status-text--inactive {
+  color: var(--dc-danger);
+}
+
+/* === BODY === */
+.card-body-container {
+  display: flex;
+  flex: 1;
+  padding: var(--dc-space-4);
+  gap: var(--dc-space-4);
+}
+
+.card-body-container--horizontal {
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.card-body-container--vertical {
+  flex-direction: column;
+}
+
+/* === FOOTER === */
+.card-footer {
+  margin-top: auto;
+  padding: var(--dc-space-3) var(--dc-space-4);
+  background: var(--dc-bg-footer);
+}
+
+.card-footer--divider {
+  border-top: 1px solid var(--dc-border-light);
+}
+
+.card-footer--compact {
+  padding: var(--dc-space-2) var(--dc-space-4);
+}
+
+.card-footer--expanded {
+  padding: var(--dc-space-4);
+}
+
+.card-footer--left {
+  text-align: left;
+}
+
+.card-footer--center {
+  text-align: center;
+}
+
+.card-footer--right {
+  text-align: right;
+}
+
+.card-footer--space-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* === IMAGE === */
+.card-image {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--dc-radius-md);
+  background: var(--dc-bg-secondary);
+}
+
+.card-image__wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.card-image__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--dc-transition-fast);
+}
+
+.card-image--sm { width: 60px; height: 60px; }
+.card-image--md { width: 80px; height: 80px; }
+.card-image--lg { width: 120px; height: 120px; }
+.card-image--xl { width: 160px; height: 160px; }
+
+/* === BUTTONS === */
+.card-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--dc-space-1);
+  font-family: var(--dc-font-family);
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  border-radius: var(--dc-radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  user-select: none;
+  transition: all var(--dc-transition-fast);
+}
+
+.card-action:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Button Variants */
+.card-action--default {
+  background: var(--dc-bg-secondary);
+  color: var(--dc-text-primary);
+  border-color: var(--dc-border-light);
+}
+
+.card-action--default:hover:not(:disabled) {
+  background: var(--dc-text-muted);
+  color: white;
+}
+
+.card-action--primary {
+  background: var(--dc-primary);
+  color: white;
+}
+
+.card-action--primary:hover:not(:disabled) {
+  background: var(--dc-primary-hover);
+}
+
+.card-action--secondary {
+  background: #6b7280;
+  color: white;
+}
+
+.card-action--secondary:hover:not(:disabled) {
+  background: #4b5563;
+}
+
+.card-action--success {
+  background: var(--dc-success);
+  color: white;
+}
+
+.card-action--success:hover:not(:disabled) {
+  background: var(--dc-success-hover);
+}
+
+.card-action--warning {
+  background: var(--dc-warning);
+  color: white;
+}
+
+.card-action--warning:hover:not(:disabled) {
+  background: var(--dc-warning-hover);
+}
+
+.card-action--danger {
+  background: var(--dc-danger);
+  color: white;
+}
+
+.card-action--danger:hover:not(:disabled) {
+  background: var(--dc-danger-hover);
+}
+
+/* Button Sizes */
+.card-action--sm {
+  padding: var(--dc-space-1) var(--dc-space-3);
+  font-size: 11px;
+  min-height: 28px;
+}
+
+.card-action--md {
+  padding: var(--dc-space-2) var(--dc-space-4);
+  font-size: 14px;
+  min-height: 36px;
+}
+
+.card-action--lg {
+  padding: var(--dc-space-3) var(--dc-space-6);
+  font-size: 16px;
+  min-height: 44px;
+}
+
+/* === BADGES === */
+.card-category {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: var(--dc-radius-sm);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  width: fit-content;
+}
+
+.card-category--plastica {
+  background: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #3b82f6;
+}
+
+.card-category--secco {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #6b7280;
+}
+
+.card-category--carta {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #f59e0b;
+}
+
+.card-category--indifferenziato {
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #ef4444;
+}
+
+.card-category--organico {
+  background: #d1fae5;
+  color: #047857;
+  border: 1px solid #10b981;
+}
+
+.card-category--vetro {
+  background: #e0f2fe;
+  color: #0c4a6e;
+  border: 1px solid #0ea5e9;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .card-body-container {
+    flex-direction: column !important;
+    padding: var(--dc-space-3);
+    gap: var(--dc-space-3);
+  }
+
+  .card-footer {
+    padding: var(--dc-space-2) var(--dc-space-3);
+  }
+
+  .card-action {
+    font-size: 10px;
+    padding: var(--dc-space-1) var(--dc-space-2);
+    min-height: 24px;
+  }
+
+  .card-image {
+    width: 80px !important;
+    height: 80px !important;
+  }
+}
+
+/* === UTILITY === */
+.dynamic-card--full-width {
+  max-width: none;
+  width: 100%;
+}
+
+.dynamic-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--dc-shadow-lg);
+}

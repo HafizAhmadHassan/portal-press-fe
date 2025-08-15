@@ -1,0 +1,137 @@
+/* ==========================================================================
+   Color Utilities
+   ========================================================================== */
+
+@use "sass:math";
+@use "../colors" as c;
+
+// Text Colors
+.text-primary {
+  color: c.$primary !important;
+}
+.text-secondary {
+  color: c.$secondary !important;
+}
+.text-success {
+  color: c.$success !important;
+}
+.text-danger {
+  color: c.$danger !important;
+}
+.text-warning {
+  color: c.$warning !important;
+}
+.text-info {
+  color: c.$info !important;
+}
+.text-light {
+  color: c.$gray-400 !important;
+}
+.text-dark {
+  color: c.$gray-900 !important;
+}
+.text-muted {
+  color: c.$text-muted !important;
+}
+.text-white {
+  color: c.$white !important;
+}
+.text-black {
+  color: c.$black !important;
+}
+.text-body {
+  color: c.$text-primary !important;
+}
+
+// Background Colors
+.bg-primary {
+  background-color: c.$primary !important;
+}
+.bg-secondary {
+  background-color: c.$secondary !important;
+}
+.bg-success {
+  background-color: c.$success !important;
+}
+.bg-danger {
+  background-color: c.$danger !important;
+}
+.bg-warning {
+  background-color: c.$warning !important;
+}
+.bg-info {
+  background-color: c.$info !important;
+}
+.bg-light {
+  background-color: c.$gray-100 !important;
+}
+.bg-dark {
+  background-color: c.$gray-900 !important;
+}
+.bg-white {
+  background-color: c.$white !important;
+}
+.bg-transparent {
+  background-color: transparent !important;
+}
+.bg-body {
+  background-color: c.$bg-body !important;
+}
+
+// Background Opacity Utilities
+@for $i from 10 through 90 {
+  @if $i % 10 == 0 {
+    .bg-opacity-#{$i} {
+      --bs-bg-opacity: #{math.div($i, 100)};
+    }
+  }
+}
+
+// Link Colors
+.link-primary {
+  color: c.$primary !important;
+}
+.link-secondary {
+  color: c.$secondary !important;
+}
+.link-success {
+  color: c.$success !important;
+}
+.link-danger {
+  color: c.$danger !important;
+}
+.link-warning {
+  color: c.$warning !important;
+}
+.link-info {
+  color: c.$info !important;
+}
+.link-light {
+  color: c.$gray-400 !important;
+}
+.link-dark {
+  color: c.$gray-900 !important;
+}
+
+.link-underline {
+  text-decoration: underline !important;
+}
+
+.link-underline-opacity-0 {
+  text-decoration: none !important;
+}
+.link-underline-opacity-10 {
+  text-decoration-color: rgba(var(--link-color-rgb), 0.1) !important;
+}
+.link-underline-opacity-25 {
+  text-decoration-color: rgba(var(--link-color-rgb), 0.25) !important;
+}
+.link-underline-opacity-50 {
+  text-decoration-color: rgba(var(--link-color-rgb), 0.5) !important;
+}
+.link-underline-opacity-75 {
+  text-decoration-color: rgba(var(--link-color-rgb), 0.75) !important;
+}
+.link-underline-opacity-100 {
+  text-decoration-color: rgba(var(--link-color-rgb), 1) !important;
+}

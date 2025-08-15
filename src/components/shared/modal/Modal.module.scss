@@ -1,0 +1,377 @@
+@use "../../../admin/styles/globals.scss";
+
+/* Animations */
+$dur: 0.3s;
+$ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+@keyframes overlayIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes overlayOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes contentIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+@keyframes contentOut {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95) translateY(-20px);
+  }
+}
+
+@keyframes slideInTop {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes slideInBottom {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Overlay */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  animation: overlayIn $dur $ease forwards;
+}
+.overlay--closing {
+  animation: overlayOut $dur $ease forwards;
+}
+
+/* Content */
+.content {
+  position: relative;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+
+  box-shadow: var(--shadow-2xl);
+  animation: contentIn $dur $ease forwards;
+
+  &:hover {
+    box-shadow: 0 32px 64px -12px rgba(0, 0, 0, 0.4);
+  }
+}
+.content--closing {
+  animation: contentOut $dur $ease forwards;
+}
+.content--loading {
+  pointer-events: none;
+  opacity: 0.85;
+
+  .closeBtn {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+/* Sizes (padding top maggiore per la X) */
+.content--sm {
+  max-width: 24rem;
+  padding: 1rem;
+  padding-top: 3rem;
+}
+.content--md {
+  max-width: 32rem;
+  padding: 1.5rem;
+  padding-top: 3rem;
+}
+.content--lg {
+  max-width: 48rem;
+  padding: 2rem;
+  padding-top: 3rem;
+}
+.content--xl {
+  max-width: 64rem;
+  padding: 2rem;
+  padding-top: 3rem;
+}
+.content--bare {
+  max-width: fit-content;
+  padding: 0.5rem;
+  padding-top: 2.5rem;
+}
+
+/* Body & structure */
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-left: 0.125rem;
+  padding-right: 0.125rem;
+}
+.body > * {
+  margin: 0;
+}
+.body > * + * {
+  margin-top: 0;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+  padding-right: 2.5rem;
+  animation: slideInTop 0.4s $ease 0.1s both;
+}
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.title {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  flex: 1;
+  overflow-wrap: anywhere;
+}
+
+.description {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  color: var(--text-secondary);
+  margin: 0;
+  padding-right: 2.5rem;
+  animation: slideInTop 0.4s $ease 0.15s both;
+}
+
+.children {
+  animation: slideInTop 0.4s $ease 0.2s both;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+  margin-top: 1rem;
+  animation: slideInBottom 0.4s $ease 0.25s both;
+
+  > * {
+    transition: transform 0.2s ease;
+    &:hover {
+      transform: translateY(-2px);
+    }
+    &:active {
+      transform: translateY(0);
+    }
+  }
+}
+
+.cancelIcon {
+  width: 1rem;
+  height: 1rem;
+  color: var(--error-color);
+}
+.cancelText {
+  color: var(--error-color);
+  font-weight: 500;
+}
+
+/* Close button */
+.closeBtn {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  width: 2rem;
+  height: 2rem;
+  padding: 0.5rem;
+
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 9999px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 20;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+  &:hover:not(:disabled) {
+    background-color: var(--bg-secondary);
+    transform: scale(1.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px
+      color-mix(in srgb, var(--primary-color) 50%, transparent);
+  }
+  &:active:not(:disabled) {
+    transform: scale(0.95);
+  }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+.closeIcon {
+  width: 1rem;
+  height: 1rem;
+  color: var(--gray-500);
+  transition: color 0.2s ease;
+  .closeBtn:hover:not(:disabled) & {
+    color: var(--gray-700);
+  }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .content--xl {
+    max-width: 90vw;
+  }
+}
+
+@media (max-width: 768px) {
+  .overlay {
+    padding: 0.5rem;
+  }
+  .content {
+    max-width: 100% !important;
+    margin: 0;
+    max-height: 95vh;
+  }
+  .content--sm,
+  .content--md,
+  .content--lg,
+  .content--xl {
+    padding: 1rem;
+    padding-top: 3rem;
+  }
+  .content--bare {
+    padding: 0.5rem;
+    padding-top: 2.5rem;
+  }
+
+  .closeBtn {
+    right: 0.75rem;
+    top: 0.75rem;
+    width: 1.75rem;
+    height: 1.75rem;
+    padding: 0.375rem;
+  }
+  .closeIcon {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+
+  .header {
+    padding-right: 2rem;
+  }
+  .description {
+    padding-right: 2rem;
+  }
+
+  .actions {
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+    > * {
+      width: 100%;
+    }
+  }
+
+  .title {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+  .description {
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .content {
+    border-radius: 0.5rem;
+  }
+  .content--sm,
+  .content--md,
+  .content--lg,
+  .content--xl {
+    padding: 0.75rem;
+    padding-top: 2.75rem;
+  }
+  .content--bare {
+    padding: 0.5rem;
+    padding-top: 2.25rem;
+  }
+
+  .closeBtn {
+    right: 0.5rem;
+    top: 0.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0.25rem;
+  }
+  .closeIcon {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+
+  .body {
+    gap: 1rem;
+  }
+  .header {
+    gap: 0.5rem;
+    padding-right: 1.5rem;
+  }
+  .description {
+    padding-right: 1.5rem;
+  }
+  .title {
+    font-size: 1.125rem;
+    line-height: 1.5rem;
+  }
+}
