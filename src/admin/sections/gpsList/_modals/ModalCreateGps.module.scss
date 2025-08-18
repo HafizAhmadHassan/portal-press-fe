@@ -62,6 +62,11 @@
   flex: 1;
 }
 
+.fullWidth {
+  grid-column: span 2;
+  padding: 0 20px;
+}
+
 /* Grid */
 .formGrid {
   display: grid;

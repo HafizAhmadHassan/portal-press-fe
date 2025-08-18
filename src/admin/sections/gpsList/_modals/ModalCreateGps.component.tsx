@@ -132,14 +132,16 @@ export const ModalCreateGps: React.FC<Props> = ({ onSave, triggerButton }) => {
             />
           </div>
 
-          <Input
-            label="Indirizzo"
-            value={form.address || ''}
-            onChange={(e) => set('address', e.target.value)}
-            icon={MapPin}
-            required
-            error={errors.address}
-          />
+          <div className={styles.fullWidth}>
+            <Input
+              label="Indirizzo"
+              value={form.address || ''}
+              onChange={(e) => set('address', e.target.value)}
+              icon={MapPin}
+              required
+              error={errors.address}
+            />
+          </div>
         </div>
       </div>
     </Modal>
