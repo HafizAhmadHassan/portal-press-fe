@@ -1,6 +1,6 @@
 import {
     BarChart3, Calendar, ChevronRight, ComponentIcon, FileText,
-    Home, Mail, Settings, TableIcon, Ticket, Users, WashingMachine
+    Home, LocateFixed, Mail, Settings, TableIcon, Ticket, Users, WashingMachine
   } from 'lucide-react';
   import type { MenuItem, UserProfile } from '@shared/side-navbar/types/MenuItem.types';
   
@@ -16,7 +16,10 @@ import {
   
     { label: 'Tickets', route: '/admin/tickets', icon: Ticket, badge: '12',
       iconColor: 'var(--warning-color)', iconActiveColor: 'var(--warning-dark)' },
-  
+
+    { label: 'GPS', route: '/admin/gps', icon: LocateFixed, badge: '12',
+      iconColor: 'var(--info-color)', iconActiveColor: 'var(--info-dark)' },
+
     {
       label: 'Analytics',
       icon: BarChart3,

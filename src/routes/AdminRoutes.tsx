@@ -6,6 +6,7 @@ import { UsersListSections } from '@sections_admin/usersList/Users-list.sections
 import OverviwSection from '@sections_admin/overview/Overview.sections.tsx';
 import AnalyticsReportsSections from '@sections_admin/analytics/AnalyticsReports.sections.tsx';
 import { TicketsListSections } from '@sections_admin/ticketsList/Ticket-list.section.tsx';
+import { GpsListSections } from '@root/admin/sections/gpsList/Gps-list.sections';
 
 /*import AnalyticsReportsSection from '@sections_admin/analytics/reports/Analytics-reports.section.tsx';*/
 
@@ -34,6 +35,10 @@ const AdminRoutes: RouteObject[] = [
       {
         path: 'users',
         element: <UsersListSections />,
+      },
+      {
+        path: 'gps',
+        element: <GpsListSections />,
       },
       {
         path: 'analytics',                // no wrapper component needed

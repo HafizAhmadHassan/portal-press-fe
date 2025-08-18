@@ -1,12 +1,14 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { RootState } from '../../../store.ts';
-import { API_BASE_URL, API_HASSAN_URL } from '@env';
+
+//const baseUrl = import.meta.env.VITE_API_BASE_URL;
+const apiHassanUrl = import.meta.env.VITE_API_HASSAN_URL;
 
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
    /*  baseUrl: `${API_BASE_URL}`, */
-    baseUrl: `${API_HASSAN_URL}`,
+    baseUrl: `${apiHassanUrl}`,
    
    /*  prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;

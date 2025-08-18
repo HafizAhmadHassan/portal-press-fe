@@ -25,6 +25,7 @@
 
     "baseUrl": ".",
     "paths": {
+      "@root/*": ["src/*"],
       "@public/*": ["public/*"],
       "@assets/*": ["public/assets/*"],
       "@components/*": ["src/components/*"],
@@ -37,5 +38,5 @@
       "@hooks/*": ["src/hooks/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "environment.ts"]
 }

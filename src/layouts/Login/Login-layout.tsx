@@ -39,7 +39,7 @@ const LoginLayout: React.FC = () => {
       isInitialized: true // assumiamo che sia inizializzato se siamo in LoginLayout
     });
     if (isAuthenticated) {
-      const from = (location.state as any)?.from?.pathname || '/overview';
+      const from = (location.state as any)?.from?.pathname || '/admin';
       console.log('User authenticated, redirecting to:', from);
       navigate(from, { replace: true });
     }

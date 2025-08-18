@@ -309,7 +309,7 @@ export const DevicesListSections: React.FC = () => {
     <div className={styles['devices-list-page']}>
       <SectionHeaderComponent
         title="Dispositivi"
-        subTitle={`Gestisci i dispositivi (${getTotalDevicesCount()} totali)`}
+        subTitle={`Gestisci i dispositivi`}
         buttons={sectionHeaderButtons}
       />
 
