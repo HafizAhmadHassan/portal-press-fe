@@ -1,4 +1,4 @@
-@use '../../../admin/styles/globals.scss';
+@use "../../../admin/styles/globals.scss";
 
 /* Select.module.scss
    - Dark-mode ready via global CSS variables (globals.scss)
@@ -6,7 +6,7 @@
 */
 
 .selectContainer {
-  margin-bottom: 1.5rem;
+  /* margin-bottom: 1.5rem; */
 
   .selectLabel {
     display: block;
@@ -22,7 +22,7 @@
 
   .selectInput {
     width: 100%;
-    padding: 1rem;
+    padding: 0 1rem;
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     font-size: 0.9375rem;
@@ -82,20 +82,31 @@
   }
 
   &.iconLeft {
-    .selectInput { padding-left: 3rem; }
-    .selectIcon { left: 1rem; }
+    .selectInput {
+      padding-left: 3rem;
+    }
+    .selectIcon {
+      left: 1rem;
+    }
   }
 
   &.iconRight {
-    .selectInput { padding-right: 3rem; }
-    .selectIcon { right: 2.5rem; } /* spazio per chevron */
-    .chevronIcon { margin-right: 0.5rem; }
+    .selectInput {
+      padding-right: 3rem;
+    }
+    .selectIcon {
+      right: 2.5rem;
+    } /* spazio per chevron */
+    .chevronIcon {
+      margin-right: 0.5rem;
+    }
   }
 
   &.open {
     .selectInput {
       border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary-color) 20%, transparent);
+      box-shadow: 0 0 0 3px
+        color-mix(in oklab, var(--primary-color) 20%, transparent);
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
     }
@@ -138,9 +149,13 @@
     color: var(--text-primary);
     border-bottom: 1px solid var(--border-color);
 
-    &:last-child { border-bottom: none; }
+    &:last-child {
+      border-bottom: none;
+    }
 
-    &:hover { background-color: var(--gray-100); }
+    &:hover {
+      background-color: var(--gray-100);
+    }
 
     &.selected {
       background-color: var(--primary-light);
@@ -149,13 +164,19 @@
     }
 
     &:active {
-      background-color: color-mix(in oklab, var(--primary-color) 20%, transparent);
+      background-color: color-mix(
+        in oklab,
+        var(--primary-color) 20%,
+        transparent
+      );
     }
   }
 }
 
 /* Scrollbar */
-.optionsContainer::-webkit-scrollbar { width: 6px; }
+.optionsContainer::-webkit-scrollbar {
+  width: 6px;
+}
 .optionsContainer::-webkit-scrollbar-track {
   background: var(--bg-secondary);
   border-radius: 3px;
@@ -164,4 +185,6 @@
   background: var(--gray-300);
   border-radius: 3px;
 }
-.optionsContainer::-webkit-scrollbar-thumb:hover { background: var(--gray-400); }
+.optionsContainer::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-400);
+}

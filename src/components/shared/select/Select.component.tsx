@@ -8,7 +8,7 @@ type OptionType = {
 };
 
 type SelectProps = {
-  label: string;
+  label?: string;
   name: string;
   placeholder?: string;
   value: string | number;
@@ -21,7 +21,7 @@ type SelectProps = {
 };
 
 export const Select = ({
-  label = 'Select Default',
+  label,
   name = 'select-default',
   placeholder = "Seleziona un'opzione",
   value = '',
@@ -75,9 +75,11 @@ export const Select = ({
 
   return (
     <div className={styles.selectContainer}>
-      <label id={labelId} htmlFor={name} className={styles.selectLabel}>
-        {label}
-      </label>
+      {label && (
+        <label id={labelId} htmlFor={name} className={styles.selectLabel}>
+          {label}
+        </label>
+      )}
 
       <div
         ref={selectRef}

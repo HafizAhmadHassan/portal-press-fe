@@ -1,10 +1,9 @@
-@use '../../../../styles/globals.scss';
-
+@use "../../../../styles/globals.scss";
 
 .sectionHeader {
   background-color: var(--bg-secondary);
   border: 1px solid var(--border-color);
-  
+
   box-shadow: var(--shadow-sm);
   padding: 0.5rem 1rem;
 
@@ -19,6 +18,13 @@
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 1rem;
+}
+
+.sectionHeaderTitleWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .sectionHeaderTitleSection {
