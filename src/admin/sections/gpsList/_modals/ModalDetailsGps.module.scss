@@ -8,6 +8,13 @@
   max-width: 100%;
 }
 
+.mapWrapper {
+  height: 200px;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadowshadow-2xl);
+}
 .section {
   background: var(--bg-primary);
   border: 1px solid var(--border-color);

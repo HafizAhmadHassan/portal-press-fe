@@ -5,6 +5,8 @@ import { SimpleButton } from '@shared/simple-btn/SimpleButton.component';
 import { Eye, MapPin, Satellite, Hash } from 'lucide-react';
 import styles from './ModalDetailsGps.module.scss';
 import type { GpsDevice } from '@store_admin/gps/gps.types';
+import DevicesMap from '../../devicesList/_components/DevicesMap';
+import GpsMap from '../_components/GpsMap';
 
 export const ModalDetailsGps: React.FC<{ device: GpsDevice }> = ({ device }) => {
   const fmt = (k: string) => k || 'N/A';
@@ -17,6 +19,17 @@ export const ModalDetailsGps: React.FC<{ device: GpsDevice }> = ({ device }) => 
       variant="primary"
     >
       <div className={styles.modalContent}>
+        <div className={styles.mapWrapper}>
+          <GpsMap
+            mapData={[device]}
+            isCollapsed={false}
+            center={[Number(device.gps_x), Number(device.gps_y)]}
+            showActions={false}
+            mapHeight="100%"
+            zoom={14}
+          
+          />
+        </div>
         <div className={styles.section}>
           <div className={styles.sectionHeader}>
             <Satellite className={styles.sectionIcon} />

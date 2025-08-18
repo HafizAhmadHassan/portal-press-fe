@@ -106,9 +106,9 @@ export const createTicketsTableConfig = ({
     },
     {
       key: 'date_Time',
-      header: 'Data e Ora Apertura',
+      header: 'Data Apertura',
       type: 'custom' as const,
-      width: '160px',
+      width: '200px',
       sortable: true,
       render: (_: any, t: TicketWithDevice) => {
         const raw = (t as any).date_Time || (t as any).date_time || (t as any).created_at;
