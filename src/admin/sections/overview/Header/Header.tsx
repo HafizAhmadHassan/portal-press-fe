@@ -1,71 +1,101 @@
-import React, { useRef, useState } from 'react';
-import { useSidebar } from '@store_admin/hooks/useSidebar';
-import styles from './styles/Header.module.scss';
-import stylesToggle from './Header.module.scss';
-import stylesPill from './styles/Pill.module.scss';
-import { ChevronDown, Grid, Mail, Menu, Search, X } from 'lucide-react';
-import UserActions from '@root/components/shared/header/components/UserActions';
-import SearchInput from '@root/components/shared/header/components/SearchInput';
-import FilterSelect from '@root/components/shared/header/components/FilterSelect.component';
+import React from 'react';
+import { 
+  Clock, 
+  Download, 
+  RefreshCw, 
+  Settings, 
+  Search, 
+  Sun, 
+  Moon 
+} from 'lucide-react';
+import styles from './Header.module.scss';
 
-export default function KgnHeader() {
-  const [selectedFilter, setSelectedFilter] = useState('Tutti');
-  const [searchText, setSearchText] = useState('');
-  const filterOptions = ['Tutti', 'Dispositivi', 'Utenti', 'Configurazioni'];
 
-  const { isMobileOpen, toggleSidebar, toggleMobile, closeMobile } = useSidebar();
+interface DashboardHeaderProps {
+  selectedTimeRange: string;
+  setSelectedTimeRange: (range: string) => void;
+}
 
-  const pillRef = useRef<HTMLDivElement>(null); // <— ref della pill intera
+const DashboardHeader: React.FC<DashboardHeaderProps> = ({
 
-  const handleSearch = () => {
-    if (!searchText.trim()) return;
-    console.log('Search triggered:', { filter: selectedFilter, query: searchText });
-    if (isMobileOpen) closeMobile();
-  };
-
-  const handleFilterChange = (filter: string) => {
-    setSelectedFilter(filter);
-    if (searchText.trim()) handleSearch();
-  };
-
-  const getToggleIcon = () => (isMobileOpen ? <X size={20} /> : <Menu size={20} />);
-
-  const handleToggleClick = () => {
-    const isMobile = window.innerWidth <= 768;
-    if (isMobile) toggleMobile();
-    else toggleSidebar();
-  };
+  selectedTimeRange,
+  setSelectedTimeRange
+}) => {
+  const timeRanges = ['24h', '7d', '30d', '90d'];
+  
+  
 
   return (
-    <header className={styles.kgnHeader}>
-      <button
-        className={stylesToggle.toggleBtn}
-        onClick={handleToggleClick}
-        aria-label="Menu"
-        title={isMobileOpen ? 'Close menu' : 'Open menu'}
-      >
-        {getToggleIcon()}
-      </button>
-
-      <div className={stylesPill.searchGroup}>
-        <div className={stylesPill.pill} ref={pillRef}>
-          <FilterSelect
-            selected={selectedFilter}
-            options={filterOptions}
-            onChange={handleFilterChange}
-            ChevronIcon={<ChevronDown size={16} />}
-            anchorRef={pillRef}                     // <— ancora per il portal
-          />
-          <SearchInput
-            value={searchText}
-            onChange={setSearchText}
-            onSearch={handleSearch}
-            SearchIcon={<Search size={16} />}
-          />
+    <div className={styles.dashboardHeader}>
+      <div className={styles.headerContent}>
+        <div className={styles.titleSection}>
+          <h1>PetStore Analytics</h1>
+          <p>Dashboard completa per il tuo ecommerce di prodotti per animali</p>
+        </div>
+        <div className={styles.headerStats}>
+          <div className={styles.quickStat}>
+            <span className={styles.quickLabel}>Ultimo aggiornamento</span>
+            <span className={styles.quickValue}>
+              <Clock size={14} />
+              2 min fa
+            </span>
+          </div>
+          <div className={styles.quickStat}>
+            <span className={styles.quickLabel}>Sistema</span>
+            <span className={`${styles.quickValue} ${styles.online}`}>
+              <div className={styles.statusDot}></div>
+              Online
+            </span>
+          </div>
         </div>
       </div>
-
-      <UserActions MailIcon={<Mail size={20} />} GridIcon={<Grid size={20} />} />
-    </header>
+      
+      <div className={styles.headerActions}>
+        <div className={styles.searchContainer}>
+          <Search size={16} />
+          <input 
+            type="text" 
+            placeholder="Cerca..." 
+            className={styles.searchInput}
+          />
+        </div>
+        
+        <div className={styles.timeRangeSelector}>
+          {timeRanges.map(range => (
+            <button
+              key={range}
+              className={`${styles.timeBtn} ${selectedTimeRange === range ? styles.active : ''}`}
+              onClick={() => setSelectedTimeRange(range)}
+            >
+              {range}
+            </button>
+          ))}
+        </div>
+        
+        <button className={styles.btnSecondary}>
+          <Download size={16} />
+          Esporta
+        </button>
+        
+        <button className={styles.btnSecondary}>
+          <Settings size={16} />
+          Impostazioni
+        </button>
+        
+       {/*  <button 
+          className={styles.btnOutline}
+          onClick={() => toggleTheme()}
+        >
+          {isDark ? <Sun size={16} /> : <Moon size={16} />}
+        </button> */}
+        
+        <button className={styles.btnPrimary}>
+          <RefreshCw size={16} />
+          Aggiorna
+        </button>
+      </div>
+    </div>
   );
-}
+};
+
+export default DashboardHeader;
