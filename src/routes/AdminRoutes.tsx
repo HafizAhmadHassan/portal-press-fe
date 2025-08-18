@@ -37,6 +37,10 @@ const AdminRoutes: RouteObject[] = [
         element: <UsersListSections />,
       },
       {
+        path: 'tickets',
+        element: <TicketsListSections />,
+      },
+      {
         path: 'gps',
         element: <GpsListSections />,
       },
@@ -53,10 +57,7 @@ const AdminRoutes: RouteObject[] = [
           },
         ],
       },
-      {
-        path: 'tickets',
-        element: <TicketsListSections />,
-      },
+     
     ],
   },
   {

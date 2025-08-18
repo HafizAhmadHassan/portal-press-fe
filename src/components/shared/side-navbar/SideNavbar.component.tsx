@@ -5,8 +5,10 @@ import { SideNavOverlay } from './components/SideNavOverlay.component';
 import { SideNavHeader } from './components/SideNavHeader.component';
 import { SideNavContent } from './components/SideNavContent.component';
 import { SideNavFooter } from './components/SideNavFooter.component';
-import type { MenuItem } from '../../types/MenuItem';
+
 import { useSidebar } from '@store_admin/hooks/useSidebar';
+import type { MenuItem } from '@shared/side-navbar/types/MenuItem.types';
+
 
 interface Props {
   menuItems: MenuItem[];
@@ -23,7 +25,6 @@ interface Props {
 
 export default function SideNav({
                                   menuItems,
-                                  userProfile,
                                   showCollapseButton = true,
                                   showMobileToggle = true,
                                   brand,

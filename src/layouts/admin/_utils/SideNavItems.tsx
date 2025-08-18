@@ -1,6 +1,6 @@
 import {
-    BarChart3, Calendar, ChevronRight, ComponentIcon, FileText,
-    Home, LocateFixed, Mail, Settings, TableIcon, Ticket, Users, WashingMachine
+    BarChart3, ChevronRight, FileText,
+     LocateFixed, Ticket, Users, WashingMachine
   } from 'lucide-react';
   import type { MenuItem, UserProfile } from '@shared/side-navbar/types/MenuItem.types';
   
@@ -33,15 +33,7 @@ import {
       ]
     },
   
-    { label: 'Messages', route: '/admin/messages', icon: Mail, badge: '5',
-      iconColor: 'var(--orange-color)', iconActiveColor: 'var(--orange-dark)' },
-  
-    { label: 'Calendar', route: '/admin/calendar', icon: Calendar,
-      iconColor: 'var(--purple-color)', iconActiveColor: 'var(--purple-dark)' },
-  
-    { label: 'Settings', route: '/admin/settings', icon: Settings,
-      iconColor: 'var(--text-secondary)', iconActiveColor: 'var(--text-primary)' },
-  
+   /* 
     {
       label: 'Kgn Components',
       icon: ComponentIcon,
@@ -52,7 +44,7 @@ import {
         { label: 'Table', route: '/admin/kgn-component-demo/tables', icon: TableIcon,
           iconColor: 'var(--purple-color)', iconActiveColor: 'var(--purple-dark)' },
       ]
-    },
+    }, */
   ];
   
   export const AdminLayoutUserProfile: UserProfile = {

@@ -4,7 +4,7 @@ import LogoKgn from '@assets/images/kgn-logo.png';
 import styles from './Admin-layout.module.scss';
 import Header from '@shared/header/Header.component.tsx';
 import SideNav from '@shared/side-navbar/SideNavbar.component.tsx';
-import { AdminLayoutSideNavItems, AdminLayoutUserProfile } from '@layouts/admin/_utils/SideNavItems.tsx';
+import { AdminLayoutSideNavItems } from '@layouts/admin/_utils/SideNavItems.tsx';
 
 
 export default function AdminLayout() {
@@ -16,14 +16,11 @@ export default function AdminLayout() {
           <div className={styles.body}>
               <SideNav
                 menuItems={AdminLayoutSideNavItems}
-                userProfile={AdminLayoutUserProfile}
                 brand={{
                     logo: LogoKgn,
                     title: 'KGN srl',
                     subtitle: 'Admin Panel',
                 }}
-                position="left"
-                accordionDirection="down"
                 showCollapseButton={true}
                 showMobileToggle={true}
               />

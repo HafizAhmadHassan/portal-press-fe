@@ -1,8 +1,8 @@
-@use '../../../../admin/styles/globals.scss';
+@use "../../../../admin/styles/globals.scss";
 
 .badge {
   background: var(--error-color);
-  color: var(--white);
+  color: white;
   font-size: 0.6875rem;
   font-weight: 600;
   padding: 2px 6px;

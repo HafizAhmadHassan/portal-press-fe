@@ -1,92 +1,149 @@
 @use "../../../../admin/styles/globals.scss";
 
-/* Container for the centered search */
+/* wrapper centrale nell'header */
 .searchGroup {
   flex: 1;
   display: flex;
   justify-content: center;
 }
 
-/* The "pill" that wraps select + input */
+/* pill esterna (select + input) */
 .pill {
+  position: relative; /* non necessario per il portal, ma utile */
   display: flex;
   align-items: center;
-  background: var(--gray-100);
+  height: 40px;
+
+  border: 1px solid var(--border-color);
   border-radius: 9999px;
   overflow: hidden;
   max-width: 600px;
   width: 100%;
-  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
 }
 
-/* Filter select on the left */
-.pillSelect {
-  position: relative;
-  display: flex;
+/* =========== SEZIONE SELECT (trigger) =========== */
+.pillSelectBtn {
+  all: unset;
+  display: inline-flex;
   align-items: center;
-  padding: 0 0.75rem;
-  background: transparent;
+  gap: 0.25rem;
+  height: 100%;
+  padding: 0 0.75rem 0 0.75rem;
+  border-right: none;
+  color: var(--text-primary);
+  cursor: pointer;
+  user-select: none;
 
-  select {
-    appearance: none;
-    border: none;
-    background: transparent;
-    padding: 0.5rem 1.5rem 0.5rem 0;
-    font-size: 1rem;
-    color: var(--text-primary);
-    cursor: pointer;
-    outline: none;
-  }
-
-  /* Chevron icon passed as React node */
   svg {
-    position: absolute;
-    right: 0.5rem;
     width: 16px;
     height: 16px;
     color: var(--text-secondary);
-    pointer-events: none;
+  }
+
+  /*  &:hover {
+    background: var(--primary-light);
+  } */
+  &:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: -2px;
   }
 }
 
-/* Search input on the right */
+.pillSelectValue {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+/* =========== SEZIONE INPUT =========== */
 .pillInput {
   position: relative;
   flex: 1;
   display: flex;
   align-items: center;
-  background: transparent;
+  min-width: 0;
+  box-shadow: var(--shadow-lg);
+}
 
-  /* Search icon passed as React node */
-  svg {
-    position: absolute;
-    left: 0.75rem;
-    width: 16px;
-    height: 16px;
-    color: var(--text-secondary);
+/* Input “bare” (usato dal nostro SearchInput) */
+.bareContainer {
+  margin: 0;
+  width: 100%;
+}
+.bareField {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  min-height: 40px;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+.bareContainer :global(.inputIcon) {
+  left: 0.75rem;
+}
+.bareField::placeholder {
+  color: var(--text-secondary);
+}
+
+/* =========== DROPDOWN FULL-WIDTH (PORTAL) =========== */
+.dropdownPortal {
+  z-index: 10000;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.dropdownList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.dropdownItem {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+
+  &:last-child {
+    border-bottom: none;
   }
-
-  input {
-    flex: 1;
-    border: none;
-    background: transparent;
-    padding: 0.5rem 0.75rem 0.5rem 2.5rem;
-    font-size: 1rem;
-    color: var(--text-primary);
-    outline: none;
-
-    &::placeholder {
-      color: var(--text-secondary);
-    }
-
-    &:focus {
-      outline: 2px solid var(--primary-color);
-      outline-offset: -2px;
-      border-radius: 9999px;
-    }
+  &:hover {
+    background-color: var(--gray-100);
   }
 }
 
+.dropdownItemActive {
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+/* scrollbar */
+.dropdownList::-webkit-scrollbar {
+  width: 6px;
+}
+.dropdownList::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 3px;
+}
+.dropdownList::-webkit-scrollbar-thumb {
+  background: var(--gray-300);
+  border-radius: 3px;
+}
+.dropdownList::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-400);
+}
+
+/* nasconde la search su mobile (come prima) */
 @media (max-width: 768px) {
-  .searchGroup { display: none; }
+  .searchGroup {
+    display: none;
+  }
 }
