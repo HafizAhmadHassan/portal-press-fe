@@ -12,7 +12,15 @@ import {
 } from 'lucide-react';
 import { ModalDeviceDetails } from '@sections_admin/devicesList/_modals/ModalDeviceDetail/ModalDeviceDetail.component';
 import { ModalRiActiveDevice } from '@sections_admin/devicesList/_modals/ModalRiActivateDevice/ModalRiActiveDevice.component';
-import ModalOpenTicket from '@sections_admin/ticketsList/_modals/ModalsOpenTicket/ModalOpenTicket.component';
+// ✅ usa il path reale del tuo file ModalOpenTicket.
+// Se il file è in src/sections/ticketsList/_modals/ModalOpenTicket.component.tsx:
+
+// Se invece hai davvero la cartella "ModalsOpenTicket", lascia il tuo import originale.
+
+// ✅ mutation per POST /messages/
+import { useCreateTicketMutation } from '@store_admin/tickets/ticket.api';
+import type { MessageCreate } from '@store_admin/tickets/ticket.types';
+import ModalOpenTicket from '../../ticketsList/_modals/ModalsOpenTicket/ModalOpenTicket.component';
 
 interface DeviceCardProps {
   device: Device;
@@ -23,6 +31,9 @@ interface DeviceCardProps {
 export const DeviceCard: React.FC<DeviceCardProps> = ({ device, onAction, style }) => {
   const [isHovered, setIsHovered] = useState(false);
   const isActive = device.status === 1;
+
+  // RTK Query mutation per creare il ticket (POST /messages/)
+  const [createTicket, { isLoading: isCreating }] = useCreateTicketMutation();
 
   // Indirizzo completo
   const getFullAddress = () => {
@@ -173,14 +184,27 @@ export const DeviceCard: React.FC<DeviceCardProps> = ({ device, onAction, style 
 
         <ModalOpenTicket
           device={device}
-          onSave={async (ticketData) => {
-            console.log('Ticket data:', ticketData);
+          onSave={async (ticketData: MessageCreate) => {
+            // ✅ QUI parte la POST http://localhost:8003/myapi/messages/
+            try {
+              const created = await createTicket(ticketData).unwrap();
+              console.log('Ticket creato:', created);
+              // callback facoltativa per aggiornare UI/lista
+              onAction && onAction('ticket:created', device);
+            } catch (e: any) {
+              console.error('Errore creazione ticket', e);
+              // mostra un feedback all’utente; sostituisci con il tuo sistema di toast
+              alert(e?.data?.message || e?.message || 'Errore nella creazione del ticket');
+              throw e; // per far gestire l’errore anche al Modal, se previsto
+            }
           }}
           triggerButton={
             <button
               className={[styles['compact-btn'], styles.warning].join(' ')}
               onClick={() => onAction('ticket', device)}
               type="button"
+              disabled={isCreating}
+              title={isCreating ? 'Apertura in corso...' : 'Apri ticket'}
             >
               <SpoolIcon size={12} />
             </button>

@@ -1,6 +1,6 @@
 // store/auth/selectors.ts
-import { createSelector } from '@reduxjs/toolkit';
-import type { RootState } from '../../../../store';
+import { createSelector } from "@reduxjs/toolkit";
+import type { RootState } from "../../../../store";
 
 // Selettori base
 export const selectAuthState = (state: RootState) => state.auth;
@@ -22,7 +22,7 @@ export const selectAuthToken = createSelector(
 
 export const selectRefreshToken = createSelector(
   [selectAuthState],
-  (auth) => auth.refreshToken
+  (auth) => auth.refresh
 );
 
 export const selectAuthLoading = createSelector(
@@ -61,10 +61,7 @@ export const selectUserAvatar = createSelector(
   (user) => user?.avatar
 );
 
-export const selectUserId = createSelector(
-  [selectUser],
-  (user) => user?.id
-);
+export const selectUserId = createSelector([selectUser], (user) => user?.id);
 
 // Selettori per controlli di autorizzazione
 export const selectHasRole = (role: string) =>
@@ -78,28 +75,26 @@ export const selectHasAnyRole = (roles: string[]) =>
 // Controllo admin
 export const selectIsAdmin = createSelector(
   [selectUserRole],
-  (role) => role === 'admin' || role === 'super_admin'
+  (role) => role === "admin" || role === "super_admin"
 );
 
 // Controllo moderatore
 export const selectIsModerator = createSelector(
   [selectUserRole],
-  (role) => role === 'moderator' || role === 'admin' || role === 'super_admin'
+  (role) => role === "moderator" || role === "admin" || role === "super_admin"
 );
 
 // Stato di inizializzazione
-export const selectIsInitialized = createSelector(
-  [selectAuthState],
-  (auth) => {
-    // Considera inizializzato se:
-    // - Non è in loading E
-    // - (È autenticato CON user e token) OPPURE (non è autenticato senza token)
-    return !auth.isLoading && (
-      (auth.isAuthenticated && auth.user && auth.token) ||
-      (!auth.isAuthenticated && !auth.token)
-    );
-  }
-);
+export const selectIsInitialized = createSelector([selectAuthState], (auth) => {
+  // Considera inizializzato se:
+  // - Non è in loading E
+  // - (È autenticato CON user e token) OPPURE (non è autenticato senza token)
+  return (
+    !auth.isLoading &&
+    ((auth.isAuthenticated && auth.user && auth.token) ||
+      (!auth.isAuthenticated && !auth.token))
+  );
+});
 
 // Controllo scadenza sessione
 export const selectSessionTimeRemaining = createSelector(
@@ -166,31 +161,33 @@ export const selectAuthSession = createSelector(
 export const selectCanAccessAdminPanel = createSelector(
   [selectIsAuthenticated, selectUserRole],
   (isAuthenticated, role) =>
-    isAuthenticated && (role === 'admin' || role === 'super_admin')
+    isAuthenticated && (role === "admin" || role === "super_admin")
 );
 
 export const selectCanModerateContent = createSelector(
   [selectIsAuthenticated, selectUserRole],
   (isAuthenticated, role) =>
-    isAuthenticated && ['moderator', 'admin', 'super_admin'].includes(role || '')
+    isAuthenticated &&
+    ["moderator", "admin", "super_admin"].includes(role || "")
 );
 
 export const selectCanManageUsers = createSelector(
   [selectIsAuthenticated, selectUserRole],
   (isAuthenticated, role) =>
-    isAuthenticated && ['admin', 'super_admin'].includes(role || '')
+    isAuthenticated && ["admin", "super_admin"].includes(role || "")
 );
 
 // Selettore per dati profilo completi
-export const selectUserProfile = createSelector(
-  [selectUser],
-  (user) => user ? {
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    role: user.role,
-    avatar: user.avatar,
-    createdAt: user.createdAt,
-    updatedAt: user.updatedAt,
-  } : null
+export const selectUserProfile = createSelector([selectUser], (user) =>
+  user
+    ? {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        avatar: user.avatar,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      }
+    : null
 );

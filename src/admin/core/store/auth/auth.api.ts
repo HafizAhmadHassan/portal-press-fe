@@ -1,133 +1,237 @@
 // store/auth/auth.api.ts
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { RootState } from '@store_admin/store';
-import type { AuthResponse, LoginCredentials, RegisterCredentials, User } from './auth.types';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import type { RootState } from "@root/store";
+import type {
+  AuthResponse,
+  LoginCredentials,
+  RegisterCredentials,
+  User,
+} from "./auth.types";
+
 const apiHassanUrl = import.meta.env.VITE_API_HASSAN_URL;
 
 export const authApi = createApi({
-  reducerPath: 'authApi',
+  reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${apiHassanUrl}/auth`,
+    baseUrl: `${apiHassanUrl}api/auth`,
     prepareHeaders: (headers, { getState }) => {
-      const token = (getState() as RootState).auth.token;
+      const state = getState() as RootState;
+
+      // Leggi prima dal tuo slice, altrimenti da localStorage (fallback)
+      const token =
+        (state as any)?.auth?.token ??
+        (typeof localStorage !== "undefined"
+          ? localStorage.getItem("access_token")
+          : null);
+
       if (token) {
-        headers.set('Authorization', `Bearer ${token}`);
+        headers.set("Authorization", `Bearer ${token}`);
       }
+
       return headers;
     },
-    credentials: 'include', // include cookies if using session cookies
+    credentials: "include", // include cookies if using session cookies
   }),
-  tagTypes: ['Auth', 'User'],
+  tagTypes: ["Auth", "User"],
   endpoints: (builder) => ({
-    // Login (OAuth2 Password Grant)
+    // Login (Password Grant / SimpleJWT compat)
     login: builder.mutation<AuthResponse, LoginCredentials>({
-      query: ({ email, password, rememberMe }) => ({
-        url: '/login',
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      query: ({ username, password, rememberMe }) => ({
+        url: "/login/",
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams({
-          username: email,
+          username,
           password,
-          grant_type: 'password',
-          ...(rememberMe && { remember_me: 'true' })
+          // Se il backend vuole davvero grant_type, tienilo. Per SimpleJWT non serve.
+          // grant_type: "password",
+          ...(rememberMe ? { remember_me: "true" } : {}),
         }),
       }),
       transformResponse: (response: any): AuthResponse => {
-        console.log('API: Raw login response:', response);
+        // Log utile in dev
+        // console.log("API: Raw login response:", response);
 
-        // Gestisce il formato OAuth2 standard
-        if (response.access_token) {
+        // 1) Django SimpleJWT (access/refresh)
+        if (response?.access && response?.refresh) {
           return {
-            token: response.access_token,
-            refreshToken: response.refresh_token,
-            user: response.user || {
-              id: 'temp',
-              email: 'unknown',
-              name: 'User',
-              role: 'user',
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString()
-            }
+            token: response.access,
+            refresh: response.refresh,
+            user:
+              response.user ??
+              ({
+                id: "temp",
+                email: "",
+                name: response?.user?.username ?? "User",
+                role: "user",
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+              } as unknown as User),
           };
         }
 
-        // Gestisce il formato personalizzato
+        // 2) OAuth2 tipico (access_token/refresh_token)
+        if (response?.access_token) {
+          return {
+            token: response.access_token,
+            refresh: response.refresh,
+            user:
+              response.user ??
+              ({
+                id: "temp",
+                email: "unknown",
+                name: "User",
+                role: "user",
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+              } as unknown as User),
+          };
+        }
+
+        // 3) Già nel formato giusto
         return response;
       },
-      invalidatesTags: ['Auth'],
+      // Salva token in localStorage così prepareHeaders li trova subito
+      async onQueryStarted(_arg, { queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          if (typeof localStorage !== "undefined") {
+            if (data?.token) localStorage.setItem("access_token", data.token);
+            if ((data as any)?.refresh)
+              localStorage.setItem("refresh_token", (data as any).refresh);
+          }
+          // Se hai un slice auth:
+          // dispatch(setTokens({ token: data.token, refresh: data.refresh, user: data.user }))
+        } catch {
+          // noop
+        }
+      },
+      invalidatesTags: ["Auth"],
     }),
 
     // Register (JSON)
     register: builder.mutation<AuthResponse, RegisterCredentials>({
       query: (credentials) => ({
-        url: '/register',
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        url: "/register",
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: credentials,
       }),
-      invalidatesTags: ['Auth'],
+      invalidatesTags: ["Auth"],
     }),
 
     // Logout
     logout: builder.mutation<{ message: string }, void>({
-      query: () => ({ url: '/logout', method: 'POST' }),
-      invalidatesTags: ['Auth'],
+      query: () => ({ url: "/logout", method: "POST" }),
+      async onQueryStarted(_arg, { queryFulfilled }) {
+        try {
+          await queryFulfilled;
+        } finally {
+          if (typeof localStorage !== "undefined") {
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("refresh_token");
+          }
+        }
+      },
+      invalidatesTags: ["Auth"],
     }),
 
-    // Refresh Token (form-data)
-    refreshToken: builder.mutation<{ token: string; refreshToken: string }, { refreshToken: string }>({
-      query: ({ refreshToken }) => ({
-        url: '/refresh',
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    // Refresh Token (form-data o SimpleJWT)
+    refresh: builder.mutation<
+      { token: string; refresh: string },
+      { refresh: string }
+    >({
+      query: ({ refresh }) => ({
+        url: "/refresh",
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        // Per SimpleJWT il campo si chiama "refresh"
         body: new URLSearchParams({
-          refresh_token: refreshToken,
-          grant_type: 'refresh_token'
+          refresh: refresh,
+          // grant_type: "refresh_token", // non necessario per SimpleJWT
         }),
       }),
-      invalidatesTags: ['Auth'],
+      transformResponse: (response: any) => {
+        // SimpleJWT di solito ritorna solo un nuovo `access`
+        if (response?.access) {
+          return {
+            token: response.access,
+            refresh:
+              response.refresh ??
+              (typeof localStorage !== "undefined"
+                ? localStorage.getItem("refresh_token") ?? ""
+                : ""),
+          };
+        }
+        if (response?.access_token) {
+          return {
+            token: response.access_token,
+            refresh: response.refresh_token,
+          };
+        }
+        return response;
+      },
+      async onQueryStarted(_arg, { queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          if (typeof localStorage !== "undefined") {
+            if (data?.token) localStorage.setItem("access_token", data.token);
+            if ((data as any)?.refresh)
+              localStorage.setItem("refresh_token", (data as any).refresh);
+          }
+        } catch {
+          // noop
+        }
+      },
+      invalidatesTags: ["Auth"],
     }),
 
     // Get Current User (verify + fetch profile)
     getCurrentUser: builder.query<User, void>({
-      query: () => ({ url: '/me', method: 'GET' }),
-      providesTags: ['User'],
+      query: () => ({ url: "/me", method: "GET" }),
+      providesTags: ["User"],
     }),
 
     // Forgot Password (JSON)
     forgotPassword: builder.mutation<{ message: string }, { email: string }>({
       query: ({ email }) => ({
-        url: '/forgot-password',
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        url: "/forgot-password",
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: { email },
       }),
     }),
 
     // Reset Password (JSON)
-    resetPassword: builder.mutation<{ message: string }, {
-      token: string;
-      password: string;
-      confirmPassword: string;
-    }>({
+    resetPassword: builder.mutation<
+      { message: string },
+      {
+        token: string;
+        password: string;
+        confirmPassword: string;
+      }
+    >({
       query: ({ token, password, confirmPassword }) => ({
-        url: '/reset-password',
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        url: "/reset-password",
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: { token, password, confirmPassword },
       }),
     }),
 
     // Change Password (JSON)
-    changePassword: builder.mutation<{ message: string }, {
-      currentPassword: string;
-      newPassword: string;
-      confirmPassword: string;
-    }>({
+    changePassword: builder.mutation<
+      { message: string },
+      {
+        currentPassword: string;
+        newPassword: string;
+        confirmPassword: string;
+      }
+    >({
       query: (passwords) => ({
-        url: '/change-password',
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        url: "/change-password",
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: passwords,
       }),
     }),
@@ -135,12 +239,12 @@ export const authApi = createApi({
     // Update Profile (JSON)
     updateProfile: builder.mutation<User, Partial<User>>({
       query: (updates) => ({
-        url: '/profile',
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        url: "/profile",
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
         body: updates,
       }),
-      invalidatesTags: ['User'],
+      invalidatesTags: ["User"],
     }),
   }),
 });

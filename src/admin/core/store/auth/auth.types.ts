@@ -1,7 +1,7 @@
 // store/auth/types.ts
 export interface User {
   id: string;
-  email: string;
+  username: string;
   name: string;
   role: string;
   avatar?: string;
@@ -10,14 +10,14 @@ export interface User {
 }
 
 export interface LoginCredentials {
-  email: string;
+  username: string;
   password: string;
   rememberMe?: boolean;
 }
 
 export interface RegisterCredentials {
   name: string;
-  email: string;
+  username: string;
   password: string;
   confirmPassword: string;
 }
@@ -25,13 +25,13 @@ export interface RegisterCredentials {
 export interface AuthResponse {
   user: User;
   token: string;
-  refreshToken: string;
+  refresh: string;
 }
 
 export interface AuthState {
   user: User | null;
   token: string | null;
-  refreshToken: string | null;
+  refresh: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;

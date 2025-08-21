@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
-import { Ticket, AlertCircle, Calendar, FileText, Monitor, MapPin, Settings } from 'lucide-react';
+import {
+  Ticket as TicketIcon,
+  AlertCircle,
+  Calendar,
+  FileText,
+  MapPin,
+} from 'lucide-react';
 import Modal from '@components/shared/modal/Modal';
 import './ModalCloseTicket.scss';
-import type { Device } from '@core/store/devices/devices.types';
+import type { TicketWithDevice } from '@store_admin/tickets/ticket.api';
 
-interface TicketData {
-  deviceId: string;
+interface CloseTicketData {
+  ticketId: number | string;
   date?: Date;
-  info?: string;
   note?: string;
-  opening?: string;
-  migration?: string;
+  info?: string;
   address?: string;
   inGaranzia?: boolean;
   fuoriGaranzia?: boolean;
@@ -19,57 +23,61 @@ interface TicketData {
 }
 
 interface ModalCloseTicketProps {
-  device?: Device;
+  ticket: TicketWithDevice;
   triggerButton: React.ReactNode;
-  onSave: (ticketData: TicketData) => Promise<void>;
+  onSave: (data: CloseTicketData) => Promise<void>;
   btnClassName?: string;
 }
 
 const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
-  device,
+  ticket,
   triggerButton,
   onSave,
-  btnClassName
+  btnClassName,
 }) => {
-  const getFullAddress = (device: Device): string => {
+  const dev = ticket?.device;
+
+  const getFullAddress = (): string => {
     const parts = [
-      device?.address,
-      device?.street,
-      device?.city,
-      device?.province,
-      device?.postal_code,
-      device?.country
+      dev?.address,
+      dev?.street,
+      dev?.city,
+      dev?.province,
+      dev?.postal_code,
+      dev?.country,
     ].filter(Boolean);
-    return parts.join(', ');
+    return parts.length > 0 ? parts.join(', ') : 'Ubicazione non specificata';
   };
 
-  const [formData, setFormData] = useState<TicketData>({
-    deviceId: device?.id,
+  const [formData, setFormData] = useState<CloseTicketData>({
+    ticketId: ticket?.id,
     date: new Date(),
-    info: `Ticket per device: ${device?.machine_name}\nCliente: ${device?.customer_name || 'N/D'}\nTipo rifiuto: ${device?.waste || 'N/D'}`,
-    opening: `Apertura ticket per ${device?.machine_name}`,
-    migration: device?.linux_version ? `Linux Version: ${device?.linux_version}` : '',
-    address: getFullAddress(device),
+    info: `Ticket #${ticket?.id}${
+      dev?.machine_name ? ` – ${dev?.machine_name}` : ''
+    }\nCliente: ${dev?.customer || dev?.customer_name || 'N/D'}${
+      (dev as any)?.waste ? `\nTipo rifiuto: ${(dev as any)?.waste}` : ''
+    }`,
+    address: getFullAddress(),
     inGaranzia: false,
     fuoriGaranzia: false,
     machine_retrival: false,
-    machine_not_repairable: false
+    machine_not_repairable: false,
+    note: '',
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const handleInputChange = (field: keyof TicketData, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+  const handleInputChange = (field: keyof CloseTicketData, value: any) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
     if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }));
+      setErrors((prev) => ({ ...prev, [field]: '' }));
     }
   };
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
-    if (!formData.info?.trim()) newErrors.info = 'Le informazioni sono obbligatorie';
-    if (!formData.opening?.trim()) newErrors.opening = "L'apertura è obbligatoria";
-    if (!formData.address?.trim()) newErrors.address = "L'indirizzo è obbligatorio";
+    // per la chiusura rendiamo obbligatoria almeno la nota
+    if (!formData.note?.trim()) newErrors.note = 'La nota di chiusura è obbligatoria';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -78,21 +86,25 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
     if (!validateForm()) return;
     try {
       await onSave(formData);
+      // reset "soft" mantenendo ticketId e address di contesto
       setFormData({
-        deviceId: device?.id,
+        ticketId: ticket?.id,
         date: new Date(),
-        info: `Ticket per device: ${device?.machine_name}\nCliente: ${device?.customer_name || 'N/D'}\nTipo rifiuto: ${device?.waste || 'N/D'}`,
-        opening: `Apertura ticket per ${device?.machine_name}`,
-        migration: device?.linux_version ? `Linux Version: ${device?.linux_version}` : '',
-        address: getFullAddress(device),
+        info: `Ticket #${ticket?.id}${
+          dev?.machine_name ? ` – ${dev?.machine_name}` : ''
+        }\nCliente: ${dev?.customer || dev?.customer_name || 'N/D'}${
+          (dev as any)?.waste ? `\nTipo rifiuto: ${(dev as any)?.waste}` : ''
+        }`,
+        address: getFullAddress(),
         inGaranzia: false,
         fuoriGaranzia: false,
         machine_retrival: false,
-        machine_not_repairable: false
+        machine_not_repairable: false,
+        note: '',
       });
       setErrors({});
     } catch (error) {
-      console.error('Errore durante il salvataggio del ticket:', error);
+      console.error('Errore durante la chiusura del ticket:', error);
       throw error;
     }
   };
@@ -102,90 +114,99 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
       triggerButton={triggerButton}
       btnClassName={btnClassName}
       size="lg"
-      confirmText="Salva Ticket"
+      confirmText="Chiudi Ticket"
       cancelText="Annulla"
       onConfirm={handleSave}
       variant="primary"
-      modalClassName="modal-open-ticket"
+      modalClassName="modal-close-ticket"
     >
       <div className="modal-open-ticket__content">
-        
-        {/* Header Compatto */}
+        {/* HEADER */}
         <div className="modal-open-ticket__header">
           <div className="modal-open-ticket__header-main">
             <div className="modal-open-ticket__header-left">
               <div className="modal-open-ticket__device-icon">
-                <Monitor />
+                <TicketIcon />
               </div>
               <div className="modal-open-ticket__header-info">
-                <h3 className="modal-open-ticket__header-title">{device?.machine_name}</h3>
+                <h3 className="modal-open-ticket__header-title">
+                  Ticket #{ticket?.id}
+                  {dev?.machine_name ? ` – ${dev?.machine_name}` : ''}
+                </h3>
                 <div className="modal-open-ticket__header-subtitle">
-                  {device?.customer_name || 'Cliente N/D'} • {device?.waste || 'Tipo N/D'}
+                  {(dev?.customer || (dev as any)?.customer_name || 'Cliente N/D')}{' '}
+                  • {dev?.city || 'Luogo N/D'}
                 </div>
               </div>
             </div>
             <div className="modal-open-ticket__header-right">
               <div className="modal-open-ticket__header-tag">
-                <Ticket size={14} />
+                <TicketIcon size={14} />
                 CHIUSURA TICKET
               </div>
               <div className="modal-open-ticket__header-date">
-                {new Date().toLocaleDateString('it-IT', { 
-                  day: '2-digit', 
-                  month: '2-digit', 
-                  year: 'numeric' 
+                {new Date().toLocaleDateString('it-IT', {
+                  day: '2-digit',
+                  month: '2-digit',
+                  year: 'numeric',
                 })}
               </div>
             </div>
           </div>
           <div className="modal-open-ticket__header-badges">
-            <span className={`modal-open-ticket__status-badge ${
-              device?.status === 1 ? 'modal-open-ticket__status-badge--active' : 'modal-open-ticket__status-badge--inactive'
-            }`}>
+            <span
+              className={`modal-open-ticket__status-badge ${
+                ticket?.status === 2
+                  ? 'modal-open-ticket__status-badge--inactive'
+                  : 'modal-open-ticket__status-badge--active'
+              }`}
+            >
               <span className="modal-open-ticket__status-dot"></span>
-              {device?.status === 1 ? 'Attivo' : 'Inattivo'}
+              {ticket?.status === 2 ? 'Chiuso' : 'Aperto'}
             </span>
-            {device?.status_machine_blocked && (
-              <span className="modal-open-ticket__status-badge modal-open-ticket__status-badge--blocked">
-                <AlertCircle size={12} />
-                Bloccato
-              </span>
-            )}
           </div>
         </div>
 
-        {/* Informazioni Device Compatte */}
+        {/* INFO COMPATTE */}
         <div className="modal-open-ticket__device-compact">
           <div className="modal-open-ticket__compact-grid">
             <div className="modal-open-ticket__compact-item">
-              <strong>Customer:</strong> {device?.customer_name || 'N/D'}
+              <strong>Customer:</strong>{' '}
+              {dev?.customer || (dev as any)?.customer_name || 'N/D'}
             </div>
             <div className="modal-open-ticket__compact-item">
-              <strong>Matricola:</strong> {device?.matricola_kgn || device?.matricola_bte || '00000'}
+              <strong>Ticket ID:</strong> {ticket?.id}
             </div>
-            <div className="modal-open-ticket__compact-item">
-              <strong>Waste:</strong> {device?.waste || 'N/D'}
-            </div>
-            <div className="modal-open-ticket__compact-item">
-              <strong>IP:</strong> {device?.ip_router || 'N/D'}
-            </div>
-            <div className="modal-open-ticket__compact-item">
-              <strong>Street:</strong> {device?.street || 'N/D'} {device?.city && `- ${device?.city}`}
-            </div>
-            {(device?.gps_x && device?.gps_y) && (
+            {dev?.machine_name && (
               <div className="modal-open-ticket__compact-item">
-                <strong>GPS:</strong> {device?.gps_x}, {device?.gps_y}
+                <strong>Macchina:</strong> {dev.machine_name}
+              </div>
+            )}
+            {(dev as any)?.waste && (
+              <div className="modal-open-ticket__compact-item">
+                <strong>Waste:</strong> {(dev as any).waste}
+              </div>
+            )}
+            {dev?.ip_router && (
+              <div className="modal-open-ticket__compact-item">
+                <strong>IP:</strong> {dev.ip_router}
+              </div>
+            )}
+            {dev?.city && (
+              <div className="modal-open-ticket__compact-item">
+                <strong>Città:</strong> {dev.city}
               </div>
             )}
           </div>
         </div>
 
-        {/* Form Compatto */}
+        {/* FORM */}
         <div className="modal-open-ticket__form-compact">
+          {/* Data di chiusura */}
           <div className="modal-open-ticket__input-group">
             <label className="modal-open-ticket__label">
               <Calendar size={14} />
-              Data
+              Data chiusura
             </label>
             <input
               type="date"
@@ -194,13 +215,14 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
               className="modal-open-ticket__input modal-open-ticket__input--compact"
             />
           </div>
-          
+
           <div className="modal-open-ticket__divider"></div>
-          
+
+          {/* Opzioni */}
           <div className="modal-open-ticket__input-group">
             <label className="modal-open-ticket__label">
               <AlertCircle size={14} />
-              Opzioni
+              Opzioni di chiusura
             </label>
             <div className="modal-open-ticket__options-compact">
               <div className="modal-open-ticket__options-group">
@@ -208,24 +230,24 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
                   <input
                     type="checkbox"
                     id="inGaranzia"
-                    checked={formData.inGaranzia}
+                    checked={!!formData.inGaranzia}
                     onChange={(e) => handleInputChange('inGaranzia', e.target.checked)}
                     className="modal-open-ticket__option-checkbox"
                   />
                   <label htmlFor="inGaranzia" className="modal-open-ticket__option-label">
-                    In Garanzia
+                    In garanzia
                   </label>
                 </div>
                 <div className="modal-open-ticket__option-item">
                   <input
                     type="checkbox"
                     id="fuoriGaranzia"
-                    checked={formData.fuoriGaranzia}
+                    checked={!!formData.fuoriGaranzia}
                     onChange={(e) => handleInputChange('fuoriGaranzia', e.target.checked)}
                     className="modal-open-ticket__option-checkbox"
                   />
                   <label htmlFor="fuoriGaranzia" className="modal-open-ticket__option-label">
-                    Fuori Garanzia
+                    Fuori garanzia
                   </label>
                 </div>
               </div>
@@ -237,23 +259,28 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
                   <input
                     type="checkbox"
                     id="machine_retrival"
-                    checked={formData.machine_retrival}
+                    checked={!!formData.machine_retrival}
                     onChange={(e) => handleInputChange('machine_retrival', e.target.checked)}
                     className="modal-open-ticket__option-checkbox"
                   />
                   <label htmlFor="machine_retrival" className="modal-open-ticket__option-label">
-                    Ripristino Macchina
+                    Ripristino macchina
                   </label>
                 </div>
                 <div className="modal-open-ticket__option-item">
                   <input
                     type="checkbox"
                     id="machine_not_repairable"
-                    checked={formData.machine_not_repairable}
-                    onChange={(e) => handleInputChange('machine_not_repairable', e.target.checked)}
+                    checked={!!formData.machine_not_repairable}
+                    onChange={(e) =>
+                      handleInputChange('machine_not_repairable', e.target.checked)
+                    }
                     className="modal-open-ticket__option-checkbox"
                   />
-                  <label htmlFor="machine_not_repairable" className="modal-open-ticket__option-label">
+                  <label
+                    htmlFor="machine_not_repairable"
+                    className="modal-open-ticket__option-label"
+                  >
                     Macchina non riparabile in loco
                   </label>
                 </div>
@@ -261,15 +288,30 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
             </div>
           </div>
 
+          {/* Indirizzo (readonly informativo) */}
+          <div className="modal-open-ticket__input-group">
+            <label className="modal-open-ticket__label">
+              <MapPin size={14} />
+              Indirizzo
+            </label>
+            <input
+              type="text"
+              value={formData.address || ''}
+              readOnly
+              className="modal-open-ticket__input modal-open-ticket__input--compact"
+            />
+          </div>
+
+          {/* Nota di chiusura (obbligatoria) */}
           <div className="modal-open-ticket__input-group">
             <label className="modal-open-ticket__label modal-open-ticket__label--required">
               <FileText size={14} />
-              Note
+              Nota di chiusura
             </label>
             <textarea
               value={formData.note}
               onChange={(e) => handleInputChange('note', e.target.value)}
-              placeholder="Inserisci le informazioni del ticket..."
+              placeholder="Inserisci la nota di chiusura..."
               rows={3}
               className={`modal-open-ticket__textarea modal-open-ticket__textarea--compact ${
                 errors.note ? 'modal-open-ticket__textarea--error' : ''
@@ -284,12 +326,14 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
           </div>
         </div>
 
-        {/* Nota Informativa Compatta */}
+        {/* Nota informativa */}
         <div className="modal-open-ticket__info-note modal-open-ticket__info-note--compact">
           <AlertCircle size={14} />
-          <span><strong>Importante:</strong> Compilare tutti i campi obbligatori (*) prima di salvare.</span>
+          <span>
+            <strong>Importante:</strong> Compila la <em>nota di chiusura</em>. Gli altri campi
+            sono informativi o opzionali.
+          </span>
         </div>
-
       </div>
     </Modal>
   );

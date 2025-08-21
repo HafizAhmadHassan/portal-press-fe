@@ -1,5 +1,5 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { TicketRead } from './ticket.types';
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { TicketRead } from "./ticket.types";
 
 interface TicketsState {
   tickets: TicketRead[];
@@ -8,7 +8,12 @@ interface TicketsState {
   isLoading: boolean;
   isLoadingAll: boolean;
   error: string | null;
-  pagination: { page: number; limit: number; total: number; totalPages: number };
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
   filters: Record<string, any>;
 }
 
@@ -24,7 +29,7 @@ const initialState: TicketsState = {
 };
 
 const ticketsSlice = createSlice({
-  name: 'tickets',
+  name: "tickets",
   initialState,
   reducers: {
     setTickets(state, action: PayloadAction<TicketRead[]>) {

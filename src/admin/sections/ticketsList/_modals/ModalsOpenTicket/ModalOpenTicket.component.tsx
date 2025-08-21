@@ -1,15 +1,14 @@
-// src/sections/ticketsList/_modals/ModalOpenTicket.component.tsx
 import React, { useState } from 'react';
-import { Calendar, FileText, Grid, Tag, User } from 'lucide-react';
+import { Calendar, FileText, Grid, Tag } from 'lucide-react';
 import Modal from '@components/shared/modal/Modal';
 import './ModalOpenTicket.scss';
 import type { Device } from '@store_admin/devices/devices.types';
-import type { TicketCreate } from '@store_admin/tickets/ticket.types';
+import type { MessageCreate, ProblemCategory } from '@store_admin/tickets/ticket.types';
 
 interface ModalOpenTicketProps {
   device: Device;
   triggerButton: React.ReactNode;
-  onSave: (ticketData: Omit<TicketCreate, 'created_by_user_id'>) => Promise<void>;
+  onSave: (data: MessageCreate) => Promise<void>;
 }
 
 export const ModalOpenTicket: React.FC<ModalOpenTicketProps> = ({
@@ -17,37 +16,56 @@ export const ModalOpenTicket: React.FC<ModalOpenTicketProps> = ({
   triggerButton,
   onSave,
 }) => {
-  // categorie disponibili
-  const CATEGORY_OPTIONS: TicketCreate['category'] = [
-    'DATABASE','HYDRAULIC','ELECTRIC','MECHANIC'
+  // Opzioni problema (costanti richieste)
+  const PROBLEM_OPTIONS: ProblemCategory[] = [
+    'DATA_BASE',
+    'IDRAULICO',
+    'ELETTRICO',
+    'MECCANICO',
   ];
 
-  const [formData, setFormData] = useState<Omit<TicketCreate,'created_by_user_id'>>({
-    machine_id: device.id,
-    created_at: new Date().toISOString(),
-    note: '',
-    category: [],
-    user_id: 0,        
+  // customer è prelevato dal device e NON è modificabile
+  const [formData, setFormData] = useState<MessageCreate>({
+    machine: device.id,
+    problema: [],
+    status: 1, // default 1
+    open_Description: '',
+    customer: device.customer ?? '',
   });
-  const [errors, setErrors] = useState<Record<string,string>>({});
 
-  const handleChange = (field: keyof typeof formData, value: any) => {
-    setFormData(f => ({ ...f, [field]: value }));
-    if (errors[field]) setErrors(e => ({ ...e, [field]: '' }));
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const handleChange = <K extends keyof MessageCreate>(field: K, value: MessageCreate[K]) => {
+    setFormData((f) => ({ ...f, [field]: value }));
+    if (errors[field as string]) setErrors((e) => ({ ...e, [field as string]: '' }));
   };
 
   const validate = () => {
-    const e: Record<string,string> = {};
-    if (!formData.note.trim()) e.note = 'Note obbligatorie';
-    if (formData?.category?.length === 0) e.category = 'Seleziona almeno una categoria';
-    // user_id lasciamo fuori (assumiamo tu lo riempia da context)
+    const e: Record<string, string> = {};
+    if (!formData.open_Description.trim()) e.open_Description = 'Descrizione obbligatoria';
+    if (!formData.problema || formData.problema.length === 0)
+      e.problema = 'Seleziona almeno un problema';
+    if (formData.status !== 1 && formData.status !== 2)
+      e.status = 'Stato non valido (ammessi 1 o 2)';
+    if (!formData.customer?.trim())
+      e.customer = 'Customer non disponibile per la macchina selezionata';
     setErrors(e);
     return Object.keys(e).length === 0;
   };
 
   const handleSave = async () => {
-    if (!validate()) return;
-    await onSave(formData);
+    console.debug('[ModalOpenTicket] Click conferma', formData);
+    if (!validate()) {
+      console.debug('[ModalOpenTicket] Validazione fallita', { errors });
+      return;
+    }
+    try {
+      console.debug('[ModalOpenTicket] Invio onSave...', formData);
+      await onSave(formData);
+      console.debug('[ModalOpenTicket] onSave completata');
+    } catch (err) {
+      console.error('[ModalOpenTicket] Errore durante onSave', err);
+    }
   };
 
   return (
@@ -83,7 +101,7 @@ export const ModalOpenTicket: React.FC<ModalOpenTicketProps> = ({
                 APERTURA TICKET
               </div>
               <div className="modal-open-ticket__header-date">
-                {new Date(formData.created_at).toLocaleDateString('it-IT')}
+                {new Date().toLocaleDateString('it-IT')}
               </div>
             </div>
           </div>
@@ -93,7 +111,10 @@ export const ModalOpenTicket: React.FC<ModalOpenTicketProps> = ({
         <div className="modal-open-ticket__device-compact">
           <div className="modal-open-ticket__compact-grid">
             <div className="modal-open-ticket__compact-item">
-              <strong>Customer:</strong> {device.customer || 'N/D'}
+              <strong>Customer:</strong>{' '}
+              <span className="modal-open-ticket__readonly-chip">
+                {formData.customer || 'N/D'}
+              </span>
             </div>
             <div className="modal-open-ticket__compact-item">
               <strong>Machine ID:</strong> {device.id}
@@ -104,80 +125,99 @@ export const ModalOpenTicket: React.FC<ModalOpenTicketProps> = ({
               </div>
             )}
           </div>
+          {errors.customer && (
+            <div className="modal-open-ticket__error" style={{ marginTop: 8 }}>
+              <FileText className="modal-open-ticket__error-icon" />
+              {errors.customer}
+            </div>
+          )}
         </div>
 
         {/* FORM COMPACT */}
         <div className="modal-open-ticket__form-compact">
-          {/* Data */}
+          {/* Stato (1|2) */}
           <div className="modal-open-ticket__input-group">
             <label className="modal-open-ticket__label">
               <Calendar size={14} />
-              Data
+              Stato <span className="modal-open-ticket__label--required">*</span>
             </label>
-            <input
-              type="date"
-              className="modal-open-ticket__input modal-open-ticket__input--compact"
-              value={formData.created_at.slice(0,10)}
-              onChange={e => handleChange('created_at', e.target.value)}
-            />
+            <div className="modal-open-ticket__options-compact">
+              {[1, 2].map((val) => (
+                <label key={val} className="modal-open-ticket__radio">
+                  <input
+                    type="radio"
+                    name="status"
+                    checked={formData.status === val}
+                    onChange={() => handleChange('status', val as 1 | 2)}
+                  />
+                  <span>{val}</span>
+                </label>
+              ))}
+            </div>
+            {errors.status && (
+              <div className="modal-open-ticket__error">
+                <FileText className="modal-open-ticket__error-icon" />
+                {errors.status}
+              </div>
+            )}
           </div>
 
-          {/* Categoria */}
+          {/* Problema (checkbox multiple) */}
           <div className="modal-open-ticket__input-group">
             <label className="modal-open-ticket__label">
               <Tag size={14} />
-              Categoria <span className="modal-open-ticket__label--required">*</span>
+              Problema <span className="modal-open-ticket__label--required">*</span>
             </label>
             <div className="modal-open-ticket__options-compact">
               <div className="modal-open-ticket__options-group">
-                {CATEGORY_OPTIONS.map(cat => (
-                  <div key={cat} className="modal-open-ticket__option-item">
+                {PROBLEM_OPTIONS.map((p) => (
+                  <div key={p} className="modal-open-ticket__option-item">
                     <input
                       type="checkbox"
-                      id={`cat_${cat}`}
-                      checked={formData.category?.includes(cat)}
-                      onChange={e => {
-                        const arr = formData.category?.slice();
-                        if (e.target.checked) arr?.push(cat);
-                        else arr?.splice(arr?.indexOf(cat),1);
-                        handleChange('category', arr);
+                      id={`prob_${p}`}
+                      checked={formData.problema.includes(p)}
+                      onChange={(e) => {
+                        const next = new Set(formData.problema);
+                        if (e.target.checked) next.add(p);
+                        else next.delete(p);
+                        handleChange('problema', Array.from(next) as ProblemCategory[]);
                       }}
                       className="modal-open-ticket__option-checkbox"
                     />
-                    <label htmlFor={`cat_${cat}`} className="modal-open-ticket__option-label">
-                      {cat}
+                    <label htmlFor={`prob_${p}`} className="modal-open-ticket__option-label">
+                      {p}
                     </label>
                   </div>
                 ))}
               </div>
-              {errors.category && (
+              {errors.problema && (
                 <div className="modal-open-ticket__error">
                   <FileText className="modal-open-ticket__error-icon" />
-                  {errors.category}
+                  {errors.problema}
                 </div>
               )}
             </div>
           </div>
 
-          {/* Note */}
+          {/* Descrizione apertura */}
           <div className="modal-open-ticket__input-group">
             <label className="modal-open-ticket__label modal-open-ticket__label--required">
               <FileText size={14} />
-              Note
+              Descrizione apertura
             </label>
             <textarea
               className={`modal-open-ticket__textarea modal-open-ticket__textarea--compact ${
-                errors.note ? 'modal-open-ticket__textarea--error' : ''
+                errors.open_Description ? 'modal-open-ticket__textarea--error' : ''
               }`}
               rows={3}
-              value={formData?.note}
-              onChange={e => handleChange('note', e.target.value)}
+              value={formData.open_Description}
+              onChange={(e) => handleChange('open_Description', e.target.value)}
               placeholder="Descrivi il problema..."
             />
-            {errors.note && (
+            {errors.open_Description && (
               <div className="modal-open-ticket__error">
                 <FileText className="modal-open-ticket__error-icon" />
-                {errors.note}
+                {errors.open_Description}
               </div>
             )}
           </div>
@@ -186,7 +226,10 @@ export const ModalOpenTicket: React.FC<ModalOpenTicketProps> = ({
         {/* INFO NOTE */}
         <div className="modal-open-ticket__info-note modal-open-ticket__info-note--compact">
           <FileText size={14} />
-          <span><strong>Importante:</strong> Compilare i campi obbligatori (*) prima di salvare.</span>
+          <span>
+            <strong>Importante:</strong> Il customer è impostato automaticamente dalla macchina
+            selezionata e non è modificabile. Compila i campi obbligatori (*) prima di salvare.
+          </span>
         </div>
       </div>
     </Modal>

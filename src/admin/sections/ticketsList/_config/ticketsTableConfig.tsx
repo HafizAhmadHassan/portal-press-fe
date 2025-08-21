@@ -1,23 +1,49 @@
 import React from 'react';
 import type { TicketRead } from '@store_admin/tickets/ticket.types';
-import { CategoryBadge } from '@shared/badges/CategoryBadge.tsx';
 import { StatusBadge } from '@shared/badges/StatusBadge.tsx';
+import ModalCloseTicket from '../_modals/ModalCloseTIcket/ModalCloseTicket.component';
+import { PowerIcon } from 'lucide-react';
+import ModalTicketDetails from '../_modals/ModalDetailTicket/ModalTicketDetail';
 
+
+// Info minime del device collegate al ticket (arricchite dal join nell'hook)
 type DeviceLite = {
   machine_name?: string;
   city?: string;
   province?: string;
   customer_name?: string;
+  customer?: string;
+  ip_router?: string;
+  waste?: string;
+  address?: string;
+  street?: string;
+  postal_code?: string;
+  country?: string;
 };
 
+// Ticket che arriva in tabella con (eventuale) device
 type TicketWithDevice = TicketRead & {
   device?: DeviceLite | null;
+};
+
+// Payload che il ModalCloseTicket manderà all'onSave
+export type CloseTicketData = {
+  ticketId: number | string;
+  date?: Date;
+  note?: string;
+  info?: string;
+  address?: string;
+  inGaranzia?: boolean;
+  fuoriGaranzia?: boolean;
+  machine_retrival?: boolean;
+  machine_not_repairable?: boolean;
 };
 
 interface TicketsTableConfigProps {
   tickets: TicketRead[];
   onEdit: (data: { id: number | string; [key: string]: any }) => Promise<any>;
   onDelete: (ticket: TicketRead) => void;
+  onClose: (data: CloseTicketData) => Promise<any>; // handler chiusura
   isLoading?: boolean;
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
@@ -25,10 +51,13 @@ interface TicketsTableConfigProps {
   pagination?: any;
 }
 
+const isClosed = (t: any) => t?.status === 2 || t?.status === 'closed' || t?.status === 'CLOSED';
+
 export const createTicketsTableConfig = ({
   tickets,
   onEdit,
   onDelete,
+  onClose,
   isLoading = false,
   sortBy,
   sortOrder,
@@ -37,41 +66,29 @@ export const createTicketsTableConfig = ({
 }: TicketsTableConfigProps) => ({
   columns: [
     { key: 'id', header: 'ID', type: 'text' as const, width: '80px', sortable: true },
-    { 
-      key: 'description', 
-      header: 'Descrizione', 
-      type: 'text' as const, 
+    {
+      key: 'open_Description',
+      header: 'Descrizione',
+      type: 'text' as const,
       width: '250px',
       sortable: true,
       textConfig: {
         overflow: 'smart' as const,
         maxLines: 3,
         maxWidth: '250px',
-        showTooltip: true
-      }
+        showTooltip: true,
+      },
     },
-    { 
-      key: 'alarm', 
-      header: 'Stato', 
-      type: 'custom' as const, 
-      sortable: true, 
+    {
+      key: 'status',
+      header: 'Stato',
+      type: 'custom' as const,
+      sortable: true,
       width: '120px',
-      render: (_: any, t: TicketWithDevice) => <StatusBadge status={t.alarm as any} /> 
+      render: (_: any, t: TicketWithDevice) => <StatusBadge status={t.status as any} />,
     },
-    { key: 'category', header: 'Categoria', type: 'text' as const, sortable: true },
-    { 
-      key: 'type', 
-      header: 'Tipo', 
-      width: '240px',
-      type: 'custom' as const, 
-      render: (_: any, t: TicketWithDevice) => (
-        <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
-          {(t?.type ?? []).map((cat: any, i: number) => 
-            <CategoryBadge key={i} category={cat?.key ?? String(cat)} />
-          )}
-        </div>
-      )
-    },
+    { key: 'customer', header: 'Cliente', type: 'text' as const, sortable: true },
+
     {
       key: 'machine',
       header: 'Macchina',
@@ -80,9 +97,13 @@ export const createTicketsTableConfig = ({
       sortable: true,
       render: (_: any, t: TicketWithDevice) => {
         if (!t.device) {
-          return <span style={{ color: 'var(--text-secondary)', fontStyle: 'italic' }}>Macchina non trovata</span>;
+          return (
+            <span style={{ color: 'var(--text-secondary)', fontStyle: 'italic' }}>
+              Macchina non trovata
+            </span>
+          );
         }
-        
+
         return (
           <div>
             {t.device.machine_name && (
@@ -92,12 +113,13 @@ export const createTicketsTableConfig = ({
             )}
             {(t.device.city || t.device.province) && (
               <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
-                {t.device.city}{t.device.province ? `, ${t.device.province}` : ''}
+                {t.device.city}
+                {t.device.province ? `, ${t.device.province}` : ''}
               </div>
             )}
-            {t.device.customer_name && (
+            {(t.device.customer_name || (t.device as any).customer) && (
               <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
-                {t.device.customer_name}
+                {t.device.customer_name || (t.device as any).customer}
               </div>
             )}
           </div>
@@ -126,24 +148,52 @@ export const createTicketsTableConfig = ({
         );
       },
     },
-    { 
-      key: 'actions', 
-      header: 'Azioni', 
-      type: 'custom' as const, 
-      width: '120px',
+    {
+      key: 'actions',
+      header: 'Azioni',
+      type: 'custom' as const,
+      width: '160px',
       render: (_: any, t: TicketWithDevice) => (
         <div style={{ display: 'flex', gap: '8px' }}>
-          {/* Qui puoi montare modali/bottoni azione */}
+          {isClosed(t) ? (
+            // 👇 occhio: modale dettagli stile "utente"
+            <ModalTicketDetails ticket={t as any} />
+          ) : (
+            // 👇 altrimenti: modale per CHIUDERE il ticket
+            <ModalCloseTicket
+              ticket={t as any}
+              onSave={onClose}
+              triggerButton={
+                <button
+                  type="button"
+                  title="Chiudi ticket"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: 32,
+                    height: 32,
+                    borderRadius: 8,
+                    border: '1px solid var(--border-color)',
+                    background: 'var(--surface-1)',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <PowerIcon size={14} />
+                </button>
+              }
+            />
+          )}
         </div>
-      )
+      ),
     },
   ],
   data: tickets,
   loading: isLoading,
   pagination,
-  sorting: { 
-    enabled: true, 
-    currentSort: (sortBy && sortOrder) ? { key: sortBy, direction: sortOrder } : undefined, 
+  sorting: {
+    enabled: true,
+    currentSort: sortBy && sortOrder ? { key: sortBy, direction: sortOrder } : undefined,
     onSort,
     defaultSort: { key: 'date_Time', direction: 'desc' as const },
   },

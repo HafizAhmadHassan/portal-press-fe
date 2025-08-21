@@ -1,7 +1,7 @@
 // store/auth/_hooks/useAuth.ts
-import { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import type { AppDispatch } from '@store_admin/store';
+import { useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch } from "@store_admin/store";
 import {
   selectAuthError,
   selectAuthLoading,
@@ -15,7 +15,7 @@ import {
   selectUserEmail,
   selectUserName,
   selectUserRole,
-} from '../auth.selectors';
+} from "../auth.selectors";
 import {
   clearError,
   initializeAuthAsync,
@@ -25,8 +25,8 @@ import {
   refreshTokenAsync,
   registerAsync,
   updateLastActivity,
-} from '../auth.actions';
-import type { LoginCredentials, RegisterCredentials } from '../auth.types';
+} from "../auth.actions";
+import type { LoginCredentials, RegisterCredentials } from "../auth.types";
 
 export const useAuth = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -48,6 +48,7 @@ export const useAuth = () => {
   // Actions
   const login = useCallback(
     (credentials: LoginCredentials) => {
+      console.log("Logging in with credentials:", credentials);
       return dispatch(loginAsync(credentials));
     },
     [dispatch]
@@ -68,7 +69,7 @@ export const useAuth = () => {
     return dispatch(initializeAuthAsync());
   }, [dispatch]);
 
-  const refreshToken = useCallback(() => {
+  const refresh = useCallback(() => {
     return dispatch(refreshTokenAsync());
   }, [dispatch]);
 
@@ -104,7 +105,7 @@ export const useAuth = () => {
     register,
     logout: handleLogout,
     initializeAuth,
-    refreshToken,
+    refresh,
     clearError: clearAuthError,
     updateActivity,
     forceLogout,

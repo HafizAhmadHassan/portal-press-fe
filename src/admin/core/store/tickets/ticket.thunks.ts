@@ -1,12 +1,12 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import type { RootState } from '../../../../store';
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import type { RootState } from "../../../../store";
 import type {
   TicketsQueryParams,
-  CreateTicketRequest,
+  CreateTicketRequest, // alias a MessageCreate
   UpdateTicketRequest,
   BulkActionRequest,
-} from './ticket.types';
-import { ticketsApi } from './ticket.api';
+} from "./ticket.types";
+import { ticketsApi } from "./ticket.api";
 import {
   setTickets,
   setAllTickets,
@@ -14,17 +14,18 @@ import {
   setLoading,
   setLoadingAll,
   setError,
-} from './ticket.slice';
+} from "./ticket.slice";
 
 export const loadTickets = createAsyncThunk(
-  'tickets/load',
+  "tickets/load",
   async (
     params: Partial<TicketsQueryParams> = {},
     { getState, dispatch, rejectWithValue }
   ) => {
     try {
       const state = getState() as RootState;
-      const { filters: currentFilters, pagination: currentPagination } = state.tickets;
+      const { filters: currentFilters, pagination: currentPagination } =
+        state.tickets;
       const query: TicketsQueryParams = {
         page: params.page ?? currentPagination.page,
         page_size: params.page_size ?? currentPagination.limit,
@@ -48,7 +49,7 @@ export const loadTickets = createAsyncThunk(
 );
 
 export const loadAllTickets = createAsyncThunk(
-  'tickets/loadAll',
+  "tickets/loadAll",
   async (_, { dispatch, rejectWithValue }) => {
     try {
       dispatch(setLoadingAll(true));
@@ -65,7 +66,7 @@ export const loadAllTickets = createAsyncThunk(
 );
 
 export const createNewTicket = createAsyncThunk(
-  'tickets/create',
+  "tickets/create",
   async (ticketData: CreateTicketRequest, { dispatch, rejectWithValue }) => {
     try {
       const created = await dispatch(
@@ -75,7 +76,8 @@ export const createNewTicket = createAsyncThunk(
       await dispatch(loadAllTickets());
       return created;
     } catch (error: any) {
-      const msg = error.data?.message || error.message || 'Errore nella creazione ticket';
+      const msg =
+        error.data?.message || error.message || "Errore nella creazione ticket";
       dispatch(setError(msg));
       return rejectWithValue(msg);
     }
@@ -83,8 +85,11 @@ export const createNewTicket = createAsyncThunk(
 );
 
 export const updateExistingTicket = createAsyncThunk(
-  'tickets/update',
-  async (updateData: UpdateTicketRequest & { id: string }, { dispatch, rejectWithValue }) => {
+  "tickets/update",
+  async (
+    updateData: UpdateTicketRequest & { id: string },
+    { dispatch, rejectWithValue }
+  ) => {
     try {
       const updated = await dispatch(
         ticketsApi.endpoints.updateTicket.initiate(updateData)
@@ -93,7 +98,10 @@ export const updateExistingTicket = createAsyncThunk(
       await dispatch(loadAllTickets());
       return updated;
     } catch (error: any) {
-      const msg = error.data?.message || error.message || 'Errore nell\'aggiornamento ticket';
+      const msg =
+        error.data?.message ||
+        error.message ||
+        "Errore nell'aggiornamento ticket";
       dispatch(setError(msg));
       return rejectWithValue(msg);
     }
@@ -101,7 +109,7 @@ export const updateExistingTicket = createAsyncThunk(
 );
 
 export const deleteExistingTicket = createAsyncThunk(
-  'tickets/delete',
+  "tickets/delete",
   async (ticketId: string, { dispatch, rejectWithValue }) => {
     try {
       await dispatch(
@@ -111,7 +119,10 @@ export const deleteExistingTicket = createAsyncThunk(
       await dispatch(loadAllTickets());
       return ticketId;
     } catch (error: any) {
-      const msg = error.data?.message || error.message || 'Errore nell\'eliminazione ticket';
+      const msg =
+        error.data?.message ||
+        error.message ||
+        "Errore nell'eliminazione ticket";
       dispatch(setError(msg));
       return rejectWithValue(msg);
     }
@@ -119,7 +130,7 @@ export const deleteExistingTicket = createAsyncThunk(
 );
 
 export const performBulkTicketAction = createAsyncThunk(
-  'tickets/bulkAction',
+  "tickets/bulkAction",
   async (request: BulkActionRequest, { dispatch, rejectWithValue }) => {
     try {
       const response = await dispatch(
@@ -127,9 +138,14 @@ export const performBulkTicketAction = createAsyncThunk(
       ).unwrap();
       await dispatch(loadTickets());
       await dispatch(loadAllTickets());
-      return { ...response, action: request.action, affectedTicketIds: request.ticketIds };
+      return {
+        ...response,
+        action: request.action,
+        affectedTicketIds: request.ticketIds,
+      };
     } catch (error: any) {
-      const msg = error.data?.message || error.message || 'Errore nell\'operazione bulk';
+      const msg =
+        error.data?.message || error.message || "Errore nell'operazione bulk";
       dispatch(setError(msg));
       return rejectWithValue(msg);
     }
@@ -137,49 +153,64 @@ export const performBulkTicketAction = createAsyncThunk(
 );
 
 export const changeTicketPage = createAsyncThunk(
-  'tickets/changePage',
+  "tickets/changePage",
   async (page: number, { dispatch, rejectWithValue }) => {
     try {
       const resp = await dispatch(loadTickets({ page })).unwrap();
       return resp;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || 'Errore cambio pagina tickets');
+      return rejectWithValue(
+        error.data?.message || "Errore cambio pagina tickets"
+      );
     }
   }
 );
 
 export const changeTicketPageSize = createAsyncThunk(
-  'tickets/changePageSize',
+  "tickets/changePageSize",
   async (pageSize: number, { dispatch, rejectWithValue }) => {
     try {
-      const resp = await dispatch(loadTickets({ page_size: pageSize, page: 1 })).unwrap();
+      const resp = await dispatch(
+        loadTickets({ page_size: pageSize, page: 1 })
+      ).unwrap();
       return resp;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || 'Errore cambio dimensione pagina tickets');
+      return rejectWithValue(
+        error.data?.message || "Errore cambio dimensione pagina tickets"
+      );
     }
   }
 );
 
 export const applyTicketFilters = createAsyncThunk(
-  'tickets/applyFilters',
-  async (filters: Partial<TicketsQueryParams>, { dispatch, rejectWithValue }) => {
+  "tickets/applyFilters",
+  async (
+    filters: Partial<TicketsQueryParams>,
+    { dispatch, rejectWithValue }
+  ) => {
     try {
-      const resp = await dispatch(loadTickets({ ...filters, page: 1 })).unwrap();
+      const resp = await dispatch(
+        loadTickets({ ...filters, page: 1 })
+      ).unwrap();
       return resp;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || 'Errore applicazione filtri tickets');
+      return rejectWithValue(
+        error.data?.message || "Errore applicazione filtri tickets"
+      );
     }
   }
 );
 
 export const resetTicketFilters = createAsyncThunk(
-  'tickets/resetFilters',
+  "tickets/resetFilters",
   async (_, { dispatch, rejectWithValue }) => {
     try {
       const resp = await dispatch(loadTickets({ page: 1 })).unwrap();
       return resp;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || 'Errore reset filtri tickets');
+      return rejectWithValue(
+        error.data?.message || "Errore reset filtri tickets"
+      );
     }
   }
 );

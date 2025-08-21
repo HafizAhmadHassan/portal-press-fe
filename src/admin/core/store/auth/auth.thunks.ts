@@ -1,9 +1,14 @@
 // store/auth/auth.thunks.ts
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import type { RootState } from '@store_admin/store';
-import type { AuthResponse, LoginCredentials, RegisterCredentials, User } from './auth.types';
-import { authApi } from './auth.api';
-import { logout } from './auth.slice';
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import type { RootState } from "@root/store";
+import type {
+  AuthResponse,
+  LoginCredentials,
+  RegisterCredentials,
+  User,
+} from "./auth.types";
+import { authApi } from "./auth.api";
+import { logout } from "./auth.slice";
 
 // Login con credenziali
 export const loginAsync = createAsyncThunk<
@@ -11,34 +16,35 @@ export const loginAsync = createAsyncThunk<
   LoginCredentials,
   { rejectValue: string }
 >(
-  'auth/loginAsync',
+  "auth/loginAsync",
   async (credentials: LoginCredentials, { dispatch, rejectWithValue }) => {
+    console.log("loginAsync called with credentialsTHUNK:", credentials);
     try {
-      
-      const loginResult = await dispatch(authApi.endpoints.login.initiate(credentials)).unwrap();
-      
+      const loginResult = await dispatch(
+        authApi.endpoints.login.initiate(credentials)
+      ).unwrap();
 
       // Se non abbiamo i dati utente, chiamiamo /me
       if (!loginResult.user && loginResult.token) {
-        
         try {
-          const userData = await dispatch(authApi.endpoints.getCurrentUser.initiate()).unwrap();
-          
+          const userData = await dispatch(
+            authApi.endpoints.getCurrentUser.initiate()
+          ).unwrap();
 
           return {
             ...loginResult,
-            user: userData
+            user: userData,
           };
         } catch (userError) {
-          console.error('loginAsync: Failed to fetch user data:', userError);
+          console.error("loginAsync: Failed to fetch user data:", userError);
           // Continua con i dati di login anche senza user data
         }
       }
 
       return loginResult;
     } catch (error: any) {
-      console.error('loginAsync: Login failed, error:', error);
-      return rejectWithValue(error.data?.message || 'Errore durante il login');
+      console.error("loginAsync: Login failed, error:", error);
+      return rejectWithValue(error.data?.message || "Errore durante il login");
     }
   }
 );
@@ -49,25 +55,29 @@ export const registerAsync = createAsyncThunk<
   RegisterCredentials,
   { rejectValue: string }
 >(
-  'auth/registerAsync',
+  "auth/registerAsync",
   async (credentials: RegisterCredentials, { dispatch, rejectWithValue }) => {
     try {
       // Validazione password
       if (credentials.password !== credentials.confirmPassword) {
-        return rejectWithValue('Le password non coincidono');
+        return rejectWithValue("Le password non coincidono");
       }
 
-      const result = await dispatch(authApi.endpoints.register.initiate(credentials)).unwrap();
+      const result = await dispatch(
+        authApi.endpoints.register.initiate(credentials)
+      ).unwrap();
       return result;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || 'Errore durante la registrazione');
+      return rejectWithValue(
+        error.data?.message || "Errore durante la registrazione"
+      );
     }
   }
 );
 
 // Logout completo
 export const logoutAsync = createAsyncThunk(
-  'auth/logoutAsync',
+  "auth/logoutAsync",
   async (_, { dispatch, getState }) => {
     try {
       const state = getState() as RootState;
@@ -78,7 +88,10 @@ export const logoutAsync = createAsyncThunk(
       }
     } catch (error) {
       // Anche se il logout dal server fallisce, facciamo il logout locale
-      console.warn('Server logout failed, proceeding with local logout:', error);
+      console.warn(
+        "Server logout failed, proceeding with local logout:",
+        error
+      );
     } finally {
       // Logout locale garantito
       dispatch(logout());
@@ -91,29 +104,29 @@ export const logoutAsync = createAsyncThunk(
 
 // Refresh token automatico
 export const refreshTokenAsync = createAsyncThunk<
-  { token: string; refreshToken: string },
+  { token: string; refresh: string },
   void,
   { rejectValue: string }
 >(
-  'auth/refreshTokenAsync',
+  "auth/refreshTokenAsync",
   async (_, { dispatch, getState, rejectWithValue }) => {
     try {
       const state = getState() as RootState;
-      const { refreshToken } = state.auth;
+      const { refresh } = state.auth;
 
-      if (!refreshToken) {
-        return rejectWithValue('Nessun refresh token disponibile');
+      if (!refresh) {
+        return rejectWithValue("Nessun refresh token disponibile");
       }
 
       const result = await dispatch(
-        authApi.endpoints.refreshToken.initiate({ refreshToken })
+        authApi.endpoints.refresh.initiate({ refresh })
       ).unwrap();
 
       return result;
     } catch (error: any) {
       // Se il refresh fallisce, logout automatico
       dispatch(logout());
-      return rejectWithValue(error.data?.message || 'Sessione scaduta');
+      return rejectWithValue(error.data?.message || "Sessione scaduta");
     }
   }
 );
@@ -123,60 +136,53 @@ export const initializeAuthAsync = createAsyncThunk<
   User | null,
   void,
   { rejectValue: string }
->(
-  'auth/initializeAuthAsync',
-  async (_, { dispatch, getState }) => {
-    try {
-      const state = getState() as RootState;
-      
+>("auth/initializeAuthAsync", async (_, { dispatch, getState }) => {
+  try {
+    const state = getState() as RootState;
 
-      // Se non c'è token, considera l'inizializzazione completata
-      if (!state.auth.token) {
-        
-        return null;
-      }
+    // Se non c'è token, considera l'inizializzazione completata
+    if (!state.auth.token) {
+      return null;
+    }
 
-      // Verifica il token corrente chiamando /me
-      
-      const profile = await dispatch(
-        authApi.endpoints.getCurrentUser.initiate()
-      ).unwrap();
+    // Verifica il token corrente chiamando /me
 
-      
-      return profile;
-    } catch (error: any) {
-      
-      // Se getCurrentUser fallisce, prova il refresh
-      const state = getState() as RootState;
+    const profile = await dispatch(
+      authApi.endpoints.getCurrentUser.initiate()
+    ).unwrap();
 
-      if (state.auth.refreshToken) {
-        try {
-          await dispatch(refreshTokenAsync()).unwrap();
-          // Riprova a ottenere il profilo dopo il refresh
-          const profile = await dispatch(
-            authApi.endpoints.getCurrentUser.initiate()
-          ).unwrap();
-          
-          return profile;
-        } catch {
-          // Se anche il refresh fallisce, logout
-          
-          dispatch(logout());
-          return null;
-        }
-      } else {
-        // Nessun refresh token, logout
-        
+    return profile;
+  } catch (error: any) {
+    // Se getCurrentUser fallisce, prova il refresh
+    const state = getState() as RootState;
+
+    if (state.auth.refresh) {
+      try {
+        await dispatch(refreshTokenAsync()).unwrap();
+        // Riprova a ottenere il profilo dopo il refresh
+        const profile = await dispatch(
+          authApi.endpoints.getCurrentUser.initiate()
+        ).unwrap();
+
+        return profile;
+      } catch {
+        // Se anche il refresh fallisce, logout
+
         dispatch(logout());
         return null;
       }
+    } else {
+      // Nessun refresh token, logout
+
+      dispatch(logout());
+      return null;
     }
   }
-);
+});
 
 // Controllo scadenza sessione (per timeout automatico)
 export const checkSessionTimeout = createAsyncThunk(
-  'auth/checkSessionTimeout',
+  "auth/checkSessionTimeout",
   async (_, { dispatch, getState }) => {
     const state = getState() as RootState;
     const { lastActivity, isAuthenticated } = state.auth;
@@ -202,7 +208,7 @@ export const forgotPasswordAsync = createAsyncThunk<
   { email: string },
   { rejectValue: string }
 >(
-  'auth/forgotPasswordAsync',
+  "auth/forgotPasswordAsync",
   async ({ email }: { email: string }, { dispatch, rejectWithValue }) => {
     try {
       const result = await dispatch(
@@ -210,7 +216,9 @@ export const forgotPasswordAsync = createAsyncThunk<
       ).unwrap();
       return result;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || 'Errore durante l\'invio email');
+      return rejectWithValue(
+        error.data?.message || "Errore durante l'invio email"
+      );
     }
   }
 );
@@ -221,9 +229,13 @@ export const resetPasswordAsync = createAsyncThunk<
   { token: string; password: string; confirmPassword: string },
   { rejectValue: string }
 >(
-  'auth/resetPasswordAsync',
+  "auth/resetPasswordAsync",
   async (
-    { token, password, confirmPassword }: {
+    {
+      token,
+      password,
+      confirmPassword,
+    }: {
       token: string;
       password: string;
       confirmPassword: string;
@@ -232,16 +244,22 @@ export const resetPasswordAsync = createAsyncThunk<
   ) => {
     try {
       if (password !== confirmPassword) {
-        return rejectWithValue('Le password non coincidono');
+        return rejectWithValue("Le password non coincidono");
       }
 
       const result = await dispatch(
-        authApi.endpoints.resetPassword.initiate({ token, password, confirmPassword })
+        authApi.endpoints.resetPassword.initiate({
+          token,
+          password,
+          confirmPassword,
+        })
       ).unwrap();
 
       return result;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || 'Errore durante il reset password');
+      return rejectWithValue(
+        error.data?.message || "Errore durante il reset password"
+      );
     }
   }
 );

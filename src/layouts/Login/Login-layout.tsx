@@ -2,11 +2,10 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@store_admin/auth/hooks/useAuth';
-import type { LoginCredentials } from '@store_admin/auth/auth.types';
 import './Login-layout.scss';
 
-interface LoginFormData extends LoginCredentials {
-  email: string;
+interface LoginFormData {
+  emailOrUsername: string; // CAMBIATO: campo unico di input
   password: string;
   rememberMe?: boolean;
 }
@@ -19,12 +18,12 @@ const LoginLayout: React.FC = () => {
     isLoading,
     error,
     isAuthenticated,
-    user,  // AGGIUNTO: mancava questa variabile
+    user,
     clearError
   } = useAuth();
 
   const [formData, setFormData] = useState<LoginFormData>({
-    email: '',
+    emailOrUsername: '',
     password: '',
     rememberMe: false
   });
@@ -36,7 +35,7 @@ const LoginLayout: React.FC = () => {
     console.log('Auth state in LoginLayout:', {
       isAuthenticated,
       user: user?.email,
-      isInitialized: true // assumiamo che sia inizializzato se siamo in LoginLayout
+      isInitialized: true
     });
     if (isAuthenticated) {
       const from = (location.state as any)?.from?.pathname || '/admin';
@@ -66,12 +65,28 @@ const LoginLayout: React.FC = () => {
     }));
   };
 
+  // Determina se l'input è un'email (per UI/validazione, NON per payload)
+  const isEmail = (input: string): boolean => {
+    return input.includes('@') && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input);
+  };
+
+  // Validazione aggiornata
   const validateForm = (): string | null => {
-    if (!formData.email) {
-      return 'Email richiesta';
+    if (!formData.emailOrUsername) {
+      return 'Email o username richiesti';
     }
-    if (!formData.email.includes('@')) {
+    // Se contiene @, validalo come email
+    if (formData.emailOrUsername.includes('@') && !isEmail(formData.emailOrUsername)) {
       return 'Email non valida';
+    }
+    // Se non contiene @, validalo come username (almeno 3 caratteri, no spazi)
+    if (!formData.emailOrUsername.includes('@')) {
+      if (formData.emailOrUsername.length < 3) {
+        return 'Username deve essere di almeno 3 caratteri';
+      }
+      if (formData.emailOrUsername.includes(' ')) {
+        return 'Username non può contenere spazi';
+      }
     }
     if (!formData.password) {
       return 'Password richiesta';
@@ -93,23 +108,27 @@ const LoginLayout: React.FC = () => {
     }
 
     try {
-      console.log('Attempting login with:', { email: formData.email });
-
-      const result = await login({
-        email: formData.email,
+      // CAMBIATO: inviamo sempre `username` come identificatore (email o username)
+      const loginData = {
+        username: formData.emailOrUsername,
         password: formData.password,
         rememberMe: formData.rememberMe
+      };
+
+      console.log('Attempting login with identifier:', {
+        username: loginData.username,
+        isEmail: isEmail(loginData.username)
       });
+
+      
+      const result = await login(loginData);
 
       console.log('Login result:', result);
 
-      // Verifica se il login è avvenuto con successo
-      if (result.type === 'auth/loginAsync/fulfilled') {
+      if ((result as any)?.type === 'auth/loginAsync/fulfilled') {
         console.log('Login successful, user will be redirected by useEffect');
-        // Il redirect avverrà automaticamente tramite useEffect quando isAuthenticated cambierà
-      } else if (result.type === 'auth/loginAsync/rejected') {
-        console.log('Login failed:', result.payload);
-        // L'errore verrà gestito dal Redux state
+      } else if ((result as any)?.type === 'auth/loginAsync/rejected') {
+        console.log('Login failed:', (result as any)?.payload);
       }
     } catch (err) {
       console.error('Login error:', err);
@@ -248,23 +267,32 @@ const LoginLayout: React.FC = () => {
 
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                  <label htmlFor="email">Email</label>
+                  {/* Label e placeholder per email o username */}
+                  <label htmlFor="emailOrUsername">Email o Username</label>
                   <div className="input-wrapper">
                     <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
+                      type="text"
+                      id="emailOrUsername"
+                      name="emailOrUsername"
+                      value={formData.emailOrUsername}
                       onChange={handleInputChange}
-                      placeholder="Inserisci la tua email"
+                      placeholder="Inserisci email o username"
                       required
                       disabled={isLoading}
                     />
                     <span className="input-icon">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" strokeWidth="2" fill="none"/>
-                        <polyline points="22,6 12,13 2,6" stroke="currentColor" strokeWidth="2"/>
-                      </svg>
+                      {/* Icona dinamica */}
+                      {isEmail(formData.emailOrUsername) ? (
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" strokeWidth="2" fill="none"/>
+                          <polyline points="22,6 12,13 2,6" stroke="currentColor" strokeWidth="2"/>
+                        </svg>
+                      ) : (
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" strokeWidth="2"/>
+                          <circle cx="12" cy="7" r="4" stroke="currentColor" strokeWidth="2"/>
+                        </svg>
+                      )}
                     </span>
                   </div>
                 </div>

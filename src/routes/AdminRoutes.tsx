@@ -13,15 +13,10 @@ import { GpsListSections } from '@root/admin/sections/gpsList/Gps-list.sections'
 const AdminRoutes: RouteObject[] = [
   {
     path: '/admin',
-   /*  element: (
+    element: (
       <ProtectedRoute>
         <AdminLayout />
       </ProtectedRoute>
-    ), */
-    element: (
-     
-        <AdminLayout />
-    
     ),
     children: [
       {

@@ -1,24 +1,28 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { RootState } from '../../../store.ts';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import type { RootState } from "../../../store.ts";
 
 //const baseUrl = import.meta.env.VITE_API_BASE_URL;
 const apiHassanUrl = import.meta.env.VITE_API_HASSAN_URL;
 
 export const apiSlice = createApi({
-  reducerPath: 'api',
+  reducerPath: "api",
   baseQuery: fetchBaseQuery({
-   /*  baseUrl: `${API_BASE_URL}`, */
+    /*  baseUrl: `${API_BASE_URL}`, */
     baseUrl: `${apiHassanUrl}`,
-   
-   /*  prepareHeaders: (headers, { getState }) => {
+
+    prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;
-      if (token) headers.set('Authorization', `Bearer ${token}`);
+      console.log(
+        "API: Preparing headers with token:",
+        getState() as RootState
+      );
+      if (token) headers.set("Authorization", `Bearer ${token}`);
       return headers;
-    }, */
-   /*  credentials: 'include', */
+    },
+    credentials: "include",
   }),
 
-  tagTypes: ['LIST', 'ENTITY', 'STATS'],
+  tagTypes: ["LIST", "ENTITY", "STATS"],
   endpoints: () => ({}),
 });
 
