@@ -1,3 +1,4 @@
+// File: admin/sections_admin/devicesList/DevicesList.sections.tsx
 import React, { useCallback, useMemo } from 'react';
 import { useListQueryParams } from '@hooks/useListQueryParams';
 import { createDevicesTableConfig } from '@sections_admin/devicesList/_config/devicesTableConfig';
@@ -21,6 +22,7 @@ import { useDevicesListView } from './_hooks/useDevicesListView';
 import { createHeaderBtnConfig } from '@sections_admin/devicesList/_config/deviceHeaderBtnsConfig';
 import { DevicesMapStats } from '@sections_admin/devicesList/_components/DevicesMapStats';
 import { Divider } from '@shared/divider/Divider.component.tsx';
+import { useCustomers } from '@root/admin/core/store/customers/hooks/useCustomers';
 
 
 
@@ -71,6 +73,14 @@ export const DevicesListSections: React.FC = () => {
   const { devices, isLoading, meta, deleteDevice, createDevice, updateDevice, refetch } =
     useDevices(queryParamsTable);
 
+
+  // Customers (string[]) — già puliti e deduplicati in transformResponse
+  const { customers: customerNames, isLoading: isLoadingCustomers } = useCustomers();
+  const customerOptions = useMemo(
+    () => customerNames.map((name) => ({ value: name, label: name })),
+    [customerNames]
+  );
+
   const mapFilters = useMemo(
     () => ({
       wasteType: filters[DeviceFields.WASTE] || undefined,
@@ -112,7 +122,7 @@ export const DevicesListSections: React.FC = () => {
 
   const handleDeleteDevice = useCallback(
     async (device: Device) => {
-      const name = device.machineName || device.id;
+      const name = (device as any).machineName || device.id;
       if (window.confirm(`Sei sicuro di voler eliminare il dispositivo ${name}?`)) {
         try {
           await deleteDevice(device.id).unwrap();
@@ -133,57 +143,36 @@ export const DevicesListSections: React.FC = () => {
     reloadGrid();
   }, [refetch, refetchMap, reloadGrid]);
 
-  const onToggleDeviceStatus = useCallback(async (device: Device) => refetchAll(), [refetchAll]);
+  const onToggleDeviceStatus = useCallback(async (_device: Device) => refetchAll(), [refetchAll]);
   const onExportClick = () => console.log('Esporta devices');
-  const onRefreshClick = () => useCallback(async (device: Device) => refetchAll(), [refetchAll]);
+  const onRefreshClick = () => useCallback(async (_device: Device) => refetchAll(), [refetchAll]);
 
-  const getTotalDevicesCount = () => {
-    if (isMap) return totalDevicesCount.total;
-    if (isTable) return meta?.total ?? 0;
-    return deviceGrid.length;
-  };
 
   const getLoadingState = () => {
     if (isMap) return isLoadingMap;
     if (isTable) return isLoading;
     return isLoadingGrid;
   };
+
   const updateExistingDevice = useCallback(
     async (deviceId: string, deviceData: any) => {
       try {
-        console.log('COMPONENT - Updating device:', deviceId, 'with data:', deviceData);
-
-        if (!deviceData) {
-          throw new Error('Device data is required');
-        }
-
-        const updatePayload = {
-          id: deviceId,
-          data: deviceData,
-        };
-
-        console.log('COMPONENT - Calling updateDevice with:', updatePayload);
-
+        if (!deviceData) throw new Error('Device data is required');
+        const updatePayload = { id: deviceId, data: deviceData };
         const result = await updateDevice(updatePayload).unwrap();
-        console.log('COMPONENT - Device updated successfully:', result);
-
         setTimeout(() => {
-          console.log('COMPONENT - Reloading data after update...');
           refetch();
           refetchMap();
           reloadGrid();
         }, 100);
-
         return result;
       } catch (error: any) {
-        console.error('COMPONENT - Errore nella modifica dispositivo:', error);
-        throw new Error(
-          error?.data?.detail || error?.message || 'Errore durante la modifica del dispositivo'
-        );
+        throw new Error(error?.data?.detail || error?.message || 'Errore durante la modifica');
       }
     },
     [updateDevice, refetch, refetchMap, reloadGrid]
   );
+
   const handleDeviceAction = () => console.log('handleDeviceAction');
 
   const tableConfig = useMemo(
@@ -232,23 +221,8 @@ export const DevicesListSections: React.FC = () => {
   const createNewDevice = useCallback(
     async (deviceData: any) => {
       try {
-        console.log('COMPONENT - Received deviceData (should be snake_case):', deviceData);
-
-        if (!deviceData) {
-          throw new Error('Device data is required');
-        }
-
-        if (!deviceData.machine_name) {
-          throw new Error('machine_name is required');
-        }
-
-        console.log('COMPONENT - Calling createDevice with:', deviceData);
-
+        if (!deviceData?.machine_name) throw new Error('machine_name is required');
         const result = await createDevice(deviceData).unwrap();
-        console.log('COMPONENT - Device created successfully:', result);
-
-        console.log('COMPONENT - Resetting all filters...');
-
         setFilter('search', '');
         setFilter('waste', '');
         setFilter('status', '');
@@ -258,20 +232,14 @@ export const DevicesListSections: React.FC = () => {
         setFilter('statusMachineBlocked', '');
         setPage(1);
         setPageSize(10);
-
         setTimeout(() => {
-          console.log('COMPONENT - Filters reset, now reloading data...');
           refetch();
           refetchMap();
           reloadGrid();
         }, 200);
-
         return result;
       } catch (error: any) {
-        console.error('COMPONENT - Errore nella creazione dispositivo:', error);
-        throw new Error(
-          error?.data?.detail || error?.message || 'Errore durante la creazione del dispositivo'
-        );
+        throw new Error(error?.data?.detail || error?.message || 'Errore creazione dispositivo');
       }
     },
     [createDevice, refetch, refetchMap, reloadGrid, setFilter, setPage, setPageSize]
@@ -311,6 +279,16 @@ export const DevicesListSections: React.FC = () => {
         title="Dispositivi"
         subTitle={`Gestisci i dispositivi`}
         buttons={sectionHeaderButtons}
+        customerSelect={{
+          value: (filters as any)[DeviceFields.CUSTOMER] || '',
+          options: customerOptions,
+          loading: isLoadingCustomers,
+          placeholder: 'Seleziona cliente',
+          onChange: (val: string) => {
+            setFilter(DeviceFields.CUSTOMER, val);
+            setPage(1);
+          },
+        }}
       />
 
       <div className={styles['devices-list-page__filters']}>
@@ -345,9 +323,7 @@ export const DevicesListSections: React.FC = () => {
           <div className={styles.devicesListSection}>
             <div className={styles.viewContainer}>
               {isTable ? (
-                
-                  <GenericTableWithLogic config={tableConfig} loading={isLoading} />
-                
+                <GenericTableWithLogic config={tableConfig} loading={isLoading} />
               ) : (
                 <div className={styles.devicesGrid}>
                   {deviceGrid.map((device, idx) => (
