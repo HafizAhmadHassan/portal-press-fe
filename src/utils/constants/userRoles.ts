@@ -1,10 +1,12 @@
-export enum UserRoles {
-  ADMIN = "ADMIN",
-  SUPER_ADMIN = "SUPER_ADMIN",
-  USER = "USER",
-  ADVANCED_USER = "ADVANCED_USER",
-  DRIVER = "DRIVER",
-}
+export const UserRoles = {
+  USER: "USER",
+  ADMIN: "ADMIN",
+  DRIVER: "DRIVER", // elenco delle macchine e gli allarmi
+  SUPER_ADMIN: "SUPER_ADMIN",
+  ADVANCED_USER: "ADVANCED_USER",
+} as const;
+
+export type UserRoles = (typeof UserRoles)[keyof typeof UserRoles];
 
 export const UserRoleLabels: Record<UserRoles, string> = {
   [UserRoles.ADMIN]: "Admin",
@@ -14,30 +16,33 @@ export const UserRoleLabels: Record<UserRoles, string> = {
   [UserRoles.DRIVER]: "Driver",
 };
 
-export const UserRoleStyles: Record<UserRoles, { backgroundColor: string; color: string; borderColor: string }> = {
+export const UserRoleStyles: Record<
+  UserRoles,
+  { backgroundColor: string; color: string; borderColor: string }
+> = {
   [UserRoles.SUPER_ADMIN]: {
-    backgroundColor: '#fef3c7',
-    color: '#92400e',
-    borderColor: '#fcd34d'
+    backgroundColor: "#fef3c7",
+    color: "#92400e",
+    borderColor: "#fcd34d",
   },
   [UserRoles.ADMIN]: {
-    backgroundColor: '#dbeafe',
-    color: '#1e40af',
-    borderColor: '#60a5fa'
+    backgroundColor: "#dbeafe",
+    color: "#1e40af",
+    borderColor: "#60a5fa",
   },
   [UserRoles.USER]: {
-    backgroundColor: '#f3f4f6',
-    color: '#374151',
-    borderColor: '#d1d5db'
+    backgroundColor: "#f3f4f6",
+    color: "#374151",
+    borderColor: "#d1d5db",
   },
   [UserRoles.ADVANCED_USER]: {
-    backgroundColor: '#f3f4f6',
-    color: '#374151',
-    borderColor: '#d1d5db'
+    backgroundColor: "#f3f4f6",
+    color: "#374151",
+    borderColor: "#d1d5db",
   },
   [UserRoles.DRIVER]: {
-    backgroundColor: '#f3f4f6',
-    color: '#374151',
-    borderColor: '#d1d5db'
+    backgroundColor: "#f3f4f6",
+    color: "#374151",
+    borderColor: "#d1d5db",
   },
 };

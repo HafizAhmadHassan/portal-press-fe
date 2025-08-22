@@ -19,7 +19,7 @@ export const ticketsApi = apiSlice.injectEndpoints({
       { data: TicketWithDevice[]; meta: any },
       TicketsQueryParams
     >({
-      query: (params = {}) => ({ url: "messages/", params }),
+      query: (params = {}) => ({ url: "message/", params }),
       providesTags: [
         { type: "LIST" as const, id: "Tickets" },
         { type: "STATS" as const, id: "Tickets" },
@@ -65,7 +65,7 @@ export const ticketsApi = apiSlice.injectEndpoints({
     }),
 
     getAllTickets: builder.query<TicketWithDevice[], void>({
-      query: () => "messages/all/",
+      query: () => "message/all/",
       providesTags: [{ type: "LIST" as const, id: "AllTickets" }],
       async onQueryStarted(args, { queryFulfilled, dispatch }) {
         try {
@@ -109,7 +109,7 @@ export const ticketsApi = apiSlice.injectEndpoints({
     }),
 
     getTicketById: builder.query<TicketWithDevice, string>({
-      query: (id) => `messages/`,
+      query: (id) => `message/`,
       providesTags: (_result, _error, id) => [{ type: "ENTITY" as const, id }],
       async onQueryStarted(id, { queryFulfilled, dispatch }) {
         try {
@@ -140,9 +140,9 @@ export const ticketsApi = apiSlice.injectEndpoints({
       },
     }),
 
-    // 👇 POST /messages/ con il body richiesto
+    // 👇 POST /message/ con il body richiesto
     createTicket: builder.mutation<TicketRead, MessageCreate>({
-      query: (body) => ({ url: "messages/", method: "POST", body }),
+      query: (body) => ({ url: "message/", method: "POST", body }),
       invalidatesTags: [
         { type: "LIST" as const, id: "Tickets" },
         { type: "LIST" as const, id: "AllTickets" },
@@ -155,7 +155,7 @@ export const ticketsApi = apiSlice.injectEndpoints({
       { id: string; data: TicketUpdate }
     >({
       query: ({ id, data }) => ({
-        url: `messages/${id}/`,
+        url: `message/${id}/`,
         method: "PUT",
         body: data,
       }),
@@ -168,7 +168,7 @@ export const ticketsApi = apiSlice.injectEndpoints({
     }),
 
     deleteTicket: builder.mutation<{ success: boolean }, string>({
-      query: (id) => ({ url: `messages/`, method: "DELETE" }),
+      query: (id) => ({ url: `message/`, method: "DELETE" }),
       invalidatesTags: (_r, _e, id) => [
         { type: "ENTITY" as const, id },
         { type: "LIST" as const, id: "Tickets" },
@@ -181,7 +181,7 @@ export const ticketsApi = apiSlice.injectEndpoints({
       { message: string; affectedCount: number },
       BulkActionRequest
     >({
-      query: (body) => ({ url: "messages/bulk/", method: "POST", body }),
+      query: (body) => ({ url: "message/bulk/", method: "POST", body }),
       invalidatesTags: [
         { type: "LIST" as const, id: "Tickets" },
         { type: "LIST" as const, id: "AllTickets" },
@@ -190,7 +190,7 @@ export const ticketsApi = apiSlice.injectEndpoints({
     }),
 
     getTicketStats: builder.query<any, void>({
-      query: () => "messages/stats/",
+      query: () => "message/stats/",
       providesTags: [{ type: "STATS" as const, id: "Tickets" }],
     }),
   }),
