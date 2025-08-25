@@ -1,4 +1,4 @@
-@use '../../../../admin/styles/globals.scss';
+@use "@root/pages/admin/styles/globals.scss";
 
 /* GenericTable.module.scss — light/dark via globals.scss */
 /* GenericTable.module.scss - dark-mode ready using globals CSS variables */
@@ -30,7 +30,11 @@
   border-bottom-color: var(--primary-color);
 }
 
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 .tableWrapper {
   overflow-x: auto;
@@ -67,8 +71,10 @@
   background: var(--gray-50);
 }
 
-.tableHeader {}
-.headerRow {}
+.tableHeader {
+}
+.headerRow {
+}
 
 .headerCell {
   padding: 1rem 1.5rem;
@@ -113,7 +119,8 @@
   opacity: 0.6;
 }
 
-.tableBody {}
+.tableBody {
+}
 
 .bodyRow {
   transition: background-color 0.15s ease-in-out;

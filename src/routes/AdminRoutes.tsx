@@ -1,22 +1,20 @@
 // routes/admin.routes.tsx
-import { type RouteObject } from 'react-router-dom';
+import { type RouteObject } from "react-router-dom";
 // ATTENZIONE al path/typo:
 
-
-import AdminLayout from '@layouts/admin/Admin-layout.component.tsx';
-import DevicesListSections from '@sections_admin/devicesList/Devices-list.sections.tsx';
-import { UsersListSections } from '@sections_admin/usersList/Users-list.sections.tsx';
-import OverviwSection from '@sections_admin/overview/Overview.sections.tsx';
-import AnalyticsReportsSections from '@sections_admin/analytics/AnalyticsReports.sections.tsx';
-import { TicketsListSections } from '@sections_admin/ticketsList/Ticket-list.section.tsx';
-import { GpsListSections } from '@root/admin/sections/gpsList/Gps-list.sections';
-import { UserRoles } from '@root/utils/constants/userRoles';
-import ProtectedRoute from '@root/components/shared/PretectedRoutes';
-
+import AdminLayout from "@layouts/admin/Admin-layout.component.tsx";
+import DevicesListSections from "@sections_admin/devicesList/Devices-list.sections.tsx";
+import { UsersListSections } from "@sections_admin/usersList/Users-list.sections.tsx";
+import OverviwSection from "@sections_admin/overview/Overview.sections.tsx";
+import AnalyticsReportsSections from "@sections_admin/analytics/AnalyticsReports.sections.tsx";
+import { TicketsListSections } from "@sections_admin/ticketsList/Ticket-list.section.tsx";
+import { GpsListSections } from "@root/pages/admin/sections/gpsList/Gps-list.sections";
+import { UserRoles } from "@root/utils/constants/userRoles";
+import ProtectedRoute from "@root/components/shared/PretectedRoutes";
 
 const AdminRoutes: RouteObject[] = [
   {
-    path: '/admin',
+    path: "/admin",
     // Qui basta essere autenticati (nessun ruolo specifico)
     element: (
       <ProtectedRoute>
@@ -27,48 +25,80 @@ const AdminRoutes: RouteObject[] = [
       {
         index: true, // /admin
         element: (
-          <ProtectedRoute requiredRoles={[UserRoles.ADMIN, UserRoles.SUPER_ADMIN, UserRoles.USER]}>
+          <ProtectedRoute
+            requiredRoles={[
+              UserRoles.ADMIN,
+              UserRoles.SUPER_ADMIN,
+              UserRoles.USER,
+            ]}
+          >
             <DevicesListSections />
           </ProtectedRoute>
         ),
       },
       {
-        path: 'machines',
+        path: "machines",
         element: (
-          <ProtectedRoute requiredRoles={[UserRoles.ADMIN, UserRoles.SUPER_ADMIN, UserRoles.USER]}>
+          <ProtectedRoute
+            requiredRoles={[
+              UserRoles.ADMIN,
+              UserRoles.SUPER_ADMIN,
+              UserRoles.USER,
+            ]}
+          >
             <DevicesListSections />
           </ProtectedRoute>
         ),
       },
       {
-        path: 'users',
+        path: "users",
         element: (
-          <ProtectedRoute requiredRoles={[UserRoles.SUPER_ADMIN, UserRoles.ADMIN, UserRoles.USER]}>
+          <ProtectedRoute
+            requiredRoles={[
+              UserRoles.SUPER_ADMIN,
+              UserRoles.ADMIN,
+              UserRoles.USER,
+            ]}
+          >
             <UsersListSections />
           </ProtectedRoute>
         ),
       },
       {
-        path: 'tickets',
+        path: "tickets",
         element: (
-          <ProtectedRoute requiredRoles={[UserRoles.ADMIN, UserRoles.SUPER_ADMIN, UserRoles.USER]}>
+          <ProtectedRoute
+            requiredRoles={[
+              UserRoles.ADMIN,
+              UserRoles.SUPER_ADMIN,
+              UserRoles.USER,
+            ]}
+          >
             <TicketsListSections />
           </ProtectedRoute>
         ),
       },
       {
-        path: 'gps',
+        path: "gps",
         element: (
-          <ProtectedRoute requiredRoles={[UserRoles.ADMIN, UserRoles.SUPER_ADMIN, UserRoles.DRIVER]}>
+          <ProtectedRoute
+            requiredRoles={[
+              UserRoles.ADMIN,
+              UserRoles.SUPER_ADMIN,
+              UserRoles.DRIVER,
+            ]}
+          >
             <GpsListSections />
           </ProtectedRoute>
         ),
       },
       {
         // Intera sezione analytics accessibile solo ad ADMIN e SUPER_ADMIN
-        path: 'analytics',
+        path: "analytics",
         element: (
-          <ProtectedRoute requiredRoles={[UserRoles.ADMIN, UserRoles.SUPER_ADMIN]}>
+          <ProtectedRoute
+            requiredRoles={[UserRoles.ADMIN, UserRoles.SUPER_ADMIN]}
+          >
             {/* Outlet verrà reso perché ProtectedRoute restituisce children */}
             <div />
           </ProtectedRoute>
@@ -76,7 +106,7 @@ const AdminRoutes: RouteObject[] = [
         children: [
           {
             // Esempio di rotta SOLO per SUPER_ADMIN
-            path: 'overview',
+            path: "overview",
             element: (
               <ProtectedRoute requiredRole={UserRoles.SUPER_ADMIN}>
                 <OverviwSection />
@@ -84,9 +114,11 @@ const AdminRoutes: RouteObject[] = [
             ),
           },
           {
-            path: 'reports',
+            path: "reports",
             element: (
-              <ProtectedRoute requiredRoles={[UserRoles.ADMIN, UserRoles.SUPER_ADMIN]}>
+              <ProtectedRoute
+                requiredRoles={[UserRoles.ADMIN, UserRoles.SUPER_ADMIN]}
+              >
                 <AnalyticsReportsSections />
               </ProtectedRoute>
             ),

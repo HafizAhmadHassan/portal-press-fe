@@ -1,7 +1,6 @@
-@use '../../../../admin/styles/globals.scss';
+@use "@root/pages/admin/styles/globals.scss";
 
 /* TableCell.module.scss — light/dark via globals.scss */
-
 
 .bodyCell {
   white-space: nowrap;
@@ -26,9 +25,13 @@
   gap: 0.75rem;
 }
 
-.avatarWrapper { flex-shrink: 0; }
+.avatarWrapper {
+  flex-shrink: 0;
+}
 
-.avatarImage { border-radius: 50%; }
+.avatarImage {
+  border-radius: 50%;
+}
 
 .avatarPlaceholder {
   border-radius: 50%;
@@ -43,16 +46,35 @@
   font-size: 0.875rem;
 }
 
-.avatarInfo { display: flex; flex-direction: column; }
-.avatarName { font-size: 0.875rem; font-weight: 600; color: var(--text-primary); }
-.avatarEmail { font-size: 0.75rem; color: var(--text-secondary); }
+.avatarInfo {
+  display: flex;
+  flex-direction: column;
+}
+.avatarName {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.avatarEmail {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
 
 /* Avatar sizes */
 .avatarImage,
 .avatarPlaceholder {
-  &.sm { width: 2rem; height: 2rem; }
-  &.md { width: 2.5rem; height: 2.5rem; }
-  &.lg { width: 3rem; height: 3rem; }
+  &.sm {
+    width: 2rem;
+    height: 2rem;
+  }
+  &.md {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+  &.lg {
+    width: 3rem;
+    height: 3rem;
+  }
 }
 
 /* Badge */
@@ -92,21 +114,32 @@
   background: var(--bg-primary);
   color: var(--text-primary);
   cursor: pointer;
-  transition: box-shadow .15s ease, border-color .15s ease;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
 }
 .selectInput:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary-color) 20%, transparent);
+  box-shadow: 0 0 0 3px
+    color-mix(in oklab, var(--primary-color) 20%, transparent);
 }
 
 /* Boolean cell */
-.booleanText { font-size: 0.875rem; font-weight: 600; }
-.true { color: var(--success-color); }
-.false { color: var(--error-color); }
+.booleanText {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.true {
+  color: var(--success-color);
+}
+.false {
+  color: var(--error-color);
+}
 
 /* Actions */
-.actionsContainer { display: flex; gap: 0.5rem; }
+.actionsContainer {
+  display: flex;
+  gap: 0.5rem;
+}
 .actionButton {
   display: inline-flex;
   align-items: center;
@@ -127,4 +160,6 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
-.actionIcon { margin-right: 0.25rem; }
+.actionIcon {
+  margin-right: 0.25rem;
+}

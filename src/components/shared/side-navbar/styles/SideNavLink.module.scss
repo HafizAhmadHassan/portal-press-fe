@@ -1,4 +1,4 @@
-@use '../../../../admin/styles/globals.scss';
+@use "@root/pages/admin/styles/globals.scss";
 
 .navLinkWrapper {
   text-decoration: none;
@@ -29,7 +29,7 @@
     font-weight: 600;
 
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       left: -0.5rem;
       top: 50%;
@@ -46,13 +46,26 @@
     padding: 1rem;
     margin: 0 0.25rem;
 
-    &:hover { transform: scale(1.05); }
-    &.active::before { left: -0.25rem; }
+    &:hover {
+      transform: scale(1.05);
+    }
+    &.active::before {
+      left: -0.25rem;
+    }
   }
 
-  &.level1 { padding-left: 2rem; font-size: 0.875rem; }
-  &.level2 { padding-left: 3rem; font-size: 0.8125rem; }
-  &.level3 { padding-left: 4rem; font-size: 0.8125rem; }
+  &.level1 {
+    padding-left: 2rem;
+    font-size: 0.875rem;
+  }
+  &.level2 {
+    padding-left: 3rem;
+    font-size: 0.8125rem;
+  }
+  &.level3 {
+    padding-left: 4rem;
+    font-size: 0.8125rem;
+  }
 }
 
 .left {

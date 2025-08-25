@@ -1,4 +1,4 @@
-@use '../../../admin/styles/globals.scss';
+@use "@root/pages/admin/styles/globals.scss";
 
 /* Accordion.module.scss
    - All colors and spacings use global CSS variables from globals.scss
@@ -27,8 +27,8 @@
 
   /* Sizes -> expose CSS variables so header/content can read them */
   &.sm {
-    --accordion-padding: .5rem 1rem;
-    --accordion-content-padding: .5rem 1rem;
+    --accordion-padding: 0.5rem 1rem;
+    --accordion-content-padding: 0.5rem 1rem;
     --accordion-font-size: 14px;
   }
   &.md {
@@ -46,11 +46,15 @@
 .accordionItem {
   border-bottom: 1px solid var(--border-color);
 
-  &:last-child { border-bottom: none; }
+  &:last-child {
+    border-bottom: none;
+  }
 
   &.disabled {
     opacity: 0.6;
-    .accordionHeader { cursor: not-allowed; }
+    .accordionHeader {
+      cursor: not-allowed;
+    }
   }
 
   &.open {
@@ -76,20 +80,24 @@
   text-align: left;
   color: var(--text-primary);
 
-  &:hover:not(:disabled) { background: var(--primary-light); }
+  &:hover:not(:disabled) {
+    background: var(--primary-light);
+  }
 
   &:focus-visible {
     outline: 2px solid var(--primary-color);
     outline-offset: 2px;
   }
 
-  &:active:not(:disabled) { background: var(--primary-light); }
+  &:active:not(:disabled) {
+    background: var(--primary-light);
+  }
 }
 
 .accordionHeaderContent {
   display: flex;
   align-items: center;
-  gap: .5rem;
+  gap: 0.5rem;
   flex: 1;
 }
 
@@ -100,14 +108,18 @@
   justify-content: center;
   flex-shrink: 0;
 
-  .accordionItem.open & { color: var(--primary-color); }
+  .accordionItem.open & {
+    color: var(--primary-color);
+  }
 }
 
 .accordionTitle {
   color: var(--text-primary);
   font-weight: 600;
   flex: 1;
-  .accordionItem.open & { color: var(--primary-color); }
+  .accordionItem.open & {
+    color: var(--primary-color);
+  }
 }
 
 .accordionChevron {
@@ -115,9 +127,13 @@
   transition: transform 0.2s ease, color 0.2s ease;
   flex-shrink: 0;
 
-  &.rotated { transform: rotate(180deg); }
+  &.rotated {
+    transform: rotate(180deg);
+  }
 
-  .accordionItem.open & { color: var(--primary-color); }
+  .accordionItem.open & {
+    color: var(--primary-color);
+  }
 }
 
 .accordionContent {
@@ -149,9 +165,13 @@
 }
 
 .accordionActiveItems {
-  background: linear-gradient(135deg, var(--success-color) 0%, var(--success-light) 40%);
+  background: linear-gradient(
+    135deg,
+    var(--success-color) 0%,
+    var(--success-light) 40%
+  );
   border: 1px solid var(--success-color);
-  padding: .25rem .5rem;
+  padding: 0.25rem 0.5rem;
   color: var(--success-dark);
   height: 20px;
   width: fit-content;
@@ -160,7 +180,7 @@
   justify-content: center;
   border-radius: 999px;
   margin-right: 1rem;
-  font-size: .75rem;
+  font-size: 0.75rem;
   font-weight: 700;
   box-shadow: var(--shadow-sm);
 }
@@ -169,12 +189,12 @@
 @media (max-width: 768px) {
   .accordion {
     &.sm {
-      --accordion-padding: .5rem;
-      --accordion-content-padding: .5rem;
+      --accordion-padding: 0.5rem;
+      --accordion-content-padding: 0.5rem;
     }
     &.md {
-      --accordion-padding: .5rem 1rem;
-      --accordion-content-padding: .5rem 1rem;
+      --accordion-padding: 0.5rem 1rem;
+      --accordion-content-padding: 0.5rem 1rem;
     }
     &.lg {
       --accordion-padding: 1rem 1.5rem;

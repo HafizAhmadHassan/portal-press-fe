@@ -1,4 +1,4 @@
-@use '../../../../admin/styles/globals.scss';
+@use "@root/pages/admin/styles/globals.scss";
 
 .mobileToggle {
   position: fixed;
@@ -14,7 +14,9 @@
   box-shadow: var(--sidenav-shadow);
   transition: var(--sidenav-transition);
 
-  @media (min-width: 769px) { display: none; }
+  @media (min-width: 769px) {
+    display: none;
+  }
 
   &:hover {
     background: var(--sidenav-hover-bg);

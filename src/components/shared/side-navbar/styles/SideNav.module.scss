@@ -1,4 +1,4 @@
-@use '../../../../admin/styles/globals.scss';
+@use "@root/pages/admin/styles/globals.scss";
 
 /* Base container for the SideNav. All colors come from global tokens.
    To toggle dark mode, just add/remove `.darkMode` on <html> or <body>.
@@ -34,10 +34,19 @@
 
   /* scroll behavior */
   overflow: hidden;
-  &:hover { overflow-y: auto; }
-  &::-webkit-scrollbar { width: 8px; }
-  &::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 999px; }
-  &::-webkit-scrollbar-thumb:hover { background: var(--gray-300); }
+  &:hover {
+    overflow-y: auto;
+  }
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--gray-200);
+    border-radius: 999px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--gray-300);
+  }
 
   &.left {
     left: 0;
@@ -53,7 +62,9 @@
       transform: translateX(0);
       position: relative;
     }
-    &.mobileOpen { transform: translateX(0); }
+    &.mobileOpen {
+      transform: translateX(0);
+    }
     &.collapsed {
       @media (min-width: 769px) {
         width: var(--sidenav-collapsed-width);
@@ -77,7 +88,9 @@
       transform: translateX(0);
       position: relative;
     }
-    &.mobileOpen { transform: translateX(0); }
+    &.mobileOpen {
+      transform: translateX(0);
+    }
     &.collapsed {
       @media (min-width: 769px) {
         width: var(--sidenav-collapsed-width);

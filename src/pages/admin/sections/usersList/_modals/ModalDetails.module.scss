@@ -1,0 +1,461 @@
+@use "@root/pages/admin/styles/globals.scss";
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Header utente */
+.userHeader {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px;
+  background: linear-gradient(
+    135deg,
+    var(--primary-light) 0%,
+    var(--bg-secondary) 100%
+  );
+  border-radius: 12px;
+  border: 1px solid
+    color-mix(in srgb, var(--primary-color) 35%, var(--border-color));
+  position: relative;
+  overflow: hidden;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), #a855f7, #2563eb);
+    border-radius: 12px 12px 0 0;
+  }
+}
+.avatarSection {
+  position: relative;
+  flex-shrink: 0;
+}
+.statusIndicator {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  background: var(--bg-primary);
+  border-radius: 50%;
+  padding: 2px;
+  box-shadow: var(--shadow-sm);
+}
+.statusIconActive {
+  width: 20px;
+  height: 20px;
+  color: #16a34a;
+}
+.statusIconInactive {
+  width: 20px;
+  height: 20px;
+  color: #dc2626;
+}
+
+.userMainInfo {
+  flex: 1;
+  min-width: 0;
+}
+.userName {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 4px 0;
+  line-height: 1.2;
+  word-wrap: break-word;
+}
+.userEmail {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin: 0 0 4px 0;
+  word-wrap: break-word;
+}
+.userUsername {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0 0 12px 0;
+  font-family: "Monaco", "Menlo", monospace;
+}
+
+.userBadges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  row-gap: 6px;
+}
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.statusActive {
+  background: color-mix(in srgb, var(--success-color) 15%, transparent);
+  color: color-mix(in srgb, var(--success-color) 85%, white);
+  border: 1px solid color-mix(in srgb, var(--success-color) 45%, transparent);
+}
+.statusInactive {
+  background: color-mix(in srgb, var(--error-color) 12%, transparent);
+  color: color-mix(in srgb, var(--error-color) 85%, white);
+  border: 1px solid color-mix(in srgb, var(--error-color) 45%, transparent);
+}
+.staffBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: color-mix(in srgb, var(--warning-color) 12%, transparent);
+  color: color-mix(in srgb, var(--warning-color) 85%, white);
+  border: 1px solid color-mix(in srgb, var(--warning-color) 45%, transparent);
+  border-radius: 16px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.superuserBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: color-mix(in srgb, var(--primary-color) 12%, transparent);
+  color: color-mix(in srgb, var(--primary-color) 85%, white);
+  border: 1px solid color-mix(in srgb, var(--primary-color) 45%, transparent);
+  border-radius: 16px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.badgeIcon {
+  width: 12px;
+  height: 12px;
+}
+
+/* Section card */
+.section {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  animation: slideInUp 0.3s ease-out;
+  &:hover {
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-md);
+  }
+}
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 20px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+.sectionIcon {
+  width: 18px;
+  height: 18px;
+  color: var(--primary-color);
+  flex-shrink: 0;
+}
+.sectionTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* Info grid */
+.infoGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  padding: 20px;
+}
+.infoItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--bg-secondary);
+  border-radius: 6px;
+  border-left: 3px solid var(--primary-color);
+}
+.infoLabel {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+.infoValue {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: right;
+  word-wrap: break-word;
+  max-width: 60%;
+}
+.emailLink {
+  color: var(--primary-color);
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+/* Date grid */
+.dateGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
+  padding: 20px;
+}
+.dateCard {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  transition: all 0.2s ease;
+  &:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+.dateCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.dateIcon {
+  width: 16px;
+  height: 16px;
+  color: var(--primary-color);
+}
+.dateCardTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.dateCardContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.dateValue {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.dateRelative {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* Permissions & groups */
+.permissionsContainer {
+  padding: 20px;
+}
+.permissionsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.permissionChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: color-mix(in srgb, var(--primary-color) 10%, transparent);
+  color: color-mix(in srgb, var(--primary-color) 85%, white);
+  border: 1px solid var(--primary-color);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+.permissionIcon {
+  width: 14px;
+  height: 14px;
+}
+.noPermissions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 32px;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+.noPermissionsIcon {
+  width: 20px;
+  height: 20px;
+}
+
+.groupsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 20px;
+}
+.groupChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: color-mix(in srgb, var(--success-color) 10%, transparent);
+  color: color-mix(in srgb, var(--success-color) 85%, white);
+  border: 1px solid color-mix(in srgb, var(--success-color) 40%, transparent);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+.groupIcon {
+  width: 14px;
+  height: 14px;
+}
+
+/* Privileges */
+.privilegesSection {
+  background: linear-gradient(
+    135deg,
+    var(--bg-secondary) 70%,
+    color-mix(in srgb, var(--primary-color) 10%, transparent) 100%
+  );
+  border: 1px solid var(--primary-color);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.privilegesList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px;
+}
+.privilegeItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: transform 0.2s ease;
+  &:hover {
+    transform: translateX(4px);
+  }
+}
+.privilegeActive {
+  background: color-mix(in srgb, var(--success-color) 12%, transparent);
+  color: #166534;
+  border: 1px solid color-mix(in srgb, var(--success-color) 40%, transparent);
+}
+.privilegeInactive {
+  background: color-mix(in srgb, var(--error-color) 12%, transparent);
+  color: #991b1b;
+  border: 1px solid color-mix(in srgb, var(--error-color) 40%, transparent);
+}
+.privilegeIcon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* Animations */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .modalContent {
+    gap: 16px;
+  }
+  .userHeader {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+    gap: 16px;
+  }
+  .userName {
+    font-size: 20px;
+  }
+  .dateGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 16px;
+  }
+  .infoGrid {
+    padding: 16px;
+  }
+  .infoItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .infoValue {
+    text-align: left;
+    max-width: 100%;
+  }
+  .permissionsList,
+  .groupsList {
+    justify-content: center;
+  }
+  .privilegesList {
+    padding: 16px;
+  }
+}
+@media (max-width: 480px) {
+  .userHeader {
+    padding: 16px;
+  }
+  .userName {
+    font-size: 18px;
+  }
+  .userEmail {
+    font-size: 14px;
+  }
+  .section {
+    margin: 0 -4px;
+  }
+  .sectionHeader {
+    padding: 12px 16px;
+  }
+  .dateCard {
+    padding: 12px;
+  }
+  .permissionChip,
+  .groupChip {
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+}
