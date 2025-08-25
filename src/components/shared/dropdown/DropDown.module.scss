@@ -1,0 +1,122 @@
+.wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.panel {
+  position: fixed;
+  min-width: 280px;
+  max-width: 420px;
+  background: var(--bg-primary, #fff);
+  color: var(--text-primary, #111);
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
+  border-radius: var(--border-radius, 10px);
+  box-shadow: var(--shadow-lg, 0 12px 32px rgba(0, 0, 0, 0.16));
+  overflow: hidden;
+  pointer-events: auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.6rem 0.8rem;
+  background: var(--bg-secondary, #f6f7f8);
+  border-bottom: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
+}
+
+.title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-secondary, #555);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.headerActions {
+  display: inline-flex;
+  gap: 0.25rem;
+}
+
+.iconBtn {
+  appearance: none;
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
+  background: transparent;
+  border-radius: 8px;
+  padding: 0.35rem 0.45rem;
+  line-height: 0;
+  cursor: pointer;
+  transition: background-color 120ms ease, border-color 120ms ease,
+    transform 60ms ease;
+
+  &:hover {
+    background: var(--bg-primary, #fff);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+.content {
+  max-height: 420px;
+  overflow: auto;
+  scrollbar-width: thin;
+
+  /* scrollbar webkit */
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: color-mix(
+      in oklab,
+      var(--text-secondary, #777) 25%,
+      transparent
+    );
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+}
+
+.footer {
+  padding: 0.6rem 0.8rem;
+  border-top: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
+  background: var(--bg-primary, #fff);
+}
+
+.arrow {
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  background: var(--bg-primary, #fff);
+  border-left: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
+  border-top: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
+  transform: rotate(45deg);
+  z-index: 10000;
+}
+
+/* small fade-in */
+.panel,
+.header,
+.content,
+.footer {
+  animation: dp-fade 0.12s ease;
+}
+
+@keyframes dp-fade {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
