@@ -6,6 +6,14 @@ export const UserRoles = {
   ADVANCED_USER: "ADVANCED_USER",
 } as const;
 
+export const UserRolesGroups = {
+  "1": UserRoles.USER,
+  "2": UserRoles.DRIVER,
+  "3": UserRoles.ADMIN,
+  "4": UserRoles.SUPER_ADMIN,
+  "5": UserRoles.ADVANCED_USER,
+};
+
 export type UserRoles = (typeof UserRoles)[keyof typeof UserRoles];
 
 export const UserRoleLabels: Record<UserRoles, string> = {
@@ -14,6 +22,16 @@ export const UserRoleLabels: Record<UserRoles, string> = {
   [UserRoles.USER]: "User",
   [UserRoles.ADVANCED_USER]: "Advanced User",
   [UserRoles.DRIVER]: "Driver",
+};
+export const UserRoleGroupsLabels: Record<
+  keyof typeof UserRolesGroups,
+  string
+> = {
+  "1": "User",
+  "2": "Driver",
+  "3": "Admin",
+  "4": "Super Admin",
+  "5": "Advanced User",
 };
 
 export const UserRoleStyles: Record<

@@ -1,4 +1,4 @@
-import { apiSlice } from '@store_admin/apiSlice';
+import { apiSlice } from "@store_admin/apiSlice";
 import type {
   BulkActionRequest,
   CreateUserRequest,
@@ -7,7 +7,7 @@ import type {
   UsersQueryParams,
   UsersResponse,
   UsersStatsResponse,
-} from './user.types';
+} from "./user.types";
 
 export const usersApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -15,21 +15,24 @@ export const usersApi = apiSlice.injectEndpoints({
     getUsers: builder.query<UsersResponse, UsersQueryParams>({
       query: (params = {}) => {
         // Filtra parametri undefined/null/empty
-        const cleanParams = Object.entries(params).reduce((acc, [key, value]) => {
-          if (value !== undefined && value !== null && value !== '') {
-            acc[key] = value;
-          }
-          return acc;
-        }, {} as Record<string, any>);
+        const cleanParams = Object.entries(params).reduce(
+          (acc, [key, value]) => {
+            if (value !== undefined && value !== null && value !== "") {
+              acc[key] = value;
+            }
+            return acc;
+          },
+          {} as Record<string, any>
+        );
 
         return {
-          url: 'users/',
+          url: "user/",
           params: cleanParams,
         };
       },
       providesTags: [
-        { type: 'LIST' as const, id: 'Users' },
-        { type: 'STATS' as const, id: 'Users' }
+        { type: "LIST" as const, id: "Users" },
+        { type: "STATS" as const, id: "Users" },
       ],
       // Mantieni i dati precedenti durante il fetch per UX migliore
       keepPreviousData: true,
@@ -37,7 +40,7 @@ export const usersApi = apiSlice.injectEndpoints({
       transformResponse: (response: UsersResponse) => {
         // Valida che la risposta abbia la struttura corretta
         if (!response.meta || !Array.isArray(response.data)) {
-          throw new Error('Invalid API response structure');
+          throw new Error("Invalid API response structure");
         }
         return response;
       },
@@ -45,39 +48,39 @@ export const usersApi = apiSlice.injectEndpoints({
 
     // Ottieni singolo utente
     getUserById: builder.query<User, string>({
-      query: (id) => `users/${id}`,
-      providesTags: (result, error, id) => [{ type: 'ENTITY' as const, id }],
+      query: (id) => `user/${id}`,
+      providesTags: (result, error, id) => [{ type: "ENTITY" as const, id }],
     }),
 
     // Crea nuovo utente
     createUser: builder.mutation<User, CreateUserRequest>({
       query: (body) => ({
-        url: 'users',
-        method: 'POST',
-        body
+        url: "users",
+        method: "POST",
+        body,
       }),
       invalidatesTags: [
-        { type: 'LIST' as const, id: 'Users' },
-        { type: 'STATS' as const, id: 'Users' }
+        { type: "LIST" as const, id: "Users" },
+        { type: "STATS" as const, id: "Users" },
       ],
     }),
 
     // Aggiorna utente
     updateUser: builder.mutation<User, UpdateUserRequest>({
       query: ({ id, data }) => ({
-        url: `users/${id}`,
-        method: 'PUT',
-        body: data
+        url: `user/${id}`,
+        method: "PUT",
+        body: data,
       }),
       invalidatesTags: (result, error, { id }) => [
-        { type: 'ENTITY' as const, id },
-        { type: 'LIST' as const, id: 'Users' },
-        { type: 'STATS' as const, id: 'Users' }
+        { type: "ENTITY" as const, id },
+        { type: "LIST" as const, id: "Users" },
+        { type: "STATS" as const, id: "Users" },
       ],
       // Aggiornamento ottimistico
       async onQueryStarted({ id, data }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
-          apiSlice.util.updateQueryData('getUserById', id, (draft) => {
+          apiSlice.util.updateQueryData("getUserById", id, (draft) => {
             Object.assign(draft, data);
           })
         );
@@ -91,58 +94,71 @@ export const usersApi = apiSlice.injectEndpoints({
     }),
 
     // Elimina utente
-    deleteUser: builder.mutation<{ success: boolean; message: string }, string>({
-      query: (id) => ({
-        url: `users/${id}`,
-        method: 'DELETE'
-      }),
-      invalidatesTags: (result, error, id) => [
-        { type: 'ENTITY' as const, id },
-        { type: 'LIST' as const, id: 'Users' },
-        { type: 'STATS' as const, id: 'Users' }
-      ],
-      // Aggiornamento ottimistico della lista
-      async onQueryStarted(id, { dispatch, queryFulfilled }) {
-        const patches: any[] = [];
+    deleteUser: builder.mutation<{ success: boolean; message: string }, string>(
+      {
+        query: (id) => ({
+          url: `user/${id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: (result, error, id) => [
+          { type: "ENTITY" as const, id },
+          { type: "LIST" as const, id: "Users" },
+          { type: "STATS" as const, id: "Users" },
+        ],
+        // Aggiornamento ottimistico della lista
+        async onQueryStarted(id, { dispatch, queryFulfilled }) {
+          const patches: any[] = [];
 
-        // Aggiorna tutte le query di lista in cache
-        dispatch(
-          apiSlice.util.updateQueryData('getUsers', {}, (draft: UsersResponse) => {
-            if (draft.data) {
-              const userIndex = draft.data.findIndex(user => user.id === id);
-              if (userIndex !== -1) {
-                draft.data.splice(userIndex, 1);
-                // Aggiorna i metadati
-                draft.meta.total = Math.max(0, draft.meta.total - 1);
-                draft.meta.total_pages = Math.ceil(draft.meta.total / draft.meta.page_size);
+          // Aggiorna tutte le query di lista in cache
+          dispatch(
+            apiSlice.util.updateQueryData(
+              "getUsers",
+              {},
+              (draft: UsersResponse) => {
+                if (draft.data) {
+                  const userIndex = draft.data.findIndex(
+                    (user) => user.id === id
+                  );
+                  if (userIndex !== -1) {
+                    draft.data.splice(userIndex, 1);
+                    // Aggiorna i metadati
+                    draft.meta.total = Math.max(0, draft.meta.total - 1);
+                    draft.meta.total_pages = Math.ceil(
+                      draft.meta.total / draft.meta.page_size
+                    );
 
-                // Aggiorna has_next/has_prev se necessario
-                if (draft.meta.page > draft.meta.total_pages && draft.meta.total_pages > 0) {
-                  draft.meta.page = draft.meta.total_pages;
-                  draft.meta.has_next = false;
-                  draft.meta.next_page = null;
+                    // Aggiorna has_next/has_prev se necessario
+                    if (
+                      draft.meta.page > draft.meta.total_pages &&
+                      draft.meta.total_pages > 0
+                    ) {
+                      draft.meta.page = draft.meta.total_pages;
+                      draft.meta.has_next = false;
+                      draft.meta.next_page = null;
+                    }
+                  }
                 }
               }
-            }
-          })
-        );
+            )
+          );
 
-        try {
-          await queryFulfilled;
-        } catch {
-          // Rollback in caso di errore
-          patches.forEach(patch => patch.undo());
-        }
-      },
-    }),
+          try {
+            await queryFulfilled;
+          } catch {
+            // Rollback in caso di errore
+            patches.forEach((patch) => patch.undo());
+          }
+        },
+      }
+    ),
 
     // Ricerca utenti
     searchUsers: builder.query<User[], { query: string; limit?: number }>({
       query: ({ query, limit = 10 }) => ({
-        url: 'users/search',
+        url: "user/search",
         params: { q: query, limit },
       }),
-      providesTags: [{ type: 'LIST' as const, id: 'Users' }],
+      providesTags: [{ type: "LIST" as const, id: "Users" }],
     }),
 
     // Operazioni bulk
@@ -151,20 +167,20 @@ export const usersApi = apiSlice.injectEndpoints({
       BulkActionRequest
     >({
       query: (body) => ({
-        url: 'users/bulk',
-        method: 'POST',
-        body
+        url: "user/bulk",
+        method: "POST",
+        body,
       }),
       invalidatesTags: [
-        { type: 'LIST' as const, id: 'Users' },
-        { type: 'STATS' as const, id: 'Users' }
+        { type: "LIST" as const, id: "Users" },
+        { type: "STATS" as const, id: "Users" },
       ],
     }),
 
     // Statistiche utenti
     getUserStats: builder.query<UsersStatsResponse, void>({
-      query: () => 'users/stats',
-      providesTags: [{ type: 'STATS' as const, id: 'Users' }],
+      query: () => "user/stats",
+      providesTags: [{ type: "STATS" as const, id: "Users" }],
     }),
   }),
   overrideExisting: false,

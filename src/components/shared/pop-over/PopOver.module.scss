@@ -1,0 +1,85 @@
+.wrapper {
+  position: fixed; /* posizionato rispetto al viewport */
+  z-index: 9999;
+  inset: 0; /* per intercettare i click fuori */
+  pointer-events: none; /* il layer esterno non deve catturare click, solo il menu */
+}
+
+.menu {
+  position: fixed; /* verrà settato via inline style top/left */
+  min-width: 180px;
+  max-width: 260px;
+  background: var(--bg-primary, #fff);
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
+  border-radius: var(--border-radius, 8px);
+  box-shadow: var(--shadow-lg, 0 10px 30px rgba(0, 0, 0, 0.12));
+  overflow: hidden;
+  pointer-events: auto; /* il menu cattura i click */
+}
+
+.header {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  padding: 0.25rem 0;
+}
+
+.item {
+  appearance: none;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background-color 140ms ease;
+
+  &:hover {
+    background: var(--bg-secondary);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.itemIcon {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.itemLabel {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Freccia del popover */
+.arrow {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  background: var(--bg-primary, #fff);
+  border-left: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
+  border-top: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
+  transform: rotate(45deg);
+  z-index: 10000;
+}

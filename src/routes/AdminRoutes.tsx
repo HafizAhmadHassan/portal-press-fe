@@ -43,7 +43,7 @@ const AdminRoutes: RouteObject[] = [
       {
         path: 'users',
         element: (
-          <ProtectedRoute requiredRoles={[UserRoles.ADMIN, UserRoles.USER]}>
+          <ProtectedRoute requiredRoles={[UserRoles.SUPER_ADMIN, UserRoles.ADMIN, UserRoles.USER]}>
             <UsersListSections />
           </ProtectedRoute>
         ),

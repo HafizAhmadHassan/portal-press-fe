@@ -9,16 +9,16 @@
 .devices-list-page {
   background: var(--bg-primary);
   color: var(--text-primary);
+  height: 100%;
 }
 
 /* ===== Sezione dispositivi ===== */
 .devicesListSection {
   position: relative;
-  min-height: 400px;
+  min-height: 100%;
   padding: 2rem;
   background: var(--bg-secondary);
   scroll-margin-top: 20px;
-
   @media (min-width: 1600px) {
     adding: 2rem;
   }

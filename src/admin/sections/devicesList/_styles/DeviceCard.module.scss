@@ -120,21 +120,21 @@
 }
 
 .actions-menu {
-  opacity: 0;
+  opacity: 1;
   transition: opacity 0.2s;
   position: relative;
   z-index: 2;
 
-  .compact-device-card.is-hovered & {
+  /* .compact-device-card.is-hovered & {
     opacity: 1;
-  }
+  } */
 }
 
 .menu-btn {
   width: 20px;
   height: 20px;
   border: none;
-  background: color-mix(in srgb, var(--bg-primary) 80%, transparent);
+  background: color-mix(in srgb, var(--bg-primary) 80%, --bg-primary);
   border-radius: 50%;
   display: inline-flex;
   align-items: center;

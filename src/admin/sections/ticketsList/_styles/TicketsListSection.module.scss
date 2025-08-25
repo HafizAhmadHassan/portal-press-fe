@@ -1,4 +1,4 @@
-@use '../../../styles/globals.scss';
+@use "../../../styles/globals.scss";
 
 /* TicketsSection.module.scss
    - Dark-mode ready via global CSS variables from globals.scss
@@ -9,7 +9,7 @@
 .tickets-list-page {
   position: relative;
   min-height: 400px;
-  
+  height: 100%;
   color: var(--text-primary);
   scroll-margin-top: 20px;
   background-color: var(--bg-secondary);
@@ -29,6 +29,7 @@
   /* border-radius: var(--border-radius); */
   box-shadow: var(--shadow-sm);
   animation: slideInFromRight 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  padding: 1.5rem;
 
   &.exiting {
     animation: slideOutToLeft 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
@@ -37,12 +38,7 @@
 
 /* Sezione wrapper tabella (compatibile con UsersList) */
 .tickets-list-page__table-wrapper {
-  margin-bottom: 2rem;
   padding: 1.5rem;
-  
-  border: 1px solid var(--border-color);
-  /* border-radius: var(--border-radius); */
-  box-shadow: var(--shadow-sm);
 }
 
 /* Stati */
@@ -75,7 +71,8 @@
     cursor: pointer;
     font-size: 0.875rem;
     font-weight: 600;
-    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    transition: transform 0.15s ease, box-shadow 0.15s ease,
+      background 0.15s ease;
 
     &:hover {
       background: var(--error-dark);
@@ -124,7 +121,9 @@
 
 /* Animazioni */
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes slideInFromRight {
