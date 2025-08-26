@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import type { Device } from "@store_admin/devices/devices.types";
 import styles from "../_styles/DeviceCard.module.scss";
 import {
@@ -33,6 +34,7 @@ export const DeviceCard: React.FC<DeviceCardProps> = ({
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const isActive = device.status === 1;
+  const navigate = useNavigate();
 
   // RTK Query mutation per creare il ticket (POST /messages/)
   const [createTicket, { isLoading: isCreating }] = useCreateTicketMutation();
@@ -58,7 +60,7 @@ export const DeviceCard: React.FC<DeviceCardProps> = ({
       case "VETRO":
         return "var(--purple-color)";
       case "INDIFFERENZIATO":
-        return "var(--gray-500)"; // neutro
+        return "var(--gray-500)";
       default:
         return "var(--text-secondary)";
     }
@@ -85,12 +87,22 @@ export const DeviceCard: React.FC<DeviceCardProps> = ({
   const [menuOpen, setMenuOpen] = useState(false);
   const menuBtnRef = useRef<HTMLButtonElement | null>(null);
 
+  const handleGoToPLC = () => {
+    if (device?.id !== undefined && device?.id !== null) {
+      navigate(`/device/${device.id}`);
+    }
+    // Callback opzionale per tracciare l’azione
+    onAction?.("plc", device);
+    // Il PopOver ha closeOnSelect, ma chiudo anche qui per sicurezza
+    setMenuOpen(false);
+  };
+
   const menuItems: PopOverItem[] = [
     {
       key: "plc",
       label: "Vai ai PLC",
       icon: <PowerIcon size={14} />,
-      onSelect: () => onAction?.("plc", device),
+      onSelect: handleGoToPLC,
     },
     {
       key: "details",
@@ -107,7 +119,7 @@ export const DeviceCard: React.FC<DeviceCardProps> = ({
         ...style,
         opacity: 1,
         visibility: "visible",
-        position: "relative", // importante: consente overlay sopra la card
+        position: "relative",
         display: "flex",
         flexDirection: "column",
       }}
@@ -137,7 +149,6 @@ export const DeviceCard: React.FC<DeviceCardProps> = ({
 
         <div
           className={styles["actions-menu"]}
-          /* opzionale, utile se vuoi posizionare internamente */
           style={{ position: "relative" }}
         >
           <button

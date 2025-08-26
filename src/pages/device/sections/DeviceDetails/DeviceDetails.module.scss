@@ -1,18 +1,90 @@
 /* =========================================
-   ModalDeviceDetail.module.scss
-   Usa var(--...) da globals.scss (light/dark)
+   DeviceDetailsPage.module.scss
+   Usa i design tokens da globals.scss
+   (var(--...)) per light/dark mode
    ========================================= */
 
-/* Container principale */
-.modalContent {
+/* ====== PAGE WRAPPER ====== */
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 12px 16px 24px;
+}
+
+/* Header top con back, titolo e azioni */
+/* .pageHeader {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md, 12px);
+  padding: 10px 12px;
+  box-shadow: var(--shadow-sm);
+}
+
+.backBtn {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: var(--border-radius-sm, 8px);
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  transition: background-color 0.15s ease, border-color 0.15s ease,
+    transform 0.06s ease;
+
+  svg {
+    width: 18px;
+    height: 18px;
+    color: var(--text-secondary);
+  }
+  &:hover {
+    background: var(--bg-secondary);
+  }
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+.pageTitleWrap {
+  min-width: 0;
+}
+
+.pageTitle {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pageActions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+} */
+
+/* ====== CONTENT CONTAINER ====== */
+.pageContent {
   display: flex;
   flex-direction: column;
   gap: 20px;
   width: 100%;
   max-width: 100%;
+  animation: slideInUp 0.3s ease-out;
 }
 
-/* Header dispositivo principale */
+/* ====== HEADER DISPOSITIVO ====== */
 .deviceHeader {
   display: flex;
   align-items: center;
@@ -73,13 +145,11 @@
   padding: 2px;
   box-shadow: var(--shadow-sm);
 }
-
 .statusIconActive {
   width: 20px;
   height: 20px;
   color: var(--success-color);
 }
-
 .statusIconInactive {
   width: 20px;
   height: 20px;
@@ -90,7 +160,6 @@
   flex: 1;
   min-width: 0;
 }
-
 .deviceName {
   font-size: 24px;
   font-weight: 700;
@@ -99,14 +168,12 @@
   line-height: 1.2;
   word-wrap: break-word;
 }
-
 .deviceCustomer {
   font-size: 16px;
   color: var(--text-secondary);
   margin: 0 0 4px 0;
   word-wrap: break-word;
 }
-
 .deviceLocation {
   font-size: 14px;
   color: var(--text-secondary);
@@ -139,7 +206,6 @@
     color: var(--success-dark);
     border: 1px solid var(--success-color);
   }
-
   &.statusInactive {
     background-color: color-mix(
       in srgb,
@@ -167,7 +233,6 @@
   font-size: 11px;
   font-weight: 600;
 }
-
 .readyBadge {
   display: inline-flex;
   align-items: center;
@@ -184,119 +249,17 @@
   font-size: 11px;
   font-weight: 600;
 }
-
 .badgeIcon {
   width: 12px;
   height: 12px;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .modalContent {
-    gap: 16px;
-  }
-
-  .deviceHeader {
-    flex-direction: column;
-    text-align: center;
-    padding: 20px;
-    gap: 16px;
-    height: auto;
-  }
-
-  .deviceName {
-    font-size: 20px;
-  }
-
-  .deviceIcon {
-    width: 60px;
-    height: 60px;
-  }
-
-  .dateGrid,
-  .matricoleGrid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-    padding: 16px;
-  }
-
-  .availabilityGrid {
-    grid-template-columns: 1fr;
-    padding: 0 16px 16px;
-  }
-
-  .infoGrid {
-    padding: 16px;
-  }
-
-  .infoItem {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-  }
-
-  .infoValue {
-    text-align: left;
-    max-width: 100%;
-  }
-
-  .coordinatesDisplay {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-  }
-
-  .statusList {
-    padding: 16px;
-  }
-}
-
-@media (max-width: 480px) {
-  .deviceHeader {
-    padding: 16px;
-  }
-
-  .deviceName {
-    font-size: 18px;
-  }
-
-  .deviceCustomer {
-    font-size: 14px;
-  }
-
-  .section {
-    margin: 0 -4px;
-  }
-
-  .sectionHeader {
-    padding: 12px 16px;
-  }
-
-  .dateCard,
-  .matricoleItem {
-    padding: 12px;
-  }
-
-  .gpsContainer {
-    padding: 16px;
-  }
-
-  .notesContainer {
-    padding: 16px;
-  }
-}
-
-/* Map */
+/* ====== MAP/COORD PLACEHOLDERS ====== */
 .mapWrapper {
   height: 100%;
   width: 200px;
 }
-.noMapWrapper {
-  height: 100%;
-  /* width: 200px; */
-}
 
-/* Stato mancanza coordinate */
 .noCoordinatesMessage {
   display: flex;
   align-items: center;
@@ -306,9 +269,8 @@
   background-color: var(--bg-secondary);
   border: 2px dashed var(--border-color);
   border-radius: var(--border-radius-sm, 8px);
-  /*  padding: 0.5rem; */
+  padding: 2rem;
 }
-
 .noCoordinatesContent {
   display: flex;
   flex-direction: column;
@@ -316,27 +278,23 @@
   text-align: center;
   max-width: 300px;
 }
-
 .noCoordinatesIcon {
   color: var(--text-secondary);
   margin-bottom: 1rem;
 }
-
 .noCoordinatesText {
   .noCoordinatesTitle {
     color: var(--text-primary);
-    font-size: 0.875rem;
+    font-size: 1.1rem;
     font-weight: 600;
     margin: 0 0 0.5rem 0;
   }
-
   .noCoordinatesDescription {
     color: var(--text-secondary);
     font-size: 0.875rem;
     line-height: 1.4;
     margin: 0 0 1rem 0;
   }
-
   .coordinatesDebug {
     padding: 0.5rem;
     background-color: var(--bg-secondary);
@@ -351,12 +309,33 @@
   }
 }
 
-/* Animazioni */
+/* ====== STATES ====== */
+.loadingState,
+.errorState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 240px;
+  gap: 12px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md, 12px);
+  color: var(--text-secondary);
+}
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--border-color);
+  border-top: 3px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* ====== ANIMATIONS ====== */
 .deviceHeader,
 .section {
   animation: slideInUp 0.3s ease-out;
 }
-
 @keyframes slideInUp {
   from {
     opacity: 0;
@@ -365,5 +344,59 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 768px) {
+  .page {
+    padding: 10px 12px 20px;
+  }
+  .pageHeader {
+    grid-template-columns: auto 1fr;
+    gap: 10px;
+  }
+  .pageActions {
+    grid-column: 1 / -1;
+    justify-content: flex-end;
+  }
+
+  .pageContent {
+    gap: 16px;
+  }
+
+  .deviceHeader {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+    gap: 16px;
+    height: auto;
+  }
+  .deviceName {
+    font-size: 20px;
+  }
+  .deviceIcon {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .deviceHeader {
+    padding: 16px;
+  }
+  .deviceName {
+    font-size: 18px;
+  }
+  .deviceCustomer {
+    font-size: 14px;
   }
 }

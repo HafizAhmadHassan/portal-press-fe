@@ -32,8 +32,8 @@
       "@shared/*": ["src/components/shared/*"],
       "@core/*": ["src/core/*"],
       "@layouts/*": ["src/layouts/*"],
-      "@store_admin/*": ["src/admin/core/store/*"],
-      "@sections_admin/*": ["src/admin/sections/*"],
+      "@store_admin/*": ["src/pages/admin/core/store/*"],
+      "@sections_admin/*": ["src/pages/admin/sections/*"],
       "@utils/*": ["src/utils/*"],
       "@hooks/*": ["src/hooks/*"]
     }

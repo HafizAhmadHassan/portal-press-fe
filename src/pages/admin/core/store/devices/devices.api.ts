@@ -70,7 +70,7 @@ export const devicesApi = apiSlice.injectEndpoints({
     }),
 
     getDeviceById: builder.query<Device, string>({
-      query: (id) => `devices/${id}`,
+      query: (id) => `joined-machines-gps/${id}`,
       providesTags: (_result, _error, id) => [{ type: "ENTITY" as const, id }],
     }),
 
@@ -96,7 +96,7 @@ export const devicesApi = apiSlice.injectEndpoints({
         }
 
         return {
-          url: "devices/", // ✅ Aggiunto trailing slash
+          url: "joined-machines-gps/", // ✅ Aggiunto trailing slash
           method: "POST",
           body,
           headers: {
@@ -115,7 +115,7 @@ export const devicesApi = apiSlice.injectEndpoints({
       query: ({ id, data }) => {
         console.log("Updating device with data:", { id, data }); // Debug log
         return {
-          url: `devices/${id}`, // ✅ RIMOSSO trailing slash per matchare backend
+          url: `joined-machines-gps/${id}`, // ✅ RIMOSSO trailing slash per matchare backend
           method: "PUT",
           body: data,
         };
@@ -149,7 +149,7 @@ export const devicesApi = apiSlice.injectEndpoints({
       query: (id) => {
         console.log("Deleting device with id:", id); // Debug log
         return {
-          url: `devices/${id}`, // ✅ RIMOSSO trailing slash per matchare backend
+          url: `joined-machines-gps/${id}`, // ✅ RIMOSSO trailing slash per matchare backend
           method: "DELETE",
         };
       },
@@ -222,7 +222,7 @@ export const devicesApi = apiSlice.injectEndpoints({
       query: ({ id, status }) => {
         console.log("Toggling device status:", { id, status }); // Debug log
         return {
-          url: `devices/${id}`, // ✅ RIMOSSO trailing slash per matchare backend
+          url: `joined-machines-gps/${id}`, // ✅ RIMOSSO trailing slash per matchare backend
           method: "PUT",
           body: { status },
         };
@@ -242,7 +242,7 @@ export const devicesApi = apiSlice.injectEndpoints({
       query: ({ id, blocked }) => {
         console.log("Toggling device block:", { id, blocked }); // Debug log
         return {
-          url: `devices/${id}`, // ✅ RIMOSSO trailing slash per matchare backend
+          url: `joined-machines-gps/${id}`, // ✅ RIMOSSO trailing slash per matchare backend
           method: "PUT",
           body: { status_machine_blocked: blocked },
         };
@@ -259,7 +259,7 @@ export const devicesApi = apiSlice.injectEndpoints({
       query: ({ id, waste }) => {
         console.log("Updating device waste:", { id, waste }); // Debug log
         return {
-          url: `devices/${id}`, // ✅ RIMOSSO trailing slash per matchare backend
+          url: `joined-machines-gps/${id}`, // ✅ RIMOSSO trailing slash per matchare backend
           method: "PUT",
           body: { waste },
         };
@@ -274,7 +274,7 @@ export const devicesApi = apiSlice.injectEndpoints({
 
     searchDevices: builder.query<Device[], { query: string; limit?: number }>({
       query: ({ query, limit = 10 }) => ({
-        url: "devices/search/",
+        url: "joined-machines-gps/search/",
         params: { q: query, limit },
       }),
       providesTags: [{ type: "LIST" as const, id: "Devices" }],
@@ -285,7 +285,7 @@ export const devicesApi = apiSlice.injectEndpoints({
       BulkActionRequest
     >({
       query: (body) => ({
-        url: "devices/bulk/",
+        url: "joined-machines-gps/bulk/",
         method: "POST",
         body,
       }),
@@ -297,13 +297,13 @@ export const devicesApi = apiSlice.injectEndpoints({
     }),
 
     getDeviceStats: builder.query<any, void>({
-      query: () => "devices/stats/summary/",
+      query: () => "joined-machines-gps/stats/summary/",
       providesTags: [{ type: "STATS" as const, id: "Devices" }],
     }),
 
     exportDevices: builder.mutation<Blob, DevicesQueryParams>({
       query: (params) => ({
-        url: "devices/export/",
+        url: "joined-machines-gps/export/",
         method: "POST",
         body: params,
         responseHandler: (response) => response.blob(),
