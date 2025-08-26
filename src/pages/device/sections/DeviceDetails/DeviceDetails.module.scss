@@ -277,15 +277,15 @@
 .actionBar {
   position: sticky;
   bottom: 0;
+  left: 0;
   display: flex;
   justify-content: flex-end;
   gap: 8px;
   padding: 10px 12px;
-  background: color-mix(in srgb, var(--bg-primary) 88%, transparent);
+  background: var(--bg-secondary);
   border-top: 1px solid var(--border-color);
   backdrop-filter: blur(6px);
   z-index: 5;
-  border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
 
 /* ====== SEZIONI (riusate in EDIT per allinearsi al DETAILS) ====== */

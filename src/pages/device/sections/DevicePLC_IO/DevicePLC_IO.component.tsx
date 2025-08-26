@@ -1,5 +1,10 @@
 import React, { useEffect, useMemo, useState, useCallback } from "react";
-import { useLocation, useParams, useNavigate } from "react-router-dom";
+import {
+  useLocation,
+  useParams,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import styles from "./DevicePLC_IO.module.scss";
 
 import TableKeyValue, {
@@ -22,6 +27,9 @@ export default function DevicePLC_IO() {
   const [original, setOriginal] = useState<TableKeyValueRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+
+  const [searchParams] = useSearchParams();
+  const isEdit = searchParams.get("edit") === "1";
 
   useEffect(() => {
     setLoading(true);
@@ -163,12 +171,12 @@ export default function DevicePLC_IO() {
     <>
       <div className={styles.page}>
         <TableKeyValue
-          title={
+          /*  title={
             <div className={styles.sectionHeader}>
               <Database size={16} />
               <span>Registri e Flag</span>
             </div>
-          }
+          } */
           rows={rows}
           onChange={setRows}
           onSave={saveAll}
@@ -176,9 +184,9 @@ export default function DevicePLC_IO() {
           saving={saving}
           loading={loading}
           compact
-          editable={editable}
+          editable={isEdit}
           showActionsColumn
-          allowHeaderEditToggle
+          allowHeaderEditToggle={false}
           showRowEditSwitch
           rowSwitchCancelBehavior="revert"
           onRowSave={saveRow}

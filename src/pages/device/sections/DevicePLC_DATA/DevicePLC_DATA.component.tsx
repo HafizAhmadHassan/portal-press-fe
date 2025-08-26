@@ -1,12 +1,16 @@
 import React, { useEffect, useMemo, useState, useCallback } from "react";
-import { useLocation, useParams, useNavigate } from "react-router-dom";
+import {
+  useLocation,
+  useParams,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import styles from "./DevicePLC_DATA.module.scss";
 
 import TableKeyValue, {
   type TableKeyValueRow,
 } from "@components/shared/table-key-value/TableKeyValue.component";
 
-import { Database } from "lucide-react";
 import { SimpleButton } from "@root/components/shared/simple-btn/SimpleButton.component";
 
 export default function DevicePLC_DATA() {
@@ -22,6 +26,9 @@ export default function DevicePLC_DATA() {
   const [original, setOriginal] = useState<TableKeyValueRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+
+  const [searchParams] = useSearchParams();
+  const isEdit = searchParams.get("edit") === "1";
 
   useEffect(() => {
     setLoading(true);
@@ -163,12 +170,12 @@ export default function DevicePLC_DATA() {
     <>
       <div className={styles.page}>
         <TableKeyValue
-          title={
+          /*  title={
             <div className={styles.sectionHeader}>
               <Database size={16} />
               <span>Registri e Flag</span>
             </div>
-          }
+          } */
           rows={rows}
           onChange={setRows}
           onSave={saveAll}
@@ -176,9 +183,9 @@ export default function DevicePLC_DATA() {
           saving={saving}
           loading={loading}
           compact
-          editable={editable}
+          editable={isEdit}
           showActionsColumn
-          allowHeaderEditToggle
+          allowHeaderEditToggle={false}
           showRowEditSwitch
           rowSwitchCancelBehavior="revert"
           onRowSave={saveRow}

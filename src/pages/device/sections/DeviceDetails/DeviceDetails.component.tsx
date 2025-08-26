@@ -262,399 +262,400 @@ export default function DeviceDetailsPage() {
   const displayName = device?.machine_name || `Dispositivo ${device?.id}`;
 
   return (
-    <section className={styles.page}>
-      {/* mini-toolbar in alto a destra: refresh + switch edit */}
-      <div className={styles.topActions}>
-        <SimpleButton
-          size="sm"
-          color="secondary"
-          variant="ghost"
-          icon={RotateCw}
-          onClick={() => refetch()}
-          disabled={isFetching || isSaving}
-        >
-          Aggiorna
-        </SimpleButton>
+    <>
+      <section className={styles.page}>
+        <div className={styles.pageContent}>
+          {/* intestazione sempre uguale */}
+          <ModalDeviceHeader
+            device={device}
+            displayName={displayName}
+            getFullAddress={() => getFullAddress(device as Device)}
+          />
 
-        <Switch
-          size="md"
-          color="primary"
-          checked={isEdit}
-          onChange={toggleEdit}
-          label={
-            <span style={{ display: "inline-flex", gap: 6 }}>Modifica</span>
-          }
-          labelPosition="right"
-          title="Attiva/disattiva la modalità modifica"
-        />
-      </div>
-
-      <div className={styles.pageContent}>
-        {/* intestazione sempre uguale */}
-        <ModalDeviceHeader
-          device={device}
-          displayName={displayName}
-          getFullAddress={() => getFullAddress(device as Device)}
-        />
-
-        {/* READ-ONLY vs EDIT */}
-        {!isEdit ? (
-          <>
-            <TechnicalInfoRO device={device} />
-            <PositionInfoRO device={device} />
-            <DateHoursInfoRO
-              device={device}
-              formatDate={formatDate}
-              getRelativeTime={getRelativeTime}
-            />
-            <CoordinatesInfoRO
-              device={device}
-              formatCoordinates={formatCoordinates}
-            />
-            <RegisterInfoRO device={device} />
-            {device?.note && <NoteInfo device={device} />}
-            <Summary device={device} />
-          </>
-        ) : (
-          formData && (
+          {/* READ-ONLY vs EDIT */}
+          {!isEdit ? (
             <>
-              {/* Informazioni Generali */}
-              <div className={`${styles.section} ${styles.formSection}`}>
-                <div className={styles.sectionHeader}>
-                  <Settings className={styles.sectionIcon} />
-                  <h4 className={styles.sectionTitle}>Informazioni Generali</h4>
-                </div>
-                <div className={styles.sectionBody}>
-                  <div className={styles.formGrid}>
-                    <Input
-                      label="Nome Macchina"
-                      name="machineName"
-                      value={formData.machineName}
-                      onChange={(e) => onChange("machineName", e.target.value)}
-                      placeholder="Inserisci nome macchina"
-                      icon={Monitor}
-                      disabled={isSaving}
-                    />
-                    <div className={styles.selectGroup}>
-                      <label className={styles.selectLabel}>Tipo Rifiuto</label>
-                      <select
-                        className={styles.selectInput}
-                        value={formData.waste}
-                        onChange={(e) => onChange("waste", e.target.value)}
-                        disabled={isSaving}
-                      >
-                        <option value="">Seleziona tipo</option>
-                        <option value="Plastica">Plastica</option>
-                        <option value="Secco">Secco</option>
-                        <option value="Umido">Umido</option>
-                        <option value="Vetro">Vetro</option>
-                        <option value="Indifferenziato">Indifferenziato</option>
-                        <option value="Carta">Carta</option>
-                        <option value="vpl">VPL</option>
-                      </select>
-                    </div>
+              <TechnicalInfoRO device={device} />
+              <PositionInfoRO device={device} />
+              <DateHoursInfoRO
+                device={device}
+                formatDate={formatDate}
+                getRelativeTime={getRelativeTime}
+              />
+              <CoordinatesInfoRO
+                device={device}
+                formatCoordinates={formatCoordinates}
+              />
+              <RegisterInfoRO device={device} />
+              {device?.note && <NoteInfo device={device} />}
+              <Summary device={device} />
+            </>
+          ) : (
+            formData && (
+              <>
+                {/* Informazioni Generali */}
+                <div className={`${styles.section} ${styles.formSection}`}>
+                  <div className={styles.sectionHeader}>
+                    <Settings className={styles.sectionIcon} />
+                    <h4 className={styles.sectionTitle}>
+                      Informazioni Generali
+                    </h4>
                   </div>
-
-                  <div className={styles.formGrid}>
-                    <div className={styles.selectGroup}>
-                      <label className={styles.selectLabel}>Stato</label>
-                      <select
-                        className={styles.selectInput}
-                        value={formData.status}
+                  <div className={styles.sectionBody}>
+                    <div className={styles.formGrid}>
+                      <Input
+                        label="Nome Macchina"
+                        name="machineName"
+                        value={formData.machineName}
                         onChange={(e) =>
-                          onChange("status", parseInt(e.target.value))
+                          onChange("machineName", e.target.value)
+                        }
+                        placeholder="Inserisci nome macchina"
+                        icon={Monitor}
+                        disabled={isSaving}
+                      />
+                      <div className={styles.selectGroup}>
+                        <label className={styles.selectLabel}>
+                          Tipo Rifiuto
+                        </label>
+                        <select
+                          className={styles.selectInput}
+                          value={formData.waste}
+                          onChange={(e) => onChange("waste", e.target.value)}
+                          disabled={isSaving}
+                        >
+                          <option value="">Seleziona tipo</option>
+                          <option value="Plastica">Plastica</option>
+                          <option value="Secco">Secco</option>
+                          <option value="Umido">Umido</option>
+                          <option value="Vetro">Vetro</option>
+                          <option value="Indifferenziato">
+                            Indifferenziato
+                          </option>
+                          <option value="Carta">Carta</option>
+                          <option value="vpl">VPL</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className={styles.formGrid}>
+                      <div className={styles.selectGroup}>
+                        <label className={styles.selectLabel}>Stato</label>
+                        <select
+                          className={styles.selectInput}
+                          value={formData.status}
+                          onChange={(e) =>
+                            onChange("status", parseInt(e.target.value))
+                          }
+                          disabled={isSaving}
+                        >
+                          <option value={0}>Inattivo</option>
+                          <option value={1}>Attivo</option>
+                        </select>
+                      </div>
+
+                      <Input
+                        label="Versione Linux"
+                        name="linuxVersion"
+                        value={formData.linuxVersion}
+                        onChange={(e) =>
+                          onChange("linuxVersion", e.target.value)
+                        }
+                        placeholder="es. Ubuntu 22.04"
+                        disabled={isSaving}
+                      />
+                    </div>
+
+                    <div className={styles.formGrid}>
+                      <Input
+                        label="Orario Inizio"
+                        name="startAvailable"
+                        type="time"
+                        value={formData.startAvailable}
+                        onChange={(e) =>
+                          onChange("startAvailable", e.target.value)
                         }
                         disabled={isSaving}
-                      >
-                        <option value={0}>Inattivo</option>
-                        <option value={1}>Attivo</option>
-                      </select>
+                      />
+                      <Input
+                        label="Orario Fine"
+                        name="endAvailable"
+                        type="time"
+                        value={formData.endAvailable}
+                        onChange={(e) =>
+                          onChange("endAvailable", e.target.value)
+                        }
+                        disabled={isSaving}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Ubicazione */}
+                <div className={`${styles.section} ${styles.formSection}`}>
+                  <div className={styles.sectionHeader}>
+                    <MapPin className={styles.sectionIcon} />
+                    <h4 className={styles.sectionTitle}>
+                      Informazioni di Ubicazione
+                    </h4>
+                  </div>
+                  <div className={styles.sectionBody}>
+                    <div className={styles.formGrid}>
+                      <Input
+                        label="Indirizzo/Via"
+                        name="street"
+                        value={formData.street}
+                        onChange={(e) => onChange("street", e.target.value)}
+                        placeholder="Via, Numero civico"
+                        disabled={isSaving}
+                      />
+                      <Input
+                        label="Città"
+                        name="city"
+                        value={formData.city}
+                        onChange={(e) => onChange("city", e.target.value)}
+                        placeholder="Nome città"
+                        disabled={isSaving}
+                      />
+                    </div>
+
+                    <div className={styles.formGrid}>
+                      <Input
+                        label="Provincia"
+                        name="province"
+                        value={formData.province}
+                        onChange={(e) => onChange("province", e.target.value)}
+                        placeholder="Sigla provincia"
+                        disabled={isSaving}
+                      />
+                      <Input
+                        label="CAP"
+                        name="postalCode"
+                        value={formData.postalCode}
+                        onChange={(e) => onChange("postalCode", e.target.value)}
+                        placeholder="Codice postale"
+                        disabled={isSaving}
+                      />
+                    </div>
+
+                    <div className={styles.formGrid}>
+                      <Input
+                        label="Paese"
+                        name="country"
+                        value={formData.country}
+                        onChange={(e) => onChange("country", e.target.value)}
+                        placeholder="Nome paese"
+                        disabled={isSaving}
+                      />
+                      <Input
+                        label="Municipalità"
+                        name="municipality"
+                        value={formData.municipality}
+                        onChange={(e) =>
+                          onChange("municipality", e.target.value)
+                        }
+                        placeholder="Nome municipalità"
+                        disabled={isSaving}
+                      />
                     </div>
 
                     <Input
-                      label="Versione Linux"
-                      name="linuxVersion"
-                      value={formData.linuxVersion}
-                      onChange={(e) => onChange("linuxVersion", e.target.value)}
-                      placeholder="es. Ubuntu 22.04"
-                      disabled={isSaving}
-                    />
-                  </div>
-
-                  <div className={styles.formGrid}>
-                    <Input
-                      label="Orario Inizio"
-                      name="startAvailable"
-                      type="time"
-                      value={formData.startAvailable}
-                      onChange={(e) =>
-                        onChange("startAvailable", e.target.value)
-                      }
-                      disabled={isSaving}
-                    />
-                    <Input
-                      label="Orario Fine"
-                      name="endAvailable"
-                      type="time"
-                      value={formData.endAvailable}
-                      onChange={(e) => onChange("endAvailable", e.target.value)}
+                      label="Indirizzo Completo"
+                      name="address"
+                      value={formData.address}
+                      onChange={(e) => onChange("address", e.target.value)}
+                      placeholder="Indirizzo completo"
                       disabled={isSaving}
                     />
                   </div>
                 </div>
-              </div>
 
-              {/* Ubicazione */}
-              <div className={`${styles.section} ${styles.formSection}`}>
-                <div className={styles.sectionHeader}>
-                  <MapPin className={styles.sectionIcon} />
-                  <h4 className={styles.sectionTitle}>
-                    Informazioni di Ubicazione
-                  </h4>
-                </div>
-                <div className={styles.sectionBody}>
-                  <div className={styles.formGrid}>
-                    <Input
-                      label="Indirizzo/Via"
-                      name="street"
-                      value={formData.street}
-                      onChange={(e) => onChange("street", e.target.value)}
-                      placeholder="Via, Numero civico"
-                      disabled={isSaving}
-                    />
-                    <Input
-                      label="Città"
-                      name="city"
-                      value={formData.city}
-                      onChange={(e) => onChange("city", e.target.value)}
-                      placeholder="Nome città"
-                      disabled={isSaving}
-                    />
+                {/* Tecniche */}
+                <div className={`${styles.section} ${styles.formSection}`}>
+                  <div className={styles.sectionHeader}>
+                    <Smartphone className={styles.sectionIcon} />
+                    <h4 className={styles.sectionTitle}>
+                      Informazioni Tecniche
+                    </h4>
                   </div>
+                  <div className={styles.sectionBody}>
+                    <div className={styles.formGrid}>
+                      <Input
+                        label="IP Router"
+                        name="ipRouter"
+                        value={formData.ipRouter}
+                        onChange={(e) => onChange("ipRouter", e.target.value)}
+                        placeholder="192.168.1.100"
+                        disabled={isSaving}
+                      />
+                      <Input
+                        label="Codice GPS"
+                        name="codiceGps"
+                        value={formData.codiceGps}
+                        onChange={(e) => onChange("codiceGps", e.target.value)}
+                        placeholder="Codice identificativo GPS"
+                        disabled={isSaving}
+                      />
+                    </div>
 
-                  <div className={styles.formGrid}>
-                    <Input
-                      label="Provincia"
-                      name="province"
-                      value={formData.province}
-                      onChange={(e) => onChange("province", e.target.value)}
-                      placeholder="Sigla provincia"
-                      disabled={isSaving}
-                    />
-                    <Input
-                      label="CAP"
-                      name="postalCode"
-                      value={formData.postalCode}
-                      onChange={(e) => onChange("postalCode", e.target.value)}
-                      placeholder="Codice postale"
-                      disabled={isSaving}
-                    />
-                  </div>
+                    <div className={styles.formGrid}>
+                      <Input
+                        label="Coordinate GPS X (Longitudine)"
+                        name="gpsX"
+                        value={formData.gpsX}
+                        onChange={(e) => onChange("gpsX", e.target.value)}
+                        placeholder="es. 12.4964"
+                        disabled={isSaving}
+                      />
+                      <Input
+                        label="Coordinate GPS Y (Latitudine)"
+                        name="gpsY"
+                        value={formData.gpsY}
+                        onChange={(e) => onChange("gpsY", e.target.value)}
+                        placeholder="es. 41.9028"
+                        disabled={isSaving}
+                      />
+                    </div>
 
-                  <div className={styles.formGrid}>
-                    <Input
-                      label="Paese"
-                      name="country"
-                      value={formData.country}
-                      onChange={(e) => onChange("country", e.target.value)}
-                      placeholder="Nome paese"
-                      disabled={isSaving}
-                    />
-                    <Input
-                      label="Municipalità"
-                      name="municipality"
-                      value={formData.municipality}
-                      onChange={(e) => onChange("municipality", e.target.value)}
-                      placeholder="Nome municipalità"
-                      disabled={isSaving}
-                    />
-                  </div>
+                    <div className={styles.formGrid}>
+                      <Input
+                        label="Matricola BTE"
+                        name="matricolaBte"
+                        value={formData.matricolaBte}
+                        onChange={(e) =>
+                          onChange("matricolaBte", e.target.value)
+                        }
+                        placeholder="Codice matricola BTE"
+                        disabled={isSaving}
+                      />
+                      <Input
+                        label="Matricola KGN"
+                        name="matricolaKgn"
+                        value={formData.matricolaKgn}
+                        onChange={(e) =>
+                          onChange("matricolaKgn", e.target.value)
+                        }
+                        placeholder="Codice matricola KGN"
+                        disabled={isSaving}
+                      />
+                    </div>
 
-                  <Input
-                    label="Indirizzo Completo"
-                    name="address"
-                    value={formData.address}
-                    onChange={(e) => onChange("address", e.target.value)}
-                    placeholder="Indirizzo completo"
-                    disabled={isSaving}
-                  />
-                </div>
-              </div>
-
-              {/* Tecniche */}
-              <div className={`${styles.section} ${styles.formSection}`}>
-                <div className={styles.sectionHeader}>
-                  <Smartphone className={styles.sectionIcon} />
-                  <h4 className={styles.sectionTitle}>Informazioni Tecniche</h4>
-                </div>
-                <div className={styles.sectionBody}>
-                  <div className={styles.formGrid}>
                     <Input
-                      label="IP Router"
-                      name="ipRouter"
-                      value={formData.ipRouter}
-                      onChange={(e) => onChange("ipRouter", e.target.value)}
-                      placeholder="192.168.1.100"
-                      disabled={isSaving}
-                    />
-                    <Input
-                      label="Codice GPS"
-                      name="codiceGps"
-                      value={formData.codiceGps}
-                      onChange={(e) => onChange("codiceGps", e.target.value)}
-                      placeholder="Codice identificativo GPS"
-                      disabled={isSaving}
-                    />
-                  </div>
-
-                  <div className={styles.formGrid}>
-                    <Input
-                      label="Coordinate GPS X (Longitudine)"
-                      name="gpsX"
-                      value={formData.gpsX}
-                      onChange={(e) => onChange("gpsX", e.target.value)}
-                      placeholder="es. 12.4964"
-                      disabled={isSaving}
-                    />
-                    <Input
-                      label="Coordinate GPS Y (Latitudine)"
-                      name="gpsY"
-                      value={formData.gpsY}
-                      onChange={(e) => onChange("gpsY", e.target.value)}
-                      placeholder="es. 41.9028"
-                      disabled={isSaving}
-                    />
-                  </div>
-
-                  <div className={styles.formGrid}>
-                    <Input
-                      label="Matricola BTE"
-                      name="matricolaBte"
-                      value={formData.matricolaBte}
-                      onChange={(e) => onChange("matricolaBte", e.target.value)}
-                      placeholder="Codice matricola BTE"
-                      disabled={isSaving}
-                    />
-                    <Input
-                      label="Matricola KGN"
-                      name="matricolaKgn"
-                      value={formData.matricolaKgn}
-                      onChange={(e) => onChange("matricolaKgn", e.target.value)}
-                      placeholder="Codice matricola KGN"
-                      disabled={isSaving}
-                    />
-                  </div>
-
-                  <Input
-                    label="Sheet Name"
-                    name="sheetName"
-                    value={formData.sheetName}
-                    onChange={(e) => onChange("sheetName", e.target.value)}
-                    placeholder="Nome del foglio"
-                    disabled={isSaving}
-                  />
-                </div>
-              </div>
-
-              {/* Cliente */}
-              <div className={`${styles.section} ${styles.formSection}`}>
-                <div className={styles.sectionHeader}>
-                  <Settings className={styles.sectionIcon} />
-                  <h4 className={styles.sectionTitle}>Informazioni Cliente</h4>
-                </div>
-                <div className={styles.sectionBody}>
-                  <div className={styles.formGrid}>
-                    <Input
-                      label="Nome Cliente"
-                      name="customerName"
-                      value={formData.customerName}
-                      onChange={(e) => onChange("customerName", e.target.value)}
-                      placeholder="Nome completo del cliente"
-                      disabled={isSaving}
-                    />
-                    <Input
-                      label="Cliente (Codice)"
-                      name="customer"
-                      value={formData.customer}
-                      onChange={(e) => onChange("customer", e.target.value)}
-                      placeholder="Codice cliente"
+                      label="Sheet Name"
+                      name="sheetName"
+                      value={formData.sheetName}
+                      onChange={(e) => onChange("sheetName", e.target.value)}
+                      placeholder="Nome del foglio"
                       disabled={isSaving}
                     />
                   </div>
                 </div>
-              </div>
 
-              {/* Flag */}
-              <div
-                className={`${styles.section} ${styles.formSection} ${styles.privilegesSection}`}
-              >
-                <div className={styles.sectionHeader}>
-                  <Settings className={styles.sectionIcon} />
-                  <h5 className={styles.sectionSubtitle}>Stati e Flag</h5>
-                </div>
-                <div className={styles.sectionBody}>
-                  <div className={styles.checkboxGrid}>
-                    <Checkbox
-                      label="Status Ready D75_3_7"
-                      description="Indica se il dispositivo è pronto per l'uso"
-                      checked={formData.statusReadyD75_3_7}
-                      onChange={(checked) =>
-                        onChange("statusReadyD75_3_7", checked)
-                      }
-                      disabled={isSaving}
-                      color="success"
-                    />
-                    <Checkbox
-                      label="Macchina Bloccata"
-                      description="Indica se la macchina è bloccata"
-                      checked={formData.statusMachineBlocked}
-                      onChange={(checked) =>
-                        onChange("statusMachineBlocked", checked)
-                      }
-                      disabled={isSaving}
-                      color="danger"
-                    />
+                {/* Cliente */}
+                <div className={`${styles.section} ${styles.formSection}`}>
+                  <div className={styles.sectionHeader}>
+                    <Settings className={styles.sectionIcon} />
+                    <h4 className={styles.sectionTitle}>
+                      Informazioni Cliente
+                    </h4>
+                  </div>
+                  <div className={styles.sectionBody}>
+                    <div className={styles.formGrid}>
+                      <Input
+                        label="Nome Cliente"
+                        name="customerName"
+                        value={formData.customerName}
+                        onChange={(e) =>
+                          onChange("customerName", e.target.value)
+                        }
+                        placeholder="Nome completo del cliente"
+                        disabled={isSaving}
+                      />
+                      <Input
+                        label="Cliente (Codice)"
+                        name="customer"
+                        value={formData.customer}
+                        onChange={(e) => onChange("customer", e.target.value)}
+                        placeholder="Codice cliente"
+                        disabled={isSaving}
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Note */}
-              <div className={`${styles.section} ${styles.formSection}`}>
-                <div className={styles.sectionHeader}>
-                  <Settings className={styles.sectionIcon} />
-                  <h4 className={styles.sectionTitle}>Note</h4>
-                </div>
-                <div className={styles.sectionBody}>
-                  <div className={styles.textareaGroup}>
-                    <label className={styles.textareaLabel}>
-                      Note aggiuntive
-                    </label>
-                    <textarea
-                      className={styles.textareaInput}
-                      value={formData.note}
-                      onChange={(e) => onChange("note", e.target.value)}
-                      placeholder="Inserisci note aggiuntive sul dispositivo..."
-                      rows={4}
-                      disabled={isSaving}
-                    />
+                {/* Flag */}
+                <div
+                  className={`${styles.section} ${styles.formSection} ${styles.privilegesSection}`}
+                >
+                  <div className={styles.sectionHeader}>
+                    <Settings className={styles.sectionIcon} />
+                    <h5 className={styles.sectionSubtitle}>Stati e Flag</h5>
+                  </div>
+                  <div className={styles.sectionBody}>
+                    <div className={styles.checkboxGrid}>
+                      <Checkbox
+                        label="Status Ready D75_3_7"
+                        description="Indica se il dispositivo è pronto per l'uso"
+                        checked={formData.statusReadyD75_3_7}
+                        onChange={(checked) =>
+                          onChange("statusReadyD75_3_7", checked)
+                        }
+                        disabled={isSaving}
+                        color="success"
+                      />
+                      <Checkbox
+                        label="Macchina Bloccata"
+                        description="Indica se la macchina è bloccata"
+                        checked={formData.statusMachineBlocked}
+                        onChange={(checked) =>
+                          onChange("statusMachineBlocked", checked)
+                        }
+                        disabled={isSaving}
+                        color="danger"
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* hint */}
-              <div className={styles.infoNote}>
-                <p className={styles.infoNoteText}>
-                  <strong>Nota:</strong> Le modifiche diventeranno effettive
-                  dopo il salvataggio. Alcune modifiche potrebbero richiedere il
-                  riavvio del dispositivo.
-                </p>
-              </div>
-            </>
-          )
-        )}
-      </div>
+                {/* Note */}
+                <div className={`${styles.section} ${styles.formSection}`}>
+                  <div className={styles.sectionHeader}>
+                    <Settings className={styles.sectionIcon} />
+                    <h4 className={styles.sectionTitle}>Note</h4>
+                  </div>
+                  <div className={styles.sectionBody}>
+                    <div className={styles.textareaGroup}>
+                      <label className={styles.textareaLabel}>
+                        Note aggiuntive
+                      </label>
+                      <textarea
+                        className={styles.textareaInput}
+                        value={formData.note}
+                        onChange={(e) => onChange("note", e.target.value)}
+                        placeholder="Inserisci note aggiuntive sul dispositivo..."
+                        rows={4}
+                        disabled={isSaving}
+                      />
+                    </div>
+                  </div>
+                </div>
 
-      {/* ACTION BAR (solo in edit) */}
+                {/* hint */}
+                <div className={styles.infoNote}>
+                  <p className={styles.infoNoteText}>
+                    <strong>Nota:</strong> Le modifiche diventeranno effettive
+                    dopo il salvataggio. Alcune modifiche potrebbero richiedere
+                    il riavvio del dispositivo.
+                  </p>
+                </div>
+              </>
+            )
+          )}
+        </div>
+
+        {/* ACTION BAR (solo in edit) */}
+      </section>
+
       {isEdit && (
         <div className={styles.actionBar}>
           <SimpleButton
@@ -677,6 +678,6 @@ export default function DeviceDetailsPage() {
           </SimpleButton>
         </div>
       )}
-    </section>
+    </>
   );
 }

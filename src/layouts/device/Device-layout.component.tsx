@@ -1,4 +1,4 @@
-// DeviceLayout.tsx (estratto)
+// DeviceLayout.tsx
 import {
   Outlet,
   useParams,
@@ -6,7 +6,7 @@ import {
   useNavigate,
   useSearchParams,
 } from "react-router-dom";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useEffect } from "react";
 import { ArrowLeft, RotateCw } from "lucide-react";
 import LogoKgn from "@assets/images/kgn-logo.png";
 import styles from "./Device-layout.module.scss";
@@ -23,6 +23,7 @@ export default function DeviceLayout() {
   const navigate = useNavigate();
   const { deviceId, id } = useParams<{ deviceId?: string; id?: string }>();
   const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const pathId = useMemo(() => {
     const match = location.pathname.match(/\/device\/([^/]+)/);
@@ -43,20 +44,27 @@ export default function DeviceLayout() {
     skip: !parsedId,
   });
 
-  // Edit mode switch controllato dall’URL
-  const isEditRoute = location.pathname.endsWith("/edit");
-  const [editMode, setEditMode] = useState<boolean>(isEditRoute);
+  // === Single source of truth: ?edit=1
+  const editMode = searchParams.get("edit") === "1";
 
+  // Retro-compat: se l'URL termina con /edit e manca ?edit=1, aggiungilo.
   useEffect(() => {
-    setEditMode(isEditRoute);
-  }, [isEditRoute]);
+    const endsWithEdit = location.pathname.endsWith("/edit");
+    const hasParam = searchParams.get("edit") === "1";
+    if (endsWithEdit && !hasParam) {
+      const next = new URLSearchParams(searchParams);
+      next.set("edit", "1");
+      setSearchParams(next, { replace: true });
+    }
+    // NB: Non rimuoviamo /edit dalla path (no redirect) per non rompere rotte esistenti.
+  }, [location.pathname, searchParams, setSearchParams]);
 
-  const [searchParams, setSearchParams] = useSearchParams();
   const handleToggleEdit = (on: boolean) => {
     const next = new URLSearchParams(searchParams);
     if (on) next.set("edit", "1");
     else next.delete("edit");
     setSearchParams(next, { replace: true });
+    // Le pagine figlie reagiscono a questo cambiamento leggendo ?edit=1
   };
 
   return (
@@ -77,7 +85,7 @@ export default function DeviceLayout() {
               onClick={() => navigate("/admin")}
             >
               <ArrowLeft size={18} />
-              <span>Indietro</span>
+              <span>Torna alla Dashboard</span>
             </button>
 
             <div className={styles.pageActions}>
@@ -90,8 +98,6 @@ export default function DeviceLayout() {
               >
                 Aggiorna
               </SimpleButton>
-
-              {/* 🔀 Switch al posto del bottone "Modifica" */}
 
               {user?.role === UserRoles.SUPER_ADMIN && (
                 <Switch
@@ -107,7 +113,7 @@ export default function DeviceLayout() {
                         gap: 6,
                       }}
                     >
-                      Edit {editMode ? "attiva" : "disattiva"}
+                      Modifica {editMode ? "attiva" : "disattiva"}
                     </span>
                   }
                   labelPosition="right"
