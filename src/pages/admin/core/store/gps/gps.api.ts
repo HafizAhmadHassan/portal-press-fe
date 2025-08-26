@@ -35,7 +35,7 @@ export const gpsApi = apiSlice.injectEndpoints({
 
     getGpsById: builder.query<GpsDevice, string | number>({
       query: (id) => `gps/${id}`,
-      providesTags: (r, e, id) => [{ type: "ENTITY" as const, id }],
+      providesTags: (_r, _e, id) => [{ type: "ENTITY" as const, id }],
     }),
 
     createGps: builder.mutation<GpsDevice, CreateGpsRequest>({
@@ -52,7 +52,7 @@ export const gpsApi = apiSlice.injectEndpoints({
         method: "PUT",
         body: data,
       }),
-      invalidatesTags: (r, e, { id }) => [
+      invalidatesTags: (_r, _e, { id }) => [
         { type: "ENTITY" as const, id },
         { type: "LIST" as const, id: "Gps" },
         { type: "STATS" as const, id: "Gps" },
@@ -77,7 +77,7 @@ export const gpsApi = apiSlice.injectEndpoints({
 
     deleteGps: builder.mutation<{ success: boolean }, string | number>({
       query: (id) => ({ url: `gps/${id}`, method: "DELETE" }),
-      invalidatesTags: (r, e, id) => [
+      invalidatesTags: (_r, _e, id) => [
         { type: "ENTITY" as const, id },
         { type: "LIST" as const, id: "Gps" },
         { type: "STATS" as const, id: "Gps" },

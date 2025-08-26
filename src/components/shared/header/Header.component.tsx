@@ -1,40 +1,54 @@
-import React, { useRef, useState } from "react";
-import { useSidebar } from "@store_admin/hooks/useSidebar";
+// KgnHeader.tsx
+import { useMemo, useRef, useState } from "react";
 import styles from "./styles/Header.module.scss";
-import stylesToggle from "./styles/Header.module.scss";
 import stylesPill from "./styles/Pill.module.scss";
+import stylesToggle from "./styles/Header.module.scss";
+import { useSidebar } from "@store_admin/hooks/useSidebar";
+import { setCustomer } from "@store_admin/scope/scope.slice";
 import { ChevronDown, Grid, Mail, Menu, Search, X } from "lucide-react";
+import { selectScopedCustomer } from "@store_admin/scope/scope.selectors";
 import UserActions from "@root/components/shared/header/components/UserActions";
 import SearchInput from "@root/components/shared/header/components/SearchInput";
+import { useCustomers } from "@root/pages/admin/core/store/customers/hooks/useCustomers";
 import FilterSelect from "@root/components/shared/header/components/FilterSelect.component";
 
-export default function KgnHeader() {
-  const [selectedFilter, setSelectedFilter] = useState("Tutti");
-  const [searchText, setSearchText] = useState("");
-  const filterOptions = ["Tutti", "Dispositivi", "Utenti", "Configurazioni"];
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "@root/pages/admin/core/store/store.hooks";
 
+export default function KgnHeader() {
+  const [searchText, setSearchText] = useState("");
   const { isMobileOpen, toggleSidebar, toggleMobile, closeMobile } =
     useSidebar();
 
-  const pillRef = useRef<HTMLDivElement>(null); // <— ref della pill intera
+  const dispatch = useAppDispatch();
+  const scopedCustomer = useAppSelector(selectScopedCustomer);
+
+  const { customers: customerNames } = useCustomers();
+  const customerOptions = useMemo(
+    () => [
+      { value: "", label: "Tutti" },
+      ...customerNames.map((n) => ({ value: n, label: n })),
+    ],
+    [customerNames]
+  );
+
+  const pillRef = useRef<HTMLDivElement>(null);
 
   const handleSearch = () => {
     if (!searchText.trim()) return;
-    console.log("Search triggered:", {
-      filter: selectedFilter,
-      query: searchText,
-    });
     if (isMobileOpen) closeMobile();
   };
 
-  const handleFilterChange = (filter: string) => {
-    setSelectedFilter(filter);
-    if (searchText.trim()) handleSearch();
+  const handleCustomerChange = (value: string) => {
+    dispatch(setCustomer(value || null));
+    console.log("Customer changed:", value || "(Tutti)");
+    if (isMobileOpen) closeMobile();
   };
 
   const getToggleIcon = () =>
     isMobileOpen ? <X size={20} /> : <Menu size={20} />;
-
   const handleToggleClick = () => {
     const isMobile = window.innerWidth <= 768;
     if (isMobile) toggleMobile();
@@ -55,11 +69,11 @@ export default function KgnHeader() {
       <div className={stylesPill.searchGroup}>
         <div className={stylesPill.pill} ref={pillRef}>
           <FilterSelect
-            selected={selectedFilter}
-            options={filterOptions}
-            onChange={handleFilterChange}
+            selected={scopedCustomer ?? ""}
+            options={customerOptions}
+            onChange={handleCustomerChange}
             ChevronIcon={<ChevronDown size={16} />}
-            anchorRef={pillRef} // <— ancora per il portal
+            anchorRef={pillRef}
           />
           <SearchInput
             value={searchText}

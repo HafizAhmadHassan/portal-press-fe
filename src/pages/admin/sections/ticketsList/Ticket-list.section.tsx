@@ -1,18 +1,24 @@
-import React, { useCallback, useMemo } from 'react';
-import { useListQueryParams } from '@hooks/useListQueryParams';
-import { createTicketsTableConfig } from './_config/ticketsTableConfig';
-import { createTicketsFilterConfig, TicketFields } from './_config/ticketsFilterConfig';
-import styles from './_styles/TicketsListSection.module.scss';
-import { SectionHeaderComponent } from '@sections_admin/_commons/components/SectionHeader/Section-header.component';
-import { SectionFilterComponent } from '@sections_admin/_commons/components/SectionFilters/Section-filters.component';
-import { GenericTableWithLogic } from '@shared/table/components/GenericTableWhitLogic.component';
-import { usePagination } from '@hooks/usePagination.ts';
-import { useTicketsWithDevices } from '@store_admin/tickets/hooks/useTicketWithDevices';
-import { Divider } from '@shared/divider/Divider.component.tsx';
-import { useUpdateTicketMutation } from '@store_admin/tickets/ticket.api';
-import type { TicketRead } from '@store_admin/tickets/ticket.types';
+import React, { useCallback, useEffect, useMemo } from "react";
+import { useListQueryParams } from "@hooks/useListQueryParams";
+import { createTicketsTableConfig } from "./_config/ticketsTableConfig";
+import {
+  createTicketsFilterConfig,
+  TicketFields,
+} from "./_config/ticketsFilterConfig";
+import styles from "./_styles/TicketsListSection.module.scss";
+import { SectionHeaderComponent } from "@sections_admin/_commons/components/SectionHeader/Section-header.component";
+import { SectionFilterComponent } from "@sections_admin/_commons/components/SectionFilters/Section-filters.component";
+import { GenericTableWithLogic } from "@shared/table/components/GenericTableWhitLogic.component";
+import { usePagination } from "@hooks/usePagination.ts";
+import { useTicketsWithDevices } from "@store_admin/tickets/hooks/useTicketWithDevices";
+import { Divider } from "@shared/divider/Divider.component.tsx";
+import { useUpdateTicketMutation } from "@store_admin/tickets/ticket.api";
+import type { TicketRead } from "@store_admin/tickets/ticket.types";
+import { useAppSelector } from "../../core/store/store.hooks";
+import { selectScopedCustomer } from "../../core/store/scope/scope.selectors";
 
 export const TicketsListSections: React.FC = () => {
+  const scopedCustomer = useAppSelector(selectScopedCustomer);
   // ✅ Query params management
   const {
     filters,
@@ -27,11 +33,11 @@ export const TicketsListSections: React.FC = () => {
     resetAll,
   } = useListQueryParams({
     initialFilters: {
-      [TicketFields.TITLE]: '',
-      [TicketFields.STATUS]: '',
-      [TicketFields.PRIORITY]: '',
-      [TicketFields.CATEGORY]: '',
-      [TicketFields.ASSIGNED_TO]: '',
+      [TicketFields.TITLE]: "",
+      [TicketFields.STATUS]: "",
+      [TicketFields.PRIORITY]: "",
+      [TicketFields.CATEGORY]: "",
+      [TicketFields.ASSIGNED_TO]: "",
     },
   });
 
@@ -84,7 +90,9 @@ export const TicketsListSections: React.FC = () => {
   // ✅ CRUD operations base
   const handleCreate = useCallback(
     async (data) => {
-      const created = await (createNewTicket as any)(data).unwrap?.() ?? (await (createNewTicket as any)(data));
+      const created =
+        (await (createNewTicket as any)(data).unwrap?.()) ??
+        (await (createNewTicket as any)(data));
       refetch();
       return created;
     },
@@ -93,8 +101,9 @@ export const TicketsListSections: React.FC = () => {
 
   const handleEdit = useCallback(
     async ({ id, ...rest }) => {
-      const updated = await (updateExistingTicket as any)({ id, data: rest }).unwrap?.()
-        ?? (await (updateExistingTicket as any)({ id, data: rest }));
+      const updated =
+        (await (updateExistingTicket as any)({ id, data: rest }).unwrap?.()) ??
+        (await (updateExistingTicket as any)({ id, data: rest }));
       refetch();
       return updated;
     },
@@ -104,7 +113,8 @@ export const TicketsListSections: React.FC = () => {
   const handleDelete = useCallback(
     async (ticket: TicketRead) => {
       if (window.confirm(`Confermi eliminazione ticket #${ticket.id}?`)) {
-        await ((deleteExistingTicket as any)(ticket.id).unwrap?.() ?? (deleteExistingTicket as any)(ticket.id));
+        await ((deleteExistingTicket as any)(ticket.id).unwrap?.() ??
+          (deleteExistingTicket as any)(ticket.id));
         refetch();
       }
     },
@@ -122,10 +132,12 @@ export const TicketsListSections: React.FC = () => {
       machine_not_repairable?: boolean;
     }) => {
       // 1) Recupero il ticket corrente per ottenere machine & customer
-      const t = tickets?.find((x) => String(x.id) === String(data.ticketId)) as (TicketRead & { device?: any }) | undefined;
+      const t = tickets?.find((x) => String(x.id) === String(data.ticketId)) as
+        | (TicketRead & { device?: any })
+        | undefined;
       if (!t) {
-        alert('Ticket non trovato per la chiusura.');
-        throw new Error('Ticket not found');
+        alert("Ticket non trovato per la chiusura.");
+        throw new Error("Ticket not found");
       }
 
       const machineId = (t as any).machine ?? (t as any).device_id;
@@ -133,27 +145,30 @@ export const TicketsListSections: React.FC = () => {
         t?.device?.customer ??
         t?.device?.customer_name ??
         (t as any).customer ??
-        '';
+        "";
 
       if (!machineId) {
-        alert('ID macchina non disponibile per la chiusura.');
-        throw new Error('Machine id missing');
+        alert("ID macchina non disponibile per la chiusura.");
+        throw new Error("Machine id missing");
       }
       if (!customer) {
-        alert('Customer non disponibile per la chiusura.');
-        throw new Error('Customer missing');
+        alert("Customer non disponibile per la chiusura.");
+        throw new Error("Customer missing");
       }
 
       // 2) Mappo guanratee_status
       const guanratee_status: string[] = [];
-      if (data.inGaranzia) guanratee_status.push('in_garanzia');
-      if (data.fuoriGaranzia) guanratee_status.push('fuori_garanzia');
+      if (data.inGaranzia) guanratee_status.push("in_garanzia");
+      if (data.fuoriGaranzia) guanratee_status.push("fuori_garanzia");
 
       // 3) Compongo la close_Description
       const extra: string[] = [];
-      if (data.machine_retrival) extra.push('Ripristino macchina');
-      if (data.machine_not_repairable) extra.push('Macchina non riparabile in loco');
-      const close_Description = [data.note?.trim() || '', ...extra].filter(Boolean).join('\n• ');
+      if (data.machine_retrival) extra.push("Ripristino macchina");
+      if (data.machine_not_repairable)
+        extra.push("Macchina non riparabile in loco");
+      const close_Description = [data.note?.trim() || "", ...extra]
+        .filter(Boolean)
+        .join("\n• ");
 
       // 4) Payload finale richiesto
       const payload = {
@@ -217,16 +232,22 @@ export const TicketsListSections: React.FC = () => {
     ]
   );
 
-  console.log('TICKETS', tickets);
+  // 🔁 Quando cambia il cliente scelto in header:
+  // - resetta paginazione
+  // - rifai la fetch degli utenti
+  useEffect(() => {
+    setPage(1);
+    refetch();
+  }, [scopedCustomer]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className={styles['tickets-list-page']}>
+    <div className={styles["tickets-list-page"]}>
       <SectionHeaderComponent
         title="Tickets"
         subTitle={`Gestisci i tickets (${meta?.total ?? 0} totali)`}
       />
 
-      <div className={styles['tickets-list-page__filters']}>
+      <div className={styles["tickets-list-page__filters"]}>
         <SectionFilterComponent
           filters={createTicketsFilterConfig({ filters, setFilter })}
           onResetFilters={handleResetAll}
@@ -236,7 +257,7 @@ export const TicketsListSections: React.FC = () => {
 
       <Divider />
 
-      <div className={styles['tickets-list-page__table-wrapper']}>
+      <div className={styles["tickets-list-page__table-wrapper"]}>
         <GenericTableWithLogic
           config={tableConfig}
           loading={isLoading}

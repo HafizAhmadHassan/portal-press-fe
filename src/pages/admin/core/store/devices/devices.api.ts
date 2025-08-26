@@ -1,3 +1,4 @@
+// @store_admin/devices/devices.api.ts
 import { apiSlice } from "@store_admin/apiSlice";
 import type {
   BulkActionRequest,
@@ -14,16 +15,13 @@ export const devicesApi = apiSlice.injectEndpoints({
         const cleanParams = Object.entries(params).reduce(
           (acc, [key, value]) => {
             if (value !== undefined && value !== null && value !== "") {
-              acc[key] = value;
+              (acc as any)[key] = value;
             }
             return acc;
           },
           {} as Record<string, any>
         );
-
         return {
-          /*  url: 'devices/',
-          params: cleanParams, */
           url: "joined-machines-gps/",
           params: cleanParams,
         };
@@ -32,76 +30,50 @@ export const devicesApi = apiSlice.injectEndpoints({
         { type: "LIST" as const, id: "Devices" },
         { type: "STATS" as const, id: "Devices" },
       ],
-
       transformResponse: (response: any) => {
-        if (!response.meta || !Array.isArray(response.data)) {
+        if (!response?.meta || !Array.isArray(response?.data)) {
           throw new Error("Invalid API response structure");
         }
         return response;
       },
     }),
 
-    // NUOVO: Endpoint specifico per ottenere tutti i devices (per la mappa)
-    getAllDevices: builder.query<Device[], { filters?: any }>({
-      query: ({ filters = {} } = {}) => {
+    getAllDevices: builder.query<Device[], { filters?: any } | void>({
+      query: (args) => {
+        const filters = args?.filters ?? {};
         const cleanParams = Object.entries(filters).reduce(
           (acc, [key, value]) => {
             if (value !== undefined && value !== null && value !== "") {
-              acc[key] = value;
+              (acc as any)[key] = value;
             }
             return acc;
           },
           {} as Record<string, any>
         );
-
-        return {
-          url: "joined-machines-gps/?all=true",
-          params: cleanParams,
-        };
+        return { url: "joined-machines-gps/?all=true", params: cleanParams };
       },
-      /* providesTags: [{ type: 'LIST' as const, id: 'AllDevices' }], */
       providesTags: [{ type: "LIST" as const, id: "AllDevices" }],
       transformResponse: (response: { data: Device[] }) => {
-        if (!Array.isArray(response.data)) {
+        if (!Array.isArray(response?.data)) {
           throw new Error("Invalid API response structure");
         }
-        return response.data || []; // Assicurati che sia un array
+        return response.data || [];
       },
     }),
 
     getDeviceById: builder.query<Device, string>({
       query: (id) => `joined-machines-gps/${id}`,
-      providesTags: (_result, _error, id) => [{ type: "ENTITY" as const, id }],
+      providesTags: (_r, _e, id) => [{ type: "ENTITY" as const, id }],
     }),
 
-    // ✅ FIXED: Aggiunto trailing slash e debug del body
     createDevice: builder.mutation<Device, CreateDeviceRequest>({
       query: (body) => {
-        console.log("RTK Query - Creating device with body:", body);
-        console.log("RTK Query - Body type:", typeof body);
-        console.log(
-          "RTK Query - Body keys:",
-          body ? Object.keys(body) : "NO KEYS"
-        );
-        console.log("RTK Query - Body JSON:", JSON.stringify(body, null, 2));
-
-        if (!body) {
-          console.error("RTK Query - BODY IS NULL OR UNDEFINED!");
-          throw new Error("Body cannot be null or undefined");
-        }
-
-        if (!body.machine_name) {
-          console.error("RTK Query - machine_name is missing!");
-          throw new Error("machine_name is required");
-        }
-
+        if (!body?.machine_name) throw new Error("machine_name is required");
         return {
-          url: "joined-machines-gps/", // ✅ Aggiunto trailing slash
+          url: "joined-machines-gps/",
           method: "POST",
           body,
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
         };
       },
       invalidatesTags: [
@@ -112,32 +84,27 @@ export const devicesApi = apiSlice.injectEndpoints({
     }),
 
     updateDevice: builder.mutation<Device, UpdateDeviceRequest>({
-      query: ({ id, data }) => {
-        console.log("Updating device with data:", { id, data }); // Debug log
-        return {
-          url: `joined-machines-gps/${id}`, // ✅ RIMOSSO trailing slash per matchare backend
-          method: "PUT",
-          body: data,
-        };
-      },
-      invalidatesTags: (_result, _error, { id }) => [
+      query: ({ id, data }) => ({
+        url: `joined-machines-gps/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: (_r, _e, { id }) => [
         { type: "ENTITY" as const, id },
         { type: "LIST" as const, id: "Devices" },
         { type: "LIST" as const, id: "AllDevices" },
         { type: "STATS" as const, id: "Devices" },
       ],
-
       async onQueryStarted({ id, data }, { dispatch, queryFulfilled }) {
-        const patchResult = dispatch(
-          apiSlice.util.updateQueryData("getDeviceById", id, (draft) => {
+        const patch = dispatch(
+          apiSlice.util.updateQueryData("getDeviceById", id, (draft: any) => {
             Object.assign(draft, data);
           })
         );
-
         try {
           await queryFulfilled;
         } catch {
-          patchResult.undo();
+          (patch as any).undo?.();
         }
       },
     }),
@@ -146,38 +113,24 @@ export const devicesApi = apiSlice.injectEndpoints({
       { success: boolean; message: string },
       string
     >({
-      query: (id) => {
-        console.log("Deleting device with id:", id); // Debug log
-        return {
-          url: `joined-machines-gps/${id}`, // ✅ RIMOSSO trailing slash per matchare backend
-          method: "DELETE",
-        };
-      },
-      invalidatesTags: (_result, _error, id) => [
+      query: (id) => ({ url: `joined-machines-gps/${id}`, method: "DELETE" }),
+      invalidatesTags: (_r, _e, id) => [
         { type: "ENTITY" as const, id },
         { type: "LIST" as const, id: "Devices" },
         { type: "LIST" as const, id: "AllDevices" },
         { type: "STATS" as const, id: "Devices" },
       ],
-
       async onQueryStarted(id, { dispatch, queryFulfilled }) {
-        const patches: any[] = [];
-
-        // Aggiorna cache devices paginati
-        dispatch(
+        const patch1 = dispatch(
           apiSlice.util.updateQueryData("getDevices", {}, (draft: any) => {
-            if (draft.data) {
-              const deviceIndex = draft.data.findIndex(
-                (device: Device) => device.id === id
-              );
-              if (deviceIndex !== -1) {
-                draft.data.splice(deviceIndex, 1);
-
+            if (draft?.data) {
+              const i = draft.data.findIndex((d: Device) => d.id === id);
+              if (i !== -1) {
+                draft.data.splice(i, 1);
                 draft.meta.total = Math.max(0, draft.meta.total - 1);
                 draft.meta.total_pages = Math.ceil(
                   draft.meta.total / draft.meta.page_size
                 );
-
                 if (
                   draft.meta.page > draft.meta.total_pages &&
                   draft.meta.total_pages > 0
@@ -191,18 +144,13 @@ export const devicesApi = apiSlice.injectEndpoints({
           })
         );
 
-        // Aggiorna cache per tutti i devices
-        dispatch(
+        const patch2 = dispatch(
           apiSlice.util.updateQueryData(
             "getAllDevices",
             undefined,
             (draft: Device[]) => {
-              const deviceIndex = draft.findIndex(
-                (device: Device) => device.id === id
-              );
-              if (deviceIndex !== -1) {
-                draft.splice(deviceIndex, 1);
-              }
+              const i = draft.findIndex((d) => d.id === id);
+              if (i !== -1) draft.splice(i, 1);
             }
           )
         );
@@ -210,7 +158,8 @@ export const devicesApi = apiSlice.injectEndpoints({
         try {
           await queryFulfilled;
         } catch {
-          patches.forEach((patch) => patch.undo());
+          (patch1 as any).undo?.();
+          (patch2 as any).undo?.();
         }
       },
     }),
@@ -219,15 +168,12 @@ export const devicesApi = apiSlice.injectEndpoints({
       Device,
       { id: string; status: number }
     >({
-      query: ({ id, status }) => {
-        console.log("Toggling device status:", { id, status }); // Debug log
-        return {
-          url: `joined-machines-gps/${id}`, // ✅ RIMOSSO trailing slash per matchare backend
-          method: "PUT",
-          body: { status },
-        };
-      },
-      invalidatesTags: (_result, _error, { id }) => [
+      query: ({ id, status }) => ({
+        url: `joined-machines-gps/${id}`,
+        method: "PUT",
+        body: { status },
+      }),
+      invalidatesTags: (_r, _e, { id }) => [
         { type: "ENTITY" as const, id },
         { type: "LIST" as const, id: "Devices" },
         { type: "LIST" as const, id: "AllDevices" },
@@ -239,15 +185,12 @@ export const devicesApi = apiSlice.injectEndpoints({
       Device,
       { id: string; blocked: boolean }
     >({
-      query: ({ id, blocked }) => {
-        console.log("Toggling device block:", { id, blocked }); // Debug log
-        return {
-          url: `joined-machines-gps/${id}`, // ✅ RIMOSSO trailing slash per matchare backend
-          method: "PUT",
-          body: { status_machine_blocked: blocked },
-        };
-      },
-      invalidatesTags: (_result, _error, { id }) => [
+      query: ({ id, blocked }) => ({
+        url: `joined-machines-gps/${id}`,
+        method: "PUT",
+        body: { status_machine_blocked: blocked },
+      }),
+      invalidatesTags: (_r, _e, { id }) => [
         { type: "ENTITY" as const, id },
         { type: "LIST" as const, id: "Devices" },
         { type: "LIST" as const, id: "AllDevices" },
@@ -256,15 +199,12 @@ export const devicesApi = apiSlice.injectEndpoints({
     }),
 
     updateDeviceWaste: builder.mutation<Device, { id: string; waste: string }>({
-      query: ({ id, waste }) => {
-        console.log("Updating device waste:", { id, waste }); // Debug log
-        return {
-          url: `joined-machines-gps/${id}`, // ✅ RIMOSSO trailing slash per matchare backend
-          method: "PUT",
-          body: { waste },
-        };
-      },
-      invalidatesTags: (_result, _error, { id }) => [
+      query: ({ id, waste }) => ({
+        url: `joined-machines-gps/${id}`,
+        method: "PUT",
+        body: { waste },
+      }),
+      invalidatesTags: (_r, _e, { id }) => [
         { type: "ENTITY" as const, id },
         { type: "LIST" as const, id: "Devices" },
         { type: "LIST" as const, id: "AllDevices" },
@@ -313,10 +253,9 @@ export const devicesApi = apiSlice.injectEndpoints({
   overrideExisting: false,
 });
 
-// Export degli hook generati
 export const {
   useGetDevicesQuery,
-  useGetAllDevicesQuery, // NUOVO hook per tutti i devices
+  useGetAllDevicesQuery,
   useGetDeviceByIdQuery,
   useCreateDeviceMutation,
   useUpdateDeviceMutation,

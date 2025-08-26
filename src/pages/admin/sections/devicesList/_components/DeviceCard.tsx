@@ -144,6 +144,15 @@ export const DeviceCard: React.FC<DeviceCardProps> = ({
             color: "var(--white)",
           }}
         >
+          {device.customer_Name || "N/A"}
+        </div>
+        <div
+          className={styles["waste-badge"]}
+          style={{
+            backgroundColor: getWasteColorVar(device.waste),
+            color: "var(--white)",
+          }}
+        >
           {device.waste || "N/A"}
         </div>
 
@@ -209,14 +218,14 @@ export const DeviceCard: React.FC<DeviceCardProps> = ({
           </div>
 
           <div className={styles["device-technical"]}>
-            {device.ip_router && (
+            {device.ip_Router && (
               <span className={styles["tech-detail"]}>
-                IP: {device.ip_router}
+                IP: {device.ip_Router}
               </span>
             )}
-            {device.codice_gps && (
+            {device.codice_GPS && (
               <span className={styles["tech-detail"]}>
-                GPS: {device.codice_gps}
+                GPS: {device.codice_GPS}
               </span>
             )}
           </div>

@@ -2,39 +2,54 @@
 
 export interface Device {
   id: string;
-  machine_name: string;
+  machine_Name: string;
   status: number; // 0 = inactive, 1 = active
-  waste: 'Plastica' | 'Secco' | 'Umido' | 'Vetro' | 'Indifferenziato' | 'Carta' | 'vpl' | null;
-  linux_version?: string | null;
-  start_available?: string | null;
-  end_available?: string | null;
+  waste:
+    | "Plastica"
+    | "Secco"
+    | "Umido"
+    | "Vetro"
+    | "Indifferenziato"
+    | "Carta"
+    | "vpl"
+    | null;
+  linux_Version?: string | null;
+  start_Available?: string | null;
+  end_Available?: string | null;
   street?: string | null;
-  postal_code?: string | null;
+  postal_Code?: string | null;
   province?: string | null;
   city?: string | null;
   country?: string | null;
   municipality?: string | null;
   address?: string | null;
   status_ready_d75_3_7: boolean;
-  status_machine_blocked: boolean;
-  codice_gps?: string | null;
-  sheet_name?: string | null;
-  customer_name?: string | null;
-  matricola_bte?: string | null;
-  matricola_kgn?: string | null;
+  status_Machine_Blocked: boolean;
+  codice_Gps?: string | null;
+  sheet_Name?: string | null;
+  customer_Name?: string | null;
+  matricola_Bte?: string | null;
+  matricola_Kgn?: string | null;
   customer?: string | null;
-  ip_router?: string | null;
+  ip_Router?: string | null;
   gps_x?: string | null;
   gps_y?: string | null;
   note?: string | null;
-  created_at: string;
-  updated_at: string;
+  created_At: string;
+  updated_At: string;
 }
 
 export interface CreateDeviceRequest {
   machine_name: string;
   status?: number;
-  waste?: 'Plastica' | 'Secco' | 'Umido' | 'Vetro' | 'Indifferenziato' | 'Carta' | 'vpl';
+  waste?:
+    | "Plastica"
+    | "Secco"
+    | "Umido"
+    | "Vetro"
+    | "Indifferenziato"
+    | "Carta"
+    | "vpl";
   linux_version?: string;
   start_available?: string;
   end_available?: string;
@@ -61,7 +76,7 @@ export interface CreateDeviceRequest {
 
 export interface UpdateDeviceRequest {
   id: string;
-  data: Partial<Omit<Device, 'id' | 'created_at' | 'updated_at'>>;
+  data: Partial<Omit<Device, "id" | "created_at" | "updated_at">>;
 }
 
 export interface DevicesQueryParams {
@@ -76,15 +91,28 @@ export interface DevicesQueryParams {
   status_machine_blocked?: boolean | string;
   status_ready_d75_3_7?: boolean | string;
   sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
+  sortOrder?: "asc" | "desc";
 }
 
 export interface BulkActionRequest {
   deviceIds: string[];
-  action: 'activate' | 'deactivate' | 'block' | 'unblock' | 'delete' | 'updateWaste';
+  action:
+    | "activate"
+    | "deactivate"
+    | "block"
+    | "unblock"
+    | "delete"
+    | "updateWaste";
   data?: {
     status?: number;
     status_machine_blocked?: boolean;
-    waste?: 'Plastica' | 'Secco' | 'Umido' | 'Vetro' | 'Indifferenziato' | 'Carta' | 'vpl';
+    waste?:
+      | "Plastica"
+      | "Secco"
+      | "Umido"
+      | "Vetro"
+      | "Indifferenziato"
+      | "Carta"
+      | "vpl";
   };
 }

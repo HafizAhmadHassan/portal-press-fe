@@ -1,4 +1,4 @@
-// store/store.ts
+// @store_admin/store/store.ts
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 
@@ -8,9 +8,16 @@ import userReducer from "@store_admin/users/user.slice";
 import devicesReducer from "@store_admin/devices/devices.slice";
 import ticketReducer from "@store_admin/tickets/ticket.slice";
 import gpsReducer from "@store_admin/gps/gps.slice";
+import scopeReducer from "@store_admin/scope/scope.slice";
 
 import { authApi } from "@store_admin/auth/auth.api";
-import { usersApi } from "@store_admin/users/user.api";
+import { apiSlice } from "@store_admin/apiSlice";
+import { scopeListener } from "@store_admin/scope/scope.listener";
+
+const preloadedCustomer =
+  typeof window !== "undefined"
+    ? (localStorage.getItem("scope.customer_Name") || "").trim()
+    : "";
 
 export const store = configureStore({
   reducer: {
@@ -20,37 +27,40 @@ export const store = configureStore({
     devices: devicesReducer,
     tickets: ticketReducer,
     gps: gpsReducer,
+    scope: scopeReducer,
+
     [authApi.reducerPath]: authApi.reducer,
-    [usersApi.reducerPath]: usersApi.reducer,
+    [apiSlice.reducerPath]: apiSlice.reducer,
+  },
+  preloadedState: {
+    scope: { customer: preloadedCustomer || null },
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [
+          `${authApi.reducerPath}/executeMutation/pending`,
+          `${authApi.reducerPath}/executeMutation/fulfilled`,
+          `${authApi.reducerPath}/executeMutation/rejected`,
+          `${authApi.reducerPath}/executeQuery/pending`,
+          `${authApi.reducerPath}/executeQuery/fulfilled`,
+          `${authApi.reducerPath}/executeQuery/rejected`,
+          `${apiSlice.reducerPath}/executeMutation/pending`,
+          `${apiSlice.reducerPath}/executeMutation/fulfilled`,
+          `${apiSlice.reducerPath}/executeMutation/rejected`,
+          `${apiSlice.reducerPath}/executeQuery/pending`,
+          `${apiSlice.reducerPath}/executeQuery/fulfilled`,
+          `${apiSlice.reducerPath}/executeQuery/rejected`,
           "persist/PERSIST",
           "persist/REHYDRATE",
-          // Ignora le azioni RTK Query se necessario
-          "authApi/executeMutation/pending",
-          "authApi/executeMutation/fulfilled",
-          "authApi/executeMutation/rejected",
-          "authApi/executeQuery/pending",
-          "authApi/executeQuery/fulfilled",
-          "authApi/executeQuery/rejected",
-          "usersApi/executeMutation/pending",
-          "usersApi/executeMutation/fulfilled",
-          "usersApi/executeMutation/rejected",
-          "usersApi/executeQuery/pending",
-          "usersApi/executeQuery/fulfilled",
-          "usersApi/executeQuery/rejected",
         ],
       },
     })
-      // concateniamo entrambe le middleware RTK Query
-      .concat(authApi.middleware, usersApi.middleware),
+      .prepend(scopeListener.middleware)
+      .concat(authApi.middleware, apiSlice.middleware),
   devTools: process.env.NODE_ENV !== "production",
 });
 
-// Abilitiamo listener (per re-fetch on focus, retry ecc.) sia per authApi che usersApi
 setupListeners(store.dispatch);
 
 export type RootState = ReturnType<typeof store.getState>;

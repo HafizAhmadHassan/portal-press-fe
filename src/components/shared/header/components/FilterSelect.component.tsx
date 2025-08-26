@@ -1,10 +1,12 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
-import styles from '../styles/Pill.module.scss';
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import styles from "../styles/Pill.module.scss";
+
+type Option = { value: string; label: string };
 
 type Props = {
-  selected: string;
-  options: string[];
+  selected: string; // <-- value selezionato
+  options: Option[];
   onChange: (value: string) => void;
   ChevronIcon: React.ReactNode;
   /** ref del contenitore .pill (o .searchGroup) per calcolare left/top/width */
@@ -19,15 +21,25 @@ export default function FilterSelect({
   anchorRef,
 }: Props) {
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
-  const [rect, setRect] = useState<{ left: number; top: number; width: number; height: number }>({
+  const [rect, setRect] = useState<{
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+  }>({
     left: 0,
     top: 0,
     width: 0,
     height: 0,
   });
 
-  // aggiorna posizione/width dalla pill
+  const selectedLabel = useMemo(
+    () => options.find((o) => o.value === selected)?.label ?? selected,
+    [options, selected]
+  );
+
   const updatePosition = () => {
     const anchor = anchorRef?.current;
     if (!anchor) return;
@@ -40,26 +52,28 @@ export default function FilterSelect({
     updatePosition();
     const onScroll = () => updatePosition();
     const onResize = () => updatePosition();
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false); };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
 
-    window.addEventListener('scroll', onScroll, true);
-    window.addEventListener('resize', onResize);
-    window.addEventListener('keydown', onKey);
+    window.addEventListener("scroll", onScroll, true);
+    window.addEventListener("resize", onResize);
+    window.addEventListener("keydown", onKey);
 
-    // chiudi click esterno
+    // chiudi click esterno (ma non se clicco trigger o dropdown)
     const onDoc = (e: MouseEvent) => {
       const t = e.target as Node;
-      if (!triggerRef.current?.contains(t)) {
-        setOpen(false);
-      }
+      const inTrigger = !!triggerRef.current?.contains(t);
+      const inDropdown = !!dropdownRef.current?.contains(t);
+      if (!inTrigger && !inDropdown) setOpen(false);
     };
-    document.addEventListener('mousedown', onDoc);
+    document.addEventListener("mousedown", onDoc);
 
     return () => {
-      window.removeEventListener('scroll', onScroll, true);
-      window.removeEventListener('resize', onResize);
-      window.removeEventListener('keydown', onKey);
-      document.removeEventListener('mousedown', onDoc);
+      window.removeEventListener("scroll", onScroll, true);
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("keydown", onKey);
+      document.removeEventListener("mousedown", onDoc);
     };
   }, [open]);
 
@@ -69,10 +83,12 @@ export default function FilterSelect({
   };
 
   const portalEl = useMemo(() => {
-    let el = document.getElementById('kgn-portal-root') as HTMLDivElement | null;
+    let el = document.getElementById(
+      "kgn-portal-root"
+    ) as HTMLDivElement | null;
     if (!el) {
-      el = document.createElement('div');
-      el.id = 'kgn-portal-root';
+      el = document.createElement("div");
+      el.id = "kgn-portal-root";
       document.body.appendChild(el);
     }
     return el;
@@ -90,7 +106,7 @@ export default function FilterSelect({
         aria-expanded={open}
         title="Filtro di ricerca"
       >
-        <span className={styles.pillSelectValue}>{selected}</span>
+        <span className={styles.pillSelectValue}>{selectedLabel}</span>
         {ChevronIcon}
       </button>
 
@@ -98,9 +114,10 @@ export default function FilterSelect({
       {open &&
         createPortal(
           <div
+            ref={dropdownRef}
             className={styles.dropdownPortal}
             style={{
-              position: 'fixed',
+              position: "fixed",
               left: rect.left,
               top: rect.top + 4, // piccolo gap
               width: rect.width,
@@ -111,15 +128,15 @@ export default function FilterSelect({
             <ul className={styles.dropdownList}>
               {options.map((opt) => (
                 <li
-                  key={opt}
+                  key={opt.value}
                   className={`${styles.dropdownItem} ${
-                    opt === selected ? styles.dropdownItemActive : ''
+                    opt.value === selected ? styles.dropdownItemActive : ""
                   }`}
-                  onClick={() => handleSelect(opt)}
+                  onClick={() => handleSelect(opt.value)}
                   role="option"
-                  aria-selected={opt === selected}
+                  aria-selected={opt.value === selected}
                 >
-                  {opt}
+                  {opt.label}
                 </li>
               ))}
             </ul>

@@ -1,5 +1,5 @@
 // File: admin/sections_admin/devicesList/DevicesList.sections.tsx
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { useListQueryParams } from "@hooks/useListQueryParams";
 import { createDevicesTableConfig } from "@sections_admin/devicesList/_config/devicesTableConfig";
 import { useInfiniteDevices } from "@hooks/useInfiniteScroll.ts";
@@ -22,12 +22,19 @@ import { useDevicesListView } from "./_hooks/useDevicesListView";
 import { createHeaderBtnConfig } from "@sections_admin/devicesList/_config/deviceHeaderBtnsConfig";
 import { DevicesMapStats } from "@sections_admin/devicesList/_components/DevicesMapStats";
 import { Divider } from "@shared/divider/Divider.component.tsx";
-import { useCustomers } from "@root/pages/admin/core/store/customers/hooks/useCustomers";
+
+// 👇 NEW: customer globale scelto in header
+import { useAppSelector } from "@root/pages/admin/core/store/store.hooks";
+import { selectScopedCustomer } from "@store_admin/scope/scope.selectors";
 
 export const DevicesListSections: React.FC = () => {
   const { isCards, isTable, isMap, toggleCardsTable, toggleMap } =
     useDevicesListView("cards");
 
+  // 🔗 customer globale (selezionato nell'header)
+  const scopedCustomer = useAppSelector(selectScopedCustomer);
+
+  // ❌ RIMOSSO il filtro "customer" locale: vive nello scope globale
   const {
     filters,
     sortBy,
@@ -46,7 +53,7 @@ export const DevicesListSections: React.FC = () => {
       [DeviceFields.STATUS]: "",
       [DeviceFields.CITY]: "",
       [DeviceFields.PROVINCE]: "",
-      [DeviceFields.CUSTOMER]: "",
+      // [DeviceFields.CUSTOMER]: "",  // <— rimosso
       [DeviceFields.STATUS_MACHINE_BLOCKED]: "",
     },
   });
@@ -72,7 +79,7 @@ export const DevicesListSections: React.FC = () => {
     page,
     pageSize,
     setPage,
-    key: JSON.stringify(filters),
+    key: JSON.stringify(filters), // il customer è globale, ricarichiamo via effect sotto
   });
 
   const {
@@ -85,14 +92,7 @@ export const DevicesListSections: React.FC = () => {
     refetch,
   } = useDevices(queryParamsTable);
 
-  // Customers (string[]) — già puliti e deduplicati in transformResponse
-  const { customers: customerNames, isLoading: isLoadingCustomers } =
-    useCustomers();
-  const customerOptions = useMemo(
-    () => customerNames.map((name) => ({ value: name, label: name })),
-    [customerNames]
-  );
-
+  // 🌍 Filtri per la mappa — usa il customer globale (se serve per filtraggio client-side)
   const mapFilters = useMemo(
     () => ({
       wasteType: filters[DeviceFields.WASTE] || undefined,
@@ -102,9 +102,9 @@ export const DevicesListSections: React.FC = () => {
       isBlocked:
         filters[DeviceFields.STATUS_MACHINE_BLOCKED] === "true" || undefined,
       city: filters[DeviceFields.CITY] || undefined,
-      customer: filters[DeviceFields.CUSTOMER] || undefined,
+      customer: scopedCustomer || undefined, // <— da scope globale
     }),
-    [filters]
+    [filters, scopedCustomer]
   );
 
   const {
@@ -251,7 +251,7 @@ export const DevicesListSections: React.FC = () => {
         setFilter("status", "");
         setFilter("city", "");
         setFilter("province", "");
-        setFilter("customer", "");
+        // setFilter("customer", ""); // <— rimosso
         setFilter("statusMachineBlocked", "");
         setPage(1);
         setPageSize(10);
@@ -308,22 +308,21 @@ export const DevicesListSections: React.FC = () => {
     createNewDevice,
   ]);
 
+  // 🔁 Quando cambia il customer scelto in header:
+  // - resetto paginazione
+  // - ricarico tabella, mappa e griglia
+  useEffect(() => {
+    setPage(1);
+    refetchAll();
+  }, [scopedCustomer]); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <div className={styles["devices-list-page"]}>
       <SectionHeaderComponent
         title="Dispositivi"
         subTitle={`Gestisci i dispositivi`}
         buttons={sectionHeaderButtons}
-        customerSelect={{
-          value: (filters as any)[DeviceFields.CUSTOMER] || "",
-          options: customerOptions,
-          loading: isLoadingCustomers,
-          placeholder: "Seleziona cliente",
-          onChange: (val: string) => {
-            setFilter(DeviceFields.CUSTOMER, val);
-            setPage(1);
-          },
-        }}
+        // ❌ NIENTE customerSelect qui: sta nell'header globale
       />
 
       <div className={styles["devices-list-page__filters"]}>

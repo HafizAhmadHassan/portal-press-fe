@@ -1,22 +1,27 @@
 // @sections_admin/gpsList/Gps-list.sections.tsx
-import React, { useCallback, useMemo } from 'react';
-import { useGps } from '@store_admin/gps/hooks/useGps';
-import { useListQueryParams } from '@hooks/useListQueryParams';
-import { createGpsTableConfig } from './config/gpsTableConfig';
-import { createGpsFilterConfig, GpsFields } from './config/gpsFilterConfig';
-import type { GpsDevice } from '@store_admin/gps/gps.types';
-import styles from './styles/Gps-list.sections.module.scss';
+import React, { useCallback, useEffect, useMemo } from "react";
+import { useGps } from "@store_admin/gps/hooks/useGps";
+import { useListQueryParams } from "@hooks/useListQueryParams";
+import { createGpsTableConfig } from "./config/gpsTableConfig";
+import { createGpsFilterConfig, GpsFields } from "./config/gpsFilterConfig";
+import type { GpsDevice } from "@store_admin/gps/gps.types";
+import styles from "./styles/Gps-list.sections.module.scss";
 
-import { SectionHeaderComponent } from '@sections_admin/_commons/components/SectionHeader/Section-header.component';
-import { SectionFilterComponent } from '@sections_admin/_commons/components/SectionFilters/Section-filters.component';
-import { Download, Plus, RefreshCw } from 'lucide-react';
-import { GenericTableWithLogic } from '@shared/table/components/GenericTableWhitLogic.component';
-import { usePagination } from '@hooks/usePagination';
-import { SimpleButton } from '@shared/simple-btn/SimpleButton.component';
-import { Divider } from '@shared/divider/Divider.component';
-import { ModalCreateGps } from './_modals/ModalCreateGps.component';
+import { SectionHeaderComponent } from "@sections_admin/_commons/components/SectionHeader/Section-header.component";
+import { SectionFilterComponent } from "@sections_admin/_commons/components/SectionFilters/Section-filters.component";
+import { Download, Plus, RefreshCw } from "lucide-react";
+import { GenericTableWithLogic } from "@shared/table/components/GenericTableWhitLogic.component";
+import { usePagination } from "@hooks/usePagination";
+import { SimpleButton } from "@shared/simple-btn/SimpleButton.component";
+import { Divider } from "@shared/divider/Divider.component";
+import { ModalCreateGps } from "./_modals/ModalCreateGps.component";
+import { useAppSelector } from "../../core/store/store.hooks";
+import { selectScopedCustomer } from "../../core/store/scope/scope.selectors";
 
 export const GpsListSections: React.FC = () => {
+  // 🔗 customer globale (selezionato nell'header)
+  const scopedCustomer = useAppSelector(selectScopedCustomer);
+
   const {
     filters,
     sortBy,
@@ -30,10 +35,10 @@ export const GpsListSections: React.FC = () => {
     resetAll,
   } = useListQueryParams({
     initialFilters: {
-      [GpsFields.CODICE]: '',
-      [GpsFields.MUNICIPILITY]: '',
-      [GpsFields.CUSTOMER]: '',
-      [GpsFields.WASTE]: '',
+      [GpsFields.CODICE]: "",
+      [GpsFields.MUNICIPILITY]: "",
+      [GpsFields.CUSTOMER]: "",
+      [GpsFields.WASTE]: "",
     },
   });
 
@@ -45,7 +50,8 @@ export const GpsListSections: React.FC = () => {
     page_size: pageSize,
   };
 
-  const { gps, isLoading, meta, deleteGps, refetch, createGps, updateGps } = useGps(queryParams);
+  const { gps, isLoading, meta, deleteGps, refetch, createGps, updateGps } =
+    useGps(queryParams);
 
   const pagination = usePagination({
     initialPage: page,
@@ -89,7 +95,7 @@ export const GpsListSections: React.FC = () => {
     [createGps, refetch]
   );
 
-  const onExportClick = () => console.log('Esporta GPS');
+  const onExportClick = () => console.log("Esporta GPS");
   const onRefreshClick = () => refetch();
 
   const baseConfig = createGpsTableConfig({
@@ -99,6 +105,14 @@ export const GpsListSections: React.FC = () => {
     onDelete: handleDelete,
     isLoading,
   });
+
+  // 🔁 Quando cambia il cliente scelto in header:
+  // - resetta paginazione
+  // - rifai la fetch degli utenti
+  useEffect(() => {
+    setPage(1);
+    refetch();
+  }, [scopedCustomer]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const tableConfig = {
     ...baseConfig,
@@ -129,18 +143,18 @@ export const GpsListSections: React.FC = () => {
   );
 
   return (
-    <div className={styles['gps-list-page']}>
+    <div className={styles["gps-list-page"]}>
       <SectionHeaderComponent
         title="GPS"
         subTitle={`Gestisci i dispositivi (${meta?.total ?? 0} totali)`}
         buttons={[
           {
             onClick: onRefreshClick,
-            variant: 'outline',
-            color: 'secondary',
-            size: 'sm',
+            variant: "outline",
+            color: "secondary",
+            size: "sm",
             icon: RefreshCw,
-            label: 'Aggiorna',
+            label: "Aggiorna",
             disabled: isLoading,
           },
           {
@@ -148,7 +162,12 @@ export const GpsListSections: React.FC = () => {
               <ModalCreateGps
                 onSave={handleCreate}
                 triggerButton={
-                  <SimpleButton variant="outline" color="primary" size="sm" icon={Plus}>
+                  <SimpleButton
+                    variant="outline"
+                    color="primary"
+                    size="sm"
+                    icon={Plus}
+                  >
                     Nuovo
                   </SimpleButton>
                 }
@@ -157,16 +176,16 @@ export const GpsListSections: React.FC = () => {
           },
           {
             onClick: onExportClick,
-            variant: 'outline',
-            color: 'success',
-            size: 'sm',
+            variant: "outline",
+            color: "success",
+            size: "sm",
             icon: Download,
-            label: 'Esporta',
+            label: "Esporta",
           },
         ]}
       />
 
-      <div className={styles['gps-list-page__filters']}>
+      <div className={styles["gps-list-page__filters"]}>
         <SectionFilterComponent
           filters={filtersConfig}
           onResetFilters={handleResetAll}
@@ -175,7 +194,7 @@ export const GpsListSections: React.FC = () => {
       </div>
       <Divider />
 
-      <div className={styles['gps-list-page__table-wrapper']}>
+      <div className={styles["gps-list-page__table-wrapper"]}>
         <GenericTableWithLogic config={tableConfig} loading={isLoading} />
       </div>
     </div>

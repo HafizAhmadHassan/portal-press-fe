@@ -1,20 +1,30 @@
-import React, { useCallback, useMemo } from 'react';
-import { useUsers } from '@store_admin/users/hooks/useUsers';
-import { useListQueryParams } from '@hooks/useListQueryParams';
-import { createUsersTableConfig } from './config/usersTableConfig';
-import { createUsersFilterConfig, UserFields } from '@sections_admin/usersList/config/userFilterConfig';
-import { ModalCreateUser } from '@sections_admin/usersList/_modals/ModalCreateUser.component';
-import type { User } from '@store_admin/users/user.types';
-import styles from './styles/User-list.sections.module.scss';
-import { SectionHeaderComponent } from '@sections_admin/_commons/components/SectionHeader/Section-header.component';
-import { SectionFilterComponent } from '@sections_admin/_commons/components/SectionFilters/Section-filters.component';
-import { Download, Plus, RefreshCw } from 'lucide-react';
-import { GenericTableWithLogic } from '@shared/table/components/GenericTableWhitLogic.component';
-import { usePagination } from '@hooks/usePagination.ts';
-import { SimpleButton } from '@shared/simple-btn/SimpleButton.component.tsx';
-import { Divider } from '@shared/divider/Divider.component.tsx';
+import React, { useCallback, useMemo, useEffect } from "react";
+import { useUsers } from "@store_admin/users/hooks/useUsers";
+import { useListQueryParams } from "@hooks/useListQueryParams";
+import { createUsersTableConfig } from "./config/usersTableConfig";
+import {
+  createUsersFilterConfig,
+  UserFields,
+} from "@sections_admin/usersList/config/userFilterConfig";
+import { ModalCreateUser } from "@sections_admin/usersList/_modals/ModalCreateUser.component";
+import type { User } from "@store_admin/users/user.types";
+import styles from "./styles/User-list.sections.module.scss";
+import { SectionHeaderComponent } from "@sections_admin/_commons/components/SectionHeader/Section-header.component";
+import { SectionFilterComponent } from "@sections_admin/_commons/components/SectionFilters/Section-filters.component";
+import { Download, Plus, RefreshCw } from "lucide-react";
+import { GenericTableWithLogic } from "@shared/table/components/GenericTableWhitLogic.component";
+import { usePagination } from "@hooks/usePagination.ts";
+import { SimpleButton } from "@shared/simple-btn/SimpleButton.component.tsx";
+import { Divider } from "@shared/divider/Divider.component.tsx";
+
+// 👇 NEW: ascolta il cliente globale scelto nell'header
+import { useAppSelector } from "@root/pages/admin/core/store/store.hooks";
+import { selectScopedCustomer } from "@store_admin/scope/scope.selectors";
 
 export const UsersListSections: React.FC = () => {
+  // 🔗 customer globale (selezionato nell'header)
+  const scopedCustomer = useAppSelector(selectScopedCustomer);
+
   const {
     filters,
     sortBy,
@@ -28,10 +38,11 @@ export const UsersListSections: React.FC = () => {
     resetAll,
   } = useListQueryParams({
     initialFilters: {
-      [UserFields.EMAIL]: '',
-      [UserFields.USERNAME]: '',
-      [UserFields.USER_PERMISSIONS]: '',
-      [UserFields.IS_ACTIVE]: '',
+      [UserFields.EMAIL]: "",
+      [UserFields.USERNAME]: "",
+      [UserFields.USER_PERMISSIONS]: "",
+      [UserFields.IS_ACTIVE]: "",
+      // ❌ nessun filtro customer qui: è globale
     },
   });
 
@@ -43,8 +54,15 @@ export const UsersListSections: React.FC = () => {
     page_size: pageSize,
   };
 
-  const { users, isLoading, meta, deleteUser, refetch, createUser, updateUser } =
-    useUsers(queryParams);
+  const {
+    users,
+    isLoading,
+    meta,
+    deleteUser,
+    refetch,
+    createUser,
+    updateUser,
+  } = useUsers(queryParams);
 
   const pagination = usePagination({
     initialPage: page,
@@ -68,13 +86,13 @@ export const UsersListSections: React.FC = () => {
     async (userData: Partial<User> & { id: number | string }) => {
       try {
         const { id, ...data } = userData;
-
         await updateUser({ id, data }).unwrap();
-
         refetch();
       } catch (error: any) {
-        console.error('Errore nella modifica utente:', error);
-        throw new Error(error?.data?.detail || "Errore durante la modifica dell'utente");
+        console.error("Errore nella modifica utente:", error);
+        throw new Error(
+          error?.data?.detail || "Errore durante la modifica dell'utente"
+        );
       }
     },
     [updateUser, refetch]
@@ -87,7 +105,7 @@ export const UsersListSections: React.FC = () => {
         try {
           await deleteUser(u.id).unwrap();
         } catch (e: any) {
-          alert(`Errore: ${e.message || 'sconosciuto'}`);
+          alert(`Errore: ${e.message || "sconosciuto"}`);
         }
       }
     },
@@ -100,14 +118,16 @@ export const UsersListSections: React.FC = () => {
         await createUser(userData).unwrap();
         refetch();
       } catch (error: any) {
-        console.error('Errore nella creazione utente:', error);
-        throw new Error(error?.data?.detail || "Errore durante la creazione dell'utente");
+        console.error("Errore nella creazione utente:", error);
+        throw new Error(
+          error?.data?.detail || "Errore durante la creazione dell'utente"
+        );
       }
     },
     [createUser, refetch]
   );
 
-  const onExportClick = () => console.log('Esporta utenti');
+  const onExportClick = () => console.log("Esporta utenti");
   const onRefreshClick = () => refetch();
 
   const baseConfig = createUsersTableConfig({
@@ -147,19 +167,27 @@ export const UsersListSections: React.FC = () => {
     [filters, setFilter]
   );
 
+  // 🔁 Quando cambia il cliente scelto in header:
+  // - resetta paginazione
+  // - rifai la fetch degli utenti
+  useEffect(() => {
+    setPage(1);
+    refetch();
+  }, [scopedCustomer]); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
-    <div className={styles['users-list-page']}>
+    <div className={styles["users-list-page"]}>
       <SectionHeaderComponent
         title="Utenti"
         subTitle={`Gestisci gli utenti (${meta?.total ?? 0} totali)`}
         buttons={[
           {
             onClick: onRefreshClick,
-            variant: 'outline',
-            color: 'secondary',
-            size: 'sm',
+            variant: "outline",
+            color: "secondary",
+            size: "sm",
             icon: RefreshCw,
-            label: 'Aggiorna',
+            label: "Aggiorna",
             disabled: isLoading,
           },
           {
@@ -167,7 +195,12 @@ export const UsersListSections: React.FC = () => {
               <ModalCreateUser
                 onSave={handleCreateUser}
                 triggerButton={
-                  <SimpleButton variant="outline" color="primary" size="sm" icon={Plus}>
+                  <SimpleButton
+                    variant="outline"
+                    color="primary"
+                    size="sm"
+                    icon={Plus}
+                  >
                     Nuovo
                   </SimpleButton>
                 }
@@ -176,16 +209,16 @@ export const UsersListSections: React.FC = () => {
           },
           {
             onClick: onExportClick,
-            variant: 'outline',
-            color: 'success',
-            size: 'sm',
+            variant: "outline",
+            color: "success",
+            size: "sm",
             icon: Download,
-            label: 'Esporta',
+            label: "Esporta",
           },
         ]}
       />
 
-      <div className={styles['users-list-page__filters']}>
+      <div className={styles["users-list-page__filters"]}>
         <SectionFilterComponent
           filters={filtersConfig}
           onResetFilters={handleResetAll}
@@ -194,7 +227,7 @@ export const UsersListSections: React.FC = () => {
       </div>
       <Divider />
 
-      <div className={styles['users-list-page__table-wrapper']}>
+      <div className={styles["users-list-page__table-wrapper"]}>
         <GenericTableWithLogic config={tableConfig} loading={isLoading} />
       </div>
     </div>

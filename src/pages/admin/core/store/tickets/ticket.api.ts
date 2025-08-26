@@ -1,14 +1,15 @@
+// @store_admin/tickets/ticket.api.ts
 import { apiSlice } from "@store_admin/apiSlice";
 import type {
   TicketRead,
   TicketUpdate,
   BulkActionRequest,
   TicketsQueryParams,
-  MessageCreate, // 👈 nuovo payload per creazione
+  MessageCreate,
 } from "./ticket.types";
 import type { Device } from "@store_admin/devices/devices.types";
+import { devicesApi } from "@store_admin/devices/devices.api";
 
-// Tipo esteso per ticket con device incluso
 export interface TicketWithDevice extends TicketRead {
   device?: Device;
 }
@@ -26,36 +27,32 @@ export const ticketsApi = apiSlice.injectEndpoints({
       ],
       async onQueryStarted(args, { queryFulfilled, dispatch }) {
         try {
-          // Prima ottieni i ticket
           const { data: ticketsResponse } = await queryFulfilled;
 
-          // Poi ottieni tutti i device
-          const devicesPromise = dispatch(
-            apiSlice.endpoints.getAllDevices.initiate()
-          );
-          const devicesResult = await devicesPromise;
+          // usa devicesApi per garantire che l’endpoint esista
+          const devicesResult = await dispatch(
+            devicesApi.endpoints.getAllDevices.initiate()
+          ).unwrap();
 
-          if (devicesResult.data) {
-            // Crea una mappa device_id -> device per lookup veloce
+          if (devicesResult) {
             const deviceMap = new Map<number, Device>();
-            devicesResult.data.forEach((device) => {
-              deviceMap.set(device.id, device);
-            });
+            devicesResult.forEach((d) => deviceMap.set(d.id, d));
 
-            // Arricchisci ogni ticket con i dati del device
-            const ticketsWithDevices: TicketWithDevice[] =
-              ticketsResponse.data.map((ticket) => ({
-                ...ticket,
-                device: ticket.machine
-                  ? deviceMap.get(ticket.machine)
-                  : undefined,
-              }));
-
-            // Aggiorna la cache con i dati enriched
-            dispatch(
-              apiSlice.util.updateQueryData("getTickets", args, (draft) => {
-                draft.data = ticketsWithDevices;
+            const enriched: TicketWithDevice[] = ticketsResponse.data.map(
+              (t) => ({
+                ...t,
+                device: t.machine ? deviceMap.get(t.machine) : undefined,
               })
+            );
+
+            dispatch(
+              apiSlice.util.updateQueryData(
+                "getTickets",
+                args,
+                (draft: any) => {
+                  draft.data = enriched;
+                }
+              )
             );
           }
         } catch (error) {
@@ -69,37 +66,28 @@ export const ticketsApi = apiSlice.injectEndpoints({
       providesTags: [{ type: "LIST" as const, id: "AllTickets" }],
       async onQueryStarted(args, { queryFulfilled, dispatch }) {
         try {
-          // Prima ottieni i ticket
-          const { data: ticketsResponse } = await queryFulfilled;
+          const ticketsResponse = await queryFulfilled;
+          const devices = await dispatch(
+            devicesApi.endpoints.getAllDevices.initiate()
+          ).unwrap();
 
-          // Poi ottieni tutti i device
-          const devicesPromise = dispatch(
-            apiSlice.endpoints.getAllDevices.initiate()
-          );
-          const devicesResult = await devicesPromise;
-
-          if (devicesResult.data) {
-            // Crea una mappa device_id -> device per lookup veloce
+          if (devices) {
             const deviceMap = new Map<number, Device>();
-            devicesResult.data.forEach((device) => {
-              deviceMap.set(device.id, device);
-            });
+            devices.forEach((d) => deviceMap.set(d.id, d));
 
-            // Arricchisci ogni ticket con i dati del device
-            const ticketsWithDevices: TicketWithDevice[] = ticketsResponse.map(
-              (ticket) => ({
-                ...ticket,
-                device: ticket.machine
-                  ? deviceMap.get(ticket.machine)
-                  : undefined,
+            const enriched: TicketWithDevice[] = ticketsResponse.data.map(
+              (t) => ({
+                ...t,
+                device: t.machine ? deviceMap.get(t.machine) : undefined,
               })
             );
 
-            // Aggiorna la cache con i dati enriched
             dispatch(
-              apiSlice.util.updateQueryData("getAllTickets", args, () => {
-                return ticketsWithDevices;
-              })
+              apiSlice.util.updateQueryData(
+                "getAllTickets",
+                args,
+                () => enriched
+              )
             );
           }
         } catch (error) {
@@ -110,27 +98,27 @@ export const ticketsApi = apiSlice.injectEndpoints({
 
     getTicketById: builder.query<TicketWithDevice, string>({
       query: (id) => `message/`,
-      providesTags: (_result, _error, id) => [{ type: "ENTITY" as const, id }],
+      providesTags: (_r, _e, id) => [{ type: "ENTITY" as const, id }],
       async onQueryStarted(id, { queryFulfilled, dispatch }) {
         try {
-          // Prima ottieni il ticket
           const { data: ticket } = await queryFulfilled;
 
-          if (ticket.machine) {
-            // Ottieni il device specifico
-            const devicePromise = dispatch(
-              apiSlice.endpoints.getDeviceById.initiate(
+          if (ticket?.machine) {
+            const device = await dispatch(
+              devicesApi.endpoints.getDeviceById.initiate(
                 ticket.machine.toString()
               )
-            );
-            const deviceResult = await devicePromise;
+            ).unwrap();
 
-            if (deviceResult.data) {
-              // Aggiorna la cache con i dati del device
+            if (device) {
               dispatch(
-                apiSlice.util.updateQueryData("getTicketById", id, (draft) => {
-                  draft.device = deviceResult.data;
-                })
+                apiSlice.util.updateQueryData(
+                  "getTicketById",
+                  id,
+                  (draft: any) => {
+                    draft.device = device;
+                  }
+                )
               );
             }
           }
@@ -140,7 +128,6 @@ export const ticketsApi = apiSlice.injectEndpoints({
       },
     }),
 
-    // 👇 POST /message/ con il body richiesto
     createTicket: builder.mutation<TicketRead, MessageCreate>({
       query: (body) => ({ url: "message/", method: "POST", body }),
       invalidatesTags: [
@@ -159,7 +146,7 @@ export const ticketsApi = apiSlice.injectEndpoints({
         method: "PUT",
         body: data,
       }),
-      invalidatesTags: (_result, _error, { id }) => [
+      invalidatesTags: (_r, _e, { id }) => [
         { type: "ENTITY" as const, id },
         { type: "LIST" as const, id: "Tickets" },
         { type: "LIST" as const, id: "AllTickets" },

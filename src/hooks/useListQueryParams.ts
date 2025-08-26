@@ -1,16 +1,11 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState } from "react";
 
-export const useListQueryParams = ({
-                                     initialFilters = {},
-                                   } = {}) => {
+export const useListQueryParams = ({ initialFilters = {} } = {}) => {
   const [filters, setFilters] = useState({ ...initialFilters });
-  const [sortBy, setSortBy] = useState('');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [sortBy, setSortBy] = useState("");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-
-  // 🔹 Trigger manuale per forzare ricarico query
-
 
   const setFilter = useCallback((key: string, valueOrEvent: any) => {
     let value;
@@ -22,7 +17,7 @@ export const useListQueryParams = ({
     }
 
     if (value === undefined || value === null) {
-      value = '';
+      value = "";
     }
 
     setFilters((prev) => ({
@@ -32,9 +27,9 @@ export const useListQueryParams = ({
   }, []);
 
   const resetAll = useCallback(() => {
-    setFilters({ ...initialFilters }); // ✅ nuovo oggetto
-    setSortBy('');
-    setSortOrder('asc');
+    setFilters({ ...initialFilters });
+    setSortBy("");
+    setSortOrder("asc");
     setPage(1);
     setPageSize(10);
   }, [initialFilters]);
@@ -42,10 +37,10 @@ export const useListQueryParams = ({
   const setSort = useCallback((key: string) => {
     setSortBy((prev) => {
       if (prev === key) {
-        setSortOrder((o) => (o === 'asc' ? 'desc' : 'asc'));
+        setSortOrder((o) => (o === "asc" ? "desc" : "asc"));
         return prev;
       } else {
-        setSortOrder('asc');
+        setSortOrder("asc");
         return key;
       }
     });
