@@ -1,5 +1,11 @@
 // DeviceLayout.tsx (estratto)
-import { Outlet, useParams, useLocation, useNavigate } from "react-router-dom";
+import {
+  Outlet,
+  useParams,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { useMemo, useState, useEffect } from "react";
 import { ArrowLeft, RotateCw } from "lucide-react";
 import LogoKgn from "@assets/images/kgn-logo.png";
@@ -45,10 +51,12 @@ export default function DeviceLayout() {
     setEditMode(isEditRoute);
   }, [isEditRoute]);
 
+  const [searchParams, setSearchParams] = useSearchParams();
   const handleToggleEdit = (on: boolean) => {
-    setEditMode(on);
-    if (!device?.id) return;
-    navigate(on ? `/device/${device.id}/edit` : `/device/${device.id}`);
+    const next = new URLSearchParams(searchParams);
+    if (on) next.set("edit", "1");
+    else next.delete("edit");
+    setSearchParams(next, { replace: true });
   };
 
   return (

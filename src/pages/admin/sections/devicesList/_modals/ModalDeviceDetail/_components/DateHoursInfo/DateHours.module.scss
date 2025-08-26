@@ -1,27 +1,33 @@
-@use "@root/pages/admin/styles/globals.scss";
+@use "@root/pages/admin/styles/sections.scss" as s;
 
+.section {
+  @include s.section-card;
+  --section-accent: var(--warning-color);
+}
+.sectionHeader {
+  @include s.section-header;
+}
+
+/* cards come prima */
 .dateGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
   padding: 20px;
 }
-
 .dateCard {
   background: var(--bg-primary);
   border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 16px;
   text-align: center;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
   &:hover {
-    border-color: var(--warning-color);
+    border-color: var(--section-accent);
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
   }
 }
-
 .dateCardHeader {
   display: flex;
   align-items: center;
@@ -29,13 +35,11 @@
   gap: 6px;
   margin-bottom: 8px;
 }
-
 .dateIcon {
   width: 16px;
   height: 16px;
-  color: var(--warning-color);
+  color: var(--section-accent);
 }
-
 .dateCardTitle {
   font-size: 12px;
   font-weight: 600;
@@ -43,13 +47,11 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
-
 .dateCardContent {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
-
 .dateValue {
   font-size: 14px;
   font-weight: 600;
@@ -61,31 +63,18 @@
   font-style: italic;
 }
 
+/* availability -> kv rows coerenti */
 .availabilityGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+  @include s.kv-list;
   padding: 0 20px 20px;
 }
-
 .infoItem {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
-  background-color: var(--bg-primary);
-  border: 1px solid var(--border-color);
-  border-left: 3px solid var(--warning-color);
-  border-radius: 6px;
+  @include s.kv-row;
+  border-left: 3px solid var(--section-accent);
 }
-
 .infoLabel {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text-secondary);
+  @include s.kv-label;
 }
 .infoValue {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-primary);
+  @include s.kv-value;
 }

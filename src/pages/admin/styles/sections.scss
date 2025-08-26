@@ -1,0 +1,120 @@
+@use "@root/pages/admin/styles/globals.scss";
+
+/* ====== SECTION CARD ====== */
+@mixin section-card {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md, 12px);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+/* Header della sezione */
+@mixin section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+/* ====== LISTA KEY/VALUE (sia read-only che editable) ====== */
+@mixin kv-list {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+}
+
+@mixin kv-row {
+  display: grid;
+  grid-template-columns: 1fr auto; /* label | value */
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: color-mix(in srgb, var(--bg-primary) 92%, transparent);
+  border: 1px solid color-mix(in srgb, var(--border-color) 70%, transparent);
+  border-radius: 10px;
+}
+
+@mixin kv-label {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin kv-value {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+/* Quando a destra c’è un input/textarea che deve occupare tutta la colonna */
+@mixin kv-value-fluid {
+  width: min(760px, 100%);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* ====== HERO / MEDIA BLOCK (immagine o mappa + meta) ====== */
+@mixin hero {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--orange-color) 14%, var(--bg-primary)) 0%,
+    var(--bg-secondary) 100%
+  );
+  border: 1px solid
+    color-mix(in srgb, var(--orange-color) 24%, var(--border-color));
+  border-radius: var(--radius-md, 12px);
+  position: relative;
+  overflow: hidden;
+}
+
+@mixin hero-media {
+  width: 80px;
+  height: 80px;
+  display: grid;
+  place-items: center;
+  background: var(--bg-primary);
+  color: var(--orange-dark);
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+@mixin hero-main {
+  min-width: 0;
+}
+
+@mixin hero-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+@mixin hero-map {
+  height: 160px;
+  width: clamp(220px, 24vw, 320px);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  @mixin hero {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  @mixin hero-map {
+    width: 100%;
+  }
+}

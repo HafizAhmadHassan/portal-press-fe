@@ -1,34 +1,26 @@
-@use "@root/pages/admin/styles/globals.scss";
+@use "@root/pages/admin/styles/sections.scss" as s;
+
+.section {
+  @include s.section-card;
+  --section-accent: var(--primary-color);
+}
+.sectionHeader {
+  @include s.section-header;
+}
 
 .infoGrid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
-  padding: 20px;
+  @include s.kv-list;
 }
-
 .infoItem {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
-  background-color: var(--bg-primary);
-  border: 1px solid var(--border-color);
-  border-left: 3px solid var(--accent-color, var(--primary-color));
-  border-radius: 6px;
+  @include s.kv-row;
+  border-left: 3px solid var(--section-accent);
 }
-
 .infoLabel {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text-secondary);
+  @include s.kv-label;
 }
-
 .infoValue {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-primary);
+  @include s.kv-value;
   text-align: right;
+  /* max-width: 60%; */
   word-wrap: break-word;
-  max-width: 60%;
 }
