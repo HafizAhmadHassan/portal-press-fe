@@ -1,0 +1,324 @@
+/* usa i token dal tuo globals.scss */
+.tableWrap {
+  width: 100%;
+}
+
+.tableTitle {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  margin: 0 0 8px 2px;
+}
+
+.table {
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  background: var(--bg-primary);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+/* === LAYOUT GRIGLIA === */
+.row {
+  display: grid;
+  grid-template-columns: 180px 1fr minmax(320px, 520px);
+  align-items: center;
+  border-top: 1px solid var(--border-color);
+
+  &:first-child {
+    border-top: 0;
+  }
+}
+
+.withActions .row {
+  grid-template-columns: 180px 1fr minmax(320px, 520px) 120px;
+}
+
+.head {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+/* === COLONNE === */
+.colKey,
+.colParam,
+.colValue,
+.colActions {
+  padding: 12px 16px;
+}
+
+.colKey {
+  text-align: left;
+  display: flex;
+  align-items: center;
+}
+
+.keyBadge {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.paramMain {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.paramLabel {
+  color: var(--text-primary);
+  font-weight: 600;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* header toggle inside "Valori" */
+.headerToggle {
+  display: inline-flex;
+  margin-left: 12px;
+  vertical-align: middle;
+}
+.headerToggleLabel {
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-size: 0.85rem;
+}
+
+/* valori */
+.colValue {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.readonlyValue {
+  color: var(--text-primary);
+}
+.readonlyMulti {
+  width: 100%;
+  color: var(--text-primary);
+  white-space: pre-wrap;
+}
+
+.fieldInline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.inputContainer {
+  margin: 0;
+  width: 220px;
+}
+.inputField {
+  min-height: 36px;
+}
+
+.select {
+  width: 260px;
+  min-height: 36px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+.textarea {
+  width: 100%;
+  min-height: 80px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  padding: 8px 10px;
+  resize: vertical;
+}
+
+.unit {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 6px;
+  border-radius: 9999px;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  font-size: 12px;
+}
+
+/* boolean readonly chips */
+.readonlyChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  border: 1px solid var(--border-color);
+  font-size: 12px;
+  &.true {
+    background: var(--success-light);
+    color: var(--success-color);
+  }
+  &.false {
+    background: var(--error-light);
+    color: var(--error-color);
+  }
+}
+
+.errorMsg {
+  color: var(--error-color);
+  font-size: 12px;
+  margin-left: 8px;
+}
+
+/* === ACTIONS COLUMN === */
+.colActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+.rowActions {
+  display: inline-flex;
+  gap: 6px;
+}
+.iconBtn {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  &:hover {
+    color: var(--text-primary);
+    background: var(--bg-secondary);
+  }
+}
+.iconBtn.save {
+  color: var(--success-color);
+  border-color: color-mix(
+    in srgb,
+    var(--success-color) 40%,
+    var(--border-color)
+  );
+}
+.iconBtn.cancel {
+  color: var(--error-color);
+  border-color: color-mix(in srgb, var(--error-color) 40%, var(--border-color));
+}
+.actionHint {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+/* loading row */
+.loadingRow {
+  grid-template-columns: 1fr;
+  justify-content: center;
+  gap: 8px;
+  color: var(--text-secondary);
+  padding: 14px;
+}
+.loadingSpinner {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
+  border-top-color: var(--primary-color);
+  animation: spin 1s linear infinite;
+}
+
+/* footer */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  position: sticky;
+  bottom: 0;
+}
+.footerNote {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+.footerActions {
+  display: inline-flex;
+  gap: 8px;
+}
+.ftBtn {
+  all: unset;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+.ftBtn.primary {
+  border-color: var(--primary-color);
+  background: var(--primary-color);
+  color: var(--text-on-primary);
+}
+.ftBtn.ghost {
+  background: transparent;
+}
+
+/* compatto */
+.compact .row {
+  grid-template-columns: 160px 1fr minmax(260px, 420px);
+}
+.withActions.compact .row {
+  grid-template-columns: 160px 1fr minmax(260px, 420px) 110px;
+}
+.compact .colKey,
+.compact .colParam,
+.compact .colValue,
+.compact .colActions {
+  padding: 10px 12px;
+}
+
+/* responsive */
+@media (max-width: 900px) {
+  .row {
+    grid-template-columns: 150px 1fr;
+  }
+  .withActions .row {
+    grid-template-columns: 150px 1fr;
+  }
+  .colValue {
+    grid-column: 1 / -1;
+    padding-top: 8px;
+  }
+  .colActions {
+    display: none; /* su mobile le azioni per riga si possono omettere */
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

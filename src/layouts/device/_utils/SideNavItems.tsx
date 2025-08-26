@@ -33,7 +33,7 @@ export const deviceLayoutSideNavItems = (
       badge: "12",
       iconColor: "var(--purple-color)",
       iconActiveColor: "var(--purple-dark)",
-      allowedRoles: [UserRoles.ADMIN, UserRoles.SUPER_ADMIN],
+      allowedRoles: [UserRoles.ADMIN, UserRoles.SUPER_ADMIN, UserRoles.USER],
     },
     {
       label: "PLC Data",
@@ -51,15 +51,16 @@ export const deviceLayoutSideNavItems = (
       badge: "12",
       iconColor: "var(--info-color)",
       iconActiveColor: "var(--info-dark)",
-      allowedRoles: [UserRoles.ADMIN, UserRoles.SUPER_ADMIN, UserRoles.DRIVER],
+      allowedRoles: [UserRoles.ADMIN, UserRoles.SUPER_ADMIN, UserRoles.USER],
     },
     {
       label: "Stato Macchine",
       icon: BarChart3,
+      route: `${base}/machine-status`,
       badge: "3",
       iconColor: "var(--primary-color)",
       iconActiveColor: "var(--primary-dark)",
-      allowedRoles: [UserRoles.ADMIN, UserRoles.SUPER_ADMIN],
+      allowedRoles: [UserRoles.ADMIN, UserRoles.SUPER_ADMIN, UserRoles.USER],
       // Se/Quando servirà una route:
       // route: `${base}/analytics`
     },

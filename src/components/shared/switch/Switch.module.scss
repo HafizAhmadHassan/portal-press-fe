@@ -1,0 +1,176 @@
+/* =========================================
+   SimpleSwitch.module.scss
+   Usa SOLO var(--...) dai tuoi globals.scss
+   (supporto light/dark automatico)
+   ========================================= */
+
+.wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+}
+
+.label {
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  line-height: 1;
+}
+
+/* ================= Core switch ================= */
+
+.switch {
+  --sw-track-w: 44px;
+  --sw-track-h: 24px;
+  --sw-thumb: 18px;
+  --sw-pad: 3px;
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: var(--sw-track-w);
+  height: var(--sw-track-h);
+  padding: 0;
+  border: 0;
+  border-radius: 9999px;
+  background: transparent;
+  cursor: pointer;
+  outline: none;
+}
+
+.switch:focus-visible {
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--primary-color) 28%, transparent);
+  border-radius: 9999px;
+}
+
+.switch.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Track */
+.track {
+  position: absolute;
+  inset: 0;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 9999px;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Thumb */
+.thumb {
+  position: absolute;
+  top: 50%;
+  left: var(--sw-pad);
+  width: var(--sw-thumb);
+  height: var(--sw-thumb);
+  transform: translate(0, -50%);
+  border-radius: 9999px;
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  box-shadow: var(--shadow-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.loader {
+  animation: spin 0.9s linear infinite;
+}
+
+/* Checked state: sposta il thumb a destra */
+.checked .thumb {
+  transform: translate(
+    calc(var(--sw-track-w) - var(--sw-thumb) - var(--sw-pad) * 2),
+    -50%
+  );
+  color: var(--text-on-primary);
+}
+
+/* ========== COLORI ========== */
+.color-primary.checked .track {
+  background: color-mix(in srgb, var(--primary-color) 20%, var(--bg-secondary));
+  border-color: color-mix(
+    in srgb,
+    var(--primary-color) 50%,
+    var(--border-color)
+  );
+}
+.color-primary.checked .thumb {
+  background: var(--primary-color);
+}
+
+.color-secondary.checked .track {
+  background: color-mix(in srgb, var(--purple-color) 20%, var(--bg-secondary));
+  border-color: color-mix(
+    in srgb,
+    var(--purple-color) 50%,
+    var(--border-color)
+  );
+}
+.color-secondary.checked .thumb {
+  background: var(--purple-color);
+}
+
+.color-success.checked .track {
+  background: color-mix(in srgb, var(--success-color) 20%, var(--bg-secondary));
+  border-color: color-mix(
+    in srgb,
+    var(--success-color) 50%,
+    var(--border-color)
+  );
+}
+.color-success.checked .thumb {
+  background: var(--success-color);
+}
+
+.color-warning.checked .track {
+  background: color-mix(in srgb, var(--warning-color) 20%, var(--bg-secondary));
+  border-color: color-mix(
+    in srgb,
+    var(--warning-color) 50%,
+    var(--border-color)
+  );
+}
+.color-warning.checked .thumb {
+  background: var(--warning-color);
+}
+
+.color-danger.checked .track {
+  background: color-mix(in srgb, var(--error-color) 20%, var(--bg-secondary));
+  border-color: color-mix(in srgb, var(--error-color) 50%, var(--border-color));
+}
+.color-danger.checked .thumb {
+  background: var(--error-color);
+}
+
+/* ========== SIZE VARIANTS ========== */
+.size-sm {
+  --sw-track-w: 36px;
+  --sw-track-h: 20px;
+  --sw-thumb: 14px;
+  --sw-pad: 3px;
+}
+.size-md {
+  --sw-track-w: 44px;
+  --sw-track-h: 24px;
+  --sw-thumb: 18px;
+  --sw-pad: 3px;
+}
+.size-lg {
+  --sw-track-w: 56px;
+  --sw-track-h: 30px;
+  --sw-thumb: 24px;
+  --sw-pad: 3px;
+}
+
+/* Animazioni */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
