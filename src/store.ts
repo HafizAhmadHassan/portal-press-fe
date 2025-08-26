@@ -8,6 +8,7 @@ import userReducer from "@store_admin/users/user.slice";
 import devicesReducer from "@store_admin/devices/devices.slice";
 import ticketReducer from "@store_admin/tickets/ticket.slice";
 import gpsReducer from "@store_admin/gps/gps.slice";
+import logsReducer from "@store_admin/logs/logs.slice";
 import scopeReducer from "@store_admin/scope/scope.slice";
 
 import { authApi } from "@store_admin/auth/auth.api";
@@ -28,6 +29,7 @@ export const store = configureStore({
     tickets: ticketReducer,
     gps: gpsReducer,
     scope: scopeReducer,
+    logs: logsReducer,
 
     [authApi.reducerPath]: authApi.reducer,
     [apiSlice.reducerPath]: apiSlice.reducer,

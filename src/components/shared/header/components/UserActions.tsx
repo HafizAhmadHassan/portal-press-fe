@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import styles from "../styles/Actions.module.scss";
 import { Moon, Sun } from "lucide-react";
 import { useUi } from "@store_admin/ui/useUi";
@@ -7,11 +7,15 @@ import {
   type EmailLog,
 } from "@components/shared/dropdown-notification/DropDownNotification.component";
 
+import { useGetLogsQuery } from "@store_admin/logs/hooks/useLogsApi";
+
+// 👇 prendo il cliente scelto in header
+import { useAppSelector } from "@root/pages/admin/core/store/store.hooks";
+import { selectScopedCustomer } from "@store_admin/scope/scope.selectors";
+
 type Props = {
   MailIcon: React.ReactNode;
   GridIcon?: React.ReactNode;
-
-  /** Logs da mostrare nel dropdown */
   logs?: EmailLog[];
   loadingLogs?: boolean;
   onMarkAllRead?: () => void;
@@ -19,203 +23,126 @@ type Props = {
   onClickLog?: (log: EmailLog) => void;
 };
 
+const READ_IDS_KEY = "ui.readLogsIds";
+
+function loadReadIds(): Set<string> {
+  try {
+    const raw = localStorage.getItem(READ_IDS_KEY);
+    if (!raw) return new Set();
+    const arr = JSON.parse(raw) as Array<string | number>;
+    return new Set(arr.map(String));
+  } catch {
+    return new Set();
+  }
+}
+function saveReadIds(set: Set<string>) {
+  try {
+    localStorage.setItem(READ_IDS_KEY, JSON.stringify(Array.from(set)));
+  } catch {}
+}
+function computeSeverity(
+  name_alarm?: string,
+  code_alarm?: string
+): "info" | "warning" | "error" {
+  const name = (name_alarm || "").toLowerCase();
+  if (code_alarm?.startsWith("F")) return "error";
+  if (
+    name.includes("errore") ||
+    name.includes("mancanza") ||
+    name.includes("allarme") ||
+    name.includes("bloccante")
+  )
+    return "error";
+  if (name.includes("porta") || name.includes("superati")) return "warning";
+  return "info";
+}
+
 export default function UserActions({
   MailIcon,
   GridIcon,
-  logs = [],
+  logs: logsOverride,
   loadingLogs,
   onMarkAllRead,
   onOpenInbox,
   onClickLog,
 }: Props) {
   const { isDark, toggleTheme } = useUi();
-
   const [open, setOpen] = useState(false);
   const btnRef = useRef<HTMLButtonElement | null>(null);
 
-  // DEMO: rimuovi quando userai logs da prop
-  const logsMock: EmailLog[] = [
-    {
-      id: 1,
-      subject: "Generale - Errore di comunicazione con HMI : 10.20.2.13",
-      preview:
-        "geovision: timeout richiesta, controllare cablaggio e connessione",
-      timestamp: Date.now() - 5 * 60 * 1000,
-      unread: true,
-      severity: "error",
-    },
-    {
-      id: 2,
-      subject: "Generale - Errore di comunicazione con HMI : 10.20.2.8",
-      preview: "HMI non raggiungibile da 3 minuti",
-      timestamp: Date.now() - 15 * 60 * 1000,
-      unread: true,
-      severity: "warning",
-    },
-    {
-      id: 3,
-      subject: "Ripristino comunicazione con HMI : 10.20.2.4",
-      preview: "Connessione ristabilita",
-      timestamp: Date.now() - 50 * 60 * 1000,
-      unread: false,
-      severity: "info",
-    },
-    {
-      id: 1,
-      subject: "Generale - Errore di comunicazione con HMI : 10.20.2.13",
-      preview:
-        "geovision: timeout richiesta, controllare cablaggio e connessione",
-      timestamp: Date.now() - 5 * 60 * 1000,
-      unread: true,
-      severity: "error",
-    },
-    {
-      id: 2,
-      subject: "Generale - Errore di comunicazione con HMI : 10.20.2.8",
-      preview: "HMI non raggiungibile da 3 minuti",
-      timestamp: Date.now() - 15 * 60 * 1000,
-      unread: true,
-      severity: "warning",
-    },
-    {
-      id: 3,
-      subject: "Ripristino comunicazione con HMI : 10.20.2.4",
-      preview: "Connessione ristabilita",
-      timestamp: Date.now() - 50 * 60 * 1000,
-      unread: false,
-      severity: "info",
-    },
-    {
-      id: 1,
-      subject: "Generale - Errore di comunicazione con HMI : 10.20.2.13",
-      preview:
-        "geovision: timeout richiesta, controllare cablaggio e connessione",
-      timestamp: Date.now() - 5 * 60 * 1000,
-      unread: true,
-      severity: "error",
-    },
-    {
-      id: 2,
-      subject: "Generale - Errore di comunicazione con HMI : 10.20.2.8",
-      preview: "HMI non raggiungibile da 3 minuti",
-      timestamp: Date.now() - 15 * 60 * 1000,
-      unread: true,
-      severity: "warning",
-    },
-    {
-      id: 3,
-      subject: "Ripristino comunicazione con HMI : 10.20.2.4",
-      preview: "Connessione ristabilita",
-      timestamp: Date.now() - 50 * 60 * 1000,
-      unread: false,
-      severity: "info",
-    },
-    {
-      id: 1,
-      subject: "Generale - Errore di comunicazione con HMI : 10.20.2.13",
-      preview:
-        "geovision: timeout richiesta, controllare cablaggio e connessione",
-      timestamp: Date.now() - 5 * 60 * 1000,
-      unread: true,
-      severity: "error",
-    },
-    {
-      id: 2,
-      subject: "Generale - Errore di comunicazione con HMI : 10.20.2.8",
-      preview: "HMI non raggiungibile da 3 minuti",
-      timestamp: Date.now() - 15 * 60 * 1000,
-      unread: true,
-      severity: "warning",
-    },
-    {
-      id: 3,
-      subject: "Ripristino comunicazione con HMI : 10.20.2.4",
-      preview: "Connessione ristabilita",
-      timestamp: Date.now() - 50 * 60 * 1000,
-      unread: false,
-      severity: "info",
-    },
-    {
-      id: 1,
-      subject: "Generale - Errore di comunicazione con HMI : 10.20.2.13",
-      preview:
-        "geovision: timeout richiesta, controllare cablaggio e connessione",
-      timestamp: Date.now() - 5 * 60 * 1000,
-      unread: true,
-      severity: "error",
-    },
-    {
-      id: 2,
-      subject: "Generale - Errore di comunicazione con HMI : 10.20.2.8",
-      preview: "HMI non raggiungibile da 3 minuti",
-      timestamp: Date.now() - 15 * 60 * 1000,
-      unread: true,
-      severity: "warning",
-    },
-    {
-      id: 3,
-      subject: "Ripristino comunicazione con HMI : 10.20.2.4",
-      preview: "Connessione ristabilita",
-      timestamp: Date.now() - 50 * 60 * 1000,
-      unread: false,
-      severity: "info",
-    },
-    {
-      id: 1,
-      subject: "Generale - Errore di comunicazione con HMI : 10.20.2.13",
-      preview:
-        "geovision: timeout richiesta, controllare cablaggio e connessione",
-      timestamp: Date.now() - 5 * 60 * 1000,
-      unread: true,
-      severity: "error",
-    },
-    {
-      id: 2,
-      subject: "Generale - Errore di comunicazione con HMI : 10.20.2.8",
-      preview: "HMI non raggiungibile da 3 minuti",
-      timestamp: Date.now() - 15 * 60 * 1000,
-      unread: true,
-      severity: "warning",
-    },
-    {
-      id: 3,
-      subject: "Ripristino comunicazione con HMI : 10.20.2.4",
-      preview: "Connessione ristabilita",
-      timestamp: Date.now() - 50 * 60 * 1000,
-      unread: false,
-      severity: "info",
-    },
-    {
-      id: 1,
-      subject: "Generale - Errore di comunicazione con HMI : 10.20.2.13",
-      preview:
-        "geovision: timeout richiesta, controllare cablaggio e connessione",
-      timestamp: Date.now() - 5 * 60 * 1000,
-      unread: true,
-      severity: "error",
-    },
-    {
-      id: 2,
-      subject: "Generale - Errore di comunicazione con HMI : 10.20.2.8",
-      preview: "HMI non raggiungibile da 3 minuti",
-      timestamp: Date.now() - 15 * 60 * 1000,
-      unread: true,
-      severity: "warning",
-    },
-    {
-      id: 3,
-      subject: "Ripristino comunicazione con HMI : 10.20.2.4",
-      preview: "Connessione ristabilita",
-      timestamp: Date.now() - 50 * 60 * 1000,
-      unread: false,
-      severity: "info",
-    },
-  ];
+  // 🔗 cliente scelto in header
+  const scopedCustomer = useAppSelector(selectScopedCustomer);
 
-  // Usa i logs passati da prop se presenti, altrimenti i mock
-  const dataset = logs.length ? logs : logsMock;
-  const unreadCount = dataset.reduce((acc, l) => acc + (l.unread ? 1 : 0), 0);
+  // 🔎 ricerca server-side
+  const [query, setQuery] = useState("");
+
+  // ✅ query logs (customer_Name iniettato da baseQuery)
+  const {
+    data: logsResponse,
+    isFetching: isFetchingLogs,
+    refetch, // 👈 lo useremo sul cambio cliente
+  } = useGetLogsQuery(
+    {
+      page: 1,
+      page_size: 20,
+      sortBy: "date_and_time",
+      sortOrder: "desc",
+      search: query || undefined,
+    },
+    { refetchOnMountOrArgChange: true }
+  );
+
+  // 🔁 quando cambia il cliente: reset ricerca e refetch
+  useEffect(() => {
+    setQuery("");
+    refetch();
+  }, [scopedCustomer, refetch]);
+
+  // letti/non letti
+  const [readIds, setReadIds] = useState<Set<string>>(() => loadReadIds());
+  useEffect(() => saveReadIds(readIds), [readIds]);
+
+  const logsFromApi: EmailLog[] = useMemo(() => {
+    const raw = logsResponse?.data ?? [];
+    return raw.map((item) => {
+      const id = String(item.id);
+      const unread = !readIds.has(id);
+      return {
+        id,
+        subject: `${item.name_alarm} (${item.code_alarm})`,
+        preview: `${item.machine_ip} • ${item.customer_Name}`,
+        timestamp: item.date_and_time,
+        unread,
+        severity: computeSeverity(item.name_alarm, item.code_alarm),
+      } as EmailLog;
+    });
+  }, [logsResponse?.data, readIds]);
+
+  const dataset = useMemo(
+    () => (logsOverride && logsOverride.length ? logsOverride : logsFromApi),
+    [logsOverride, logsFromApi]
+  );
+
+  const unreadCount = useMemo(
+    () => dataset.reduce((acc, l) => acc + (l.unread ? 1 : 0), 0),
+    [dataset]
+  );
   const badgeText = unreadCount > 99 ? "99+" : String(unreadCount);
+
+  const handleMarkAllRead = () => {
+    if (dataset.length === 0) return;
+    const next = new Set(readIds);
+    dataset.forEach((l) => next.add(String(l.id)));
+    setReadIds(next);
+    onMarkAllRead?.();
+  };
+
+  const handleClickLog = (log: EmailLog) => {
+    const next = new Set(readIds);
+    next.add(String(log.id));
+    setReadIds(next);
+    onClickLog?.(log);
+  };
 
   return (
     <div className={styles.actions}>
@@ -229,8 +156,6 @@ export default function UserActions({
         }}
       >
         {MailIcon}
-
-        {/* Badge notifiche */}
         {unreadCount > 0 && (
           <span
             className={styles.notificationBadge}
@@ -246,20 +171,24 @@ export default function UserActions({
         {isDark ? <Sun size={16} /> : <Moon size={16} />}
       </button>
 
-      {/* DROPDOWN NOTIFICHE */}
       <DropDownNotification
         anchorEl={btnRef.current}
         open={open}
         onClose={() => setOpen(false)}
         logs={dataset}
-        loading={loadingLogs}
-        onMarkAllRead={onMarkAllRead}
+        loading={loadingLogs || isFetchingLogs}
+        onMarkAllRead={handleMarkAllRead}
         onOpenInbox={onOpenInbox}
-        onClickItem={(log) => onClickLog?.(log)}
-        title="Email Logs"
+        onClickItem={handleClickLog}
+        title="Log di sistema"
         placement="bottom"
         align="end"
         width={460}
+        // search server-side
+        searchValue={query}
+        onSearchValueChange={setQuery}
+        onSubmitSearch={setQuery}
+        disableLocalFilter
       />
     </div>
   );

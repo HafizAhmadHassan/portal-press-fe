@@ -10,11 +10,13 @@ import type { RootState } from "@root/store";
 const apiHassanUrl = import.meta.env.VITE_API_HASSAN_URL;
 
 /** ✅ SOLO questi path riceveranno automaticamente il filtro global */
+// @store_admin/apiSlice.ts
 const SCOPE_ALLOWLIST: RegExp[] = [
   /^joined-machines-gps(\/|$)/, // devices
   /^user(\/|$)/, // users
   /^gps(\/|$)/, // gps
   /^message(\/|$)/, // tickets/messages
+  /^log(\/|$)/, // ✅ logs  <-- AGGIUNTO
 ];
 
 /** (opzionale) helper per disattivare lo scope su una singola request */
@@ -31,10 +33,9 @@ const rawBaseQuery = fetchBaseQuery({
   prepareHeaders: (headers, { getState }) => {
     const state = getState() as RootState;
     const token = state.auth.token;
-    const customer = state.scope.customer;
+    /* const customer = state.scope.customer; */
 
     if (token) headers.set("Authorization", `Bearer ${token}`);
-    if (customer) headers.set("X-Customer-Name", customer); // opzionale lato BE
 
     return headers;
   },

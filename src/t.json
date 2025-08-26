@@ -1,0 +1,94 @@
+{
+  "meta": {
+    "total": 7736,
+    "page": 1,
+    "page_size": 10,
+    "total_pages": 774,
+    "has_next": true,
+    "has_prev": false,
+    "next_page": 2,
+    "prev_page": null
+  },
+  "data": [
+    {
+      "id": 6971,
+      "machine_ip": "10.20.1.49",
+      "customer_Name": "kgn",
+      "name_alarm": "Porta Aperta",
+      "code_alarm": "F07",
+      "date_and_time": "2025-03-04T16:22:02.939450Z"
+    },
+    {
+      "id": 6972,
+      "machine_ip": "10.20.1.49",
+      "customer_Name": "kgn",
+      "name_alarm": "Errore Bloccante",
+      "code_alarm": "F12",
+      "date_and_time": "2025-03-04T16:22:04.462663Z"
+    },
+    {
+      "id": 6973,
+      "machine_ip": "10.20.1.49",
+      "customer_Name": "kgn",
+      "name_alarm": "Porta Aperta",
+      "code_alarm": "F07",
+      "date_and_time": "2025-03-05T11:17:31.787493Z"
+    },
+    {
+      "id": 6974,
+      "machine_ip": "10.20.1.49",
+      "customer_Name": "kgn",
+      "name_alarm": "Errore Bloccante",
+      "code_alarm": "F12",
+      "date_and_time": "2025-03-05T11:17:33.291030Z"
+    },
+    {
+      "id": 6975,
+      "machine_ip": "10.20.1.49",
+      "customer_Name": "kgn",
+      "name_alarm": "Mancanza Rete Elettrica",
+      "code_alarm": "F06",
+      "date_and_time": "2025-03-05T11:18:04.821267Z"
+    },
+    {
+      "id": 6976,
+      "machine_ip": "10.20.1.49",
+      "customer_Name": "kgn",
+      "name_alarm": "pronto",
+      "code_alarm": "S1",
+      "date_and_time": "2025-03-05T11:19:31.308916Z"
+    },
+    {
+      "id": 6977,
+      "machine_ip": "10.20.1.49",
+      "customer_Name": "kgn",
+      "name_alarm": "Superati Tentativi in chiusura",
+      "code_alarm": "F55",
+      "date_and_time": "2025-03-05T11:27:27.396965Z"
+    },
+    {
+      "id": 6978,
+      "machine_ip": "10.20.1.49",
+      "customer_Name": "geovest",
+      "name_alarm": "pronto",
+      "code_alarm": "S1",
+      "date_and_time": "2025-03-05T11:28:55.877824Z"
+    },
+    {
+      "id": 6979,
+      "machine_ip": "10.20.1.49",
+      "customer_Name": "geovest",
+      "name_alarm": "Porta Aperta",
+      "code_alarm": "F07",
+      "date_and_time": "2025-03-05T11:33:21.151080Z"
+    },
+    {
+      "id": 6980,
+      "machine_ip": "10.20.1.49",
+      "customer_Name": "geovest",
+      "name_alarm": "Errore Bloccante",
+      "code_alarm": "F12",
+      "date_and_time": "2025-03-05T11:33:22.976187Z"
+    }
+  ]
+}

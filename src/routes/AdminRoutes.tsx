@@ -15,6 +15,7 @@ import { GpsListSections } from "@root/pages/admin/sections/gpsList/Gps-list.sec
 // Auth/ACL
 import { UserRoles } from "@root/utils/constants/userRoles";
 import ProtectedRoute from "@root/components/shared/PretectedRoutes";
+import LogsListSections from "@root/pages/admin/sections/logsList/Logs-list.section";
 // ⚠️ Attenzione al path/typo: assicurati che il file si chiami "ProtectedRoutes"
 
 const AdminRoutes: RouteObject[] = [
@@ -94,10 +95,25 @@ const AdminRoutes: RouteObject[] = [
             requiredRoles={[
               UserRoles.ADMIN,
               UserRoles.SUPER_ADMIN,
-              UserRoles.DRIVER,
+              UserRoles.USER,
             ]}
           >
             <GpsListSections />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        // /admin/logs
+        path: "logs",
+        element: (
+          <ProtectedRoute
+            requiredRoles={[
+              UserRoles.ADMIN,
+              UserRoles.SUPER_ADMIN,
+              UserRoles.USER,
+            ]}
+          >
+            <LogsListSections />
           </ProtectedRoute>
         ),
       },

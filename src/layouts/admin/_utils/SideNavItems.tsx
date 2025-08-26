@@ -3,6 +3,7 @@ import {
   ChevronRight,
   FileText,
   LocateFixed,
+  MessageCircle,
   Ticket,
   Users,
   WashingMachine,
@@ -48,6 +49,15 @@ export const AdminLayoutSideNavItems: MenuItem[] = [
     iconColor: "var(--info-color)",
     iconActiveColor: "var(--info-dark)",
     allowedRoles: [UserRoles.ADMIN, UserRoles.SUPER_ADMIN],
+  },
+  {
+    label: "Logs",
+    route: "/admin/logs",
+    icon: MessageCircle,
+    badge: "8",
+    iconColor: "var(--orange-color)",
+    iconActiveColor: "var(--orange-dark)",
+    allowedRoles: [UserRoles.ADMIN, UserRoles.SUPER_ADMIN, UserRoles.USER],
   },
   {
     label: "Analytics",

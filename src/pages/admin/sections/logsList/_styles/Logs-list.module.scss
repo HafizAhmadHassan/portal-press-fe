@@ -1,0 +1,17 @@
+@use "../../../styles/globals.scss";
+
+.logs-list-page {
+  min-height: 100vh;
+  background-color: var(--bg-secondary);
+  display: flex;
+  flex-direction: column;
+  color: var(--text-primary);
+
+  /*   &__filters {
+    padding: 0 1rem;
+  } */
+
+  &__table-wrapper {
+    padding: 1.5rem;
+  }
+}

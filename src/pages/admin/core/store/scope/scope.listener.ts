@@ -30,6 +30,7 @@ scopeListener.startListening({
       apiSlice.util.invalidateTags([
         { type: "LIST" as const },
         { type: "STATS" as const },
+
         // { type: "ENTITY" as const }, // scommenta se vuoi rifare anche i dettagli
       ])
     );

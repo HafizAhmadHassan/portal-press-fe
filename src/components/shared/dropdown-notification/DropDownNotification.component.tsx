@@ -7,15 +7,6 @@ import {
 } from "@components/shared/dropdown/DropDown.component";
 import styles from "./DropDownNotification.module.scss";
 
-/**
- * Se usi già un SearchInput “bare” con i tuoi stili, puoi importarlo qui.
- * In alternativa, usa un normale <input> nativo come nell'esempio sotto.
- *
- * // Esempio se vuoi usare il tuo:
- * import SearchInput from "@components/shared/search/SearchInput.component";
- * import pillStyles from "@components/shared/search/styles/Pill.module.scss";
- */
-
 export type LogSeverity = "info" | "warning" | "error";
 
 export interface EmailLog {
@@ -49,6 +40,7 @@ type Props = {
   onSearchValueChange?: (v: string) => void;
   onSubmitSearch?: (v: string) => void;
   searchPlaceholder?: string;
+
   /** Se true, NON applica filtro locale (utile se fai search server-side) */
   disableLocalFilter?: boolean;
 };
@@ -96,7 +88,7 @@ export function DropDownNotification({
 
   const onSubmitQuery = () => {
     if (onSubmitSearch) onSubmitSearch(query);
-    // Altrimenti usa filtro locale (di default)
+    // altrimenti usa filtro locale (default)
   };
 
   const visibleLogs = useMemo(() => {
@@ -123,15 +115,6 @@ export function DropDownNotification({
           {/* SEARCH */}
           <div className={styles.searchWrap}>
             <div className={styles.searchPill}>
-              {/* Se vuoi usare il tuo SearchInput, sostituisci l'input nativo con:
-                  <SearchInput
-                    value={query}
-                    onChange={onChangeQuery}
-                    onSearch={onSubmitQuery}
-                    SearchIcon={<Search size={16} />}
-                    placeholder={searchPlaceholder}
-                  />
-               */}
               <div style={{ position: "relative", flex: 1 }}>
                 <Search
                   size={16}
