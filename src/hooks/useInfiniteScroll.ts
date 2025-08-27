@@ -1,17 +1,19 @@
-// hooks/useInfiniteDevices.ts - Aggiornato per supportare reload sui filtri
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { useInView } from 'react-intersection-observer';
-import type { Device } from '@store_admin/devices/devices.types';
-import { useDevices } from '@store_admin/devices/hooks/useDevices.ts';
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useInView } from "react-intersection-observer";
+import type { Device } from "@store_admin/devices/devices.types";
+import { useDevices } from "@store_admin/devices/hooks/useDevices.ts";
+
+type RootRef = React.RefObject<Element> | null;
 
 interface InfiniteDevicesParams {
   filters: Record<string, any>;
   sortBy?: string;
   sortOrder?: string;
-  page: number;
   pageSize: number;
-  setPage: (p: number) => void;
-  key?: string; // 🔹 NUOVO: chiave per triggare reload
+  /** Cambia quando cambia qualcosa di “scopante” (es. customer_Name o filtri) */
+  key?: string;
+  /** (opzionale) scroll container diverso dalla finestra */
+  rootRef?: RootRef;
 }
 
 interface InfiniteDevicesResult {
@@ -27,92 +29,110 @@ export function useInfiniteDevices({
   filters,
   sortBy,
   sortOrder,
-  page,
   pageSize,
-  setPage,
-  key, // 🔹 NUOVO parametro
+  key,
+  rootRef = null,
 }: InfiniteDevicesParams): InfiniteDevicesResult {
-  const queryParams: any = {
-    ...filters,
-    sortBy,
-    sortOrder,
-    page,
-    page_size: pageSize,
-  };
-
-  const { devices: pageDevices, isLoading, meta, refetch } = useDevices(queryParams);
+  // Pagina interna, separata da quella della tabella
+  const [page, setPage] = useState<number>(1);
   const [allDevices, setAllDevices] = useState<Device[]>([]);
 
-  // 🔹 NUOVO: Tieni traccia della chiave precedente per detectare cambi
-  const previousKeyRef = useRef<string>('');
-  const previousFiltersRef = useRef<string>('');
+  // blocca l’auto-advance del sentinel finché non arriva la nuova page=1 dopo un reset
+  const justResetRef = useRef<boolean>(true);
+  // evita race e risposte stale
+  const requestKeyRef = useRef<number>(0);
 
-  // 🔹 NUOVO: Reset quando cambiano i filtri
+  // reset quando cambia la key/filtri “scopanti”
+  const prevKeyRef = useRef<string>("");
   useEffect(() => {
-    const filtersKey = JSON.stringify(filters);
-    const currentKey = key || filtersKey;
-
-    // Se è cambiata la chiave o i filtri, resetta tutto
-    if (currentKey !== previousKeyRef.current || filtersKey !== previousFiltersRef.current) {
-      previousKeyRef.current = currentKey;
-      previousFiltersRef.current = filtersKey;
-
-      // Reset stato
+    const currentKey = key ?? JSON.stringify(filters);
+    if (currentKey !== prevKeyRef.current) {
+      prevKeyRef.current = currentKey;
+      justResetRef.current = true;
+      requestKeyRef.current += 1;
       setAllDevices([]);
-      if (page !== 1) {
-        setPage(1); // Torna alla prima pagina
-      }
+      setPage(1);
     }
-  }, [filters, key, page, setPage]);
+  }, [key, filters]);
 
-  // Gestione accumulo devices per infinite scroll
+  // query params per la pagina corrente
+  const queryParams: any = useMemo(
+    () => ({
+      ...filters,
+      sortBy,
+      sortOrder,
+      page,
+      page_size: pageSize,
+    }),
+    [filters, sortBy, sortOrder, page, pageSize]
+  );
+
+  const {
+    devices: pageDevices,
+    isLoading,
+    meta,
+    refetch,
+  } = useDevices(queryParams);
+
+  // append/sostituisci risultati
   useEffect(() => {
-    if (pageDevices && pageDevices.length > 0) {
+    if (!pageDevices) return;
+
+    const myReq = requestKeyRef.current;
+    setAllDevices((prev) => {
+      // drop risposte stale
+      if (myReq !== requestKeyRef.current) return prev;
+
       if (page === 1) {
-        // Prima pagina: sostituisci tutto
-
-        setAllDevices(pageDevices);
-      } else {
-        // Pagine successive: aggiungi senza duplicati
-
-        setAllDevices((prev) => {
-          // Evita duplicati controllando gli ID
-          const existingIds = new Set(prev.map((d) => d.id));
-          const newDevices = pageDevices.filter((d: Device) => !existingIds.has(d.id));
-          return [...prev, ...newDevices];
-        });
+        justResetRef.current = false; // sblocca sentinel quando la nuova page=1 è arrivata
+        return pageDevices;
       }
-    }
+      if (pageDevices.length === 0) return prev;
+
+      const existing = new Set(prev.map((d) => d.id));
+      const newOnes = pageDevices.filter((d) => !existing.has(d.id));
+      return [...prev, ...newOnes];
+    });
   }, [pageDevices, page]);
 
+  // calcolo hasNext robusto: usa meta.has_next se presente, altrimenti fallback su pageSize
+  const hasNext = Boolean(
+    (meta && (meta as any).has_next) ??
+      (pageDevices && pageDevices.length === pageSize)
+  );
+
+  // IntersectionObserver (view-port o rootRef custom)
   const { ref: sentinelRef, inView } = useInView({
-    threshold: 0.5,
-    triggerOnce: false, // 🔹 Permetti multiple trigger
+    threshold: 0.1,
+    root: rootRef?.current ?? null,
+    // piccolo prefetch
+    rootMargin: "200px",
+    triggerOnce: false,
   });
 
-  // Intersection observer per caricare pagina successiva
+  // Avanza SOLO di +1 (ignora meta.next_page che può essere “sporcato” da altre viste)
   useEffect(() => {
-    if (inView && meta?.has_next && !isLoading) {
-      setPage(meta.next_page!);
-    }
-  }, [inView, meta, setPage, isLoading]);
+    if (justResetRef.current) return;
+    if (!inView) return;
+    if (isLoading) return;
+    if (!hasNext) return;
 
-  // 🔹 MIGLIORATO: Reload completo
+    setPage((p) => p + 1);
+  }, [inView, isLoading, hasNext]);
+
+  // Reload manuale (riparti da 1)
   const reload = useCallback(() => {
-    setAllDevices([]); // Svuota lista
-    setPage(1); // Torna alla prima pagina
-    // Opzionale: forza refetch dopo un breve delay
-    setTimeout(() => {
-      refetch();
-    }, 100);
-  }, [setPage, refetch]);
-
-  // 🔹 DEBUG: Log stato corrente
+    justResetRef.current = true;
+    requestKeyRef.current += 1;
+    setAllDevices([]);
+    setPage(1);
+    refetch();
+  }, [refetch]);
 
   return {
     devices: allDevices,
     isLoading,
-    hasNext: !!meta?.has_next,
+    hasNext,
     reload,
     refetch,
     sentinelRef,

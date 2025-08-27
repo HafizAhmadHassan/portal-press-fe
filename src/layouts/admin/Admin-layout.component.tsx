@@ -1,34 +1,53 @@
-// AdminLayout.tsx - Versione finale con DeviceCard composable
-import { Outlet } from 'react-router-dom';
-import LogoKgn from '@assets/images/kgn-logo.png';
-import styles from './Admin-layout.module.scss';
-import Header from '@shared/header/Header.component.tsx';
-import SideNav from '@shared/side-navbar/SideNavbar.component.tsx';
-import { AdminLayoutSideNavItems } from '@layouts/admin/_utils/SideNavItems.tsx';
-
+// AdminLayout.tsx - badge "Machines" = numero dispositivi INATTIVI (status === 0)
+import { useMemo } from "react";
+import { Outlet } from "react-router-dom";
+import styles from "./Admin-layout.module.scss";
+import LogoKgn from "@assets/images/kgn-logo.png";
+import Header from "@shared/header/Header.component.tsx";
+import SideNav from "@shared/side-navbar/SideNavbar.component.tsx";
+import { buildAdminLayoutSideNavItems } from "./_utils/SideNavItems";
 
 export default function AdminLayout() {
+  // altri badge
 
-    return (
-      <div className={styles.layout}>
-          <Header/>
+  const machinesBadgeCount = undefined;
+  const usersCount = undefined;
+  const ticketsCount = undefined;
+  const gpsCount = undefined;
+  const logsCount = undefined;
 
-          <div className={styles.body}>
-              <SideNav
-                menuItems={AdminLayoutSideNavItems}
-                brand={{
-                    logo: LogoKgn,
-                    title: 'KGN srl',
-                    subtitle: 'Admin Panel',
-                }}
-                showCollapseButton={true}
-                showMobileToggle={true}
-              />
+  const sideNavItems = useMemo(
+    () =>
+      buildAdminLayoutSideNavItems({
+        machines: machinesBadgeCount,
+        users: usersCount,
+        tickets: ticketsCount,
+        gps: gpsCount,
+        logs: logsCount,
+      }),
+    [machinesBadgeCount, usersCount, ticketsCount, gpsCount, logsCount]
+  );
 
-              <main className={`${styles.content} `}>
-                 <Outlet />
-              </main>
-          </div>
+  return (
+    <div className={styles.layout}>
+      <Header />
+
+      <div className={styles.body}>
+        <SideNav
+          menuItems={sideNavItems}
+          brand={{
+            logo: LogoKgn,
+            title: "KGN srl",
+            subtitle: "Admin Panel",
+          }}
+          showCollapseButton
+          showMobileToggle
+        />
+
+        <main className={styles.content}>
+          <Outlet />
+        </main>
       </div>
-    );
+    </div>
+  );
 }

@@ -7,7 +7,7 @@ export const DeviceFields = {
   CITY: "city",
   PROVINCE: "province",
   CUSTOMER: "customer_Name",
-  STATUS_MACHINE_BLOCKED: "status_machine_blocked",
+  STATUS_MACHINE_BLOCKED: "status_Machine_Blocked",
   STATUS_READY: "status_ready_d75_3_7",
 } as const;
 

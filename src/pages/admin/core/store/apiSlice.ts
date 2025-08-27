@@ -12,7 +12,7 @@ const apiHassanUrl = import.meta.env.VITE_API_HASSAN_URL;
 /** ✅ SOLO questi path riceveranno automaticamente il filtro global */
 // @store_admin/apiSlice.ts
 const SCOPE_ALLOWLIST: RegExp[] = [
-  /^joined-machines-gps(\/|$)/, // devices
+  /^joined-machines-gps(\/|$)/,
   /^user(\/|$)/, // users
   /^gps(\/|$)/, // gps
   /^message(\/|$)/, // tickets/messages

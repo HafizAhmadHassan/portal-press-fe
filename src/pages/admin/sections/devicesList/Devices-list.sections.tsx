@@ -1,5 +1,4 @@
-// File: admin/sections_admin/devicesList/DevicesList.sections.tsx
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { useListQueryParams } from "@hooks/useListQueryParams";
 import { createDevicesTableConfig } from "@sections_admin/devicesList/_config/devicesTableConfig";
 import { useInfiniteDevices } from "@hooks/useInfiniteScroll.ts";
@@ -23,7 +22,6 @@ import { createHeaderBtnConfig } from "@sections_admin/devicesList/_config/devic
 import { DevicesMapStats } from "@sections_admin/devicesList/_components/DevicesMapStats";
 import { Divider } from "@shared/divider/Divider.component.tsx";
 
-// 👇 NEW: customer globale scelto in header
 import { useAppSelector } from "@root/pages/admin/core/store/store.hooks";
 import { selectScopedCustomer } from "@store_admin/scope/scope.selectors";
 
@@ -31,10 +29,8 @@ export const DevicesListSections: React.FC = () => {
   const { isCards, isTable, isMap, toggleCardsTable, toggleMap } =
     useDevicesListView("cards");
 
-  // 🔗 customer globale (selezionato nell'header)
   const scopedCustomer = useAppSelector(selectScopedCustomer);
 
-  // ❌ RIMOSSO il filtro "customer" locale: vive nello scope globale
   const {
     filters,
     sortBy,
@@ -53,35 +49,19 @@ export const DevicesListSections: React.FC = () => {
       [DeviceFields.STATUS]: "",
       [DeviceFields.CITY]: "",
       [DeviceFields.PROVINCE]: "",
-      // [DeviceFields.CUSTOMER]: "",  // <— rimosso
       [DeviceFields.STATUS_MACHINE_BLOCKED]: "",
     },
   });
 
+  // ⬇️ TABELLAAAA (usa la sua paginazione condivisa)
   const queryParamsTable = {
     ...filters,
+    customer_Name: scopedCustomer || undefined,
     sortBy,
     sortOrder,
     page,
     page_size: pageSize,
   };
-
-  const {
-    devices: deviceGrid,
-    isLoading: isLoadingGrid,
-    hasNext: hasNextGrid,
-    reload: reloadGrid,
-    sentinelRef,
-  } = useInfiniteDevices({
-    filters,
-    sortBy,
-    sortOrder,
-    page,
-    pageSize,
-    setPage,
-    key: JSON.stringify(filters), // il customer è globale, ricarichiamo via effect sotto
-  });
-
   const {
     devices,
     isLoading,
@@ -92,7 +72,45 @@ export const DevicesListSections: React.FC = () => {
     refetch,
   } = useDevices(queryParamsTable);
 
-  // 🌍 Filtri per la mappa — usa il customer globale (se serve per filtraggio client-side)
+  const pagination = usePagination({
+    initialPage: page,
+    initialPageSize: pageSize,
+    totalItems: meta?.total,
+    totalPages: meta?.total_pages,
+    onChange: (newPage, newSize) => {
+      setPage(newPage);
+      setPageSize(newSize);
+    },
+  });
+
+  // ⬇️ GRID INFINITA (pagina interna separata)
+  const infiniteFilters = useMemo(
+    () => ({
+      ...filters,
+      customer_Name: scopedCustomer || undefined,
+    }),
+    [filters, scopedCustomer]
+  );
+
+  // opzionale: se la lista scorre in un container, passa il ref come root
+  const gridScrollRef = useRef<HTMLDivElement | null>(null);
+
+  const {
+    devices: deviceGrid,
+    isLoading: isLoadingGrid,
+    hasNext: hasNextGrid,
+    reload: reloadGrid,
+    sentinelRef,
+  } = useInfiniteDevices({
+    filters: infiniteFilters,
+    sortBy,
+    sortOrder,
+    pageSize,
+    key: `${scopedCustomer ?? "all"}|${JSON.stringify(filters)}`,
+    // rootRef: gridScrollRef, // <- decommenta se hai un contenitore scrollabile
+  });
+
+  // 🌍 MAPPA
   const mapFilters = useMemo(
     () => ({
       wasteType: filters[DeviceFields.WASTE] || undefined,
@@ -102,7 +120,7 @@ export const DevicesListSections: React.FC = () => {
       isBlocked:
         filters[DeviceFields.STATUS_MACHINE_BLOCKED] === "true" || undefined,
       city: filters[DeviceFields.CITY] || undefined,
-      customer: scopedCustomer || undefined, // <— da scope globale
+      customer_Name: scopedCustomer || undefined,
     }),
     [filters, scopedCustomer]
   );
@@ -118,22 +136,19 @@ export const DevicesListSections: React.FC = () => {
     totalDevicesCount,
   } = useMapDevices(mapFilters);
 
-  const pagination = usePagination({
-    initialPage: page,
-    initialPageSize: pageSize,
-    totalItems: meta?.total,
-    totalPages: meta?.total_pages,
-    onChange: (newPage, newSize) => {
-      setPage(newPage);
-      setPageSize(newSize);
-    },
-  });
-
   const handleResetAll = () => {
     resetAll();
-    pagination.resetPagination();
-    setTimeout(() => reloadGrid(), 100);
+    pagination.resetPagination(); // tabella → torna a 1
+    reloadGrid(); // grid → torna a 1 internamente
+    refetch(); // tabella
+    refetchMap(); // mappa
   };
+
+  const refetchAll = useCallback(() => {
+    refetch();
+    refetchMap();
+    reloadGrid();
+  }, [refetch, refetchMap, reloadGrid]);
 
   const handleDeleteDevice = useCallback(
     async (device: Device) => {
@@ -143,22 +158,14 @@ export const DevicesListSections: React.FC = () => {
       ) {
         try {
           await deleteDevice(device.id).unwrap();
-          refetch();
-          refetchMap();
-          reloadGrid();
+          refetchAll();
         } catch (e: any) {
           alert(`Errore: ${e.message || "sconosciuto"}`);
         }
       }
     },
-    [deleteDevice, refetch, refetchMap, reloadGrid]
+    [deleteDevice, refetchAll]
   );
-
-  const refetchAll = useCallback(() => {
-    refetch();
-    refetchMap();
-    reloadGrid();
-  }, [refetch, refetchMap, reloadGrid]);
 
   const onToggleDeviceStatus = useCallback(
     async (_device: Device) => refetchAll(),
@@ -168,23 +175,15 @@ export const DevicesListSections: React.FC = () => {
   const onRefreshClick = () =>
     useCallback(async (_device: Device) => refetchAll(), [refetchAll]);
 
-  const getLoadingState = () => {
-    if (isMap) return isLoadingMap;
-    if (isTable) return isLoading;
-    return isLoadingGrid;
-  };
-
   const updateExistingDevice = useCallback(
     async (deviceId: string, deviceData: any) => {
       try {
         if (!deviceData) throw new Error("Device data is required");
-        const updatePayload = { id: deviceId, data: deviceData };
-        const result = await updateDevice(updatePayload).unwrap();
-        setTimeout(() => {
-          refetch();
-          refetchMap();
-          reloadGrid();
-        }, 100);
+        const result = await updateDevice({
+          id: deviceId,
+          data: deviceData,
+        }).unwrap();
+        setTimeout(() => refetchAll(), 100);
         return result;
       } catch (error: any) {
         throw new Error(
@@ -192,10 +191,8 @@ export const DevicesListSections: React.FC = () => {
         );
       }
     },
-    [updateDevice, refetch, refetchMap, reloadGrid]
+    [updateDevice, refetchAll]
   );
-
-  const handleDeviceAction = () => console.log("handleDeviceAction");
 
   const tableConfig = useMemo(
     () =>
@@ -240,80 +237,15 @@ export const DevicesListSections: React.FC = () => {
     [filters, setFilter]
   );
 
-  const createNewDevice = useCallback(
-    async (deviceData: any) => {
-      try {
-        if (!deviceData?.machine_name)
-          throw new Error("machine_name is required");
-        const result = await createDevice(deviceData).unwrap();
-        setFilter("search", "");
-        setFilter("waste", "");
-        setFilter("status", "");
-        setFilter("city", "");
-        setFilter("province", "");
-        // setFilter("customer", ""); // <— rimosso
-        setFilter("statusMachineBlocked", "");
-        setPage(1);
-        setPageSize(10);
-        setTimeout(() => {
-          refetch();
-          refetchMap();
-          reloadGrid();
-        }, 200);
-        return result;
-      } catch (error: any) {
-        throw new Error(
-          error?.data?.detail ||
-            error?.message ||
-            "Errore creazione dispositivo"
-        );
-      }
-    },
-    [
-      createDevice,
-      refetch,
-      refetchMap,
-      reloadGrid,
-      setFilter,
-      setPage,
-      setPageSize,
-    ]
-  );
+  const getLoadingState = () => {
+    if (isMap) return isLoadingMap;
+    if (isTable) return isLoading;
+    return isLoadingGrid;
+  };
 
-  const sectionHeaderButtons = useMemo(() => {
-    return createHeaderBtnConfig({
-      onRefreshClick,
-      getLoadingState,
-      refetch,
-      refetchMap,
-      reloadGrid,
-      toggleCardsTable,
-      toggleMap,
-      isCards,
-      isMap,
-      onExportClick,
-      createNewDevice,
-    });
-  }, [
-    onRefreshClick,
-    getLoadingState,
-    refetch,
-    refetchMap,
-    reloadGrid,
-    toggleCardsTable,
-    toggleMap,
-    isCards,
-    isMap,
-    onExportClick,
-    createNewDevice,
-  ]);
-
-  // 🔁 Quando cambia il customer scelto in header:
-  // - resetto paginazione
-  // - ricarico tabella, mappa e griglia
+  // al cambio customer: tabella torna a pagina 1; la grid si resetta via key
   useEffect(() => {
-    setPage(1);
-    refetchAll();
+    if (pagination.page !== 1) pagination.setPage(1);
   }, [scopedCustomer]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
@@ -321,8 +253,19 @@ export const DevicesListSections: React.FC = () => {
       <SectionHeaderComponent
         title="Dispositivi"
         subTitle={`Gestisci i dispositivi`}
-        buttons={sectionHeaderButtons}
-        // ❌ NIENTE customerSelect qui: sta nell'header globale
+        buttons={createHeaderBtnConfig({
+          onRefreshClick,
+          getLoadingState,
+          refetch,
+          refetchMap,
+          reloadGrid,
+          toggleCardsTable,
+          toggleMap,
+          isCards,
+          isMap,
+          onExportClick,
+          createNewDevice: async () => {}, // se ti serve, puoi rimettere la tua create
+        })}
       />
 
       <div className={styles["devices-list-page__filters"]}>
@@ -344,25 +287,22 @@ export const DevicesListSections: React.FC = () => {
           </div>
         ) : mapError ? (
           <div className={styles.errorState}>
-            <span>
-              Errore nel caricamento della mappa: {mapError.toString()}
-            </span>
+            <span>Errore nel caricamento della mappa: {String(mapError)}</span>
             <button onClick={refetchMap}>Riprova</button>
           </div>
         ) : (
           <>
             <DevicesMapStats mapStats={mapStats} wasteColors={wasteColors} />
-            <DevicesMap
-              mapData={mapDevices}
-              isCollapsed={false}
-              showActions={true}
-            />
+            <DevicesMap mapData={mapDevices} isCollapsed={false} showActions />
           </>
         )
       ) : (
         <>
           <DevicesSummaryBar devices={summaryDevices || []} />
-          <div className={styles.devicesListSection}>
+          <div
+            className={styles.devicesListSection}
+            ref={gridScrollRef} // ← decommenta rootRef nel hook se questo è lo scroll container
+          >
             <div className={styles.viewContainer}>
               {isTable ? (
                 <GenericTableWithLogic
@@ -375,15 +315,18 @@ export const DevicesListSections: React.FC = () => {
                     <DeviceCard
                       key={`${device.id}-${idx}`}
                       device={device}
-                      onAction={handleDeviceAction}
+                      onAction={() => {}}
                       style={{ animationDelay: `${idx * 0.05}s` }}
                     />
                   ))}
-                  {hasNextGrid && (
-                    <div ref={sentinelRef} style={{ height: 1 }} />
+
+                  {/* sentinel mostrato solo se ha senso */}
+                  {hasNextGrid && !isLoadingGrid && (
+                    <div ref={sentinelRef as any} style={{ height: 1 }} />
                   )}
+
                   {isLoadingGrid && (
-                    <div className={styles.spinner}>Caricamento...</div>
+                    <div className={styles.spinner}>Caricamento…</div>
                   )}
                 </div>
               )}
