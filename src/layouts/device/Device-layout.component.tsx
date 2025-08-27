@@ -1,4 +1,3 @@
-// DeviceLayout.tsx
 import {
   Outlet,
   useParams,
@@ -67,6 +66,32 @@ export default function DeviceLayout() {
     // Le pagine figlie reagiscono a questo cambiamento leggendo ?edit=1
   };
 
+  // =========================
+  // VISIBILITÀ SWITCH "MODIFICA"
+  // =========================
+  const isSuperAdmin = user?.role === UserRoles.SUPER_ADMIN;
+
+  // estrae la parte del path dopo /device/:id
+  const isDetailPage = useMemo(() => {
+    // prendi tutto ciò che viene dopo /device/<id>
+    const afterId = location.pathname.replace(/^.*\/device\/[^/]+/, "");
+    // pagina di dettaglio se è root, "/" oppure "/edit"
+    return (
+      afterId === "" ||
+      afterId === "/" ||
+      afterId === "/edit" ||
+      afterId === "/edit/"
+    );
+  }, [location.pathname]);
+
+  // regola:
+  // - SUPER_ADMIN: mostra in pagina di dettaglio
+  // - NON SUPER_ADMIN: non mostrare in pagina di dettaglio, ma mostrare nelle sotto-pagine
+  const showEditSwitch = useMemo(() => {
+    if (isSuperAdmin) return isDetailPage;
+    return !isDetailPage; // non super → mostra solo nelle altre pagine
+  }, [isSuperAdmin, isDetailPage]);
+
   return (
     <div className={styles.layout}>
       <Header />
@@ -99,7 +124,7 @@ export default function DeviceLayout() {
                 Aggiorna
               </SimpleButton>
 
-              {user?.role === UserRoles.SUPER_ADMIN && (
+              {showEditSwitch && (
                 <Switch
                   size="md"
                   color="primary"
