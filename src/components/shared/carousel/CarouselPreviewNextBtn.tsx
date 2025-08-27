@@ -1,6 +1,5 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-
-import BrandButton from '../../common/brand-button';
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { SimpleButton } from "../simple-btn/SimpleButton.component";
 
 interface CarouselPreviewNextBtnProps {
   prevSlide: () => void;
@@ -15,26 +14,21 @@ const CarouselPreviewNextBtn = ({
   buttonSize = 32,
   showNavigation = true, // Default to true for backward compatibility
 }: CarouselPreviewNextBtnProps) => {
-  const commonClasses = 'absolute top-1/2 z-10 flex -translate-y-1/2 items-center justify-center';
+  const commonClasses =
+    "absolute top-1/2 z-10 flex -translate-y-1/2 items-center justify-center";
 
   // If navigation shouldn't be shown, return null or an empty fragment
   if (!showNavigation) return null;
 
   // Make sure event handlers are properly passed and work
-  const handlePrevClick = (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent default
-    e.stopPropagation(); // Prevent event bubbling
-
+  const handlePrevClick = () => {
     // Add a small delay to ensure DOM is ready
     setTimeout(() => {
       prevSlide();
     }, 0);
   };
 
-  const handleNextClick = (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent default
-    e.stopPropagation(); // Prevent event bubbling
-
+  const handleNextClick = () => {
     // Add a small delay to ensure DOM is ready
     setTimeout(() => {
       nextSlide();
@@ -43,22 +37,22 @@ const CarouselPreviewNextBtn = ({
 
   return (
     <>
-      <BrandButton
-        variant="flat"
+      <SimpleButton
+        variant="ghost"
         onClick={handlePrevClick}
         className={`${commonClasses} left-4`}
         aria-label="Previous slide"
       >
         <ChevronLeft size={buttonSize} />
-      </BrandButton>
-      <BrandButton
-        variant="flat"
+      </SimpleButton>
+      <SimpleButton
+        variant="ghost"
         onClick={handleNextClick}
         className={`${commonClasses} right-4`}
         aria-label="Next slide"
       >
         <ChevronRight size={buttonSize} />
-      </BrandButton>
+      </SimpleButton>
     </>
   );
 };

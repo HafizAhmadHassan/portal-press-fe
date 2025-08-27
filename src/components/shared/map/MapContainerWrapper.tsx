@@ -1,3 +1,4 @@
-import containerStyles from './styles/map/MapContainer.module.scss';
+import { MapContainer } from "react-leaflet";
+import containerStyles from "./styles/map/MapContainer.module.scss";
 
-<MapContainer className={containerStyles.mapContainer} />
+<MapContainer className={containerStyles.mapContainer} />;

@@ -2,7 +2,7 @@
 
 import { createSelector } from "@reduxjs/toolkit";
 import type { Device } from "@store_admin/devices/devices.types.ts";
-import type { RootState } from "@store_admin/store.ts";
+import type { RootState } from "@root/store.ts";
 
 // Selettori base
 export const selectDevicesState = (state: RootState) => state.devices;
@@ -109,7 +109,7 @@ export const selectBlockedDevices = createSelector([selectDevices], (devices) =>
 );
 
 export const selectReadyDevices = createSelector([selectDevices], (devices) =>
-  devices.filter((device: Device) => device.tatus_ready_d75_3_7 === true)
+  devices.filter((device: Device) => device.status_ready_d75_3_7 === true)
 );
 
 // NUOVO: Selettori per TUTTI i devices per status (per la mappa)
@@ -134,7 +134,7 @@ export const selectAllBlockedDevices = createSelector(
 export const selectAllReadyDevices = createSelector(
   [selectAllDevices],
   (allDevices) =>
-    allDevices.filter((device: Device) => device.tatus_ready_d75_3_7 === true)
+    allDevices.filter((device: Device) => device.status_ready_d75_3_7 === true)
 );
 
 // Conteggi per devices paginati

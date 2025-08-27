@@ -1,7 +1,7 @@
-import React from 'react';
-import styles from '../styles/SideNavHeader.module.scss';
-import { SideNavBrand } from './SideNavBrand.component';
-import type { SideNavPosition } from '../types/MenuItem';
+import React from "react";
+import styles from "../styles/SideNavHeader.module.scss";
+import { SideNavBrand } from "./SideNavBrand.component";
+import type { SideNavPosition } from "../types/MenuItem.types";
 
 interface Props {
   brand?: {
@@ -15,13 +15,7 @@ interface Props {
   onToggleCollapse: () => void;
 }
 
-export function SideNavHeader({
-                                brand,
-                                collapsed,
-                                position,
-                                showCollapseButton,
-                                onToggleCollapse
-                              }: Props) {
+export function SideNavHeader({ brand, collapsed }: Props) {
   return (
     <div className={styles.header}>
       {brand && <SideNavBrand {...brand} collapsed={collapsed} />}

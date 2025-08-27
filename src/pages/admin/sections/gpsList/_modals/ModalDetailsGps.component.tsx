@@ -2,10 +2,9 @@
 import React from "react";
 import Modal from "@components/shared/modal/Modal";
 import { SimpleButton } from "@shared/simple-btn/SimpleButton.component";
-import { Eye, MapPin, Satellite, Hash } from "lucide-react";
+import { Eye, MapPin, Satellite } from "lucide-react";
 import styles from "./ModalDetailsGps.module.scss";
 import type { GpsDevice } from "@store_admin/gps/gps.types";
-import DevicesMap from "../../devicesList/_components/DevicesMap";
 import GpsMap from "../_components/GpsMap";
 
 export const ModalDetailsGps: React.FC<{ device: GpsDevice }> = ({
@@ -24,7 +23,16 @@ export const ModalDetailsGps: React.FC<{ device: GpsDevice }> = ({
       <div className={styles.modalContent}>
         <div className={styles.mapWrapper}>
           <GpsMap
-            mapData={[device]}
+            mapData={[
+              {
+                ...device,
+                machine_Name: "",
+                status: 0,
+                status_ready_d75_3_7: false,
+                status_Machine_Blocked: false,
+                status_Machine_Ready: false,
+              },
+            ]}
             isCollapsed={false}
             center={[Number(device.gps_x), Number(device.gps_y)]}
             showActions={false}

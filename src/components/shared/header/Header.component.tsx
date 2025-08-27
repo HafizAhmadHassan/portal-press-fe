@@ -3,7 +3,7 @@ import { useMemo, useRef, useState } from "react";
 import styles from "./styles/Header.module.scss";
 import stylesPill from "./styles/Pill.module.scss";
 import stylesToggle from "./styles/Header.module.scss";
-import { useSidebar } from "@store_admin/hooks/useSidebar";
+
 import { setCustomer } from "@store_admin/scope/scope.slice";
 import { ChevronDown, Grid, Mail, Menu, Search, X } from "lucide-react";
 import { selectScopedCustomer } from "@store_admin/scope/scope.selectors";
@@ -16,6 +16,7 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "@root/pages/admin/core/store/store.hooks";
+import { useSidebar } from "@store_admin/hooks/useSidebar";
 
 export default function KgnHeader() {
   const [searchText, setSearchText] = useState("");

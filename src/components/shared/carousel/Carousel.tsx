@@ -1,9 +1,9 @@
-import { JSX, useEffect, useLayoutEffect, useState } from 'react';
+import { type JSX, useEffect, useLayoutEffect, useState } from "react";
 
-import CarouselDotPage from './CarouselDotPage';
-import CarouselItemsContainer from './CarouselItemsContainer';
-import CarouselPreviewNextBtn from './CarouselPreviewNextBtn';
-import { useCarousel } from './useCarousel';
+import CarouselDotPage from "./CarouselDotPage";
+import CarouselItemsContainer from "./CarouselItemsContainer";
+import CarouselPreviewNextBtn from "./CarouselPreviewNextBtn";
+import { useCarousel } from "./useCarousel";
 
 interface CarouselProps<T> {
   data: T[];
@@ -58,11 +58,11 @@ const DynamicCarousel = <T,>({
   // Force a layout update when component mounts
   useLayoutEffect(() => {
     // Trigger a resize event to force recalculation
-    window.dispatchEvent(new Event('resize'));
+    window.dispatchEvent(new Event("resize"));
 
     // Also trigger after a short delay
     const timeoutId = setTimeout(() => {
-      window.dispatchEvent(new Event('resize'));
+      window.dispatchEvent(new Event("resize"));
     }, 100);
 
     return () => clearTimeout(timeoutId);
@@ -92,10 +92,10 @@ const DynamicCarousel = <T,>({
   const actualVisibleItems = isMounted
     ? visibleItems
     : window.innerWidth < 768
-      ? itemsPerViewMobile
-      : window.innerWidth < 1024
-        ? itemsPerViewTablet
-        : itemsPerView;
+    ? itemsPerViewMobile
+    : window.innerWidth < 1024
+    ? itemsPerViewTablet
+    : itemsPerView;
 
   // Always show navigation if we have more items than can fit in view
   const showNavigation = data.length > 1;

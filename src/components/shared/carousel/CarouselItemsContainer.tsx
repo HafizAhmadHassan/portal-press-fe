@@ -1,4 +1,4 @@
-import { JSX, RefObject } from 'react';
+import { type JSX, type RefObject } from "react";
 
 interface CarouselItemsContainerProps<T> {
   containerRef: RefObject<HTMLDivElement | null>;
@@ -26,7 +26,9 @@ const CarouselItemsContainer = <T,>({
       ref={containerRef as RefObject<HTMLDivElement>}
       className="flex transition-transform duration-300 ease-in-out"
       style={{
-        transform: `translateX(-${currentIndex * (itemWidth || fallbackItemWidth)}px)`,
+        transform: `translateX(-${
+          currentIndex * (itemWidth || fallbackItemWidth)
+        }px)`,
         gap: `${gap}px`,
       }}
     >

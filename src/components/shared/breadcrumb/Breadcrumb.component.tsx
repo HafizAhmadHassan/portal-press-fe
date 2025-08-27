@@ -1,6 +1,10 @@
 // breadcrumb-context.tsx
-import React, { createContext, useContext, useState, ReactNode } from "react";
-import { KgnBreadcrumbItem, NavGroup, NavItem } from "./types";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  type ReactNode,
+} from "react";
 
 interface BreadcrumbContextType {
   breadcrumbItems: KgnBreadcrumbItem[];
@@ -61,10 +65,11 @@ export const BreadcrumbProvider: React.FC<BreadcrumbProviderProps> = ({
 };
 
 // kgn-Breadcrumb.component.tsx
-import React from "react";
+
 import { Link, useLocation } from "react-router-dom";
-import { useBreadcrumb } from "./breadcrumb-context";
+
 import "./kgn-breadcrumb.component.css";
+import type { KgnBreadcrumbItem, NavGroup, NavItem } from "./BreadCrumb.types";
 
 interface KgnBreadcrumbProps {
   className?: string;

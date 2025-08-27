@@ -2,7 +2,7 @@ import React from "react";
 import { getColorFromLetter } from "@utils/letter-colors.ts";
 import type { User } from "@store_admin/users/user.types.ts";
 
-export function Avatar({ user }: User) {
+export function Avatar({ user }: { user: User }) {
   return (
     <>
       {user.avatarUrl || user.avatar ? (

@@ -1,36 +1,41 @@
-import React, { useState, ReactNode } from 'react';
-import { BreadcrumbContext } from './breadcrumb-context';
-import { KgnBreadcrumbItem, NavGroup, NavItem } from './types';
+import React, { useState, type ReactNode } from "react";
+
+import type { KgnBreadcrumbItem, NavGroup, NavItem } from "./BreadCrumb.types";
+import { BreadcrumbContext } from "./BreadCrumb.context";
 
 interface BreadcrumbProviderProps {
-    children: ReactNode;
+  children: ReactNode;
 }
 
-export const BreadcrumbProvider: React.FC<BreadcrumbProviderProps> = ({ children }) => {
-    const [breadcrumbItems, setBreadcrumbItems] = useState<KgnBreadcrumbItem[]>([]);
-    const [navItems, setNavItems] = useState<NavGroup[]>([]);
+export const BreadcrumbProvider: React.FC<BreadcrumbProviderProps> = ({
+  children,
+}) => {
+  const [breadcrumbItems, setBreadcrumbItems] = useState<KgnBreadcrumbItem[]>(
+    []
+  );
+  const [navItems, setNavItems] = useState<NavGroup[]>([]);
 
-    const setNavLeft = (...items: NavItem[]) => {
-        setNavItems([{ items }]);
-    };
+  const setNavLeft = (...items: NavItem[]) => {
+    setNavItems([{ items }]);
+  };
 
-    const clear = () => {
-        setBreadcrumbItems([]);
-        setNavItems([]);
-    };
+  const clear = () => {
+    setBreadcrumbItems([]);
+    setNavItems([]);
+  };
 
-    return (
-        <BreadcrumbContext.Provider
-            value={{
-                breadcrumbItems,
-                navItems,
-                setBreadcrumbItems,
-                setNavItems,
-                setNavLeft,
-                clear,
-            }}
-        >
-            {children}
-        </BreadcrumbContext.Provider>
-    );
+  return (
+    <BreadcrumbContext.Provider
+      value={{
+        breadcrumbItems,
+        navItems,
+        setBreadcrumbItems,
+        setNavItems,
+        setNavLeft,
+        clear,
+      }}
+    >
+      {children}
+    </BreadcrumbContext.Provider>
+  );
 };

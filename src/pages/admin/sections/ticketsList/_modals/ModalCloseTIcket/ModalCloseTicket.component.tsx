@@ -158,13 +158,13 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
           <div className="modal-open-ticket__header-badges">
             <span
               className={`modal-open-ticket__status-badge ${
-                ticket?.status === 2
+                Number(ticket?.status) === 2
                   ? "modal-open-ticket__status-badge--inactive"
                   : "modal-open-ticket__status-badge--active"
               }`}
             >
               <span className="modal-open-ticket__status-dot"></span>
-              {ticket?.status === 2 ? "Chiuso" : "Aperto"}
+              {Number(ticket?.status) === 2 ? "Chiuso" : "Aperto"}
             </span>
           </div>
         </div>
