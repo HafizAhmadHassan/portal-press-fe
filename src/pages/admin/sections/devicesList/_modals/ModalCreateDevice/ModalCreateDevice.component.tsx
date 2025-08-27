@@ -47,7 +47,7 @@ interface FormData {
   matricolaBte: string;
   matricolaKgn: string;
   customer: string;
-  ipRouter: string;
+  ip_Router: string;
   gpsX: string;
   gpsY: string;
   note: string;
@@ -55,7 +55,7 @@ interface FormData {
 
 interface FormErrors {
   machineName?: string;
-  ipRouter?: string;
+  ip_Router?: string;
   general?: string;
 }
 
@@ -85,7 +85,7 @@ export const ModalCreateDevice: React.FC<ModalCreateDeviceProps> = ({
     matricolaBte: "",
     matricolaKgn: "",
     customer: "",
-    ipRouter: "",
+    ip_Router: "",
     gpsX: "",
     gpsY: "",
     note: "",
@@ -116,25 +116,25 @@ export const ModalCreateDevice: React.FC<ModalCreateDeviceProps> = ({
       machine__Name: data.machineName,
       status: data.status,
       waste: data.waste || null,
-      linux_version: data.linuxVersion || null,
-      start_available: data.startAvailable || null,
-      end_available: data.endAvailable || null,
+      linux_Version: data.linuxVersion || null,
+      start_Available: data.startAvailable || null,
+      end_Available: data.endAvailable || null,
       street: data.street || null,
-      postal_code: data.postalCode || null,
+      postal_Code: data.postalCode || null,
       province: data.province || null,
       city: data.city || null,
       country: data.country || null,
       municipality: data.municipality || null,
       address: data.address || null,
       status_ready_d75_3_7: data.statusReadyD75_3_7,
-      status_machine_blocked: data.statusMachineBlocked,
-      codice_gps: data.codiceGps || null,
-      sheet_name: data.sheetName || null,
-      customer_name: data.customerName || null,
-      matricola_bte: data.matricolaBte || null,
-      matricola_kgn: data.matricolaKgn || null,
+      status_Machine_Blocked: data.statusMachineBlocked,
+      codice_Gps: data.codiceGps || null,
+      sheet_Name: data.sheetName || null,
+      customer_Name: data.customerName || null,
+      matricola_Bte: data.matricolaBte || null,
+      matricola_Kgn: data.matricolaKgn || null,
       customer: data.customer || null,
-      ip_router: data.ipRouter || null,
+      ip_Router: data.ip_Router || null,
       gps_x: data.gpsX || null,
       gps_y: data.gpsY || null,
       note: data.note || null,
@@ -151,10 +151,10 @@ export const ModalCreateDevice: React.FC<ModalCreateDeviceProps> = ({
     }
 
     if (
-      formData.ipRouter &&
-      !/^(?:\d{1,3}\.){3}\d{1,3}$/.test(formData.ipRouter)
+      formData.ip_Router &&
+      !/^(?:\d{1,3}\.){3}\d{1,3}$/.test(formData.ip_Router)
     ) {
-      newErrors.ipRouter = "Formato IP non valido (es. 192.168.1.1)";
+      newErrors.ip_Router = "Formato IP non valido (es. 192.168.1.1)";
     }
 
     setErrors(newErrors);
@@ -209,7 +209,7 @@ export const ModalCreateDevice: React.FC<ModalCreateDeviceProps> = ({
         matricolaBte: "",
         matricolaKgn: "",
         customer: "",
-        ipRouter: "",
+        ip_Router: "",
         gpsX: "",
         gpsY: "",
         note: "",
@@ -238,8 +238,8 @@ export const ModalCreateDevice: React.FC<ModalCreateDeviceProps> = ({
       confirmText="Crea Device"
       cancelText="Annulla"
       onConfirm={handleSave}
-      variant="primary"
-      loading={isLoading}
+
+      // loading={isLoading}
     >
       <div className={styles.modalContent}>
         {errors.general && (
@@ -251,7 +251,7 @@ export const ModalCreateDevice: React.FC<ModalCreateDeviceProps> = ({
 
         <BaseInfo
           formData={formData}
-          isLoading={isLoading}
+          // isLoading={isLoading}
           handleInputChange={handleInputChange}
           statusOptions={statusOptions}
           wasteOptions={wasteOptions}
@@ -260,21 +260,21 @@ export const ModalCreateDevice: React.FC<ModalCreateDeviceProps> = ({
 
         <PositionInfo
           formData={formData}
-          isLoading={isLoading}
+          // isLoading={isLoading}
           handleInputChange={handleInputChange}
           generateFullAddress={generateFullAddress}
         />
 
         <TechnicalInfo
           formData={formData}
-          isLoading={isLoading}
+          // isLoading={isLoading}
           handleInputChange={handleInputChange}
           errors={errors}
         />
 
         <StatusInfo
           formData={formData}
-          isLoading={isLoading}
+          // isLoading={isLoading}
           handleInputChange={handleInputChange}
         />
 

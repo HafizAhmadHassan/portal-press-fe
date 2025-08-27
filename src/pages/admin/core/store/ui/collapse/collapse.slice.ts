@@ -1,5 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
-import type { CollapseState } from '../ui.types';
+import { createSlice } from "@reduxjs/toolkit";
+import type { CollapseState } from "../ui.types";
 
 const initialState: CollapseState = {
   items: {},
@@ -9,7 +9,7 @@ const initialState: CollapseState = {
 };
 
 const collapseSlice = createSlice({
-  name: 'collapse',
+  name: "collapse",
   initialState,
   reducers: {
     registerCollapse: (state, action) => {
@@ -29,10 +29,10 @@ const collapseSlice = createSlice({
 
       if (!item) return;
 
-      const wasOpen = item.isOpen;
+      const wasOpen = item?.isOpen;
 
-      if (item.autoClose && !wasOpen) {
-        Object.values(state.items).forEach(collapse => {
+      if (item?.autoClose && !wasOpen) {
+        Object.values(state.items).forEach((collapse) => {
           if (collapse.autoClose && collapse.id !== id) {
             collapse.isOpen = false;
           }
@@ -49,8 +49,8 @@ const collapseSlice = createSlice({
 
       if (!item) return;
 
-      if (item.autoClose) {
-        Object.values(state.items).forEach(collapse => {
+      if (item?.autoClose) {
+        Object.values(state.items).forEach((collapse) => {
           if (collapse.autoClose && collapse.id !== id) {
             collapse.isOpen = false;
           }
@@ -71,7 +71,7 @@ const collapseSlice = createSlice({
     },
 
     closeAllCollapses: (state) => {
-      Object.values(state.items).forEach(item => {
+      Object.values(state.items).forEach((item) => {
         item.isOpen = false;
       });
     },

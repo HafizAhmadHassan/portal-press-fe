@@ -1,8 +1,8 @@
-import React from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
-import styles from '../styles/SideNavUserInfo.module.scss';
-import type { User } from '@store_admin/users/user.types'; // Assumi che ci sia
-import { RoleBadge } from '@shared/roleBadge/RoleBadge.tsx'; // Assumi che esista un componente RoleBadge
+import React from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import styles from "../styles/SideNavUserInfo.module.scss";
+import type { User } from "@store_admin/users/user.types"; // Assumi che ci sia
+import { RoleBadge } from "@shared/roleBadge/RoleBadge.tsx"; // Assumi che esista un componente RoleBadge
 
 interface Props {
   user: User;
@@ -10,12 +10,12 @@ interface Props {
 }
 
 export function SideNavUserInfo({ user, showMenu }: Props) {
-  // Se user_permissions è array o stringa, adattalo qui:
-  const roles = Array.isArray(user.user_permissions)
-    ? user.user_permissions
-    : user.user_permissions
-      ? [user.user_permissions]
-      : [];
+  // Se userPermissions è array o stringa, adattalo qui:
+  const roles = Array.isArray(user.userPermissions)
+    ? user.userPermissions
+    : user.userPermissions
+    ? [user.userPermissions]
+    : [];
 
   const hasRoles = roles.length > 0;
 
@@ -23,7 +23,7 @@ export function SideNavUserInfo({ user, showMenu }: Props) {
     <div className={styles.container}>
       <div className={styles.userDetails}>
         <span className={styles.userName}>{user.username}</span>
-        {hasRoles &&  <RoleBadge user={user} /> }
+        {hasRoles && <RoleBadge user={user} />}
       </div>
 
       <div className={styles.menuToggle}>

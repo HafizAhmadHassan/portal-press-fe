@@ -39,7 +39,7 @@ interface FormData {
   isActive: boolean;
   isStaff: boolean;
   isSuperuser: boolean;
-  user_permissions: string[];
+  userPermissions: string[];
 }
 
 interface FormErrors {
@@ -65,7 +65,7 @@ export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({
     isActive: true,
     isStaff: false,
     isSuperuser: false,
-    user_permissions: [],
+    userPermissions: [],
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -110,7 +110,7 @@ export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({
   };
 
   const generateFullName = () => {
-    const fullName = `${formData.first_name} ${formData.last_name}`.trim();
+    const fullName = `${formData.firstName} ${formData.lastName}`.trim();
     handleInputChange("fullName", fullName);
   };
 
@@ -127,13 +127,13 @@ export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({
         email: "",
         password: "",
         confirmPassword: "",
-        first_name: "",
-        last_name: "",
+        firstName: "",
+        lastName: "",
         fullName: "",
         isActive: true,
-        is_staff: false,
-        is_superuser: false,
-        user_permissions: [],
+        isStaff: false,
+        isSuperuser: false,
+        userPermissions: [],
       });
     } catch (error: any) {
       setErrors({
@@ -171,7 +171,7 @@ export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({
       cancelText="Annulla"
       onConfirm={handleSave}
       variant="filled"
-      loading={isLoading}
+      // loading={isLoading}
     >
       <div className={styles.modalContent}>
         {errors.general && (
@@ -296,10 +296,10 @@ export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({
           <div className={styles.formGrid}>
             <Input
               label="Nome"
-              name="first_name"
-              value={formData.first_name}
+              name="firstName"
+              value={formData.firstName}
               onChange={(e) => {
-                handleInputChange("first_name", e.target.value);
+                handleInputChange("firstName", e.target.value);
                 setTimeout(generateFullName, 0);
               }}
               placeholder="es. John"
@@ -308,10 +308,10 @@ export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({
 
             <Input
               label="Cognome"
-              name="last_name"
-              value={formData.last_name}
+              name="lastName"
+              value={formData.lastName}
               onChange={(e) => {
-                handleInputChange("last_name", e.target.value);
+                handleInputChange("lastName", e.target.value);
                 setTimeout(generateFullName, 0);
               }}
               placeholder="es. Doe"
@@ -348,16 +348,16 @@ export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({
             <Checkbox
               label="Staff"
               description="Accesso alle funzioni di amministrazione"
-              checked={formData.is_staff}
-              onChange={(checked) => handleInputChange("is_staff", checked)}
+              checked={formData.isStaff}
+              onChange={(checked) => handleInputChange("isStaff", checked)}
               disabled={isLoading}
               color="warning"
             />
             <Checkbox
               label="Super Amministratore"
               description="Accesso completo a tutte le funzioni"
-              checked={formData.is_superuser}
-              onChange={(checked) => handleInputChange("is_superuser", checked)}
+              checked={formData.isSuperuser}
+              onChange={(checked) => handleInputChange("isSuperuser", checked)}
               disabled={isLoading}
               color="danger"
             />
@@ -381,9 +381,9 @@ export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({
                   role
                 ].toLowerCase()}`,
               }))}
-              value={formData.user_permissions}
+              value={formData.userPermissions}
               onChange={(permissions) =>
-                handleInputChange("user_permissions", permissions)
+                handleInputChange("userPermissions", permissions)
               }
               layout="grid"
               columns={2}
@@ -411,7 +411,7 @@ export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({
             <div className={styles.summaryItem}>
               <strong>Nome:</strong>{" "}
               {formData.fullName ||
-                `${formData.first_name} ${formData.last_name}`.trim() ||
+                `${formData.firstName} ${formData.lastName}`.trim() ||
                 "Non specificato"}
             </div>
             <div className={styles.summaryItem}>
@@ -420,8 +420,8 @@ export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({
             </div>
             <div className={styles.summaryItem}>
               <strong>Permessi:</strong>{" "}
-              {formData.user_permissions.length > 0
-                ? formData.user_permissions
+              {formData.userPermissions.length > 0
+                ? formData.userPermissions
                     .map((p) => UserRoleLabels[p])
                     .join(", ")
                 : "Nessun permesso"}

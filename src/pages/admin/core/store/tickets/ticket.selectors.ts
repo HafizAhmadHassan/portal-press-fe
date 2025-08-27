@@ -1,6 +1,5 @@
-import { createSelector } from '@reduxjs/toolkit';
-import type { RootState } from '../../../../store';
-
+import { createSelector } from "@reduxjs/toolkit";
+import type { RootState } from "@root/store";
 
 const selectTicketsState = (state: RootState) => state.tickets;
 

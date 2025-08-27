@@ -1,19 +1,20 @@
 // src/core/store/ui/ui.selectors.ts
-import { createSelector } from '@reduxjs/toolkit';
-import type { RootState } from  '../../../../store';
-import type { ThemeMode } from './ui.types';
+import { createSelector } from "@reduxjs/toolkit";
+import type { RootState } from "@root/store";
+import type { ThemeMode } from "./ui.types";
 
 export const selectUiState = (state: RootState) => state.ui.ui;
 
-export const selectThemeMode = (state: RootState): ThemeMode => state.ui.ui.themeMode;
+export const selectThemeMode = (state: RootState): ThemeMode =>
+  state.ui.ui.themeMode;
 export const selectIsDark = (state: RootState): boolean => state.ui.ui.isDark;
 
 export const selectEffectiveTheme = createSelector(
   [selectThemeMode, selectIsDark],
   (mode, isDark) => ({
-    mode,                 // 'light' | 'dark' | 'system'
-    isDark,               // boolean
-    resolved: isDark ? 'dark' : 'light', // comodo per classi/telemetria
+    mode, // 'light' | 'dark' | 'system'
+    isDark, // boolean
+    resolved: isDark ? "dark" : "light", // comodo per classi/telemetria
   })
 );
 

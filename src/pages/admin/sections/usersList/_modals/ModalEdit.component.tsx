@@ -35,13 +35,13 @@ export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({
     id: user.id || 0,
     username: user.username || "",
     email: user.email || "",
-    first_name: user.first_name || "",
-    last_name: user.last_name || "",
+    firstName: user.firstName || "",
+    lastName: user.lastName || "",
     fullName: user.fullName || "",
     isActive: user.isActive || false,
-    is_staff: user.is_staff || false,
-    is_superuser: user.is_superuser || false,
-    user_permissions: user.user_permissions || [],
+    isStaff: user.isStaff || false,
+    isSuperuser: user.isSuperuser || false,
+    userPermissions: user.userPermissions || [],
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -51,13 +51,13 @@ export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({
       id: user.id || 0,
       username: user.username || "",
       email: user.email || "",
-      first_name: user.first_name || "",
-      last_name: user.last_name || "",
+      firstName: user.firstName || "",
+      lastName: user.lastName || "",
       fullName: user.fullName || "",
       isActive: user.isActive || false,
-      is_staff: user.is_staff || false,
-      is_superuser: user.is_superuser || false,
-      user_permissions: user.user_permissions || [],
+      isStaff: user.isStaff || false,
+      isSuperuser: user.isSuperuser || false,
+      userPermissions: user.userPermissions || [],
     });
   }, [user]);
 
@@ -116,8 +116,8 @@ export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({
       confirmText="Salva Modifiche"
       cancelText="Annulla"
       onConfirm={handleSave}
-      variant="primary"
-      loading={isLoading}
+
+      // loading={isLoading}
     >
       <div className={styles.modalContent}>
         {/* Header con avatar */}
@@ -126,7 +126,7 @@ export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({
           <div className={styles.userInfo}>
             <h3 className={styles.userName}>
               {user.fullName ||
-                `${user.first_name} ${user.last_name}`.trim() ||
+                `${user.firstName} ${user.lastName}`.trim() ||
                 user.username}
             </h3>
             <p className={styles.userEmail}>{user.email}</p>
@@ -157,7 +157,7 @@ export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({
             <div>
               <p className={styles.systemLabel}>Data Creazione</p>
               <p className={styles.systemValue}>
-                {formatDate(user.dataJoined)}
+                {formatDate(user.dateJoined)}
               </p>
             </div>
           </div>
@@ -165,9 +165,7 @@ export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({
             <Calendar className={styles.systemIcon} />
             <div>
               <p className={styles.systemLabel}>Ultimo Login</p>
-              <p className={styles.systemValue}>
-                {formatDate(user.last_login)}
-              </p>
+              <p className={styles.systemValue}>{formatDate(user.lastLogin)}</p>
             </div>
           </div>
         </div>
@@ -204,17 +202,17 @@ export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({
           <div className={styles.formGrid}>
             <Input
               label="Nome"
-              name="first_name"
-              value={formData.first_name}
-              onChange={(e) => handleInputChange("first_name", e.target.value)}
+              name="firstName"
+              value={formData.firstName}
+              onChange={(e) => handleInputChange("firstName", e.target.value)}
               placeholder="Inserisci nome"
               disabled={isLoading}
             />
             <Input
               label="Cognome"
-              name="last_name"
-              value={formData.last_name}
-              onChange={(e) => handleInputChange("last_name", e.target.value)}
+              name="lastName"
+              value={formData.lastName}
+              onChange={(e) => handleInputChange("lastName", e.target.value)}
               placeholder="Inserisci cognome"
               disabled={isLoading}
             />
@@ -245,16 +243,16 @@ export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({
               />
               <Checkbox
                 label="Staff"
-                checked={formData.is_staff}
-                onChange={(checked) => handleInputChange("is_staff", checked)}
+                checked={formData.isStaff}
+                onChange={(checked) => handleInputChange("isStaff", checked)}
                 disabled={isLoading}
                 color="warning"
               />
               <Checkbox
                 label="Super Admin"
-                checked={formData.is_superuser}
+                checked={formData.isSuperuser}
                 onChange={(checked) =>
-                  handleInputChange("is_superuser", checked)
+                  handleInputChange("isSuperuser", checked)
                 }
                 disabled={isLoading}
                 color="danger"
@@ -270,9 +268,9 @@ export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({
                 label: UserRoleLabels[role],
                 value: role,
               }))}
-              value={formData.user_permissions}
+              value={formData.userPermissions}
               onChange={(permissions) =>
-                handleInputChange("user_permissions", permissions)
+                handleInputChange("userPermissions", permissions)
               }
               layout="grid"
               columns={2}

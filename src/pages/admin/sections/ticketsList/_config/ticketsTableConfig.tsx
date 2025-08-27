@@ -10,13 +10,13 @@ type DeviceLite = {
   machine__Name?: string;
   city?: string;
   province?: string;
-  customer_name?: string;
+  customer_Name?: string;
   customer?: string;
-  ip_router?: string;
+  ip_Router?: string;
   waste?: string;
   address?: string;
   street?: string;
-  postal_code?: string;
+  postal_Code?: string;
   country?: string;
 };
 
@@ -138,9 +138,9 @@ export const createTicketsTableConfig = ({
                 {t.device.province ? `, ${t.device.province}` : ""}
               </div>
             )}
-            {(t.device.customer_name || (t.device as any).customer) && (
+            {(t.device.customer_Name || (t.device as any).customer) && (
               <div style={{ fontSize: "12px", color: "var(--text-secondary)" }}>
-                {t.device.customer_name || (t.device as any).customer}
+                {t.device.customer_Name || (t.device as any).customer}
               </div>
             )}
           </div>

@@ -42,7 +42,7 @@ export const customersApi = apiSlice.injectEndpoints({
             const wrapped = response as CustomersWrappedResponse;
             raw = wrapped.flatMap((item) =>
               Array.isArray(item?.customers)
-                ? (item.customers as unknown[])
+                ? (item?.customers as unknown[])
                 : []
             );
           }

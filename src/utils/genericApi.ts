@@ -155,7 +155,7 @@ export function createCrudApi<
               (draft: any) => {
                 if (draft.data) {
                   const itemIndex = draft.data.findIndex(
-                    (item: any) => item.id === id
+                    (item: any) => item?.id === id
                   );
                   if (itemIndex !== -1) {
                     // Rimuovi l'elemento

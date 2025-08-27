@@ -43,7 +43,7 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
       dev?.street,
       dev?.city,
       dev?.province,
-      dev?.postal_code,
+      dev?.postal_Code,
       dev?.country,
     ].filter(Boolean);
     return parts.length > 0 ? parts.join(", ") : "Ubicazione non specificata";
@@ -54,7 +54,7 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
     date: new Date(),
     info: `Ticket #${ticket?.id}${
       dev?.machine__Name ? ` – ${dev?.machine__Name}` : ""
-    }\nCliente: ${dev?.customer || dev?.customer_name || "N/D"}${
+    }\nCliente: ${dev?.customer || dev?.customer_Name || "N/D"}${
       (dev as any)?.waste ? `\nTipo rifiuto: ${(dev as any)?.waste}` : ""
     }`,
     address: getFullAddress(),
@@ -93,7 +93,7 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
         date: new Date(),
         info: `Ticket #${ticket?.id}${
           dev?.machine__Name ? ` – ${dev?.machine__Name}` : ""
-        }\nCliente: ${dev?.customer || dev?.customer_name || "N/D"}${
+        }\nCliente: ${dev?.customer || dev?.customer_Name || "N/D"}${
           (dev as any)?.waste ? `\nTipo rifiuto: ${(dev as any)?.waste}` : ""
         }`,
         address: getFullAddress(),
@@ -136,7 +136,7 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
                 </h3>
                 <div className="modal-open-ticket__header-subtitle">
                   {dev?.customer ||
-                    (dev as any)?.customer_name ||
+                    (dev as any)?.customer_Name ||
                     "Cliente N/D"}{" "}
                   • {dev?.city || "Luogo N/D"}
                 </div>
@@ -175,7 +175,7 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
           <div className="modal-open-ticket__compact-grid">
             <div className="modal-open-ticket__compact-item">
               <strong>Customer:</strong>{" "}
-              {dev?.customer || (dev as any)?.customer_name || "N/D"}
+              {dev?.customer || (dev as any)?.customer_Name || "N/D"}
             </div>
             <div className="modal-open-ticket__compact-item">
               <strong>Ticket ID:</strong> {ticket?.id}
@@ -190,9 +190,9 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
                 <strong>Waste:</strong> {(dev as any).waste}
               </div>
             )}
-            {dev?.ip_router && (
+            {dev?.ip_Router && (
               <div className="modal-open-ticket__compact-item">
-                <strong>IP:</strong> {dev.ip_router}
+                <strong>IP:</strong> {dev.ip_Router}
               </div>
             )}
             {dev?.city && (

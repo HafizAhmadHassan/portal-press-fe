@@ -272,7 +272,7 @@ export const DevicesListSections: React.FC = () => {
         <SectionFilterComponent
           filters={filtersConfig}
           onResetFilters={handleResetAll}
-          isLoading={getLoadingState()}
+          // isLoading={getLoadingState()}
         />
       </div>
       <Divider />
@@ -307,7 +307,7 @@ export const DevicesListSections: React.FC = () => {
               {isTable ? (
                 <GenericTableWithLogic
                   config={tableConfig}
-                  loading={isLoading}
+                  // loading={isLoading}
                 />
               ) : (
                 <div className={styles.devicesGrid}>

@@ -189,13 +189,13 @@ export const GpsListSections: React.FC = () => {
         <SectionFilterComponent
           filters={filtersConfig}
           onResetFilters={handleResetAll}
-          isLoading={isLoading}
+          // isLoading={isLoading}
         />
       </div>
       <Divider />
 
       <div className={styles["gps-list-page__table-wrapper"]}>
-        <GenericTableWithLogic config={tableConfig} loading={isLoading} />
+        <GenericTableWithLogic config={tableConfig} /* loading={isLoading} */ />
       </div>
     </div>
   );

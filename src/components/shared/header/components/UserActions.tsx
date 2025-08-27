@@ -105,15 +105,15 @@ export default function UserActions({
   const logsFromApi: EmailLog[] = useMemo(() => {
     const raw = logsResponse?.data ?? [];
     return raw.map((item) => {
-      const id = String(item.id);
+      const id = String(item?.id);
       const unread = !readIds.has(id);
       return {
         id,
-        subject: `${item.name_alarm} (${item.code_alarm})`,
-        preview: `${item.machine_ip} • ${item.customer_Name}`,
-        timestamp: item.date_and_time,
+        subject: `${item?.name_alarm} (${item?.code_alarm})`,
+        preview: `${item?.machine_ip} • ${item?.customer_Name}`,
+        timestamp: item?.date_and_time,
         unread,
-        severity: computeSeverity(item.name_alarm, item.code_alarm),
+        severity: computeSeverity(item?.name_alarm, item?.code_alarm),
       } as EmailLog;
     });
   }, [logsResponse?.data, readIds]);
@@ -176,7 +176,7 @@ export default function UserActions({
         open={open}
         onClose={() => setOpen(false)}
         logs={dataset}
-        loading={loadingLogs || isFetchingLogs}
+        // loading={loadingLogs || isFetchingLogs}
         onMarkAllRead={handleMarkAllRead}
         onOpenInbox={onOpenInbox}
         onClickItem={handleClickLog}

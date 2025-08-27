@@ -21,21 +21,21 @@ export function useMenuItems(menuItems: MenuItem[]): MenuItem[] {
         let isActive = false;
 
         // Calcola se questo item è attivo
-        if (item.route) {
+        if (item?.route) {
           const currentPath = location.pathname;
 
-          if (item.children && item.children.length > 0) {
+          if (item?.children && item?.children.length > 0) {
             // Se ha figli, è attivo se il percorso corrente inizia con la sua rotta
-            isActive = currentPath.startsWith(item.route);
+            isActive = currentPath.startsWith(item?.route);
           } else {
             // Se non ha figli, deve essere un match esatto
-            isActive = currentPath === item.route;
+            isActive = currentPath === item?.route;
           }
         }
 
         // Calcola ricorsivamente per i figli
-        const updatedChildren = item.children
-          ? calculateActiveState(item.children)
+        const updatedChildren = item?.children
+          ? calculateActiveState(item?.children)
           : undefined;
 
         // Se ha figli e uno di essi è attivo, anche il parent è attivo

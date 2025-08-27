@@ -188,7 +188,7 @@ export const devicesApi = apiSlice.injectEndpoints({
       query: ({ id, blocked }) => ({
         url: `joined-machines-gps/${id}`,
         method: "PUT",
-        body: { status_machine_blocked: blocked },
+        body: { status_Machine_Blocked: blocked },
       }),
       invalidatesTags: (_r, _e, { id }) => [
         { type: "ENTITY" as const, id },

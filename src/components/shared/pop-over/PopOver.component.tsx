@@ -182,20 +182,20 @@ export const PopOver: React.FC<PopOverProps> = ({
         <div className={styles.list} role="none">
           {items.map((item) => (
             <button
-              key={item.key}
+              key={item?.key}
               className={styles.item}
               role="menuitem"
               type="button"
-              disabled={item.disabled}
+              disabled={item?.disabled}
               onClick={() => {
-                item.onSelect?.();
+                item?.onSelect?.();
                 if (closeOnSelect) onClose();
               }}
             >
-              {item.icon ? (
-                <span className={styles.itemIcon}>{item.icon}</span>
+              {item?.icon ? (
+                <span className={styles.itemIcon}>{item?.icon}</span>
               ) : null}
-              <span className={styles.itemLabel}>{item.label}</span>
+              <span className={styles.itemLabel}>{item?.label}</span>
             </button>
           ))}
         </div>

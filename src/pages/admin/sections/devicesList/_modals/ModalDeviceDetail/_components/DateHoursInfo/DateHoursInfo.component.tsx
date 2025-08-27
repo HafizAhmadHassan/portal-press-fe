@@ -1,6 +1,6 @@
-import styles from '../../../../_styles/Sections.module.scss';
-import stylesDateHours from './DateHours.module.scss';
-import { Calendar, Clock } from 'lucide-react';
+import styles from "../../../../_styles/Sections.module.scss";
+import stylesDateHours from "./DateHours.module.scss";
+import { Calendar, Clock } from "lucide-react";
 
 export default function DateHoursInfo({
   formatDate,
@@ -22,12 +22,16 @@ export default function DateHoursInfo({
         <div className={stylesDateHours.dateCard}>
           <div className={stylesDateHours.dateCardHeader}>
             <Calendar className={stylesDateHours.dateIcon} />
-            <span className={stylesDateHours.dateCardTitle}>Data Creazione</span>
+            <span className={stylesDateHours.dateCardTitle}>
+              Data Creazione
+            </span>
           </div>
           <div className={stylesDateHours.dateCardContent}>
-            <span className={stylesDateHours.dateValue}>{formatDate(device?.created_at)}</span>
+            <span className={stylesDateHours.dateValue}>
+              {formatDate(device?.created_at)}
+            </span>
             <span className={stylesDateHours.dateRelative}>
-              {device?.created_at ? getRelativeTime(device?.created_at) : 'N/A'}
+              {device?.created_at ? getRelativeTime(device?.created_at) : "N/A"}
             </span>
           </div>
         </div>
@@ -35,12 +39,18 @@ export default function DateHoursInfo({
         <div className={stylesDateHours.dateCard}>
           <div className={stylesDateHours.dateCardHeader}>
             <Clock className={stylesDateHours.dateIcon} />
-            <span className={stylesDateHours.dateCardTitle}>Ultimo Aggiornamento</span>
+            <span className={stylesDateHours.dateCardTitle}>
+              Ultimo Aggiornamento
+            </span>
           </div>
           <div className={stylesDateHours.dateCardContent}>
-            <span className={stylesDateHours.dateValue}>{formatDate(device?.updated_at)}</span>
+            <span className={stylesDateHours.dateValue}>
+              {formatDate(device?.updated_at)}
+            </span>
             <span className={stylesDateHours.dateRelative}>
-              {device?.updated_at ? getRelativeTime(device?.updated_at) : 'Mai aggiornato'}
+              {device?.updated_at
+                ? getRelativeTime(device?.updated_at)
+                : "Mai aggiornato"}
             </span>
           </div>
         </div>
@@ -49,11 +59,15 @@ export default function DateHoursInfo({
       <div className={stylesDateHours.availabilityGrid}>
         <div className={stylesDateHours.infoItem}>
           <span className={stylesDateHours.infoLabel}>Orario Inizio</span>
-          <span className={stylesDateHours.infoValue}>{device?.start_available || 'Non specificato'}</span>
+          <span className={stylesDateHours.infoValue}>
+            {device?.start_Available || "Non specificato"}
+          </span>
         </div>
         <div className={stylesDateHours.infoItem}>
           <span className={stylesDateHours.infoLabel}>Orario Fine</span>
-          <span className={stylesDateHours.infoValue}>{device?.end_available || 'Non specificato'}</span>
+          <span className={stylesDateHours.infoValue}>
+            {device?.end_Available || "Non specificato"}
+          </span>
         </div>
       </div>
     </div>

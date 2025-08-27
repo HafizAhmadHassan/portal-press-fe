@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   ArrowDown,
   ArrowUp,
@@ -21,22 +21,38 @@ import {
   Target,
   TrendingUp,
   Users,
-} from 'lucide-react';
-import styles from './styles/AnalyticsReports.module.scss';
+} from "lucide-react";
+import styles from "./styles/AnalyticsReports.module.scss";
 
 const AnalyticsReports = () => {
-  const [selectedReport, setSelectedReport] = useState('overview');
-  const [dateRange, setDateRange] = useState('30d');
-  const [selectedMetric, setSelectedMetric] = useState('all');
+  const [selectedReport, setSelectedReport] = useState("overview");
+  const [dateRange, setDateRange] = useState("30d");
+  const [selectedMetric, setSelectedMetric] = useState("all");
   const [isExporting, setIsExporting] = useState(false);
 
   const reportTypes = [
-    { id: 'overview', name: 'Panoramica Generale', icon: <BarChart3 size={18} /> },
-    { id: 'performance', name: 'Performance Dispositivi', icon: <TrendingUp size={18} /> },
-    { id: 'waste', name: 'Analisi Rifiuti', icon: <PieChart size={18} /> },
-    { id: 'efficiency', name: 'Efficienza Operativa', icon: <Target size={18} /> },
-    { id: 'users', name: 'Comportamento Utenti', icon: <Users size={18} /> },
-    { id: 'environmental', name: 'Impatto Ambientale', icon: <Award size={18} /> }
+    {
+      id: "overview",
+      name: "Panoramica Generale",
+      icon: <BarChart3 size={18} />,
+    },
+    {
+      id: "performance",
+      name: "Performance Dispositivi",
+      icon: <TrendingUp size={18} />,
+    },
+    { id: "waste", name: "Analisi Rifiuti", icon: <PieChart size={18} /> },
+    {
+      id: "efficiency",
+      name: "Efficienza Operativa",
+      icon: <Target size={18} />,
+    },
+    { id: "users", name: "Comportamento Utenti", icon: <Users size={18} /> },
+    {
+      id: "environmental",
+      name: "Impatto Ambientale",
+      icon: <Award size={18} />,
+    },
   ];
 
   const keyMetrics = [
@@ -47,7 +63,7 @@ const AnalyticsReports = () => {
       change: "+10.1%",
       trend: "up",
       target: "160 ton",
-      progress: 97.9
+      progress: 97.9,
     },
     {
       title: "Efficienza Media Sistema",
@@ -56,7 +72,7 @@ const AnalyticsReports = () => {
       change: "+2.6%",
       trend: "up",
       target: "95%",
-      progress: 99.2
+      progress: 99.2,
     },
     {
       title: "Tempo Medio Conferimento",
@@ -65,7 +81,7 @@ const AnalyticsReports = () => {
       change: "-17.1%",
       trend: "up",
       target: "3 min",
-      progress: 88.2
+      progress: 88.2,
     },
     {
       title: "Utenti Attivi",
@@ -74,114 +90,179 @@ const AnalyticsReports = () => {
       change: "+4.5%",
       trend: "up",
       target: "9,000",
-      progress: 91.6
-    }
+      progress: 91.6,
+    },
   ];
 
   const wasteAnalysis = {
     byType: [
-      { type: 'Plastica', amount: 54.8, percentage: 35.0, trend: '+8.2%', color: '#f59e0b' },
-      { type: 'Carta', amount: 43.9, percentage: 28.0, trend: '+5.1%', color: '#3b82f6' },
-      { type: 'Organico', amount: 34.5, percentage: 22.0, trend: '+12.3%', color: '#10b981' },
-      { type: 'Vetro', amount: 23.5, percentage: 15.0, trend: '-2.1%', color: '#8b5cf6' }
+      {
+        type: "Plastica",
+        amount: 54.8,
+        percentage: 35.0,
+        trend: "+8.2%",
+        color: "#f59e0b",
+      },
+      {
+        type: "Carta",
+        amount: 43.9,
+        percentage: 28.0,
+        trend: "+5.1%",
+        color: "#3b82f6",
+      },
+      {
+        type: "Organico",
+        amount: 34.5,
+        percentage: 22.0,
+        trend: "+12.3%",
+        color: "#10b981",
+      },
+      {
+        type: "Vetro",
+        amount: 23.5,
+        percentage: 15.0,
+        trend: "-2.1%",
+        color: "#8b5cf6",
+      },
     ],
     byLocation: [
-      { area: 'Centro Storico', amount: 45.2, devices: 12, avgFill: 78 },
-      { area: 'Zona Residenziale Nord', amount: 38.7, devices: 10, avgFill: 82 },
-      { area: 'Area Commerciale', amount: 42.1, devices: 8, avgFill: 85 },
-      { area: 'Periferia Sud', amount: 30.7, devices: 6, avgFill: 71 }
-    ]
+      { area: "Centro Storico", amount: 45.2, devices: 12, avgFill: 78 },
+      {
+        area: "Zona Residenziale Nord",
+        amount: 38.7,
+        devices: 10,
+        avgFill: 82,
+      },
+      { area: "Area Commerciale", amount: 42.1, devices: 8, avgFill: 85 },
+      { area: "Periferia Sud", amount: 30.7, devices: 6, avgFill: 71 },
+    ],
   };
 
   const performanceData = [
-    { month: 'Gen', collections: 2847, efficiency: 92.1, downtime: 3.2, users: 7234 },
-    { month: 'Feb', collections: 3156, efficiency: 94.3, downtime: 2.8, users: 7456 },
-    { month: 'Mar', collections: 3421, efficiency: 91.7, downtime: 4.1, users: 7698 },
-    { month: 'Apr', collections: 3789, efficiency: 95.2, downtime: 2.1, users: 7923 },
-    { month: 'Mag', collections: 4012, efficiency: 93.8, downtime: 3.5, users: 8156 },
-    { month: 'Giu', collections: 4234, efficiency: 96.1, downtime: 1.9, users: 8247 }
+    {
+      month: "Gen",
+      collections: 2847,
+      efficiency: 92.1,
+      downtime: 3.2,
+      users: 7234,
+    },
+    {
+      month: "Feb",
+      collections: 3156,
+      efficiency: 94.3,
+      downtime: 2.8,
+      users: 7456,
+    },
+    {
+      month: "Mar",
+      collections: 3421,
+      efficiency: 91.7,
+      downtime: 4.1,
+      users: 7698,
+    },
+    {
+      month: "Apr",
+      collections: 3789,
+      efficiency: 95.2,
+      downtime: 2.1,
+      users: 7923,
+    },
+    {
+      month: "Mag",
+      collections: 4012,
+      efficiency: 93.8,
+      downtime: 3.5,
+      users: 8156,
+    },
+    {
+      month: "Giu",
+      collections: 4234,
+      efficiency: 96.1,
+      downtime: 1.9,
+      users: 8247,
+    },
   ];
 
   const topDevices = [
     {
-      id: 'DEV-001',
-      location: 'Piazza Centrale',
+      id: "DEV-001",
+      location: "Piazza Centrale",
       efficiency: 98.5,
       collections: 342,
       uptime: 99.2,
       avgTime: 2.8,
-      revenue: '€2,340'
+      revenue: "€2,340",
     },
     {
-      id: 'DEV-007',
-      location: 'Via Roma 15',
+      id: "DEV-007",
+      location: "Via Roma 15",
       efficiency: 97.2,
       collections: 289,
       uptime: 98.7,
       avgTime: 3.1,
-      revenue: '€1,980'
+      revenue: "€1,980",
     },
     {
-      id: 'DEV-023',
-      location: 'Corso Italia',
+      id: "DEV-023",
+      location: "Corso Italia",
       efficiency: 96.8,
       collections: 267,
       uptime: 97.9,
       avgTime: 3.4,
-      revenue: '€1,845'
+      revenue: "€1,845",
     },
     {
-      id: 'DEV-015',
-      location: 'Viale Europa',
+      id: "DEV-015",
+      location: "Viale Europa",
       efficiency: 95.1,
       collections: 234,
       uptime: 96.8,
       avgTime: 3.7,
-      revenue: '€1,623'
+      revenue: "€1,623",
     },
     {
-      id: 'DEV-030',
-      location: 'Via Mazzini',
+      id: "DEV-030",
+      location: "Via Mazzini",
       efficiency: 94.7,
       collections: 298,
       uptime: 95.4,
       avgTime: 4.1,
-      revenue: '€1,789'
-    }
+      revenue: "€1,789",
+    },
   ];
 
   const scheduledReports = [
     {
       id: 1,
-      name: 'Report Mensile Performance',
-      schedule: 'Ogni 1° del mese',
+      name: "Report Mensile Performance",
+      schedule: "Ogni 1° del mese",
       recipients: 3,
-      lastSent: '1 Giu 2024',
-      status: 'active'
+      lastSent: "1 Giu 2024",
+      status: "active",
     },
     {
       id: 2,
-      name: 'Analisi Settimanale Rifiuti',
-      schedule: 'Ogni Lunedì',
+      name: "Analisi Settimanale Rifiuti",
+      schedule: "Ogni Lunedì",
       recipients: 5,
-      lastSent: '24 Giu 2024',
-      status: 'active'
+      lastSent: "24 Giu 2024",
+      status: "active",
     },
     {
       id: 3,
-      name: 'Dashboard Esecutiva',
-      schedule: 'Ogni Venerdì',
+      name: "Dashboard Esecutiva",
+      schedule: "Ogni Venerdì",
       recipients: 2,
-      lastSent: '28 Giu 2024',
-      status: 'paused'
-    }
+      lastSent: "28 Giu 2024",
+      status: "paused",
+    },
   ];
 
   const environmentalImpact = {
-    co2Saved: { value: 12.4, unit: 'ton CO₂', change: '+18.3%' },
-    recyclingRate: { value: 87.2, unit: '%', change: '+5.1%' },
-    energySaved: { value: 1.8, unit: 'MWh', change: '+12.7%' },
-    waterSaved: { value: 340, unit: 'L', change: '+8.9%' }
+    co2Saved: { value: 12.4, unit: "ton CO₂", change: "+18.3%" },
+    recyclingRate: { value: 87.2, unit: "%", change: "+5.1%" },
+    energySaved: { value: 1.8, unit: "MWh", change: "+12.7%" },
+    waterSaved: { value: 340, unit: "L", change: "+8.9%" },
   };
 
   const handleExport = (format) => {
@@ -193,8 +274,8 @@ const AnalyticsReports = () => {
   };
 
   const LineChartComponent = ({ data, metric }) => {
-    const maxValue = Math.max(...data.map(d => d[metric]));
-    const minValue = Math.min(...data.map(d => d[metric]));
+    const maxValue = Math.max(...data.map((d) => d[metric]));
+    const minValue = Math.min(...data.map((d) => d[metric]));
     const range = maxValue - minValue;
     const padding = range * 0.1; // 10% padding
     const adjustedMax = maxValue + padding;
@@ -204,7 +285,7 @@ const AnalyticsReports = () => {
     // Generate Y-axis labels
     const yLabels = [];
     for (let i = 0; i <= 4; i++) {
-      const value = adjustedMin + (adjustedRange * (4 - i) / 4);
+      const value = adjustedMin + (adjustedRange * (4 - i)) / 4;
       yLabels.push(Math.round(value));
     }
 
@@ -212,21 +293,27 @@ const AnalyticsReports = () => {
       <div className={styles.lineChart}>
         <svg width="100%" height="280" viewBox="0 0 500 280">
           <defs>
-            <linearGradient id={`gradient-${metric}`} x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.4"/>
-              <stop offset="50%" stopColor="#3b82f6" stopOpacity="0.2"/>
-              <stop offset="100%" stopColor="#3b82f6" stopOpacity="0"/>
+            <linearGradient
+              id={`gradient-${metric}`}
+              x1="0%"
+              y1="0%"
+              x2="0%"
+              y2="100%"
+            >
+              <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.4" />
+              <stop offset="50%" stopColor="#3b82f6" stopOpacity="0.2" />
+              <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
             </linearGradient>
             <filter id="shadow">
-              <feDropShadow dx="0" dy="2" stdDeviation="3" floodOpacity="0.1"/>
+              <feDropShadow dx="0" dy="2" stdDeviation="3" floodOpacity="0.1" />
             </filter>
           </defs>
 
           {/* Background */}
-          <rect x="0" y="0" width="500" height="280" fill="#fafafa" rx="8"/>
+          <rect x="0" y="0" width="500" height="280" fill="#fafafa" rx="8" />
 
           {/* Grid lines horizontal */}
-          {[0, 1, 2, 3, 4].map(i => (
+          {[0, 1, 2, 3, 4].map((i) => (
             <g key={`h-${i}`}>
               <line
                 x1="60"
@@ -265,17 +352,27 @@ const AnalyticsReports = () => {
 
           {/* Area fill */}
           <polygon
-            points={`${data.map((item, i) =>
-              `${80 + i * 60},${210 - ((item[metric] - adjustedMin) / adjustedRange) * 160}`
-            ).join(' ')},${80 + (data.length - 1) * 60},210 80,210`}
+            points={`${data
+              .map(
+                (item, i) =>
+                  `${80 + i * 60},${
+                    210 - ((item[metric] - adjustedMin) / adjustedRange) * 160
+                  }`
+              )
+              .join(" ")},${80 + (data.length - 1) * 60},210 80,210`}
             fill={`url(#gradient-${metric})`}
           />
 
           {/* Data line */}
           <polyline
-            points={data.map((item, i) =>
-              `${80 + i * 60},${210 - ((item[metric] - adjustedMin) / adjustedRange) * 160}`
-            ).join(' ')}
+            points={data
+              .map(
+                (item, i) =>
+                  `${80 + i * 60},${
+                    210 - ((item[metric] - adjustedMin) / adjustedRange) * 160
+                  }`
+              )
+              .join(" ")}
             fill="none"
             stroke="#3b82f6"
             strokeWidth="3"
@@ -287,18 +384,13 @@ const AnalyticsReports = () => {
           {/* Data points */}
           {data.map((item, i) => {
             const x = 80 + i * 60;
-            const y = 210 - ((item[metric] - adjustedMin) / adjustedRange) * 160;
+            const y =
+              210 - ((item[metric] - adjustedMin) / adjustedRange) * 160;
 
             return (
               <g key={`point-${i}`}>
                 {/* Outer glow */}
-                <circle
-                  cx={x}
-                  cy={y}
-                  r="8"
-                  fill="#3b82f6"
-                  fillOpacity="0.2"
-                />
+                <circle cx={x} cy={y} r="8" fill="#3b82f6" fillOpacity="0.2" />
                 {/* Main point */}
                 <circle
                   cx={x}
@@ -347,7 +439,7 @@ const AnalyticsReports = () => {
               fill="#64748b"
               fontWeight="600"
             >
-              {item.month}
+              {item?.month}
             </text>
           ))}
 
@@ -360,10 +452,10 @@ const AnalyticsReports = () => {
             fill="#374151"
             fontWeight="700"
           >
-            {metric === 'collections' && 'Numero Conferimenti'}
-            {metric === 'efficiency' && 'Efficienza Sistema (%)'}
-            {metric === 'users' && 'Utenti Attivi'}
-            {metric === 'downtime' && 'Downtime (ore)'}
+            {metric === "collections" && "Numero Conferimenti"}
+            {metric === "efficiency" && "Efficienza Sistema (%)"}
+            {metric === "users" && "Utenti Attivi"}
+            {metric === "downtime" && "Downtime (ore)"}
           </text>
 
           {/* Y-axis title */}
@@ -376,10 +468,10 @@ const AnalyticsReports = () => {
             fontWeight="600"
             transform="rotate(-90, 20, 140)"
           >
-            {metric === 'collections' && 'Conferimenti'}
-            {metric === 'efficiency' && '%'}
-            {metric === 'users' && 'Utenti'}
-            {metric === 'downtime' && 'Ore'}
+            {metric === "collections" && "Conferimenti"}
+            {metric === "efficiency" && "%"}
+            {metric === "users" && "Utenti"}
+            {metric === "downtime" && "Ore"}
           </text>
         </svg>
       </div>
@@ -399,18 +491,25 @@ const AnalyticsReports = () => {
         <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
           {data.map((item, index) => {
             const startAngle = cumulativePercentage * 3.6 - 90;
-            const endAngle = (cumulativePercentage + item.percentage) * 3.6 - 90;
-            const largeArcFlag = item.percentage > 50 ? 1 : 0;
+            const endAngle =
+              (cumulativePercentage + item?.percentage) * 3.6 - 90;
+            const largeArcFlag = item?.percentage > 50 ? 1 : 0;
 
-            const x1 = centerX + radius * Math.cos(startAngle * Math.PI / 180);
-            const y1 = centerY + radius * Math.sin(startAngle * Math.PI / 180);
-            const x2 = centerX + radius * Math.cos(endAngle * Math.PI / 180);
-            const y2 = centerY + radius * Math.sin(endAngle * Math.PI / 180);
+            const x1 =
+              centerX + radius * Math.cos((startAngle * Math.PI) / 180);
+            const y1 =
+              centerY + radius * Math.sin((startAngle * Math.PI) / 180);
+            const x2 = centerX + radius * Math.cos((endAngle * Math.PI) / 180);
+            const y2 = centerY + radius * Math.sin((endAngle * Math.PI) / 180);
 
-            const ix1 = centerX + innerRadius * Math.cos(startAngle * Math.PI / 180);
-            const iy1 = centerY + innerRadius * Math.sin(startAngle * Math.PI / 180);
-            const ix2 = centerX + innerRadius * Math.cos(endAngle * Math.PI / 180);
-            const iy2 = centerY + innerRadius * Math.sin(endAngle * Math.PI / 180);
+            const ix1 =
+              centerX + innerRadius * Math.cos((startAngle * Math.PI) / 180);
+            const iy1 =
+              centerY + innerRadius * Math.sin((startAngle * Math.PI) / 180);
+            const ix2 =
+              centerX + innerRadius * Math.cos((endAngle * Math.PI) / 180);
+            const iy2 =
+              centerY + innerRadius * Math.sin((endAngle * Math.PI) / 180);
 
             const pathData = [
               `M ${ix1} ${iy1}`,
@@ -418,27 +517,22 @@ const AnalyticsReports = () => {
               `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2}`,
               `L ${ix2} ${iy2}`,
               `A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${ix1} ${iy1}`,
-              'Z'
-            ].join(' ');
+              "Z",
+            ].join(" ");
 
-            cumulativePercentage += item.percentage;
+            cumulativePercentage += item?.percentage;
 
             return (
               <path
                 key={index}
                 d={pathData}
-                fill={item.color}
+                fill={item?.color}
                 className={styles.donutSlice}
               />
             );
           })}
 
-          <circle
-            cx={centerX}
-            cy={centerY}
-            r={innerRadius}
-            fill="white"
-          />
+          <circle cx={centerX} cy={centerY} r={innerRadius} fill="white" />
 
           <text
             x={centerX}
@@ -500,7 +594,7 @@ const AnalyticsReports = () => {
             <div className={styles.exportDropdown}>
               <button className={styles.exportBtn} disabled={isExporting}>
                 <Download size={16} />
-                {isExporting ? 'Esportando...' : 'Esporta'}
+                {isExporting ? "Esportando..." : "Esporta"}
                 <ChevronDown size={14} />
               </button>
             </div>
@@ -513,7 +607,9 @@ const AnalyticsReports = () => {
         {reportTypes.map((report) => (
           <button
             key={report.id}
-            className={`${styles.reportNavItem} ${selectedReport === report.id ? styles.active : ''}`}
+            className={`${styles.reportNavItem} ${
+              selectedReport === report.id ? styles.active : ""
+            }`}
             onClick={() => setSelectedReport(report.id)}
           >
             {report.icon}
@@ -543,15 +639,23 @@ const AnalyticsReports = () => {
             <div key={index} className={styles.metricCard}>
               <div className={styles.metricHeader}>
                 <h3>{metric.title}</h3>
-                <div className={`${styles.metricTrend} ${styles[metric.trend]}`}>
-                  {metric.trend === 'up' ? <ArrowUp size={16} /> : <ArrowDown size={16} />}
+                <div
+                  className={`${styles.metricTrend} ${styles[metric.trend]}`}
+                >
+                  {metric.trend === "up" ? (
+                    <ArrowUp size={16} />
+                  ) : (
+                    <ArrowDown size={16} />
+                  )}
                   {metric.change}
                 </div>
               </div>
 
               <div className={styles.metricValue}>
                 <span className={styles.currentValue}>{metric.current}</span>
-                <span className={styles.previousValue}>da {metric.previous}</span>
+                <span className={styles.previousValue}>
+                  da {metric.previous}
+                </span>
               </div>
 
               <div className={styles.metricProgress}>
@@ -594,7 +698,10 @@ const AnalyticsReports = () => {
             </div>
           </div>
           <div className={styles.chartContent}>
-            <LineChartComponent data={performanceData} metric={selectedMetric} />
+            <LineChartComponent
+              data={performanceData}
+              metric={selectedMetric}
+            />
           </div>
         </div>
 
@@ -616,17 +723,27 @@ const AnalyticsReports = () => {
                   <div className={styles.wasteItemInfo}>
                     <div
                       className={styles.wasteColor}
-                      style={{ backgroundColor: item.color }}
+                      style={{ backgroundColor: item?.color }}
                     ></div>
                     <div className={styles.wasteDetails}>
-                      <span className={styles.wasteType}>{item.type}</span>
-                      <span className={styles.wasteAmount}>{item.amount} ton</span>
+                      <span className={styles.wasteType}>{item?.type}</span>
+                      <span className={styles.wasteAmount}>
+                        {item?.amount} ton
+                      </span>
                     </div>
                   </div>
                   <div className={styles.wasteStats}>
-                    <span className={styles.wastePercentage}>{item.percentage}%</span>
-                    <span className={`${styles.wasteTrend} ${item.trend.startsWith('+') ? styles.positive : styles.negative}`}>
-                      {item.trend}
+                    <span className={styles.wastePercentage}>
+                      {item?.percentage}%
+                    </span>
+                    <span
+                      className={`${styles.wasteTrend} ${
+                        item?.trend.startsWith("+")
+                          ? styles.positive
+                          : styles.negative
+                      }`}
+                    >
+                      {item?.trend}
                     </span>
                   </div>
                 </div>
@@ -663,7 +780,9 @@ const AnalyticsReports = () => {
                   <div className={styles.deviceRank}>#{index + 1}</div>
                   <div className={styles.deviceDetails}>
                     <span className={styles.deviceId}>{device.id}</span>
-                    <span className={styles.deviceLocation}>{device.location}</span>
+                    <span className={styles.deviceLocation}>
+                      {device.location}
+                    </span>
                   </div>
                 </div>
 
@@ -679,7 +798,9 @@ const AnalyticsReports = () => {
 
                 <div className={styles.uptimeCell}>
                   <span className={styles.uptimeValue}>{device.uptime}%</span>
-                  <span className={styles.uptimeLabel}>({device.collections} conf.)</span>
+                  <span className={styles.uptimeLabel}>
+                    ({device.collections} conf.)
+                  </span>
                 </div>
 
                 <div className={styles.revenueCell}>
@@ -713,17 +834,25 @@ const AnalyticsReports = () => {
               <div key={index} className={styles.locationCard}>
                 <div className={styles.locationHeader}>
                   <h4>{location.area}</h4>
-                  <span className={styles.locationDevices}>{location.devices} dispositivi</span>
+                  <span className={styles.locationDevices}>
+                    {location.devices} dispositivi
+                  </span>
                 </div>
 
                 <div className={styles.locationMetrics}>
                   <div className={styles.locationMetric}>
                     <span className={styles.metricLabel}>Volume</span>
-                    <span className={styles.metricValue}>{location.amount} ton</span>
+                    <span className={styles.metricValue}>
+                      {location.amount} ton
+                    </span>
                   </div>
                   <div className={styles.locationMetric}>
-                    <span className={styles.metricLabel}>Riempimento Medio</span>
-                    <span className={styles.metricValue}>{location.avgFill}%</span>
+                    <span className={styles.metricLabel}>
+                      Riempimento Medio
+                    </span>
+                    <span className={styles.metricValue}>
+                      {location.avgFill}%
+                    </span>
                   </div>
                 </div>
 
@@ -754,7 +883,9 @@ const AnalyticsReports = () => {
                 <h4>CO₂ Risparmiata</h4>
                 <div className={styles.environmentalValue}>
                   <span>{environmentalImpact.co2Saved.value}</span>
-                  <span className={styles.environmentalUnit}>{environmentalImpact.co2Saved.unit}</span>
+                  <span className={styles.environmentalUnit}>
+                    {environmentalImpact.co2Saved.unit}
+                  </span>
                 </div>
                 <div className={styles.environmentalChange}>
                   {environmentalImpact.co2Saved.change}
@@ -768,7 +899,9 @@ const AnalyticsReports = () => {
                 <h4>Tasso Riciclaggio</h4>
                 <div className={styles.environmentalValue}>
                   <span>{environmentalImpact.recyclingRate.value}</span>
-                  <span className={styles.environmentalUnit}>{environmentalImpact.recyclingRate.unit}</span>
+                  <span className={styles.environmentalUnit}>
+                    {environmentalImpact.recyclingRate.unit}
+                  </span>
                 </div>
                 <div className={styles.environmentalChange}>
                   {environmentalImpact.recyclingRate.change}
@@ -782,7 +915,9 @@ const AnalyticsReports = () => {
                 <h4>Energia Risparmiata</h4>
                 <div className={styles.environmentalValue}>
                   <span>{environmentalImpact.energySaved.value}</span>
-                  <span className={styles.environmentalUnit}>{environmentalImpact.energySaved.unit}</span>
+                  <span className={styles.environmentalUnit}>
+                    {environmentalImpact.energySaved.unit}
+                  </span>
                 </div>
                 <div className={styles.environmentalChange}>
                   {environmentalImpact.energySaved.change}
@@ -796,7 +931,9 @@ const AnalyticsReports = () => {
                 <h4>Acqua Risparmiata</h4>
                 <div className={styles.environmentalValue}>
                   <span>{environmentalImpact.waterSaved.value}</span>
-                  <span className={styles.environmentalUnit}>{environmentalImpact.waterSaved.unit}</span>
+                  <span className={styles.environmentalUnit}>
+                    {environmentalImpact.waterSaved.unit}
+                  </span>
                 </div>
                 <div className={styles.environmentalChange}>
                   {environmentalImpact.waterSaved.change}
@@ -825,15 +962,25 @@ const AnalyticsReports = () => {
                 <div className={styles.reportInfo}>
                   <div className={styles.reportName}>{report.name}</div>
                   <div className={styles.reportMeta}>
-                    <span className={styles.reportSchedule}>{report.schedule}</span>
-                    <span className={styles.reportRecipients}>{report.recipients} destinatari</span>
-                    <span className={styles.reportLastSent}>Ultimo: {report.lastSent}</span>
+                    <span className={styles.reportSchedule}>
+                      {report.schedule}
+                    </span>
+                    <span className={styles.reportRecipients}>
+                      {report.recipients} destinatari
+                    </span>
+                    <span className={styles.reportLastSent}>
+                      Ultimo: {report.lastSent}
+                    </span>
                   </div>
                 </div>
 
                 <div className={styles.reportActions}>
-                  <span className={`${styles.reportStatus} ${styles[report.status]}`}>
-                    {report.status === 'active' ? 'Attivo' : 'In Pausa'}
+                  <span
+                    className={`${styles.reportStatus} ${
+                      styles[report.status]
+                    }`}
+                  >
+                    {report.status === "active" ? "Attivo" : "In Pausa"}
                   </span>
                   <div className={styles.reportButtons}>
                     <button className={styles.actionBtn}>

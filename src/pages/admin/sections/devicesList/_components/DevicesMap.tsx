@@ -1,10 +1,10 @@
-import { useMemo } from 'react';
-import Map from '@shared/map';
-import { createDevicePopup } from '@sections_admin/devicesList/utils/MapPopupBuilder';
-import Pin1 from '@assets/images/kgn-pin.svg';
-import Pin2 from '@assets/images/kgn-pin-red.png';
-import { DeviceHelpers } from '@sections_admin/devicesList/utils/DeviceHelpers';
-import type { Device } from '@store_admin/devices/devices.types';
+import { useMemo } from "react";
+import Map from "@shared/map";
+import { createDevicePopup } from "@sections_admin/devicesList/utils/MapPopupBuilder";
+import Pin1 from "@assets/images/kgn-pin.svg";
+import Pin2 from "@assets/images/kgn-pin-red.png";
+import { DeviceHelpers } from "@sections_admin/devicesList/utils/DeviceHelpers";
+import type { Device } from "@store_admin/devices/devices.types";
 
 interface Props {
   mapData: Device[];
@@ -23,12 +23,15 @@ const DevicesMap = ({
   showActions = false,
   zoom = 6,
 }: Props) => {
-  const data = useMemo(() => DeviceHelpers.transformDevicesToMapData(mapData), [mapData]);
+  const data = useMemo(
+    () => DeviceHelpers.transformDevicesToMapData(mapData),
+    [mapData]
+  );
 
   return (
     <Map
       showActions={showActions}
-      height={mapHeight || '77vh'}
+      height={mapHeight || "77vh"}
       zoom={zoom}
       center={center || [42.5, 12]}
       data={data}
@@ -36,7 +39,7 @@ const DevicesMap = ({
       clusterRadius={50}
       activeIconUrl={Pin1}
       inactiveIconUrl={Pin2}
-      renderPopup={(item) => createDevicePopup(item.additionalData)}
+      renderPopup={(item) => createDevicePopup(item?.additionalData)}
       isCollapsed={isCollapsed}
     />
   );

@@ -81,16 +81,16 @@ export const createDevicesTableConfig = ({
         render: (_: any, device: Device) => device.city || "N/A",
       },
       {
-        key: "customer", // il backend accetta 'customer'; in render fallback a customer_name
+        key: "customer", // il backend accetta 'customer'; in render fallback a customer_Name
         header: "Cliente",
         type: "text" as const,
         width: "180px",
         sortable: true,
         render: (_: any, device: Device) =>
-          device.customer || (device as any).customer_name || "N/A",
+          device.customer || (device as any).customer_Name || "N/A",
       },
       {
-        key: "status_machine_blocked",
+        key: "status_Machine_Blocked",
         header: "Blocco",
         type: "custom" as const,
         width: "110px",
@@ -98,12 +98,12 @@ export const createDevicesTableConfig = ({
         render: (_: any, device: Device) => (
           <span
             className={`${styles.badge} ${
-              device.status_machine_blocked
+              device.status_Machine_Blocked
                 ? styles["badge--danger"]
                 : styles["badge--ok"]
             }`}
           >
-            {device.status_machine_blocked ? "Bloccato" : "Libero"}
+            {device.status_Machine_Blocked ? "Bloccato" : "Libero"}
           </span>
         ),
       },

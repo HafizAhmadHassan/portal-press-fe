@@ -42,7 +42,7 @@ interface FormData {
   matricolaBte: string;
   matricolaKgn: string;
   customer: string;
-  ipRouter: string;
+  ip_Router: string;
   gpsX: string;
   gpsY: string;
   note: string;
@@ -56,25 +56,25 @@ export const ModalEditDevice: React.FC<ModalEditDeviceProps> = ({
     machineName: d.machine__Name || "",
     waste: d.waste || "",
     status: d.status ?? 0,
-    linuxVersion: d.linux_version || "",
-    startAvailable: d.start_available || "",
-    endAvailable: d.end_available || "",
+    linuxVersion: d.linux_Version || "",
+    startAvailable: d.start_Available || "",
+    endAvailable: d.end_Available || "",
     street: d.street || "",
-    postalCode: d.postal_code || "",
+    postalCode: d.postal_Code || "",
     province: d.province || "",
     city: d.city || "",
     country: d.country || "",
     municipality: d.municipality || "",
     address: d.address || "",
     statusReadyD75_3_7: d.status_ready_d75_3_7 || false,
-    statusMachineBlocked: d.status_machine_blocked || false,
-    codiceGps: d.codice_gps || "",
-    sheetName: d.sheet_name || "",
-    customerName: d.customer_name || "",
-    matricolaBte: d.matricola_bte || "",
-    matricolaKgn: d.matricola_kgn || "",
+    statusMachineBlocked: d.status_Machine_Blocked || false,
+    codiceGps: d.codice_Gps || "",
+    sheetName: d.sheet_Name || "",
+    customerName: d.customer_Name || "",
+    matricolaBte: d.matricola_Bte || "",
+    matricolaKgn: d.matricola_Kgn || "",
     customer: d.customer || "",
-    ipRouter: d.ip_router || "",
+    ip_Router: d.ip_Router || "",
     gpsX: d.gps_x || "",
     gpsY: d.gps_y || "",
     note: d.note || "",
@@ -84,25 +84,25 @@ export const ModalEditDevice: React.FC<ModalEditDeviceProps> = ({
     machine__Name: f.machineName,
     waste: f.waste || null,
     status: f.status,
-    linux_version: f.linuxVersion || null,
-    start_available: f.startAvailable || null,
-    end_available: f.endAvailable || null,
+    linux_Version: f.linuxVersion || null,
+    start_Available: f.startAvailable || null,
+    end_Available: f.endAvailable || null,
     street: f.street || null,
-    postal_code: f.postalCode || null,
+    postal_Code: f.postalCode || null,
     province: f.province || null,
     city: f.city || null,
     country: f.country || null,
     municipality: f.municipality || null,
     address: f.address || null,
     status_ready_d75_3_7: f.statusReadyD75_3_7,
-    status_machine_blocked: f.statusMachineBlocked,
-    codice_gps: f.codiceGps || null,
-    sheet_name: f.sheetName || null,
-    customer_name: f.customerName || null,
-    matricola_bte: f.matricolaBte || null,
-    matricola_kgn: f.matricolaKgn || null,
+    status_Machine_Blocked: f.statusMachineBlocked,
+    codice_Gps: f.codiceGps || null,
+    sheet_Name: f.sheetName || null,
+    customer_Name: f.customerName || null,
+    matricola_Bte: f.matricolaBte || null,
+    matricola_Kgn: f.matricolaKgn || null,
     customer: f.customer || null,
-    ip_router: f.ipRouter || null,
+    ip_Router: f.ip_Router || null,
     gps_x: f.gpsX || null,
     gps_y: f.gpsY || null,
     note: f.note || null,
@@ -159,7 +159,7 @@ export const ModalEditDevice: React.FC<ModalEditDeviceProps> = ({
       cancelText="Annulla"
       onConfirm={handleSave}
       variant="primary"
-      loading={isLoading}
+      // loading={isLoading}
     >
       <div className={styles.modalContent}>
         {/* Header */}
@@ -171,7 +171,7 @@ export const ModalEditDevice: React.FC<ModalEditDeviceProps> = ({
             <h3 className={styles.deviceName}>{displayName}</h3>
             <p className={styles.deviceCustomer}>
               {device.customer ||
-                device.customer_name ||
+                device.customer_Name ||
                 "Cliente non specificato"}
             </p>
             <div className={styles.deviceBadges}>
@@ -394,9 +394,9 @@ export const ModalEditDevice: React.FC<ModalEditDeviceProps> = ({
           <div className={styles.formGrid}>
             <Input
               label="IP Router"
-              name="ipRouter"
-              value={formData.ipRouter}
-              onChange={(e) => handleInputChange("ipRouter", e.target.value)}
+              name="ip_Router"
+              value={formData.ip_Router}
+              onChange={(e) => handleInputChange("ip_Router", e.target.value)}
               placeholder="192.168.1.100"
               disabled={isLoading}
             />

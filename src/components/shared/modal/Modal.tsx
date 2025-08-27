@@ -1,13 +1,13 @@
-import { X, type LucideIcon } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
+import { X, type LucideIcon } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
-import styles from './Modal.module.scss';
-import { SimpleButton } from '../simple-btn/SimpleButton.component';
+import styles from "./Modal.module.scss";
+import { SimpleButton } from "../simple-btn/SimpleButton.component";
 
 interface ModalProps {
   triggerButton: React.ReactNode;
-  size?: 'sm' | 'md' | 'lg' | 'xl' | 'bare';
+  size?: "sm" | "md" | "lg" | "xl" | "bare";
   btnClassName?: string;
   modalClassName?: string;
   title?: string;
@@ -18,17 +18,16 @@ interface ModalProps {
   onConfirm?: () => Promise<void> | void;
   children?: React.ReactNode;
   loading?: boolean;
-  defaultActions: {
-    variantCancel?: 'filled' | 'outline' | 'ghost';
-    variantConfirm?: 'filled' | 'outline' | 'ghost';
-    colorCancel?: 'primary' | 'secondary' | 'danger' | 'success' | 'warning';
-    colorConfirm?: 'primary' | 'secondary' | 'danger' | 'success' | 'warning';
-
-  }
+  defaultActions?: {
+    variantCancel?: "filled" | "outline" | "ghost";
+    variantConfirm?: "filled" | "outline" | "ghost";
+    colorCancel?: "primary" | "secondary" | "danger" | "success" | "warning";
+    colorConfirm?: "primary" | "secondary" | "danger" | "success" | "warning";
+  };
 }
 
 const Modal = ({
-  size = 'md',
+  size = "md",
   triggerButton,
   btnClassName,
   modalClassName,
@@ -41,10 +40,10 @@ const Modal = ({
   children,
   loading = false,
   defaultActions = {
-    variantConfirm: 'outline',
-    variantCancel: 'outline',
-    colorConfirm: 'success',
-    colorCancel: 'warning',
+    variantConfirm: "outline",
+    variantCancel: "outline",
+    colorConfirm: "success",
+    colorCancel: "warning",
   },
 }: ModalProps) => {
   const [open, setOpen] = useState(false);
@@ -53,12 +52,12 @@ const Modal = ({
 
   useEffect(() => {
     if (open) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     }
     return () => {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     };
   }, [open]);
 
@@ -80,7 +79,7 @@ const Modal = ({
       } catch (error) {
         // non chiudere in caso di errore
         // eslint-disable-next-line no-console
-        console.error('Errore durante la conferma:', error);
+        console.error("Errore durante la conferma:", error);
       } finally {
         setIsPending(false);
       }
@@ -95,23 +94,25 @@ const Modal = ({
         {triggerButton}
       </div>
 
-      {typeof document !== 'undefined' &&
+      {typeof document !== "undefined" &&
         createPortal(
           open && (
             <div
-              className={`${styles.overlay} ${isClosing ? styles['overlay--closing'] : ''}`}
+              className={`${styles.overlay} ${
+                isClosing ? styles["overlay--closing"] : ""
+              }`}
               onClick={handleClose}
             >
               <div
                 className={[
                   styles.content,
                   styles[`content--${size}`],
-                  isClosing ? styles['content--closing'] : '',
-                  modalClassName || '',
-                  isPending || loading ? styles['content--loading'] : '',
+                  isClosing ? styles["content--closing"] : "",
+                  modalClassName || "",
+                  isPending || loading ? styles["content--loading"] : "",
                 ]
                   .filter(Boolean)
-                  .join(' ')}
+                  .join(" ")}
                 onClick={(e) => e.stopPropagation()}
               >
                 <button
@@ -131,9 +132,13 @@ const Modal = ({
                     </div>
                   )}
 
-                  {description && <p className={styles.description}>{description}</p>}
+                  {description && (
+                    <p className={styles.description}>{description}</p>
+                  )}
 
-                  {children && <div className={styles.children}>{children}</div>}
+                  {children && (
+                    <div className={styles.children}>{children}</div>
+                  )}
 
                   {(confirmText || cancelText) && (
                     <div className={styles.actions}>
@@ -151,7 +156,7 @@ const Modal = ({
                       {confirmText && (
                         <SimpleButton
                           onClick={handleConfirmClick}
-                          loading={isPending || loading}
+                          // loading={isPending || loading}
                           disabled={isPending || loading}
                           variant={defaultActions?.variantConfirm}
                           icon={icon}

@@ -1,9 +1,9 @@
-import React from 'react';
-import styles from './Input.module.scss';
-import { type LucideIcon, Mail } from 'lucide-react';
+import React from "react";
+import styles from "./Input.module.scss";
+import { type LucideIcon, Mail } from "lucide-react";
 
 const cx = (...classes: Array<string | false | null | undefined>) =>
-  classes.filter(Boolean).join(' ');
+  classes.filter(Boolean).join(" ");
 
 // icona può essere componente (LucideIcon) OPPURE elemento React
 type IconProp = LucideIcon | React.ReactNode;
@@ -12,43 +12,50 @@ type InputProps = {
   label: string;
   name: string;
   placeholder?: string;
-  type?: 'text' | 'email' | 'password' | 'date';
+  type?: "text" | "email" | "password" | "date" | "time";
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onChange: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
   disabled?: boolean;
   required?: boolean;
   icon?: IconProp;
-  iconPosition?: 'left' | 'right';
+  iconPosition?: "left" | "right";
   error?: string;
   multiline?: boolean;
 
-  variant?: 'default' | 'pill';
-  size?: 'sm' | 'md';
+  variant?: "default" | "pill";
+  size?: "sm" | "md";
   hideLabel?: boolean;
-  onKeyUp?: (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onKeyUp?: (
+    e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
+  onKeyDown?: (
+    e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
 
   /** nuove */
-  containerClassName?: string;   // classe extra sul container
-  inputClassName?: string;       // classe extra sul campo (input/textarea)
+  containerClassName?: string; // classe extra sul container
+  inputClassName?: string; // classe extra sul campo (input/textarea)
 };
 
 export const Input = ({
-  label = 'Input Default',
-  name = 'input-default',
-  placeholder = 'Inserisci il tuo testo qui',
-  type = 'text',
-  value = '',
-  onChange = (e) => console.log('Input Default Changed!', (e.target as HTMLInputElement).value),
+  label = "Input Default",
+  name = "input-default",
+  placeholder = "Inserisci il tuo testo qui",
+  type = "text",
+  value = "",
+  onChange = (e) =>
+    console.log("Input Default Changed!", (e.target as HTMLInputElement).value),
   disabled = false,
   required = false,
   icon = Mail,
-  iconPosition = 'left',
-  error = '',
+  iconPosition = "left",
+  error = "",
   multiline = false,
 
-  variant = 'default',
-  size = 'md',
+  variant = "default",
+  size = "md",
   hideLabel = false,
   onKeyUp,
   onKeyDown,
@@ -61,8 +68,8 @@ export const Input = ({
 
   const containerClass = cx(
     styles.inputContainer,
-    variant === 'pill' && styles.pill,
-    size === 'sm' && styles.sizeSm,
+    variant === "pill" && styles.pill,
+    size === "sm" && styles.sizeSm,
     hideLabel && styles.noMargin,
     error && styles.hasError,
     containerClassName
@@ -70,15 +77,15 @@ export const Input = ({
 
   const wrapperClass = cx(
     styles.inputWrapper,
-    iconPosition === 'left' ? styles.iconLeft : styles.iconRight
+    iconPosition === "left" ? styles.iconLeft : styles.iconRight
   );
 
   const fieldClass = cx(styles.field, inputClassName);
 
   const renderIcon = () => {
     if (!icon) return null;
-    if (React.isValidElement(icon)) return icon;  // già elemento
-    const IconComp = icon as LucideIcon;          // componente
+    if (React.isValidElement(icon)) return icon; // già elemento
+    const IconComp = icon as LucideIcon; // componente
     return <IconComp size={16} />;
     // NB: il colore viene dai CSS del wrapper (.inputIcon)
   };
@@ -94,10 +101,8 @@ export const Input = ({
       </label>
 
       <div className={wrapperClass}>
-        {iconPosition === 'left' && (
-          <span className={styles.inputIcon}>
-            {renderIcon()}
-          </span>
+        {iconPosition === "left" && (
+          <span className={styles.inputIcon}>{renderIcon()}</span>
         )}
 
         {multiline ? (
@@ -136,10 +141,8 @@ export const Input = ({
           />
         )}
 
-        {iconPosition === 'right' && (
-          <span className={styles.inputIcon}>
-            {renderIcon()}
-          </span>
+        {iconPosition === "right" && (
+          <span className={styles.inputIcon}>{renderIcon()}</span>
         )}
       </div>
 

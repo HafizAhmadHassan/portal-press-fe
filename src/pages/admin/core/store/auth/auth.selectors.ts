@@ -1,6 +1,6 @@
 // store/auth/selectors.ts
 import { createSelector } from "@reduxjs/toolkit";
-import type { RootState } from "../../../../store";
+import type { RootState } from "@root/store";
 
 // Selettori base
 export const selectAuthState = (state: RootState) => state.auth;

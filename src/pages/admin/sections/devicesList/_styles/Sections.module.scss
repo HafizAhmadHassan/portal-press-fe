@@ -248,7 +248,7 @@
 }
 
 /* Helper IP */
-:global(.input-group:has([name="ipRouter"])) {
+:global(.input-group:has([name="ip_Router"])) {
   position: relative;
 
   &::before {

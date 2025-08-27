@@ -13,8 +13,8 @@ const machineTableConfig: any = {
         false: { label: "Disattivato", className: "bg-danger text-white" },
       },
       accessor: (item) => {
-        console.log(String(item.status_Machine_Blocked));
-        return String(item.status_Machine_Blocked);
+        console.log(String(item?.status_Machine_Blocked));
+        return String(item?.status_Machine_Blocked);
       },
     },
     {
@@ -51,7 +51,7 @@ const machineTableConfig: any = {
           label: "Riattiva",
           onClick: (item) => console.log("Riattiva:", item),
           className: "btn-warning", // puoi collegarlo a uno stile giallo
-          disabled: (item) => item.status === 1,
+          disabled: (item) => item?.status === 1,
         },
         {
           label: "Dettagli",

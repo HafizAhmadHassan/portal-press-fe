@@ -7,7 +7,7 @@ import { UserRoleLabels, UserRoles } from "@utils/constants/userRoles.ts";
 export enum UserFields {
   EMAIL = "email",
   USERNAME = "username",
-  USER_PERMISSIONS = "user_permissions",
+  USER_PERMISSIONS = "userPermissions",
   isActive = "isActive",
 }
 

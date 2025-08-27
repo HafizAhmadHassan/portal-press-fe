@@ -55,7 +55,7 @@ export const ModalDetails: React.FC<ModalDetailsProps> = ({ user }) => {
 
   const displayName =
     user.fullName ||
-    `${user.first_name || ""} ${user.last_name || ""}`.trim() ||
+    `${user.firstName || ""} ${user.lastName || ""}`.trim() ||
     user.username;
 
   return (
@@ -95,13 +95,13 @@ export const ModalDetails: React.FC<ModalDetailsProps> = ({ user }) => {
               >
                 {user.isActive ? "Attivo" : "Inattivo"}
               </span>
-              {user.is_staff && (
+              {user.isStaff && (
                 <span className={styles.staffBadge}>
                   <Settings className={styles.badgeIcon} />
                   Staff
                 </span>
               )}
-              {user.is_superuser && (
+              {user.isSuperuser && (
                 <span className={styles.superuserBadge}>
                   <Crown className={styles.badgeIcon} />
                   Super Admin
@@ -122,13 +122,13 @@ export const ModalDetails: React.FC<ModalDetailsProps> = ({ user }) => {
             <div className={styles.infoItem}>
               <span className={styles.infoLabel}>Nome</span>
               <span className={styles.infoValue}>
-                {user.first_name || "Non specificato"}
+                {user.firstName || "Non specificato"}
               </span>
             </div>
             <div className={styles.infoItem}>
               <span className={styles.infoLabel}>Cognome</span>
               <span className={styles.infoValue}>
-                {user.last_name || "Non specificato"}
+                {user.lastName || "Non specificato"}
               </span>
             </div>
             <div className={styles.infoItem}>
@@ -186,10 +186,10 @@ export const ModalDetails: React.FC<ModalDetailsProps> = ({ user }) => {
               </div>
               <div className={styles.dateCardContent}>
                 <span className={styles.dateValue}>
-                  {formatDate(user.dataJoined)}
+                  {formatDate(user.dateJoined)}
                 </span>
                 <span className={styles.dateRelative}>
-                  {getRelativeTime(user.dataJoined)}
+                  {getRelativeTime(user.dateJoined)}
                 </span>
               </div>
             </div>
@@ -201,11 +201,11 @@ export const ModalDetails: React.FC<ModalDetailsProps> = ({ user }) => {
               </div>
               <div className={styles.dateCardContent}>
                 <span className={styles.dateValue}>
-                  {formatDate(user.last_login)}
+                  {formatDate(user.lastLogin)}
                 </span>
                 <span className={styles.dateRelative}>
-                  {user.last_login
-                    ? getRelativeTime(user.last_login)
+                  {user.lastLogin
+                    ? getRelativeTime(user.lastLogin)
                     : "Mai effettuato login"}
                 </span>
               </div>
@@ -221,9 +221,9 @@ export const ModalDetails: React.FC<ModalDetailsProps> = ({ user }) => {
           </div>
 
           <div className={styles.permissionsContainer}>
-            {user.user_permissions && user.user_permissions.length > 0 ? (
+            {user.userPermissions && user.userPermissions.length > 0 ? (
               <div className={styles.permissionsList}>
-                {user.user_permissions.map((permission, index) => (
+                {user.userPermissions.map((permission, index) => (
                   <div key={index} className={styles.permissionChip}>
                     <Shield className={styles.permissionIcon} />
                     {UserRoleLabels[permission] || permission}
@@ -283,36 +283,34 @@ export const ModalDetails: React.FC<ModalDetailsProps> = ({ user }) => {
 
             <div
               className={`${styles.privilegeItem} ${
-                user.is_staff
-                  ? styles.privilegeActive
-                  : styles.privilegeInactive
+                user.isStaff ? styles.privilegeActive : styles.privilegeInactive
               }`}
             >
-              {user.is_staff ? (
+              {user.isStaff ? (
                 <CheckCircle className={styles.privilegeIcon} />
               ) : (
                 <XCircle className={styles.privilegeIcon} />
               )}
               <span>
-                Accesso Staff {user.is_staff ? "Abilitato" : "Disabilitato"}
+                Accesso Staff {user.isStaff ? "Abilitato" : "Disabilitato"}
               </span>
             </div>
 
             <div
               className={`${styles.privilegeItem} ${
-                user.is_superuser
+                user.isSuperuser
                   ? styles.privilegeActive
                   : styles.privilegeInactive
               }`}
             >
-              {user.is_superuser ? (
+              {user.isSuperuser ? (
                 <CheckCircle className={styles.privilegeIcon} />
               ) : (
                 <XCircle className={styles.privilegeIcon} />
               )}
               <span>
                 Super Amministratore{" "}
-                {user.is_superuser ? "Abilitato" : "Disabilitato"}
+                {user.isSuperuser ? "Abilitato" : "Disabilitato"}
               </span>
             </div>
           </div>

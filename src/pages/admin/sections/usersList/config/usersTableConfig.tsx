@@ -80,15 +80,15 @@ export const createUsersTableConfig = ({
         accessor: (u: User) => Boolean(u.isActive),
       },
       {
-        key: "dataJoined",
+        key: "dateJoined",
         header: "Data Creazione",
         type: "custom" as const,
         width: "160px",
         sortable: true,
         render: (_: any, user: User) => {
-          if (!user.dataJoined)
+          if (!user.dateJoined)
             return <span style={{ color: tSecondary }}>N/A</span>;
-          const date = new Date(user.dataJoined);
+          const date = new Date(user.dateJoined);
           return (
             <div>
               <div style={{ fontSize: "14px", color: tPrimary }}>
@@ -129,7 +129,7 @@ export const createUsersTableConfig = ({
     },
     sorting: {
       enabled: true,
-      defaultSort: { key: "dataJoined", direction: "desc" as const },
+      defaultSort: { key: "dateJoined", direction: "desc" as const },
     },
     selection: {
       enabled: false,

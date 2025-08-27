@@ -10,11 +10,10 @@ import DevicePLC_STATUS from "@root/pages/device/sections/DevicePLC_STATUS/Devic
 import { UserRoles } from "@root/utils/constants/userRoles";
 import ProtectedRoute from "@root/components/shared/PretectedRoutes";
 
-// helper per wrappare comodamente
-const withGuard = (
-  element: React.ReactElement,
-  props?: React.ComponentProps<typeof ProtectedRoute>
-) => <ProtectedRoute {...props}>{element}</ProtectedRoute>;
+// helper per wrappare comodamente - alternative approach if needed
+const withGuard = (element: React.ReactElement, additionalProps?: any) => {
+  return <ProtectedRoute {...additionalProps}>{element}</ProtectedRoute>;
+};
 
 // query guard: blocca ?edit=1 e "/edit" ai non-SUPER_ADMIN
 const detailEditGuard = {

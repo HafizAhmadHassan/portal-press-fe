@@ -24,25 +24,25 @@ export default function TechnicalInfo({ device }: any) {
         <div className={stylesTechnical.infoItem}>
           <span className={stylesTechnical.infoLabel}>Versione Linux</span>
           <span className={stylesTechnical.infoValue}>
-            {device?.linux_version || "Non specificata"}
+            {device?.linux_Version || "Non specificata"}
           </span>
         </div>
         <div className={stylesTechnical.infoItem}>
           <span className={stylesTechnical.infoLabel}>IP Router</span>
           <span className={stylesTechnical.infoValue}>
-            {device?.ip_router || "N/A"}
+            {device?.ip_Router || "N/A"}
           </span>
         </div>
         <div className={stylesTechnical.infoItem}>
           <span className={stylesTechnical.infoLabel}>Codice GPS</span>
           <span className={stylesTechnical.infoValue}>
-            {device?.codice_gps || "N/A"}
+            {device?.codice_Gps || "N/A"}
           </span>
         </div>
         <div className={stylesTechnical.infoItem}>
           <span className={stylesTechnical.infoLabel}>Sheet Name</span>
           <span className={stylesTechnical.infoValue}>
-            {device?.sheet_name || "N/A"}
+            {device?.sheet_Name || "N/A"}
           </span>
         </div>
       </div>

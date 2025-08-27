@@ -183,7 +183,7 @@ export default function DevicePLC_DATA() {
           onSave={saveAll}
           onCancel={cancelAll}
           saving={saving}
-          loading={loading}
+          // loading={loading}
           compact
           editable={isEdit}
           showActionsColumn
@@ -224,7 +224,7 @@ export default function DevicePLC_DATA() {
           size="sm"
           color="primary"
           onClick={() => saveAll(rows)}
-          loading={saving}
+          // loading={saving}
           disabled={!dirty || saving}
         >
           Salva

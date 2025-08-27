@@ -79,7 +79,7 @@ export const ModalDeleteDevicesConfirm: React.FC<Props> = ({
               <div className="spec-row">
                 <span className="spec-label">Indirizzo IP</span>
                 <span className="spec-value">
-                  {device?.ip_router || "Non disponibile"}
+                  {device?.ip_Router || "Non disponibile"}
                 </span>
               </div>
               <div className="spec-row">

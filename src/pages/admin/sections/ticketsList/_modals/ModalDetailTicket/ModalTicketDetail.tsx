@@ -22,13 +22,13 @@ type DeviceLite = {
   machine__Name?: string;
   city?: string;
   province?: string;
-  customer_name?: string;
+  customer_Name?: string;
   customer?: string;
-  ip_router?: string;
+  ip_Router?: string;
   waste?: string;
   address?: string;
   street?: string;
-  postal_code?: string;
+  postal_Code?: string;
   country?: string;
 };
 
@@ -76,7 +76,7 @@ export const ModalTicketDetails: React.FC<ModalTicketDetailsProps> = ({
 }) => {
   const dev = ticket?.device;
   const customer =
-    dev?.customer ?? dev?.customer_name ?? (ticket as any)?.customer ?? "N/D";
+    dev?.customer ?? dev?.customer_Name ?? (ticket as any)?.customer ?? "N/D";
   const machineId =
     (ticket as any)?.machine ?? (ticket as any)?.device_id ?? "N/D";
   const machineName = dev?.machine__Name;
@@ -147,10 +147,10 @@ export const ModalTicketDetails: React.FC<ModalTicketDetailsProps> = ({
                 {isClosed(ticket) ? "Chiuso (2)" : "Aperto"}
               </span>
 
-              {dev?.ip_router && (
+              {dev?.ip_Router && (
                 <span className={styles.infoBadge}>
                   <Shield className={styles.badgeIcon} />
-                  IP: {dev.ip_router}
+                  IP: {dev.ip_Router}
                 </span>
               )}
 

@@ -143,7 +143,7 @@ export const TicketsListSections: React.FC = () => {
       const machineId = (t as any).machine ?? (t as any).device_id;
       const customer =
         t?.device?.customer ??
-        t?.device?.customer_name ??
+        t?.device?.customer_Name ??
         (t as any).customer ??
         "";
 
@@ -251,7 +251,7 @@ export const TicketsListSections: React.FC = () => {
         <SectionFilterComponent
           filters={createTicketsFilterConfig({ filters, setFilter })}
           onResetFilters={handleResetAll}
-          isLoading={isLoading}
+          // isLoading={isLoading}
         />
       </div>
 
@@ -260,7 +260,7 @@ export const TicketsListSections: React.FC = () => {
       <div className={styles["tickets-list-page__table-wrapper"]}>
         <GenericTableWithLogic
           config={tableConfig}
-          loading={isLoading}
+          // loading={isLoading}
           pagination={{
             page: meta?.page ?? page,
             pageSize,

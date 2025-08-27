@@ -94,7 +94,7 @@ export const SectionHeaderComponent: React.FC<SectionHeaderProps> = ({
                   key={`component-${index}`}
                   className={styles.customComponent}
                 >
-                  {item.component}
+                  {item?.component}
                 </div>
               );
             }
@@ -102,15 +102,15 @@ export const SectionHeaderComponent: React.FC<SectionHeaderProps> = ({
               return (
                 <SimpleButton
                   key={`button-${index}`}
-                  onClick={item.onClick}
-                  variant={item.variant || "filled"}
-                  color={item.color || "primary"}
-                  size={item.size || "md"}
-                  icon={item.icon}
-                  iconPosition={item.iconPosition || "left"}
-                  disabled={item.disabled || false}
+                  onClick={item?.onClick}
+                  variant={item?.variant || "filled"}
+                  color={item?.color || "primary"}
+                  size={item?.size || "md"}
+                  icon={item?.icon}
+                  iconPosition={item?.iconPosition || "left"}
+                  disabled={item?.disabled || false}
                 >
-                  {item.label}
+                  {item?.label}
                 </SimpleButton>
               );
             }

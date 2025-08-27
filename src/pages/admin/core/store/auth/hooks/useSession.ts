@@ -12,9 +12,9 @@ export const useSession = () => {
 
   // Puoi aggiungere helper basati su ruolo
   const isAdmin =
-    user?.user_permissions?.includes(UserRoles.ADMIN) ||
-    user?.user_permissions?.includes(UserRoles.SUPER_ADMIN);
-  const isSuperAdmin = user?.user_permissions?.includes(UserRoles.SUPER_ADMIN);
+    user?.userPermissions?.includes(UserRoles.ADMIN) ||
+    user?.userPermissions?.includes(UserRoles.SUPER_ADMIN);
+  const isSuperAdmin = user?.userPermissions?.includes(UserRoles.SUPER_ADMIN);
 
   return {
     user,

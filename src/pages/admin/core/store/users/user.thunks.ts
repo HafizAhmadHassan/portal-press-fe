@@ -1,21 +1,25 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import type { RootState } from '../../../../store';
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import type { RootState } from "@root/store";
 import type {
   BulkActionRequest,
   CreateUserRequest,
   UpdateUserRequest,
   UsersQueryParams,
-} from '@store_admin/users/user.types.ts';
-import { usersApi } from '@store_admin/users/user.api.ts';
-import { setPagination, setUsers } from '@store_admin/users/user.slice.ts';
+} from "@store_admin/users/user.types.ts";
+import { usersApi } from "@store_admin/users/user.api.ts";
+import { setPagination, setUsers } from "@store_admin/users/user.slice.ts";
 
 // Carica utenti con parametri di paginazione
 export const loadUsers = createAsyncThunk(
-  'users/load',
-  async (params: Partial<UsersQueryParams> = {}, { getState, dispatch, rejectWithValue }) => {
+  "users/load",
+  async (
+    params: Partial<UsersQueryParams> = {},
+    { getState, dispatch, rejectWithValue }
+  ) => {
     try {
       const state = getState() as RootState;
-      const { filters: currentFilters, pagination: currentPagination } = state.users;
+      const { filters: currentFilters, pagination: currentPagination } =
+        state.users;
 
       const queryParams: UsersQueryParams = {
         page: params.page ?? currentPagination.page,
@@ -41,33 +45,35 @@ export const loadUsers = createAsyncThunk(
 
       return response;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || 'Errore nel caricamento utenti');
+      return rejectWithValue(
+        error.data?.message || "Errore nel caricamento utenti"
+      );
     }
   }
 );
 // Cerca utenti con debouncing (ora gestito dal custom hook)
 export const searchUsers = createAsyncThunk(
-  'users/search',
+  "users/search",
   async (searchQuery: string, { dispatch, rejectWithValue }) => {
     try {
       // Utilizza loadUsers con parametri di ricerca
       const response = await dispatch(
         loadUsers({
           search: searchQuery,
-          page: 1 // Reset alla prima pagina per nuove ricerche
+          page: 1, // Reset alla prima pagina per nuove ricerche
         })
       ).unwrap();
 
       return response;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || 'Errore nella ricerca');
+      return rejectWithValue(error.data?.message || "Errore nella ricerca");
     }
   }
 );
 
 // Crea nuovo utente
 export const createNewUser = createAsyncThunk(
-  'users/create',
+  "users/create",
   async (userData: CreateUserRequest, { dispatch, rejectWithValue }) => {
     try {
       const newUser = await dispatch(
@@ -79,14 +85,16 @@ export const createNewUser = createAsyncThunk(
 
       return newUser;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || 'Errore nella creazione utente');
+      return rejectWithValue(
+        error.data?.message || "Errore nella creazione utente"
+      );
     }
   }
 );
 
 // Aggiorna utente
 export const updateExistingUser = createAsyncThunk(
-  'users/update',
+  "users/update",
   async (updateData: UpdateUserRequest, { dispatch, rejectWithValue }) => {
     try {
       const updatedUser = await dispatch(
@@ -95,33 +103,35 @@ export const updateExistingUser = createAsyncThunk(
 
       return updatedUser;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || 'Errore nell\'aggiornamento utente');
+      return rejectWithValue(
+        error.data?.message || "Errore nell'aggiornamento utente"
+      );
     }
   }
 );
 
 // Elimina utente
 export const deleteExistingUser = createAsyncThunk(
-  'users/delete',
+  "users/delete",
   async (userId: string, { dispatch, rejectWithValue }) => {
     try {
-      await dispatch(
-        usersApi.endpoints.deleteUser.initiate(userId)
-      ).unwrap();
+      await dispatch(usersApi.endpoints.deleteUser.initiate(userId)).unwrap();
 
       // Ricarica la lista per aggiornare la paginazione
       await dispatch(loadUsers());
 
       return userId;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || 'Errore nell\'eliminazione utente');
+      return rejectWithValue(
+        error.data?.message || "Errore nell'eliminazione utente"
+      );
     }
   }
 );
 
 // Operazioni bulk
 export const performBulkAction = createAsyncThunk(
-  'users/bulkAction',
+  "users/bulkAction",
   async (request: BulkActionRequest, { dispatch, rejectWithValue }) => {
     try {
       const response = await dispatch(
@@ -137,78 +147,84 @@ export const performBulkAction = createAsyncThunk(
         affectedUserIds: request.userIds,
       };
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || 'Errore nell\'operazione bulk');
+      return rejectWithValue(
+        error.data?.message || "Errore nell'operazione bulk"
+      );
     }
   }
 );
 
 // Cambia pagina
 export const changePage = createAsyncThunk(
-  'users/changePage',
+  "users/changePage",
   async (page: number, { dispatch, rejectWithValue }) => {
     try {
       const response = await dispatch(loadUsers({ page })).unwrap();
       return response;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || 'Errore nel cambio pagina');
+      return rejectWithValue(error.data?.message || "Errore nel cambio pagina");
     }
   }
 );
 
 // Cambia dimensione pagina
 export const changePageSize = createAsyncThunk(
-  'users/changePageSize',
+  "users/changePageSize",
   async (pageSize: number, { dispatch, rejectWithValue }) => {
     try {
       const response = await dispatch(
         loadUsers({
           page_size: pageSize,
-          page: 1 // Reset alla prima pagina quando cambia la dimensione
+          page: 1, // Reset alla prima pagina quando cambia la dimensione
         })
       ).unwrap();
       return response;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || 'Errore nel cambio dimensione pagina');
+      return rejectWithValue(
+        error.data?.message || "Errore nel cambio dimensione pagina"
+      );
     }
   }
 );
 
 // Applica filtri
 export const applyFilters = createAsyncThunk(
-  'users/applyFilters',
+  "users/applyFilters",
   async (filters: Partial<UsersQueryParams>, { dispatch, rejectWithValue }) => {
     try {
       const response = await dispatch(
         loadUsers({
           ...filters,
-          page: 1 // Reset alla prima pagina quando si applicano nuovi filtri
+          page: 1, // Reset alla prima pagina quando si applicano nuovi filtri
         })
       ).unwrap();
       return response;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || 'Errore nell\'applicazione filtri');
+      return rejectWithValue(
+        error.data?.message || "Errore nell'applicazione filtri"
+      );
     }
   }
 );
 
 // Resetta filtri
 export const resetFilters = createAsyncThunk(
-  'users/resetFilters',
+  "users/resetFilters",
   async (_, { dispatch, rejectWithValue }) => {
     try {
       const response = await dispatch(
         loadUsers({
           page: 1,
-          search: '',
-          role: '',
+          search: "",
+          role: "",
           isActive: null,
-          sortBy: 'createdAt',
-          sortOrder: 'desc',
+          sortBy: "createdAt",
+          sortOrder: "desc",
         })
       ).unwrap();
       return response;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || 'Errore nel reset filtri');
+      return rejectWithValue(error.data?.message || "Errore nel reset filtri");
     }
   }
 );

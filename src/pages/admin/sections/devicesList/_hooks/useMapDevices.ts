@@ -1,7 +1,7 @@
 // useMapDevices.ts - Hook personalizzato per gestire i devices nella mappa - CORRETTO
 
-import { useMemo } from 'react';
-import { devicesApi } from '@store_admin/devices/devices.api.ts';
+import { useMemo } from "react";
+import { devicesApi } from "@store_admin/devices/devices.api.ts";
 
 interface MapFilters {
   wasteType?: string;
@@ -13,13 +13,13 @@ interface MapFilters {
 
 // Configurazione colori per i tipi di waste
 const WASTE_COLORS = {
-  Plastica: '#ffeb3b', // Giallo
-  Secco: '#9e9e9e', // Grigio
-  Umido: '#8bc34a', // Verde
-  Vetro: '#2196f3', // Blu
-  Indifferenziato: '#607d8b', // Blu grigio
-  Carta: '#ff9800', // Arancione
-  vpl: '#e91e63', // Rosa
+  Plastica: "#ffeb3b", // Giallo
+  Secco: "#9e9e9e", // Grigio
+  Umido: "#8bc34a", // Verde
+  Vetro: "#2196f3", // Blu
+  Indifferenziato: "#607d8b", // Blu grigio
+  Carta: "#ff9800", // Arancione
+  vpl: "#e91e63", // Rosa
 } as const;
 
 export const useMapDevices = (filters: MapFilters = {}) => {
@@ -35,7 +35,7 @@ export const useMapDevices = (filters: MapFilters = {}) => {
       f.status = filters.status;
     }
     if (filters.isBlocked !== undefined && filters.isBlocked !== null) {
-      f.status_machine_blocked = filters.isBlocked;
+      f.status_Machine_Blocked = filters.isBlocked;
     }
     if (filters.city && filters.city.trim()) {
       f.city = filters.city;
@@ -72,8 +72,8 @@ export const useMapDevices = (filters: MapFilters = {}) => {
       const hasGPS =
         device.gps_x &&
         device.gps_y &&
-        device.gps_x.toString().trim() !== '' &&
-        device.gps_y.toString().trim() !== '';
+        device.gps_x.toString().trim() !== "" &&
+        device.gps_y.toString().trim() !== "";
       return hasGPS;
     });
 
@@ -91,8 +91,10 @@ export const useMapDevices = (filters: MapFilters = {}) => {
       total: filteredDevices.length,
       active: filteredDevices.filter((d) => d.status === 1).length,
       inactive: filteredDevices.filter((d) => d.status === 0).length,
-      blocked: filteredDevices.filter((d) => d.statusMachineBlocked === true).length,
-      ready: filteredDevices.filter((d) => d.statusReadyD75_3_7 === true).length,
+      blocked: filteredDevices.filter((d) => d.statusMachineBlocked === true)
+        .length,
+      ready: filteredDevices.filter((d) => d.statusReadyD75_3_7 === true)
+        .length,
       byWaste: {} as Record<string, number>,
       byCities: {} as Record<string, number>,
       byCustomers: {} as Record<string, number>,
@@ -100,7 +102,7 @@ export const useMapDevices = (filters: MapFilters = {}) => {
 
     // Conta per tipo di waste
     filteredDevices.forEach((device) => {
-      const waste = device.waste || 'Unknown';
+      const waste = device.waste || "Unknown";
       stats.byWaste[waste] = (stats.byWaste[waste] || 0) + 1;
 
       if (device.city) {
@@ -108,7 +110,8 @@ export const useMapDevices = (filters: MapFilters = {}) => {
       }
 
       if (device.customer) {
-        stats.byCustomers[device.customer] = (stats.byCustomers[device.customer] || 0) + 1;
+        stats.byCustomers[device.customer] =
+          (stats.byCustomers[device.customer] || 0) + 1;
       }
     });
 
@@ -140,13 +143,14 @@ export const useMapDevices = (filters: MapFilters = {}) => {
       inactive: allDevices.filter((d) => d.status === 0).length,
       blocked: allDevices.filter((d) => d.statusMachineBlocked === true).length,
       ready: allDevices.filter((d) => d.statusReadyD75_3_7 === true).length,
-      plastic: allDevices.filter((d) => d.waste === 'Plastica').length,
-      dry: allDevices.filter((d) => d.waste === 'Secco').length,
-      wet: allDevices.filter((d) => d.waste === 'Umido').length,
-      glass: allDevices.filter((d) => d.waste === 'Vetro').length,
-      indifferenziato: allDevices.filter((d) => d.waste === 'Indifferenziato').length,
-      carta: allDevices.filter((d) => d.waste === 'Carta').length,
-      vpl: allDevices.filter((d) => d.waste === 'vpl').length,
+      plastic: allDevices.filter((d) => d.waste === "Plastica").length,
+      dry: allDevices.filter((d) => d.waste === "Secco").length,
+      wet: allDevices.filter((d) => d.waste === "Umido").length,
+      glass: allDevices.filter((d) => d.waste === "Vetro").length,
+      indifferenziato: allDevices.filter((d) => d.waste === "Indifferenziato")
+        .length,
+      carta: allDevices.filter((d) => d.waste === "Carta").length,
+      vpl: allDevices.filter((d) => d.waste === "vpl").length,
     };
   }, [allDevices]);
 
@@ -172,7 +176,12 @@ export const useMapDevices = (filters: MapFilters = {}) => {
 
 // Hook semplificato per componenti che vogliono solo i devices con GPS
 export const useMapDevicesSimple = () => {
-  const { data: allDevices = [], isLoading, error, refetch } = devicesApi.useGetAllDevicesQuery({});
+  const {
+    data: allDevices = [],
+    isLoading,
+    error,
+    refetch,
+  } = devicesApi.useGetAllDevicesQuery({});
 
   const devicesWithGPS = useMemo(() => {
     if (!Array.isArray(allDevices)) {

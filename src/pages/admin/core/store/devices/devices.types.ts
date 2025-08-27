@@ -50,25 +50,25 @@ export interface CreateDeviceRequest {
     | "Indifferenziato"
     | "Carta"
     | "vpl";
-  linux_version?: string;
-  start_available?: string;
-  end_available?: string;
+  linux_Version?: string;
+  start_Available?: string;
+  end_Available?: string;
   street?: string;
-  postal_code?: string;
+  postal_Code?: string;
   province?: string;
   city?: string;
   country?: string;
   municipality?: string;
   address?: string;
   status_ready_d75_3_7?: boolean;
-  status_machine_blocked?: boolean;
-  codice_gps?: string;
-  sheet_name?: string;
-  customer_name?: string;
-  matricola_bte?: string;
-  matricola_kgn?: string;
+  status_Machine_Blocked?: boolean;
+  codice_Gps?: string;
+  sheet_Name?: string;
+  customer_Name?: string;
+  matricola_Bte?: string;
+  matricola_Kgn?: string;
   customer?: string;
-  ip_router?: string;
+  ip_Router?: string;
   gps_x?: string;
   gps_y?: string;
   note?: string;
@@ -88,7 +88,7 @@ export interface DevicesQueryParams {
   city?: string;
   province?: string;
   customer?: string;
-  status_machine_blocked?: boolean | string;
+  status_Machine_Blocked?: boolean | string;
   status_ready_d75_3_7?: boolean | string;
   sortBy?: string;
   sortOrder?: "asc" | "desc";
@@ -105,7 +105,7 @@ export interface BulkActionRequest {
     | "updateWaste";
   data?: {
     status?: number;
-    status_machine_blocked?: boolean;
+    status_Machine_Blocked?: boolean;
     waste?:
       | "Plastica"
       | "Secco"
