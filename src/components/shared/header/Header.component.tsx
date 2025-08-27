@@ -19,6 +19,7 @@ import {
 
 export default function KgnHeader() {
   const [searchText, setSearchText] = useState("");
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const { isMobileOpen, toggleSidebar, toggleMobile, closeMobile } =
     useSidebar();
 
@@ -35,10 +36,12 @@ export default function KgnHeader() {
   );
 
   const pillRef = useRef<HTMLDivElement>(null);
+  const mobilePillRef = useRef<HTMLDivElement>(null);
 
   const handleSearch = () => {
     if (!searchText.trim()) return;
     if (isMobileOpen) closeMobile();
+    setIsMobileSearchOpen(false);
   };
 
   const handleCustomerChange = (value: string) => {
@@ -55,39 +58,100 @@ export default function KgnHeader() {
     else toggleSidebar();
   };
 
+  const handleMobileSearchToggle = () => {
+    setIsMobileSearchOpen(!isMobileSearchOpen);
+  };
+
+  const closeMobileSearch = () => {
+    setIsMobileSearchOpen(false);
+  };
+
   return (
-    <header className={styles.kgnHeader}>
-      <button
-        className={stylesToggle.toggleBtn}
-        onClick={handleToggleClick}
-        aria-label="Menu"
-        title={isMobileOpen ? "Close menu" : "Open menu"}
-      >
-        {getToggleIcon()}
-      </button>
+    <>
+      <header className={styles.kgnHeader}>
+        <button
+          className={stylesToggle.toggleBtn}
+          onClick={handleToggleClick}
+          aria-label="Menu"
+          title={isMobileOpen ? "Close menu" : "Open menu"}
+        >
+          {getToggleIcon()}
+        </button>
 
-      <div className={stylesPill.searchGroup}>
-        <div className={stylesPill.pill} ref={pillRef}>
-          <FilterSelect
-            selected={scopedCustomer ?? ""}
-            options={customerOptions}
-            onChange={handleCustomerChange}
-            ChevronIcon={<ChevronDown size={16} />}
-            anchorRef={pillRef}
-          />
-          <SearchInput
-            value={searchText}
-            onChange={setSearchText}
-            onSearch={handleSearch}
-            SearchIcon={<Search size={16} />}
-          />
+        <div className={stylesPill.searchGroup}>
+          <div className={stylesPill.pill} ref={pillRef}>
+            <FilterSelect
+              selected={scopedCustomer ?? ""}
+              options={customerOptions}
+              onChange={handleCustomerChange}
+              ChevronIcon={<ChevronDown size={16} />}
+              anchorRef={pillRef}
+              openUpward={false}
+            />
+            <SearchInput
+              value={searchText}
+              onChange={setSearchText}
+              onSearch={handleSearch}
+              SearchIcon={<Search size={16} />}
+            />
+          </div>
         </div>
-      </div>
 
-      <UserActions
-        MailIcon={<Mail size={20} />}
-        GridIcon={<Grid size={20} />}
-      />
-    </header>
+        {/* Mobile search button */}
+        <button
+          className={styles.mobileSearchBtn}
+          onClick={handleMobileSearchToggle}
+          aria-label="Search"
+          title="Open search"
+        >
+          <Search size={20} />
+        </button>
+
+        <UserActions
+          MailIcon={<Mail size={20} />}
+          GridIcon={<Grid size={20} />}
+        />
+      </header>
+
+      {/* Mobile search overlay */}
+      {isMobileSearchOpen && (
+        <>
+          <div
+            className={styles.mobileSearchOverlay}
+            onClick={closeMobileSearch}
+          />
+          <div className={styles.mobileSearchPanel}>
+            <div className={styles.mobileSearchContent}>
+              <div className={styles.mobileSearchHeader}>
+                <h3>Ricerca</h3>
+                <button
+                  className={styles.mobileSearchClose}
+                  onClick={closeMobileSearch}
+                  aria-label="Close search"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+              <div className={stylesPill.pill} ref={mobilePillRef}>
+                <FilterSelect
+                  selected={scopedCustomer ?? ""}
+                  options={customerOptions}
+                  onChange={handleCustomerChange}
+                  ChevronIcon={<ChevronDown size={16} />}
+                  anchorRef={mobilePillRef}
+                  openUpward={true}
+                />
+                <SearchInput
+                  value={searchText}
+                  onChange={setSearchText}
+                  onSearch={handleSearch}
+                  SearchIcon={<Search size={16} />}
+                />
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+    </>
   );
 }

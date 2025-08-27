@@ -11,6 +11,8 @@ type Props = {
   ChevronIcon: React.ReactNode;
   /** ref del contenitore .pill (o .searchGroup) per calcolare left/top/width */
   anchorRef: React.RefObject<HTMLElement>;
+  /** Se true, il dropdown si apre verso l'alto */
+  openUpward?: boolean;
 };
 
 export default function FilterSelect({
@@ -19,6 +21,7 @@ export default function FilterSelect({
   onChange,
   ChevronIcon,
   anchorRef,
+  openUpward = false,
 }: Props) {
   const triggerRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -44,7 +47,25 @@ export default function FilterSelect({
     const anchor = anchorRef?.current;
     if (!anchor) return;
     const r = anchor.getBoundingClientRect();
-    setRect({ left: r.left, top: r.bottom, width: r.width, height: r.height });
+
+    if (openUpward) {
+      // Apre verso l'alto: top = r.top - altezza dropdown - gap
+      const dropdownHeight = Math.min(280, options.length * 60); // stima altezza
+      setRect({
+        left: r.left,
+        top: r.top - dropdownHeight - 4, // gap verso l'alto
+        width: r.width,
+        height: r.height,
+      });
+    } else {
+      // Apre verso il basso (comportamento normale)
+      setRect({
+        left: r.left,
+        top: r.bottom,
+        width: r.width,
+        height: r.height,
+      });
+    }
   };
 
   useEffect(() => {
@@ -75,7 +96,7 @@ export default function FilterSelect({
       window.removeEventListener("keydown", onKey);
       document.removeEventListener("mousedown", onDoc);
     };
-  }, [open]);
+  }, [open, openUpward, options.length]);
 
   const handleSelect = (value: string) => {
     onChange(value);
@@ -96,7 +117,7 @@ export default function FilterSelect({
 
   return (
     <>
-      {/* Trigger “finto select” dentro la pill */}
+      {/* Trigger "finto select" dentro la pill */}
       <button
         ref={triggerRef}
         type="button"
@@ -119,7 +140,7 @@ export default function FilterSelect({
             style={{
               position: "fixed",
               left: rect.left,
-              top: rect.top + 4, // piccolo gap
+              top: rect.top + (openUpward ? 0 : 4), // gap solo se verso il basso
               width: rect.width,
             }}
             role="listbox"

@@ -29,7 +29,7 @@
   color: var(--sidenav-text);
   display: flex;
   flex-direction: column;
-  z-index: 1000;
+  z-index: 1200; /* Lower than header z-index (1300) */
   transition: var(--sidenav-transition);
 
   /* scroll behavior */
@@ -54,9 +54,9 @@
 
     @media (max-width: 768px) {
       position: fixed;
-      top: 60px;
+      top: 60px; /* Starts below header */
       height: calc(100vh - 60px);
-      z-index: 1200;
+      z-index: 1200; /* Lower than header */
     }
     @media (min-width: 769px) {
       transform: translateX(0);
@@ -80,9 +80,9 @@
 
     @media (max-width: 768px) {
       position: fixed;
-      top: 60px;
+      top: 60px; /* Starts below header */
       height: calc(100vh - 60px);
-      z-index: 1200;
+      z-index: 1200; /* Lower than header */
     }
     @media (min-width: 769px) {
       transform: translateX(0);
