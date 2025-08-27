@@ -3,13 +3,12 @@ import { useNavigate } from "react-router-dom";
 import type { Device } from "@store_admin/devices/devices.types";
 import styles from "../_styles/DeviceCard.module.scss";
 import {
-  CheckCircleIcon,
   EyeIcon,
   MapPinIcon,
-  MoreVerticalIcon,
   PowerIcon,
   SpoolIcon,
   WifiIcon,
+  ZapIcon,
 } from "lucide-react";
 import { ModalDeviceDetails } from "@sections_admin/devicesList/_modals/ModalDeviceDetail/ModalDeviceDetail.component";
 import { ModalRiActiveDevice } from "@sections_admin/devicesList/_modals/ModalRiActivateDevice/ModalRiActiveDevice.component";
@@ -20,6 +19,7 @@ import {
   PopOver,
   type PopOverItem,
 } from "@root/components/shared/pop-over/PopOver.component";
+import { SimpleButton } from "@root/components/shared/simple-btn/SimpleButton.component";
 
 interface DeviceCardProps {
   device: Device;
@@ -160,20 +160,14 @@ export const DeviceCard: React.FC<DeviceCardProps> = ({
           className={styles["actions-menu"]}
           style={{ position: "relative" }}
         >
-          <button
-            ref={menuBtnRef}
-            className={styles["menu-btn"]}
-            type="button"
-            aria-haspopup="menu"
-            aria-expanded={menuOpen}
-            aria-label="Azioni dispositivo"
-            onClick={(e) => {
-              e.stopPropagation();
-              setMenuOpen((v) => !v);
-            }}
-          >
-            <MoreVerticalIcon size={12} />
-          </button>
+          <ModalDeviceDetails
+            device={device}
+            triggerButton={
+              <SimpleButton variant="ghost" size="sm" color="warning">
+                <ZapIcon size={12} />
+              </SimpleButton>
+            }
+          />
 
           {/* MENU POPOVER (si apre sopra la card) */}
           <PopOver
@@ -243,35 +237,30 @@ export const DeviceCard: React.FC<DeviceCardProps> = ({
 
       {/* Footer compatto */}
       <div className={styles["compact-footer"]}>
-        {!isActive ? (
+        {!isActive && (
           <ModalRiActiveDevice
             device={device}
             triggerButton={
-              <button
+              <SimpleButton
+                variant="filled"
+                color="error"
+                size="sm"
                 className={[styles["compact-btn"], styles.error].join(" ")}
-                type="button"
               >
                 <PowerIcon size={12} />
-              </button>
+              </SimpleButton>
             }
           />
-        ) : (
-          <button className={styles["compact-btn"]} disabled type="button">
-            <CheckCircleIcon size={12} />
-          </button>
         )}
-
-        <ModalDeviceDetails
-          device={device}
-          triggerButton={
-            <button
-              className={[styles["compact-btn"], styles["primary"]].join(" ")}
-              type="button"
-            >
-              <EyeIcon size={12} />
-            </button>
-          }
-        />
+        <SimpleButton
+          size="sm"
+          variant="filled"
+          type="button"
+          color="primary"
+          onClick={handleGoToPLC}
+        >
+          <EyeIcon size={12} />
+        </SimpleButton>
 
         <ModalOpenTicket
           device={device}
@@ -291,15 +280,15 @@ export const DeviceCard: React.FC<DeviceCardProps> = ({
             }
           }}
           triggerButton={
-            <button
-              className={[styles["compact-btn"], styles["warning"]].join(" ")}
-              onClick={() => onAction("ticket", device)}
-              type="button"
+            <SimpleButton
+              variant="filled"
+              size="sm"
+              color="warning"
               disabled={isCreating}
-              title={isCreating ? "Apertura in corso..." : "Apri ticket"}
+              /* className={[styles["compact-btn"], styles["warning"]].join(" ")} */
             >
               <SpoolIcon size={12} />
-            </button>
+            </SimpleButton>
           }
         />
       </div>

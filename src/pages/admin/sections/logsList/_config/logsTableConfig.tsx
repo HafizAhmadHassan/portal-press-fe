@@ -78,7 +78,7 @@ export const createLogsTableConfig = ({
 
       {
         key: "alarm",
-        header: "Allarme",
+        header: "Messaggio",
         type: "custom" as const,
         width: "360px",
         sortable: false,
@@ -112,7 +112,7 @@ export const createLogsTableConfig = ({
       },
       {
         key: "code_alarm",
-        header: "Codice Allarme",
+        header: "Codice Log",
         type: "custom" as const,
         width: "160px",
         sortable: true,
