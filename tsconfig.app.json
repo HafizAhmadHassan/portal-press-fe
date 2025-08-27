@@ -34,6 +34,8 @@
       "@layouts/*": ["src/layouts/*"],
       "@store_admin/*": ["src/pages/admin/core/store/*"],
       "@sections_admin/*": ["src/pages/admin/sections/*"],
+      "@store_device/*": ["src/pages/device/core/store/*"],
+      "@sections_device/*": ["src/pages/device/sections/*"],
       "@utils/*": ["src/utils/*"],
       "@hooks/*": ["src/hooks/*"]
     }

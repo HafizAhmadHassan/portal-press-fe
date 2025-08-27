@@ -18,6 +18,9 @@ import Switch from "@root/components/shared/switch/Switch.component";
 import { useSession } from "@root/pages/admin/core/store/auth/hooks/useSession";
 import { UserRoles } from "@root/utils/constants/userRoles";
 
+// 👉 qui usiamo il dettaglio PLC per id
+import { useGetPlcByIdQuery } from "@store_device/plc/hooks/usePlcApi";
+
 export default function DeviceLayout() {
   const navigate = useNavigate();
   const { deviceId, id } = useParams<{ deviceId?: string; id?: string }>();
@@ -43,6 +46,28 @@ export default function DeviceLayout() {
     skip: !parsedId,
   });
 
+  // ========= CHIAMATA API PLC /plc/:id =========
+  const {
+    data: plcDetail,
+    isLoading: plcLoading,
+    error: plcError,
+    refetch: refetchPlc,
+  } = useGetPlcByIdQuery(currentDeviceId as string, {
+    skip: !currentDeviceId,
+  });
+
+  useEffect(() => {
+    if (plcLoading) return;
+    if (plcError) {
+      console.error("[PLC] errore dettaglio:", plcError);
+      return;
+    }
+    if (plcDetail) {
+      console.log("[PLC] dettaglio →", plcDetail);
+    }
+  }, [plcDetail, plcLoading, plcError]);
+  // ========= FINE CHIAMATA API PLC =========
+
   // === Single source of truth: ?edit=1
   const editMode = searchParams.get("edit") === "1";
 
@@ -55,7 +80,6 @@ export default function DeviceLayout() {
       next.set("edit", "1");
       setSearchParams(next, { replace: true });
     }
-    // NB: Non rimuoviamo /edit dalla path (no redirect) per non rompere rotte esistenti.
   }, [location.pathname, searchParams, setSearchParams]);
 
   const handleToggleEdit = (on: boolean) => {
@@ -63,7 +87,6 @@ export default function DeviceLayout() {
     if (on) next.set("edit", "1");
     else next.delete("edit");
     setSearchParams(next, { replace: true });
-    // Le pagine figlie reagiscono a questo cambiamento leggendo ?edit=1
   };
 
   // =========================
@@ -71,11 +94,8 @@ export default function DeviceLayout() {
   // =========================
   const isSuperAdmin = user?.role === UserRoles.SUPER_ADMIN;
 
-  // estrae la parte del path dopo /device/:id
   const isDetailPage = useMemo(() => {
-    // prendi tutto ciò che viene dopo /device/<id>
     const afterId = location.pathname.replace(/^.*\/device\/[^/]+/, "");
-    // pagina di dettaglio se è root, "/" oppure "/edit"
     return (
       afterId === "" ||
       afterId === "/" ||
@@ -84,12 +104,9 @@ export default function DeviceLayout() {
     );
   }, [location.pathname]);
 
-  // regola:
-  // - SUPER_ADMIN: mostra in pagina di dettaglio
-  // - NON SUPER_ADMIN: non mostrare in pagina di dettaglio, ma mostrare nelle sotto-pagine
   const showEditSwitch = useMemo(() => {
     if (isSuperAdmin) return isDetailPage;
-    return !isDetailPage; // non super → mostra solo nelle altre pagine
+    return !isDetailPage;
   }, [isSuperAdmin, isDetailPage]);
 
   return (
@@ -119,7 +136,10 @@ export default function DeviceLayout() {
                 color="secondary"
                 variant="ghost"
                 icon={RotateCw}
-                onClick={() => refetch()}
+                onClick={() => {
+                  refetch();
+                  refetchPlc(); // aggiorna anche il dettaglio PLC
+                }}
               >
                 Aggiorna
               </SimpleButton>

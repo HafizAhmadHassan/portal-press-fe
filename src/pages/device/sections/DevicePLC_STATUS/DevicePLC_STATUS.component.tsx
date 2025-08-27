@@ -12,6 +12,76 @@ import TableKeyValue, {
 } from "@components/shared/table-key-value/TableKeyValue.component";
 
 import { SimpleButton } from "@root/components/shared/simple-btn/SimpleButton.component";
+import { useGetPlcByIdQuery } from "@store_device/plc/hooks/usePlcApi";
+
+/** Util: da snake_case a label leggibile */
+function humanizeKey(k: string) {
+  return k
+    .replace(/_/g, " ")
+    .replace(/\b([a-z])/g, (m) => m.toUpperCase())
+    .replace(/\b(Plc|Io|Id)\b/gi, (m) => m.toUpperCase());
+}
+
+/** Rileva stringhe numeriche e le converte in number */
+function toNumberIfNumericString(v: any): any {
+  if (typeof v === "string" && /^\s*-?\d+(\.\d+)?\s*$/.test(v)) {
+    const n = Number(v.trim());
+    return Number.isFinite(n) ? n : v;
+  }
+  return v;
+}
+
+/** Converte un record plc_status in TableKeyValueRow[] */
+function buildRowsFromPlcStatus(
+  plcStatus: Record<string, any> | null | undefined
+): TableKeyValueRow[] {
+  if (!plcStatus) return [];
+
+  const rows: TableKeyValueRow[] = [];
+  const entries = Object.entries(plcStatus);
+
+  // ID per primo (read-only)
+  const idEntry = entries.find(([k]) => k === "id");
+  if (idEntry) {
+    const [, v] = idEntry;
+    rows.push({
+      id: "id",
+      key: "id",
+      label: "ID Dispositivo",
+      type: "number",
+      value: Number(v ?? 0),
+      readOnly: true,
+    });
+  }
+
+  // resto dei campi (ordinati alfabeticamente per label)
+  const rest = entries.filter(([k]) => k !== "id");
+  rest
+    .map<[string, any, string]>(([k, v]) => [k, v, humanizeKey(k)])
+    .sort((a, b) => a[2].localeCompare(b[2], "it"))
+    .forEach(([k, v, label]) => {
+      const normalized = toNumberIfNumericString(v);
+
+      let type: TableKeyValueRow["type"];
+      if (typeof normalized === "boolean") type = "boolean";
+      else if (typeof normalized === "number") type = "number";
+      else type = "text";
+
+      const step =
+        type === "number" && !Number.isInteger(normalized) ? 0.001 : 1;
+
+      rows.push({
+        id: k,
+        key: k,
+        label,
+        type,
+        value: normalized,
+        ...(type === "number" ? { step } : {}),
+      });
+    });
+
+  return rows;
+}
 
 export default function DevicePLC_STATUS() {
   const navigate = useNavigate();
@@ -30,122 +100,68 @@ export default function DevicePLC_STATUS() {
   const [searchParams] = useSearchParams();
   const isEdit = searchParams.get("edit") === "1";
 
-  useEffect(() => {
-    setLoading(true);
-    const mock: TableKeyValueRow[] = [
-      {
-        id: "id",
-        key: "id",
-        label: "ID Dispositivo",
-        type: "number",
-        value: Number(deviceId || 0),
-        readOnly: true,
-      },
-      {
-        id: "em_nok",
-        key: "emergenza_nok",
-        label: "Emergenza NOK",
-        type: "number",
-        value: 0,
-        min: 0,
-        max: 1,
-      },
-      {
-        id: "err_hmi",
-        key: "err_hmi",
-        label: "Errore comunicazione con HMI",
-        type: "number",
-        value: 0,
-        min: 0,
-        max: 1,
-      },
-      {
-        id: "a_peso",
-        key: "an_peso_err",
-        label: "Analogica Peso in errore",
-        type: "boolean",
-        value: false,
-      },
-      {
-        id: "a_press",
-        key: "an_press_err",
-        label: "Analogica Pressione in errore",
-        type: "boolean",
-        value: false,
-      },
-      {
-        id: "tout",
-        key: "timeout_comm",
-        label: "Timeout comunicazione",
-        type: "number",
-        value: 0,
-        min: 0,
-        max: 1,
-      },
-      {
-        id: "press",
-        key: "press_bar",
-        label: "Pressione",
-        type: "number",
-        value: 0,
-        step: 0.01,
-        unit: "bar",
-        validate: (v) => (v < 0 ? "Non può essere negativo" : undefined),
-      },
-      {
-        id: "mode",
-        key: "mode",
-        label: "Modalità",
-        type: "select",
-        value: "auto",
-        options: [
-          { label: "Automatico", value: "auto" },
-          { label: "Manuale", value: "man" },
-        ],
-      },
-      {
-        id: "note",
-        key: "note",
-        label: "Note",
-        type: "multiline",
-        value: "",
-        placeholder: "Annotazioni…",
-      },
-    ];
+  // === FETCH plc/${id} e prendi SOLO plc_status ===
+  const currentId = deviceId ?? "";
+  const {
+    data: plcDetail,
+    isLoading,
+    isFetching,
+    error,
+    refetch,
+  } = useGetPlcByIdQuery(currentId, { skip: !currentId });
 
-    const t = setTimeout(() => {
-      setRows(mock);
-      setOriginal(JSON.parse(JSON.stringify(mock)));
-      setLoading(false);
-    }, 250);
-    return () => clearTimeout(t);
-  }, [deviceId]);
+  const plcStatus = plcDetail?.plc_status ?? null;
+
+  // Inizializza/aggiorna righe quando cambia plc_status
+  useEffect(() => {
+    const busy = isLoading || isFetching;
+    setLoading(busy);
+
+    if (busy) return;
+
+    if (error) {
+      console.error("[DevicePLC_STATUS] errore plc/:id →", error);
+      setRows([]);
+      setOriginal([]);
+      return;
+    }
+
+    const built = buildRowsFromPlcStatus(plcStatus);
+    setRows(built);
+    setOriginal(JSON.parse(JSON.stringify(built)));
+  }, [plcStatus, isLoading, isFetching, error]);
 
   const dirty = useMemo(
     () => JSON.stringify(rows) !== JSON.stringify(original),
     [rows, original]
   );
 
-  const saveAll = useCallback(async (updated: TableKeyValueRow[]) => {
-    setSaving(true);
-    try {
-      // TODO: mutation reale
-      await new Promise((r) => setTimeout(r, 600));
-      setOriginal(JSON.parse(JSON.stringify(updated)));
-      setRows(updated);
-    } finally {
-      setSaving(false);
-    }
-  }, []);
+  const saveAll = useCallback(
+    async (updated: TableKeyValueRow[]) => {
+      setSaving(true);
+      try {
+        // TODO: collega mutation reale (PUT /plc/:id) mappando rows -> plc_status
+        console.log("[DevicePLC_STATUS] saveAll payload:", updated);
+        await new Promise((r) => setTimeout(r, 300));
+        setOriginal(JSON.parse(JSON.stringify(updated)));
+        setRows(updated);
+        refetch(); // ricarica dal backend
+      } finally {
+        setSaving(false);
+      }
+    },
+    [refetch]
+  );
 
   const cancelAll = useCallback(() => {
     setRows(JSON.parse(JSON.stringify(original)));
   }, [original]);
 
   const saveRow = useCallback(
-    async (_row: TableKeyValueRow, index: number) => {
-      // TODO: mutation singola riga
-      await new Promise((r) => setTimeout(r, 250));
+    async (row: TableKeyValueRow, index: number) => {
+      // TODO: mutation row-level se disponibile
+      console.log("[DevicePLC_STATUS] saveRow:", { index, row });
+      await new Promise((r) => setTimeout(r, 150));
       setOriginal((prev) => {
         const copy = [...prev];
         copy[index] = JSON.parse(JSON.stringify(rows[index]));
@@ -166,16 +182,12 @@ export default function DevicePLC_STATUS() {
     [original]
   );
 
+  const notFound = !loading && (!plcStatus || (rows.length === 0 && !error));
+
   return (
     <>
       <div className={styles.page}>
         <TableKeyValue
-          /*  title={
-            <div className={styles.sectionHeader}>
-              <Database size={16} />
-              <span>Registri e Flag</span>
-            </div>
-          } */
           rows={rows}
           onChange={setRows}
           onSave={saveAll}
@@ -190,17 +202,22 @@ export default function DevicePLC_STATUS() {
           rowSwitchCancelBehavior="revert"
           onRowSave={saveRow}
           onRowCancel={cancelRow}
+          emptyState={
+            notFound
+              ? "Nessun dato PLC (plc_status) trovato per questo device."
+              : undefined
+          }
           footerActions={{
-            show: editable, // se non vuoi doppioni con l'action bar sotto: metti false
+            show: editable,
             cancelLabel: "Annulla",
             saveLabel: "Salva",
             cancelDisabled: !dirty || saving,
             saveDisabled: !dirty || saving,
           }}
         />
-
-        {/* ACTION BAR STICKY (come nella pagina edit) */}
       </div>
+
+      {/* ACTION BAR STICKY */}
       <div className={styles.actionBar}>
         <SimpleButton
           size="sm"

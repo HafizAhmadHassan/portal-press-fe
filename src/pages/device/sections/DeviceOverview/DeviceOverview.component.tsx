@@ -32,8 +32,7 @@ export default function DeviceOverview() {
   // prende l'id dal path /device/:deviceId
   const { deviceId } = useParams<{ deviceId: string }>();
 
-  // === QUI potrai sostituire con RTK Query/selector (p.es. useGetDeviceByIdQuery(deviceId)) ===
-  // Dati placeholder per mostrare la UI finché non colleghi le API reali
+  // Dati placeholder per mostrare la UI finché non colleghi i dati reali alla view
   const deviceName = useMemo(
     () => (deviceId ? `Dispositivo #${deviceId}` : "Dispositivo"),
     [deviceId]
@@ -99,14 +98,8 @@ export default function DeviceOverview() {
   const onCommand = async (key: string) => {
     setRunningCommandKey(key);
     try {
-      // TODO: collega qui la tua azione reale (API/RTK Query/WebSocket)
-      // es.: await dispatch(runCommand({ deviceId, key })).unwrap();
       await new Promise((r) => setTimeout(r, 750));
-      // opzionale: toast di successo
-      // toast.success(`Comando "${key}" inviato al device ${deviceId}`);
     } catch (e) {
-      // opzionale: toast di errore
-      // toast.error(`Errore nell'eseguire "${key}"`);
       console.error(e);
     } finally {
       setRunningCommandKey(null);

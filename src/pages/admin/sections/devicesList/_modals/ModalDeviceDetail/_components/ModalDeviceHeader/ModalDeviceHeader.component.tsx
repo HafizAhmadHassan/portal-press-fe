@@ -35,14 +35,12 @@ export default function ModalDeviceHeader({
     const lat = Number(device.gps_x); // LATITUDINE
     const lng = Number(device.gps_y); // LONGITUDINE
     center = [lat, lng];
-
-    console.log("Valid coordinates found:", { lat, lng, center });
-  } else {
+  } /* else {
     console.log("Invalid coordinates:", {
       gps_x: device?.gps_x,
       gps_y: device?.gps_y,
     });
-  }
+  } */
 
   return (
     <div className={styles.deviceHeader}>
