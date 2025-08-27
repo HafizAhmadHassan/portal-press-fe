@@ -2,14 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import * as path from "path";
 
-export default defineConfig(({ mode }) => {
-  const envFilename =
-    mode === "production"
-      ? "environment.prod.ts"
-      : mode === "staging"
-      ? "environment.staging.ts"
-      : "environment.ts";
-
+export default defineConfig(() => {
   return {
     plugins: [react()],
     resolve: {

@@ -27,7 +27,7 @@ export const createUsersTableConfig = ({
   return {
     columns: [
       {
-        key: "full_name",
+        key: "fullName",
         header: "Utente",
         type: "custom" as const,
         width: "280px",
@@ -39,7 +39,7 @@ export const createUsersTableConfig = ({
               <div
                 style={{ fontWeight: 600, fontSize: "14px", color: tPrimary }}
               >
-                {user.full_name ||
+                {user.fullName ||
                   `${user.firstName || ""} ${user.lastName || ""}`.trim() ||
                   user.username}
               </div>
@@ -68,7 +68,7 @@ export const createUsersTableConfig = ({
         render: (_: any, user: User) => <RoleBadge user={user} />,
       },
       {
-        key: "is_active",
+        key: "isActive",
         header: "Stato",
         type: "badge" as const,
         width: "120px",
@@ -77,18 +77,18 @@ export const createUsersTableConfig = ({
           true: { label: "Attivo", className: "success" },
           false: { label: "Inattivo", className: "danger" },
         },
-        accessor: (u: User) => Boolean(u.is_active),
+        accessor: (u: User) => Boolean(u.isActive),
       },
       {
-        key: "date_joined",
+        key: "dataJoined",
         header: "Data Creazione",
         type: "custom" as const,
         width: "160px",
         sortable: true,
         render: (_: any, user: User) => {
-          if (!user.date_joined)
+          if (!user.dataJoined)
             return <span style={{ color: tSecondary }}>N/A</span>;
-          const date = new Date(user.date_joined);
+          const date = new Date(user.dataJoined);
           return (
             <div>
               <div style={{ fontSize: "14px", color: tPrimary }}>
@@ -129,7 +129,7 @@ export const createUsersTableConfig = ({
     },
     sorting: {
       enabled: true,
-      defaultSort: { key: "date_joined", direction: "desc" as const },
+      defaultSort: { key: "dataJoined", direction: "desc" as const },
     },
     selection: {
       enabled: false,

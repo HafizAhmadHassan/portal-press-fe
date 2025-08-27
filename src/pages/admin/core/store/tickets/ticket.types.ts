@@ -6,14 +6,14 @@ export type TicketCategory = "ELECTRIC" | "DATABASE" | "MECHANIC" | "HYDRAULIC";
 // --- UTENTI / DEVICE ---
 export interface UserInfo {
   id: number;
-  full_name?: string | null;
+  fullName?: string | null;
   email?: string | null;
   username: string;
 }
 
 export interface DeviceInfo {
   id: number;
-  machine_name: string;
+  machine__Name: string;
   city?: string | null;
   customer?: string | null;
   status: number;

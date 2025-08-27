@@ -1,6 +1,6 @@
-import React from 'react';
-import Modal from '@components/shared/modal/Modal';
-import { SimpleButton } from '@shared/simple-btn/SimpleButton.component.tsx';
+import React from "react";
+import Modal from "@components/shared/modal/Modal";
+import { SimpleButton } from "@shared/simple-btn/SimpleButton.component.tsx";
 import {
   Eye,
   CheckCircle,
@@ -14,12 +14,12 @@ import {
   User as UserIcon,
   Monitor,
   Badge,
-} from 'lucide-react';
-import styles from './ModalTicketDetail.module.scss';
-import type { TicketRead } from '@store_admin/tickets/ticket.types';
+} from "lucide-react";
+import styles from "./ModalTicketDetail.module.scss";
+import type { TicketRead } from "@store_admin/tickets/ticket.types";
 
 type DeviceLite = {
-  machine_name?: string;
+  machine__Name?: string;
   city?: string;
   province?: string;
   customer_name?: string;
@@ -40,15 +40,19 @@ interface ModalTicketDetailsProps {
   ticket: TicketWithDevice;
 }
 
-const isClosed = (t: any) => t?.status === 2 || t?.status === 'closed' || t?.status === 'CLOSED';
+const isClosed = (t: any) =>
+  t?.status === 2 || t?.status === "closed" || t?.status === "CLOSED";
 
 const formatDateTime = (dateString?: string) => {
-  if (!dateString) return 'N/D';
+  if (!dateString) return "N/D";
   const d = new Date(dateString);
-  if (isNaN(d.getTime())) return 'N/D';
-  return d.toLocaleString('it-IT', {
-    day: '2-digit', month: '2-digit', year: 'numeric',
-    hour: '2-digit', minute: '2-digit'
+  if (isNaN(d.getTime())) return "N/D";
+  return d.toLocaleString("it-IT", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   });
 };
 
@@ -59,20 +63,23 @@ const relativeTime = (dateString?: string) => {
   const now = new Date();
   const diffMs = now.getTime() - d.getTime();
   const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-  if (days === 0) return 'Oggi';
-  if (days === 1) return 'Ieri';
+  if (days === 0) return "Oggi";
+  if (days === 1) return "Ieri";
   if (days < 7) return `${days} giorni fa`;
   if (days < 30) return `${Math.floor(days / 7)} settimane fa`;
   if (days < 365) return `${Math.floor(days / 30)} mesi fa`;
   return `${Math.floor(days / 365)} anni fa`;
 };
 
-export const ModalTicketDetails: React.FC<ModalTicketDetailsProps> = ({ ticket }) => {
+export const ModalTicketDetails: React.FC<ModalTicketDetailsProps> = ({
+  ticket,
+}) => {
   const dev = ticket?.device;
   const customer =
-    dev?.customer ?? dev?.customer_name ?? (ticket as any)?.customer ?? 'N/D';
-  const machineId = (ticket as any)?.machine ?? (ticket as any)?.device_id ?? 'N/D';
-  const machineName = dev?.machine_name;
+    dev?.customer ?? dev?.customer_name ?? (ticket as any)?.customer ?? "N/D";
+  const machineId =
+    (ticket as any)?.machine ?? (ticket as any)?.device_id ?? "N/D";
+  const machineName = dev?.machine__Name;
 
   const openedAt =
     (ticket as any)?.date_Time ||
@@ -85,12 +92,12 @@ export const ModalTicketDetails: React.FC<ModalTicketDetailsProps> = ({ ticket }
     (ticket as any)?.open_Description ||
     (ticket as any)?.open_description ||
     ticket?.description ||
-    '';
+    "";
 
   const closeDescription =
     (ticket as any)?.close_Description ||
     (ticket as any)?.close_description ||
-    '';
+    "";
 
   const guaranteeList: string[] =
     (ticket as any)?.guanratee_status ||
@@ -100,7 +107,9 @@ export const ModalTicketDetails: React.FC<ModalTicketDetailsProps> = ({ ticket }
   return (
     <Modal
       size="lg"
-      triggerButton={<SimpleButton size="bare" color="primary" variant="ghost" icon={Eye} />}
+      triggerButton={
+        <SimpleButton size="bare" color="primary" variant="ghost" icon={Eye} />
+      }
       cancelText="Chiudi"
       variant="primary"
     >
@@ -122,17 +131,20 @@ export const ModalTicketDetails: React.FC<ModalTicketDetailsProps> = ({ ticket }
 
           <div className={styles.ticketMainInfo}>
             <h3 className={styles.title}>
-              Ticket #{ticket.id}{machineName ? ` – ${machineName}` : ''}
+              Ticket #{ticket.id}
+              {machineName ? ` – ${machineName}` : ""}
             </h3>
             <p className={styles.subTitle}>
-              {customer} • {dev?.city || 'Luogo N/D'}
+              {customer} • {dev?.city || "Luogo N/D"}
             </p>
 
             <div className={styles.badgesRow}>
               <span
-                className={`${styles.statusBadge} ${isClosed(ticket) ? styles.statusClosed : styles.statusOpen}`}
+                className={`${styles.statusBadge} ${
+                  isClosed(ticket) ? styles.statusClosed : styles.statusOpen
+                }`}
               >
-                {isClosed(ticket) ? 'Chiuso (2)' : 'Aperto'}
+                {isClosed(ticket) ? "Chiuso (2)" : "Aperto"}
               </span>
 
               {dev?.ip_router && (
@@ -174,14 +186,17 @@ export const ModalTicketDetails: React.FC<ModalTicketDetailsProps> = ({ ticket }
             <div className={styles.infoItem}>
               <span className={styles.infoLabel}>Machine</span>
               <span className={styles.infoValue}>
-                {machineName ? `${machineName} (#${machineId})` : `#${machineId}`}
+                {machineName
+                  ? `${machineName} (#${machineId})`
+                  : `#${machineId}`}
               </span>
             </div>
             {(dev?.city || dev?.province) && (
               <div className={styles.infoItem}>
                 <span className={styles.infoLabel}>Luogo</span>
                 <span className={styles.infoValue}>
-                  {dev?.city}{dev?.province ? `, ${dev?.province}` : ''}
+                  {dev?.city}
+                  {dev?.province ? `, ${dev?.province}` : ""}
                 </span>
               </div>
             )}
@@ -202,19 +217,29 @@ export const ModalTicketDetails: React.FC<ModalTicketDetailsProps> = ({ ticket }
                 <span className={styles.dateCardTitle}>Apertura</span>
               </div>
               <div className={styles.dateCardContent}>
-                <span className={styles.dateValue}>{formatDateTime(openedAt)}</span>
-                <span className={styles.dateRelative}>{relativeTime(openedAt)}</span>
+                <span className={styles.dateValue}>
+                  {formatDateTime(openedAt)}
+                </span>
+                <span className={styles.dateRelative}>
+                  {relativeTime(openedAt)}
+                </span>
               </div>
             </div>
 
             <div className={styles.dateCard}>
               <div className={styles.dateCardHeader}>
                 <Clock className={styles.dateIcon} />
-                <span className={styles.dateCardTitle}>Ultimo Aggiornamento</span>
+                <span className={styles.dateCardTitle}>
+                  Ultimo Aggiornamento
+                </span>
               </div>
               <div className={styles.dateCardContent}>
-                <span className={styles.dateValue}>{formatDateTime(updatedAt)}</span>
-                <span className={styles.dateRelative}>{relativeTime(updatedAt)}</span>
+                <span className={styles.dateValue}>
+                  {formatDateTime(updatedAt)}
+                </span>
+                <span className={styles.dateRelative}>
+                  {relativeTime(updatedAt)}
+                </span>
               </div>
             </div>
           </div>

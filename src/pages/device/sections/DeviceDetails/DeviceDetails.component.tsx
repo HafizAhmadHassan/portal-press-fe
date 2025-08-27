@@ -57,7 +57,7 @@ interface FormData {
 }
 
 const deviceToFormData = (d: Device): FormData => ({
-  machineName: d.machine_name || "",
+  machineName: d.machine__Name || "",
   waste: d.waste || "",
   status: d.status ?? 0,
   linuxVersion: d.linux_version || "",
@@ -85,7 +85,7 @@ const deviceToFormData = (d: Device): FormData => ({
 });
 
 const formDataToDevice = (f: FormData) => ({
-  machine_name: f.machineName,
+  machine__Name: f.machineName,
   waste: f.waste || null,
   status: f.status,
   linux_version: f.linuxVersion || null,
@@ -259,7 +259,7 @@ export default function DeviceDetailsPage() {
     );
   }
 
-  const displayName = device?.machine_name || `Dispositivo ${device?.id}`;
+  const displayName = device?.machine__Name || `Dispositivo ${device?.id}`;
 
   return (
     <>

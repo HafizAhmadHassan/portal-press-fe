@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Ticket as TicketIcon,
   AlertCircle,
   Calendar,
   FileText,
   MapPin,
-} from 'lucide-react';
-import Modal from '@components/shared/modal/Modal';
-import './ModalCloseTicket.scss';
-import type { TicketWithDevice } from '@store_admin/tickets/ticket.api';
+} from "lucide-react";
+import Modal from "@components/shared/modal/Modal";
+import "./ModalCloseTicket.scss";
+import type { TicketWithDevice } from "@store_admin/tickets/ticket.api";
 
 interface CloseTicketData {
   ticketId: number | string;
@@ -46,23 +46,23 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
       dev?.postal_code,
       dev?.country,
     ].filter(Boolean);
-    return parts.length > 0 ? parts.join(', ') : 'Ubicazione non specificata';
+    return parts.length > 0 ? parts.join(", ") : "Ubicazione non specificata";
   };
 
   const [formData, setFormData] = useState<CloseTicketData>({
     ticketId: ticket?.id,
     date: new Date(),
     info: `Ticket #${ticket?.id}${
-      dev?.machine_name ? ` – ${dev?.machine_name}` : ''
-    }\nCliente: ${dev?.customer || dev?.customer_name || 'N/D'}${
-      (dev as any)?.waste ? `\nTipo rifiuto: ${(dev as any)?.waste}` : ''
+      dev?.machine__Name ? ` – ${dev?.machine__Name}` : ""
+    }\nCliente: ${dev?.customer || dev?.customer_name || "N/D"}${
+      (dev as any)?.waste ? `\nTipo rifiuto: ${(dev as any)?.waste}` : ""
     }`,
     address: getFullAddress(),
     inGaranzia: false,
     fuoriGaranzia: false,
     machine_retrival: false,
     machine_not_repairable: false,
-    note: '',
+    note: "",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -70,14 +70,15 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
   const handleInputChange = (field: keyof CloseTicketData, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: '' }));
+      setErrors((prev) => ({ ...prev, [field]: "" }));
     }
   };
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
     // per la chiusura rendiamo obbligatoria almeno la nota
-    if (!formData.note?.trim()) newErrors.note = 'La nota di chiusura è obbligatoria';
+    if (!formData.note?.trim())
+      newErrors.note = "La nota di chiusura è obbligatoria";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -91,20 +92,20 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
         ticketId: ticket?.id,
         date: new Date(),
         info: `Ticket #${ticket?.id}${
-          dev?.machine_name ? ` – ${dev?.machine_name}` : ''
-        }\nCliente: ${dev?.customer || dev?.customer_name || 'N/D'}${
-          (dev as any)?.waste ? `\nTipo rifiuto: ${(dev as any)?.waste}` : ''
+          dev?.machine__Name ? ` – ${dev?.machine__Name}` : ""
+        }\nCliente: ${dev?.customer || dev?.customer_name || "N/D"}${
+          (dev as any)?.waste ? `\nTipo rifiuto: ${(dev as any)?.waste}` : ""
         }`,
         address: getFullAddress(),
         inGaranzia: false,
         fuoriGaranzia: false,
         machine_retrival: false,
         machine_not_repairable: false,
-        note: '',
+        note: "",
       });
       setErrors({});
     } catch (error) {
-      console.error('Errore durante la chiusura del ticket:', error);
+      console.error("Errore durante la chiusura del ticket:", error);
       throw error;
     }
   };
@@ -131,11 +132,13 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
               <div className="modal-open-ticket__header-info">
                 <h3 className="modal-open-ticket__header-title">
                   Ticket #{ticket?.id}
-                  {dev?.machine_name ? ` – ${dev?.machine_name}` : ''}
+                  {dev?.machine__Name ? ` – ${dev?.machine__Name}` : ""}
                 </h3>
                 <div className="modal-open-ticket__header-subtitle">
-                  {(dev?.customer || (dev as any)?.customer_name || 'Cliente N/D')}{' '}
-                  • {dev?.city || 'Luogo N/D'}
+                  {dev?.customer ||
+                    (dev as any)?.customer_name ||
+                    "Cliente N/D"}{" "}
+                  • {dev?.city || "Luogo N/D"}
                 </div>
               </div>
             </div>
@@ -145,10 +148,10 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
                 CHIUSURA TICKET
               </div>
               <div className="modal-open-ticket__header-date">
-                {new Date().toLocaleDateString('it-IT', {
-                  day: '2-digit',
-                  month: '2-digit',
-                  year: 'numeric',
+                {new Date().toLocaleDateString("it-IT", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
                 })}
               </div>
             </div>
@@ -157,12 +160,12 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
             <span
               className={`modal-open-ticket__status-badge ${
                 ticket?.status === 2
-                  ? 'modal-open-ticket__status-badge--inactive'
-                  : 'modal-open-ticket__status-badge--active'
+                  ? "modal-open-ticket__status-badge--inactive"
+                  : "modal-open-ticket__status-badge--active"
               }`}
             >
               <span className="modal-open-ticket__status-dot"></span>
-              {ticket?.status === 2 ? 'Chiuso' : 'Aperto'}
+              {ticket?.status === 2 ? "Chiuso" : "Aperto"}
             </span>
           </div>
         </div>
@@ -171,15 +174,15 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
         <div className="modal-open-ticket__device-compact">
           <div className="modal-open-ticket__compact-grid">
             <div className="modal-open-ticket__compact-item">
-              <strong>Customer:</strong>{' '}
-              {dev?.customer || (dev as any)?.customer_name || 'N/D'}
+              <strong>Customer:</strong>{" "}
+              {dev?.customer || (dev as any)?.customer_name || "N/D"}
             </div>
             <div className="modal-open-ticket__compact-item">
               <strong>Ticket ID:</strong> {ticket?.id}
             </div>
-            {dev?.machine_name && (
+            {dev?.machine__Name && (
               <div className="modal-open-ticket__compact-item">
-                <strong>Macchina:</strong> {dev.machine_name}
+                <strong>Macchina:</strong> {dev.machine__Name}
               </div>
             )}
             {(dev as any)?.waste && (
@@ -210,8 +213,10 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
             </label>
             <input
               type="date"
-              value={formData.date?.toISOString().split('T')[0] || ''}
-              onChange={(e) => handleInputChange('date', new Date(e.target.value))}
+              value={formData.date?.toISOString().split("T")[0] || ""}
+              onChange={(e) =>
+                handleInputChange("date", new Date(e.target.value))
+              }
               className="modal-open-ticket__input modal-open-ticket__input--compact"
             />
           </div>
@@ -231,10 +236,15 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
                     type="checkbox"
                     id="inGaranzia"
                     checked={!!formData.inGaranzia}
-                    onChange={(e) => handleInputChange('inGaranzia', e.target.checked)}
+                    onChange={(e) =>
+                      handleInputChange("inGaranzia", e.target.checked)
+                    }
                     className="modal-open-ticket__option-checkbox"
                   />
-                  <label htmlFor="inGaranzia" className="modal-open-ticket__option-label">
+                  <label
+                    htmlFor="inGaranzia"
+                    className="modal-open-ticket__option-label"
+                  >
                     In garanzia
                   </label>
                 </div>
@@ -243,10 +253,15 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
                     type="checkbox"
                     id="fuoriGaranzia"
                     checked={!!formData.fuoriGaranzia}
-                    onChange={(e) => handleInputChange('fuoriGaranzia', e.target.checked)}
+                    onChange={(e) =>
+                      handleInputChange("fuoriGaranzia", e.target.checked)
+                    }
                     className="modal-open-ticket__option-checkbox"
                   />
-                  <label htmlFor="fuoriGaranzia" className="modal-open-ticket__option-label">
+                  <label
+                    htmlFor="fuoriGaranzia"
+                    className="modal-open-ticket__option-label"
+                  >
                     Fuori garanzia
                   </label>
                 </div>
@@ -260,10 +275,15 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
                     type="checkbox"
                     id="machine_retrival"
                     checked={!!formData.machine_retrival}
-                    onChange={(e) => handleInputChange('machine_retrival', e.target.checked)}
+                    onChange={(e) =>
+                      handleInputChange("machine_retrival", e.target.checked)
+                    }
                     className="modal-open-ticket__option-checkbox"
                   />
-                  <label htmlFor="machine_retrival" className="modal-open-ticket__option-label">
+                  <label
+                    htmlFor="machine_retrival"
+                    className="modal-open-ticket__option-label"
+                  >
                     Ripristino macchina
                   </label>
                 </div>
@@ -273,7 +293,10 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
                     id="machine_not_repairable"
                     checked={!!formData.machine_not_repairable}
                     onChange={(e) =>
-                      handleInputChange('machine_not_repairable', e.target.checked)
+                      handleInputChange(
+                        "machine_not_repairable",
+                        e.target.checked
+                      )
                     }
                     className="modal-open-ticket__option-checkbox"
                   />
@@ -296,7 +319,7 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
             </label>
             <input
               type="text"
-              value={formData.address || ''}
+              value={formData.address || ""}
               readOnly
               className="modal-open-ticket__input modal-open-ticket__input--compact"
             />
@@ -310,11 +333,11 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
             </label>
             <textarea
               value={formData.note}
-              onChange={(e) => handleInputChange('note', e.target.value)}
+              onChange={(e) => handleInputChange("note", e.target.value)}
               placeholder="Inserisci la nota di chiusura..."
               rows={3}
               className={`modal-open-ticket__textarea modal-open-ticket__textarea--compact ${
-                errors.note ? 'modal-open-ticket__textarea--error' : ''
+                errors.note ? "modal-open-ticket__textarea--error" : ""
               }`}
             />
             {errors.note && (
@@ -330,8 +353,8 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
         <div className="modal-open-ticket__info-note modal-open-ticket__info-note--compact">
           <AlertCircle size={14} />
           <span>
-            <strong>Importante:</strong> Compila la <em>nota di chiusura</em>. Gli altri campi
-            sono informativi o opzionali.
+            <strong>Importante:</strong> Compila la <em>nota di chiusura</em>.
+            Gli altri campi sono informativi o opzionali.
           </span>
         </div>
       </div>

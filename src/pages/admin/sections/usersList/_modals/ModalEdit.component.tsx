@@ -1,32 +1,44 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import { SimpleButton } from '@shared/simple-btn/SimpleButton.component.tsx';
+import { SimpleButton } from "@shared/simple-btn/SimpleButton.component.tsx";
 
-
-import { RoleBadge } from '@shared/roleBadge/RoleBadge.tsx';
-import { Avatar } from '@shared/avatar/Avatar.compoent.tsx';
-import { Calendar, Edit, Mail, Settings, Shield, User as UserIcon } from 'lucide-react';
-import type { User } from '@store_admin/users/user.types';
-import { UserRoleLabels, UserRoles } from '@utils/constants/userRoles.ts';
-import styles from './ModalEdit.module.scss';
-import Modal from '@components/shared/modal/Modal';
-import { Input } from '@components/shared/inputs/Input.component';
-import { Checkbox, CheckboxGroup } from '@components/shared/checkbox/CheckBox.component';
+import { RoleBadge } from "@shared/roleBadge/RoleBadge.tsx";
+import { Avatar } from "@shared/avatar/Avatar.compoent.tsx";
+import {
+  Calendar,
+  Edit,
+  Mail,
+  Settings,
+  Shield,
+  User as UserIcon,
+} from "lucide-react";
+import type { User } from "@store_admin/users/user.types";
+import { UserRoleLabels, UserRoles } from "@utils/constants/userRoles.ts";
+import styles from "./ModalEdit.module.scss";
+import Modal from "@components/shared/modal/Modal";
+import { Input } from "@components/shared/inputs/Input.component";
+import {
+  Checkbox,
+  CheckboxGroup,
+} from "@components/shared/checkbox/CheckBox.component";
 
 interface ModalEditComponentProps {
   user: User;
   onSave?: (updatedUser: Partial<User>) => void;
 }
 
-export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({ user, onSave }) => {
+export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({
+  user,
+  onSave,
+}) => {
   const [formData, setFormData] = useState({
     id: user.id || 0,
-    username: user.username || '',
-    email: user.email || '',
-    first_name: user.first_name || '',
-    last_name: user.last_name || '',
-    full_name: user.full_name || '',
-    is_active: user.is_active || false,
+    username: user.username || "",
+    email: user.email || "",
+    first_name: user.first_name || "",
+    last_name: user.last_name || "",
+    fullName: user.fullName || "",
+    isActive: user.isActive || false,
     is_staff: user.is_staff || false,
     is_superuser: user.is_superuser || false,
     user_permissions: user.user_permissions || [],
@@ -37,12 +49,12 @@ export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({ user, on
   useEffect(() => {
     setFormData({
       id: user.id || 0,
-      username: user.username || '',
-      email: user.email || '',
-      first_name: user.first_name || '',
-      last_name: user.last_name || '',
-      full_name: user.full_name || '',
-      is_active: user.is_active || false,
+      username: user.username || "",
+      email: user.email || "",
+      first_name: user.first_name || "",
+      last_name: user.last_name || "",
+      fullName: user.fullName || "",
+      isActive: user.isActive || false,
       is_staff: user.is_staff || false,
       is_superuser: user.is_superuser || false,
       user_permissions: user.user_permissions || [],
@@ -55,9 +67,11 @@ export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({ user, on
 
   const validateForm = () => {
     const errors: string[] = [];
-    if (!formData.username.trim()) errors.push('Il campo Username è obbligatorio.');
-    if (!formData.email.trim()) errors.push('Il campo Email è obbligatorio.');
-    else if (!/\S+@\S+\.\S+/.test(formData.email)) errors.push("L'email non è valida.");
+    if (!formData.username.trim())
+      errors.push("Il campo Username è obbligatorio.");
+    if (!formData.email.trim()) errors.push("Il campo Email è obbligatorio.");
+    else if (!/\S+@\S+\.\S+/.test(formData.email))
+      errors.push("L'email non è valida.");
     return errors;
   };
 
@@ -67,35 +81,37 @@ export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({ user, on
       const errors = validateForm();
       if (errors.length > 0) {
         // eslint-disable-next-line no-console
-        console.log('Errori di validazione:', errors);
+        console.log("Errori di validazione:", errors);
         setIsLoading(false);
         return;
       }
       await onSave?.(formData);
     } catch (error) {
       // eslint-disable-next-line no-console
-      console.error('Errore nel salvataggio:', error);
+      console.error("Errore nel salvataggio:", error);
     } finally {
       setIsLoading(false);
     }
   };
 
   const formatDate = (dateString: string) => {
-    if (!dateString) return 'N/A';
+    if (!dateString) return "N/A";
     const date = new Date(dateString);
-    return date.toLocaleString('it-IT', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
+    return date.toLocaleString("it-IT", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
   return (
     <Modal
       size="lg"
-      triggerButton={<SimpleButton size="bare" color="warning" variant="ghost" icon={Edit} />}
+      triggerButton={
+        <SimpleButton size="bare" color="warning" variant="ghost" icon={Edit} />
+      }
       title="Modifica utente"
       confirmText="Salva Modifiche"
       cancelText="Annulla"
@@ -109,15 +125,19 @@ export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({ user, on
           <Avatar user={user} size="lg" />
           <div className={styles.userInfo}>
             <h3 className={styles.userName}>
-              {user.full_name || `${user.first_name} ${user.last_name}`.trim() || user.username}
+              {user.fullName ||
+                `${user.first_name} ${user.last_name}`.trim() ||
+                user.username}
             </h3>
             <p className={styles.userEmail}>{user.email}</p>
             <div className={styles.userBadges}>
               <RoleBadge user={user} />
               <span
-                className={`${styles.statusBadge} ${user.is_active ? styles.statusActive : styles.statusInactive}`}
+                className={`${styles.statusBadge} ${
+                  user.isActive ? styles.statusActive : styles.statusInactive
+                }`}
               >
-                {user.is_active ? 'Attivo' : 'Inattivo'}
+                {user.isActive ? "Attivo" : "Inattivo"}
               </span>
             </div>
           </div>
@@ -136,14 +156,18 @@ export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({ user, on
             <Calendar className={styles.systemIcon} />
             <div>
               <p className={styles.systemLabel}>Data Creazione</p>
-              <p className={styles.systemValue}>{formatDate(user.date_joined)}</p>
+              <p className={styles.systemValue}>
+                {formatDate(user.dataJoined)}
+              </p>
             </div>
           </div>
           <div className={styles.systemInfoItem}>
             <Calendar className={styles.systemIcon} />
             <div>
               <p className={styles.systemLabel}>Ultimo Login</p>
-              <p className={styles.systemValue}>{formatDate(user.last_login)}</p>
+              <p className={styles.systemValue}>
+                {formatDate(user.last_login)}
+              </p>
             </div>
           </div>
         </div>
@@ -160,7 +184,7 @@ export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({ user, on
               label="Username"
               name="username"
               value={formData.username}
-              onChange={(e) => handleInputChange('username', e.target.value)}
+              onChange={(e) => handleInputChange("username", e.target.value)}
               placeholder="Inserisci username"
               icon={UserIcon}
               disabled={isLoading}
@@ -170,7 +194,7 @@ export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({ user, on
               name="email"
               type="email"
               value={formData.email}
-              onChange={(e) => handleInputChange('email', e.target.value)}
+              onChange={(e) => handleInputChange("email", e.target.value)}
               placeholder="Inserisci email"
               icon={Mail}
               disabled={isLoading}
@@ -182,7 +206,7 @@ export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({ user, on
               label="Nome"
               name="first_name"
               value={formData.first_name}
-              onChange={(e) => handleInputChange('first_name', e.target.value)}
+              onChange={(e) => handleInputChange("first_name", e.target.value)}
               placeholder="Inserisci nome"
               disabled={isLoading}
             />
@@ -190,7 +214,7 @@ export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({ user, on
               label="Cognome"
               name="last_name"
               value={formData.last_name}
-              onChange={(e) => handleInputChange('last_name', e.target.value)}
+              onChange={(e) => handleInputChange("last_name", e.target.value)}
               placeholder="Inserisci cognome"
               disabled={isLoading}
             />
@@ -198,9 +222,9 @@ export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({ user, on
 
           <Input
             label="Nome Completo"
-            name="full_name"
-            value={formData.full_name}
-            onChange={(e) => handleInputChange('full_name', e.target.value)}
+            name="fullName"
+            value={formData.fullName}
+            onChange={(e) => handleInputChange("fullName", e.target.value)}
             placeholder="Inserisci nome completo"
             disabled={isLoading}
           />
@@ -214,22 +238,24 @@ export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({ user, on
             <div className={styles.checkboxGrid}>
               <Checkbox
                 label="Utente Attivo"
-                checked={formData.is_active}
-                onChange={(checked) => handleInputChange('is_active', checked)}
+                checked={formData.isActive}
+                onChange={(checked) => handleInputChange("isActive", checked)}
                 disabled={isLoading}
                 color="success"
               />
               <Checkbox
                 label="Staff"
                 checked={formData.is_staff}
-                onChange={(checked) => handleInputChange('is_staff', checked)}
+                onChange={(checked) => handleInputChange("is_staff", checked)}
                 disabled={isLoading}
                 color="warning"
               />
               <Checkbox
                 label="Super Admin"
                 checked={formData.is_superuser}
-                onChange={(checked) => handleInputChange('is_superuser', checked)}
+                onChange={(checked) =>
+                  handleInputChange("is_superuser", checked)
+                }
                 disabled={isLoading}
                 color="danger"
               />
@@ -245,7 +271,9 @@ export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({ user, on
                 value: role,
               }))}
               value={formData.user_permissions}
-              onChange={(permissions) => handleInputChange('user_permissions', permissions)}
+              onChange={(permissions) =>
+                handleInputChange("user_permissions", permissions)
+              }
               layout="grid"
               columns={2}
               disabled={isLoading}
@@ -256,8 +284,9 @@ export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({ user, on
 
         <div className={styles.infoNote}>
           <p className={styles.infoNoteText}>
-            <strong>Nota:</strong> Le modifiche diventeranno effettive dopo il salvataggio. L'utente
-            potrebbe dover effettuare nuovamente il login se vengono modificati i permessi.
+            <strong>Nota:</strong> Le modifiche diventeranno effettive dopo il
+            salvataggio. L'utente potrebbe dover effettuare nuovamente il login
+            se vengono modificati i permessi.
           </p>
         </div>
       </div>

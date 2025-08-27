@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import { SimpleButton } from '@shared/simple-btn/SimpleButton.component.tsx';
-import { Input } from '@shared/inputs/Input.component.tsx';
+import { SimpleButton } from "@shared/simple-btn/SimpleButton.component.tsx";
+import { Input } from "@shared/inputs/Input.component.tsx";
 
 import {
   AlertCircle,
@@ -13,12 +13,15 @@ import {
   Plus,
   Shield,
   User as UserIcon,
-} from 'lucide-react';
-import type { User } from '@store_admin/users/user.types';
-import { UserRoleLabels, UserRoles } from '@utils/constants/userRoles.ts';
-import styles from './ModalCreateUser.module.scss';
-import { Checkbox, CheckboxGroup } from '@components/shared/checkbox/CheckBox.component';
-import Modal from '@components/shared/modal/Modal';
+} from "lucide-react";
+import type { User } from "@store_admin/users/user.types";
+import { UserRoleLabels, UserRoles } from "@utils/constants/userRoles.ts";
+import styles from "./ModalCreateUser.module.scss";
+import {
+  Checkbox,
+  CheckboxGroup,
+} from "@components/shared/checkbox/CheckBox.component";
+import Modal from "@components/shared/modal/Modal";
 
 interface ModalCreateUserProps {
   onSave?: (userData: Partial<User>) => Promise<void>;
@@ -30,12 +33,12 @@ interface FormData {
   email: string;
   password: string;
   confirmPassword: string;
-  first_name: string;
-  last_name: string;
-  full_name: string;
-  is_active: boolean;
-  is_staff: boolean;
-  is_superuser: boolean;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  isActive: boolean;
+  isStaff: boolean;
+  isSuperuser: boolean;
   user_permissions: string[];
 }
 
@@ -47,18 +50,21 @@ interface FormErrors {
   general?: string;
 }
 
-export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({ onSave, triggerButton }) => {
+export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({
+  onSave,
+  triggerButton,
+}) => {
   const [formData, setFormData] = useState<FormData>({
-    username: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    first_name: '',
-    last_name: '',
-    full_name: '',
-    is_active: true,
-    is_staff: false,
-    is_superuser: false,
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    firstName: "",
+    lastName: "",
+    fullName: "",
+    isActive: true,
+    isStaff: false,
+    isSuperuser: false,
     user_permissions: [],
   });
 
@@ -70,23 +76,27 @@ export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({ onSave, trigge
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
-    if (!formData.username?.trim()) newErrors.username = 'Username è obbligatorio';
-    else if (formData.username.length < 3) newErrors.username = 'Minimo 3 caratteri';
+    if (!formData.username?.trim())
+      newErrors.username = "Username è obbligatorio";
+    else if (formData.username.length < 3)
+      newErrors.username = "Minimo 3 caratteri";
     else if (!/^[a-zA-Z0-9_-]+$/.test(formData.username))
-      newErrors.username = 'Ammessi lettere, numeri, _ e -';
+      newErrors.username = "Ammessi lettere, numeri, _ e -";
 
-    if (!formData.email?.trim()) newErrors.email = 'Email è obbligatoria';
+    if (!formData.email?.trim()) newErrors.email = "Email è obbligatoria";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
-      newErrors.email = 'Formato email non valido';
+      newErrors.email = "Formato email non valido";
 
-    if (!formData.password) newErrors.password = 'Password è obbligatoria';
-    else if (formData.password.length < 8) newErrors.password = 'Minimo 8 caratteri';
+    if (!formData.password) newErrors.password = "Password è obbligatoria";
+    else if (formData.password.length < 8)
+      newErrors.password = "Minimo 8 caratteri";
     else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password))
-      newErrors.password = 'Serve maiuscola, minuscola e numero';
+      newErrors.password = "Serve maiuscola, minuscola e numero";
 
-    if (!formData.confirmPassword) newErrors.confirmPassword = 'Conferma la password';
+    if (!formData.confirmPassword)
+      newErrors.confirmPassword = "Conferma la password";
     else if (formData.password !== formData.confirmPassword)
-      newErrors.confirmPassword = 'Le password non coincidono';
+      newErrors.confirmPassword = "Le password non coincidono";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -101,7 +111,7 @@ export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({ onSave, trigge
 
   const generateFullName = () => {
     const fullName = `${formData.first_name} ${formData.last_name}`.trim();
-    handleInputChange('full_name', fullName);
+    handleInputChange("fullName", fullName);
   };
 
   const handleSave = async () => {
@@ -113,20 +123,22 @@ export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({ onSave, trigge
       delete userData.confirmPassword;
       await onSave?.(userData);
       setFormData({
-        username: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-        first_name: '',
-        last_name: '',
-        full_name: '',
-        is_active: true,
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        first_name: "",
+        last_name: "",
+        fullName: "",
+        isActive: true,
         is_staff: false,
         is_superuser: false,
         user_permissions: [],
       });
     } catch (error: any) {
-      setErrors({ general: error?.message || "Errore durante la creazione dell'utente" });
+      setErrors({
+        general: error?.message || "Errore durante la creazione dell'utente",
+      });
       throw error;
     } finally {
       setIsLoading(false);
@@ -182,7 +194,7 @@ export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({ onSave, trigge
               label="Username"
               name="username"
               value={formData.username}
-              onChange={(e) => handleInputChange('username', e.target.value)}
+              onChange={(e) => handleInputChange("username", e.target.value)}
               placeholder="es. john_doe"
               icon={UserIcon}
               disabled={isLoading}
@@ -195,7 +207,7 @@ export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({ onSave, trigge
               name="email"
               type="email"
               value={formData.email}
-              onChange={(e) => handleInputChange('email', e.target.value)}
+              onChange={(e) => handleInputChange("email", e.target.value)}
               placeholder="es. john@example.com"
               icon={Mail}
               disabled={isLoading}
@@ -209,9 +221,9 @@ export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({ onSave, trigge
               <Input
                 label="Password"
                 name="password"
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 value={formData.password}
-                onChange={(e) => handleInputChange('password', e.target.value)}
+                onChange={(e) => handleInputChange("password", e.target.value)}
                 placeholder="Inserisci password sicura"
                 icon={Lock}
                 disabled={isLoading}
@@ -231,9 +243,11 @@ export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({ onSave, trigge
               <Input
                 label="Conferma Password"
                 name="confirmPassword"
-                type={showConfirmPassword ? 'text' : 'password'}
+                type={showConfirmPassword ? "text" : "password"}
                 value={formData.confirmPassword}
-                onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("confirmPassword", e.target.value)
+                }
                 placeholder="Ripeti la password"
                 icon={Lock}
                 disabled={isLoading}
@@ -255,15 +269,17 @@ export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({ onSave, trigge
               <div className={styles.strengthLabel}>Sicurezza password:</div>
               <div className={styles.strengthBar}>
                 <div
-                  className={`${styles.strengthFill} ${styles[`strength${passwordStrength}`]}`}
+                  className={`${styles.strengthFill} ${
+                    styles[`strength${passwordStrength}`]
+                  }`}
                   style={{ width: `${(passwordStrength / 5) * 100}%` }}
                 />
               </div>
               <div className={styles.strengthText}>
-                {passwordStrength <= 2 && 'Debole'}
-                {passwordStrength === 3 && 'Media'}
-                {passwordStrength === 4 && 'Forte'}
-                {passwordStrength === 5 && 'Molto forte'}
+                {passwordStrength <= 2 && "Debole"}
+                {passwordStrength === 3 && "Media"}
+                {passwordStrength === 4 && "Forte"}
+                {passwordStrength === 5 && "Molto forte"}
               </div>
             </div>
           )}
@@ -283,7 +299,7 @@ export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({ onSave, trigge
               name="first_name"
               value={formData.first_name}
               onChange={(e) => {
-                handleInputChange('first_name', e.target.value);
+                handleInputChange("first_name", e.target.value);
                 setTimeout(generateFullName, 0);
               }}
               placeholder="es. John"
@@ -295,7 +311,7 @@ export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({ onSave, trigge
               name="last_name"
               value={formData.last_name}
               onChange={(e) => {
-                handleInputChange('last_name', e.target.value);
+                handleInputChange("last_name", e.target.value);
                 setTimeout(generateFullName, 0);
               }}
               placeholder="es. Doe"
@@ -305,9 +321,9 @@ export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({ onSave, trigge
 
           <Input
             label="Nome Completo"
-            name="full_name"
-            value={formData.full_name}
-            onChange={(e) => handleInputChange('full_name', e.target.value)}
+            name="fullName"
+            value={formData.fullName}
+            onChange={(e) => handleInputChange("fullName", e.target.value)}
             placeholder="Generato automaticamente o inserisci manualmente"
             disabled={isLoading}
           />
@@ -324,8 +340,8 @@ export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({ onSave, trigge
             <Checkbox
               label="Utente Attivo"
               description="L'utente può accedere al sistema"
-              checked={formData.is_active}
-              onChange={(checked) => handleInputChange('is_active', checked)}
+              checked={formData.isActive}
+              onChange={(checked) => handleInputChange("isActive", checked)}
               disabled={isLoading}
               color="success"
             />
@@ -333,7 +349,7 @@ export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({ onSave, trigge
               label="Staff"
               description="Accesso alle funzioni di amministrazione"
               checked={formData.is_staff}
-              onChange={(checked) => handleInputChange('is_staff', checked)}
+              onChange={(checked) => handleInputChange("is_staff", checked)}
               disabled={isLoading}
               color="warning"
             />
@@ -341,7 +357,7 @@ export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({ onSave, trigge
               label="Super Amministratore"
               description="Accesso completo a tutte le funzioni"
               checked={formData.is_superuser}
-              onChange={(checked) => handleInputChange('is_superuser', checked)}
+              onChange={(checked) => handleInputChange("is_superuser", checked)}
               disabled={isLoading}
               color="danger"
             />
@@ -355,16 +371,20 @@ export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({ onSave, trigge
             <h4 className={styles.sectionTitle}>Permessi Utente</h4>
           </div>
 
-        <div className={styles.permissionsContainer}>
+          <div className={styles.permissionsContainer}>
             <CheckboxGroup
               description="Seleziona i permessi da assegnare al nuovo utente"
               options={Object.values(UserRoles).map((role) => ({
                 label: UserRoleLabels[role],
                 value: role,
-                description: `Permessi di ${UserRoleLabels[role].toLowerCase()}`,
+                description: `Permessi di ${UserRoleLabels[
+                  role
+                ].toLowerCase()}`,
               }))}
               value={formData.user_permissions}
-              onChange={(permissions) => handleInputChange('user_permissions', permissions)}
+              onChange={(permissions) =>
+                handleInputChange("user_permissions", permissions)
+              }
               layout="grid"
               columns={2}
               disabled={isLoading}
@@ -382,25 +402,29 @@ export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({ onSave, trigge
 
           <div className={styles.summaryContent}>
             <div className={styles.summaryItem}>
-              <strong>Username:</strong> {formData.username || 'Non specificato'}
+              <strong>Username:</strong>{" "}
+              {formData.username || "Non specificato"}
             </div>
             <div className={styles.summaryItem}>
-              <strong>Email:</strong> {formData.email || 'Non specificata'}
+              <strong>Email:</strong> {formData.email || "Non specificata"}
             </div>
             <div className={styles.summaryItem}>
-              <strong>Nome:</strong>{' '}
-              {formData.full_name ||
+              <strong>Nome:</strong>{" "}
+              {formData.fullName ||
                 `${formData.first_name} ${formData.last_name}`.trim() ||
-                'Non specificato'}
+                "Non specificato"}
             </div>
             <div className={styles.summaryItem}>
-              <strong>Stato:</strong> {formData.is_active ? 'Attivo' : 'Inattivo'}
+              <strong>Stato:</strong>{" "}
+              {formData.isActive ? "Attivo" : "Inattivo"}
             </div>
             <div className={styles.summaryItem}>
-              <strong>Permessi:</strong>{' '}
+              <strong>Permessi:</strong>{" "}
               {formData.user_permissions.length > 0
-                ? formData.user_permissions.map((p) => UserRoleLabels[p]).join(', ')
-                : 'Nessun permesso'}
+                ? formData.user_permissions
+                    .map((p) => UserRoleLabels[p])
+                    .join(", ")
+                : "Nessun permesso"}
             </div>
           </div>
         </div>

@@ -41,7 +41,7 @@ export const UsersListSections: React.FC = () => {
       [UserFields.EMAIL]: "",
       [UserFields.USERNAME]: "",
       [UserFields.USER_PERMISSIONS]: "",
-      [UserFields.IS_ACTIVE]: "",
+      [UserFields.isActive]: "",
       // ❌ nessun filtro customer qui: è globale
     },
   });

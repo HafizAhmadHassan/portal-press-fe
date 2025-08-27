@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 
-import { SimpleButton } from '@shared/simple-btn/SimpleButton.component.tsx';
-import { RoleBadge } from '@shared/roleBadge/RoleBadge.tsx';
-import { Avatar } from '@shared/avatar/Avatar.compoent.tsx';
+import { SimpleButton } from "@shared/simple-btn/SimpleButton.component.tsx";
+import { RoleBadge } from "@shared/roleBadge/RoleBadge.tsx";
+import { Avatar } from "@shared/avatar/Avatar.compoent.tsx";
 import {
   Badge,
   Calendar,
@@ -15,12 +15,12 @@ import {
   User as UserIcon,
   Users,
   XCircle,
-} from 'lucide-react';
-import type { User } from '@store_admin/users/user.types';
-import { UserRoleLabels } from '@utils/constants/userRoles.ts';
-import styles from './ModalDetails.module.scss';
+} from "lucide-react";
+import type { User } from "@store_admin/users/user.types";
+import { UserRoleLabels } from "@utils/constants/userRoles.ts";
+import styles from "./ModalDetails.module.scss";
 
-import Modal from '@components/shared/modal/Modal';
+import Modal from "@components/shared/modal/Modal";
 
 interface ModalDetailsProps {
   user: User;
@@ -28,14 +28,14 @@ interface ModalDetailsProps {
 
 export const ModalDetails: React.FC<ModalDetailsProps> = ({ user }) => {
   const formatDate = (dateString: string) => {
-    if (!dateString) return 'Mai';
+    if (!dateString) return "Mai";
     const date = new Date(dateString);
-    return date.toLocaleString('it-IT', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
+    return date.toLocaleString("it-IT", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
@@ -45,8 +45,8 @@ export const ModalDetails: React.FC<ModalDetailsProps> = ({ user }) => {
     const now = new Date();
     const diffInMs = now.getTime() - d.getTime();
     const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
-    if (diffInDays === 0) return 'Oggi';
-    if (diffInDays === 1) return 'Ieri';
+    if (diffInDays === 0) return "Oggi";
+    if (diffInDays === 1) return "Ieri";
     if (diffInDays < 7) return `${diffInDays} giorni fa`;
     if (diffInDays < 30) return `${Math.floor(diffInDays / 7)} settimane fa`;
     if (diffInDays < 365) return `${Math.floor(diffInDays / 30)} mesi fa`;
@@ -54,12 +54,16 @@ export const ModalDetails: React.FC<ModalDetailsProps> = ({ user }) => {
   };
 
   const displayName =
-    user.full_name || `${user.first_name || ''} ${user.last_name || ''}`.trim() || user.username;
+    user.fullName ||
+    `${user.first_name || ""} ${user.last_name || ""}`.trim() ||
+    user.username;
 
   return (
     <Modal
       size="lg"
-      triggerButton={<SimpleButton size="bare" color="primary" variant="ghost" icon={Eye} />}
+      triggerButton={
+        <SimpleButton size="bare" color="primary" variant="ghost" icon={Eye} />
+      }
       cancelText="Chiudi"
       variant="primary"
     >
@@ -69,7 +73,7 @@ export const ModalDetails: React.FC<ModalDetailsProps> = ({ user }) => {
           <div className={styles.avatarSection}>
             <Avatar user={user} size="xl" />
             <div className={styles.statusIndicator}>
-              {user.is_active ? (
+              {user.isActive ? (
                 <CheckCircle className={styles.statusIconActive} />
               ) : (
                 <XCircle className={styles.statusIconInactive} />
@@ -79,15 +83,17 @@ export const ModalDetails: React.FC<ModalDetailsProps> = ({ user }) => {
 
           <div className={styles.userMainInfo}>
             <h3 className={styles.userName}>{displayName}</h3>
-            <p className={styles.userEmail}>{user.email || 'Nessuna email'}</p>
+            <p className={styles.userEmail}>{user.email || "Nessuna email"}</p>
             <p className={styles.userUsername}>@{user.username}</p>
 
             <div className={styles.userBadges}>
               <RoleBadge user={user} />
               <span
-                className={`${styles.statusBadge} ${user.is_active ? styles.statusActive : styles.statusInactive}`}
+                className={`${styles.statusBadge} ${
+                  user.isActive ? styles.statusActive : styles.statusInactive
+                }`}
               >
-                {user.is_active ? 'Attivo' : 'Inattivo'}
+                {user.isActive ? "Attivo" : "Inattivo"}
               </span>
               {user.is_staff && (
                 <span className={styles.staffBadge}>
@@ -115,15 +121,21 @@ export const ModalDetails: React.FC<ModalDetailsProps> = ({ user }) => {
           <div className={styles.infoGrid}>
             <div className={styles.infoItem}>
               <span className={styles.infoLabel}>Nome</span>
-              <span className={styles.infoValue}>{user.first_name || 'Non specificato'}</span>
+              <span className={styles.infoValue}>
+                {user.first_name || "Non specificato"}
+              </span>
             </div>
             <div className={styles.infoItem}>
               <span className={styles.infoLabel}>Cognome</span>
-              <span className={styles.infoValue}>{user.last_name || 'Non specificato'}</span>
+              <span className={styles.infoValue}>
+                {user.last_name || "Non specificato"}
+              </span>
             </div>
             <div className={styles.infoItem}>
               <span className={styles.infoLabel}>Nome Completo</span>
-              <span className={styles.infoValue}>{user.full_name || 'Non specificato'}</span>
+              <span className={styles.infoValue}>
+                {user.fullName || "Non specificato"}
+              </span>
             </div>
           </div>
         </div>
@@ -152,7 +164,7 @@ export const ModalDetails: React.FC<ModalDetailsProps> = ({ user }) => {
                     {user.email}
                   </a>
                 ) : (
-                  'Nessuna email'
+                  "Nessuna email"
                 )}
               </span>
             </div>
@@ -173,8 +185,12 @@ export const ModalDetails: React.FC<ModalDetailsProps> = ({ user }) => {
                 <span className={styles.dateCardTitle}>Data Creazione</span>
               </div>
               <div className={styles.dateCardContent}>
-                <span className={styles.dateValue}>{formatDate(user.date_joined)}</span>
-                <span className={styles.dateRelative}>{getRelativeTime(user.date_joined)}</span>
+                <span className={styles.dateValue}>
+                  {formatDate(user.dataJoined)}
+                </span>
+                <span className={styles.dateRelative}>
+                  {getRelativeTime(user.dataJoined)}
+                </span>
               </div>
             </div>
 
@@ -184,9 +200,13 @@ export const ModalDetails: React.FC<ModalDetailsProps> = ({ user }) => {
                 <span className={styles.dateCardTitle}>Ultimo Login</span>
               </div>
               <div className={styles.dateCardContent}>
-                <span className={styles.dateValue}>{formatDate(user.last_login)}</span>
+                <span className={styles.dateValue}>
+                  {formatDate(user.last_login)}
+                </span>
                 <span className={styles.dateRelative}>
-                  {user.last_login ? getRelativeTime(user.last_login) : 'Mai effettuato login'}
+                  {user.last_login
+                    ? getRelativeTime(user.last_login)
+                    : "Mai effettuato login"}
                 </span>
               </div>
             </div>
@@ -247,36 +267,53 @@ export const ModalDetails: React.FC<ModalDetailsProps> = ({ user }) => {
 
           <div className={styles.privilegesList}>
             <div
-              className={`${styles.privilegeItem} ${user.is_active ? styles.privilegeActive : styles.privilegeInactive}`}
+              className={`${styles.privilegeItem} ${
+                user.isActive
+                  ? styles.privilegeActive
+                  : styles.privilegeInactive
+              }`}
             >
-              {user.is_active ? (
+              {user.isActive ? (
                 <CheckCircle className={styles.privilegeIcon} />
               ) : (
                 <XCircle className={styles.privilegeIcon} />
               )}
-              <span>Account {user.is_active ? 'Attivo' : 'Disattivato'}</span>
+              <span>Account {user.isActive ? "Attivo" : "Disattivato"}</span>
             </div>
 
             <div
-              className={`${styles.privilegeItem} ${user.is_staff ? styles.privilegeActive : styles.privilegeInactive}`}
+              className={`${styles.privilegeItem} ${
+                user.is_staff
+                  ? styles.privilegeActive
+                  : styles.privilegeInactive
+              }`}
             >
               {user.is_staff ? (
                 <CheckCircle className={styles.privilegeIcon} />
               ) : (
                 <XCircle className={styles.privilegeIcon} />
               )}
-              <span>Accesso Staff {user.is_staff ? 'Abilitato' : 'Disabilitato'}</span>
+              <span>
+                Accesso Staff {user.is_staff ? "Abilitato" : "Disabilitato"}
+              </span>
             </div>
 
             <div
-              className={`${styles.privilegeItem} ${user.is_superuser ? styles.privilegeActive : styles.privilegeInactive}`}
+              className={`${styles.privilegeItem} ${
+                user.is_superuser
+                  ? styles.privilegeActive
+                  : styles.privilegeInactive
+              }`}
             >
               {user.is_superuser ? (
                 <CheckCircle className={styles.privilegeIcon} />
               ) : (
                 <XCircle className={styles.privilegeIcon} />
               )}
-              <span>Super Amministratore {user.is_superuser ? 'Abilitato' : 'Disabilitato'}</span>
+              <span>
+                Super Amministratore{" "}
+                {user.is_superuser ? "Abilitato" : "Disabilitato"}
+              </span>
             </div>
           </div>
         </div>

@@ -1,20 +1,28 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import type { RootState } from '@store_admin/store.ts';
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import type { RootState } from "@store_admin/store.ts";
 import type {
   BulkActionRequest,
   CreateDeviceRequest,
   DevicesQueryParams,
   UpdateDeviceRequest,
-} from '@store_admin/devices/devices.types.ts';
-import { devicesApi } from '@store_admin/devices/devices.api.ts';
-import { setAllDevices, setDevices, setPagination } from '@store_admin/devices/devices.slice.ts';
+} from "@store_admin/devices/devices.types.ts";
+import { devicesApi } from "@store_admin/devices/devices.api.ts";
+import {
+  setAllDevices,
+  setDevices,
+  setPagination,
+} from "@store_admin/devices/devices.slice.ts";
 
 export const loadDevices = createAsyncThunk(
-  'devices/load',
-  async (params: Partial<DevicesQueryParams> = {}, { getState, dispatch, rejectWithValue }) => {
+  "devices/load",
+  async (
+    params: Partial<DevicesQueryParams> = {},
+    { getState, dispatch, rejectWithValue }
+  ) => {
     try {
       const state = getState() as RootState;
-      const { filters: currentFilters, pagination: currentPagination } = state.devices;
+      const { filters: currentFilters, pagination: currentPagination } =
+        state.devices;
 
       const queryParams: DevicesQueryParams = {
         page: params.page ?? currentPagination.page,
@@ -27,7 +35,8 @@ export const loadDevices = createAsyncThunk(
         customer: params.customer ?? currentFilters.customer,
         status_machine_blocked:
           params.status_machine_blocked ?? currentFilters.statusMachineBlocked,
-        status_ready_d75_3_7: params.status_ready_d75_3_7 ?? currentFilters.statusReadyD75_3_7,
+        status_ready_d75_3_7:
+          params.status_ready_d75_3_7 ?? currentFilters.statusReadyD75_3_7,
         sortBy: params.sortBy ?? currentFilters.sortBy,
         sortOrder: params.sortOrder ?? currentFilters.sortOrder,
       };
@@ -44,29 +53,35 @@ export const loadDevices = createAsyncThunk(
 
       return response;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || 'Errore nel caricamento devices');
+      return rejectWithValue(
+        error.data?.message || "Errore nel caricamento devices"
+      );
     }
   }
 );
 
 // NUOVO: Thunk per caricare tutti i devices (per la mappa)
 export const loadAllDevices = createAsyncThunk(
-  'devices/loadAll',
+  "devices/loadAll",
   async (_, { dispatch, rejectWithValue }) => {
     try {
-      const allDevices = await dispatch(devicesApi.endpoints.getAllDevices.initiate()).unwrap();
+      const allDevices = await dispatch(
+        devicesApi.endpoints.getAllDevices.initiate()
+      ).unwrap();
 
       dispatch(setAllDevices(allDevices));
 
       return allDevices;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || 'Errore nel caricamento di tutti i devices');
+      return rejectWithValue(
+        error.data?.message || "Errore nel caricamento di tutti i devices"
+      );
     }
   }
 );
 
 export const searchDevices = createAsyncThunk(
-  'devices/search',
+  "devices/search",
   async (searchQuery: string, { dispatch, rejectWithValue }) => {
     try {
       const response = await dispatch(
@@ -78,32 +93,35 @@ export const searchDevices = createAsyncThunk(
 
       return response;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || 'Errore nella ricerca');
+      return rejectWithValue(error.data?.message || "Errore nella ricerca");
     }
   }
 );
 
 export const createNewDevice = createAsyncThunk(
-  'devices/create',
+  "devices/create",
   async (deviceData: CreateDeviceRequest, { dispatch, rejectWithValue }) => {
     try {
-      console.log('THUNK - Creating device with data:', deviceData);
-      console.log('THUNK - DeviceData type:', typeof deviceData);
-      console.log('THUNK - DeviceData keys:', deviceData ? Object.keys(deviceData) : 'NO KEYS');
+      console.log("THUNK - Creating device with data:", deviceData);
+      console.log("THUNK - DeviceData type:", typeof deviceData);
+      console.log(
+        "THUNK - DeviceData keys:",
+        deviceData ? Object.keys(deviceData) : "NO KEYS"
+      );
 
       if (!deviceData) {
-        console.error('THUNK - deviceData is null or undefined!');
-        return rejectWithValue('Device data is required');
+        console.error("THUNK - deviceData is null or undefined!");
+        return rejectWithValue("Device data is required");
       }
 
-      if (!deviceData.machine_name) {
-        console.error('THUNK - machine_name is missing from deviceData!');
-        return rejectWithValue('machine_name is required');
+      if (!deviceData.machine__Name) {
+        console.error("THUNK - machine__Name is missing from deviceData!");
+        return rejectWithValue("machine__Name is required");
       }
 
       // ✅ Assicurati che il payload abbia tutti i campi richiesti
       const payload: CreateDeviceRequest = {
-        machine_name: deviceData.machine_name,
+        machine__Name: deviceData.machine__Name,
         status: deviceData.status ?? 1,
         waste: deviceData.waste || null,
         linux_version: deviceData.linux_version || null,
@@ -130,14 +148,17 @@ export const createNewDevice = createAsyncThunk(
         note: deviceData.note || null,
       };
 
-      console.log('THUNK - Final payload:', payload);
-      console.log('THUNK - Final payload JSON:', JSON.stringify(payload, null, 2));
+      console.log("THUNK - Final payload:", payload);
+      console.log(
+        "THUNK - Final payload JSON:",
+        JSON.stringify(payload, null, 2)
+      );
 
       const newDevice = await dispatch(
         devicesApi.endpoints.createDevice.initiate(payload)
       ).unwrap();
 
-      console.log('THUNK - Device created successfully:', newDevice);
+      console.log("THUNK - Device created successfully:", newDevice);
 
       // Ricarica sia i devices paginati che tutti i devices
       await dispatch(loadDevices());
@@ -145,36 +166,42 @@ export const createNewDevice = createAsyncThunk(
 
       return newDevice;
     } catch (error: any) {
-      console.error('THUNK - Error creating device:', error);
-      console.error('THUNK - Error details:', JSON.stringify(error, null, 2));
+      console.error("THUNK - Error creating device:", error);
+      console.error("THUNK - Error details:", JSON.stringify(error, null, 2));
       return rejectWithValue(
-        error.data?.message || error.message || 'Errore nella creazione device'
+        error.data?.message || error.message || "Errore nella creazione device"
       );
     }
   }
 );
 
 export const updateExistingDevice = createAsyncThunk(
-  'devices/update',
+  "devices/update",
   async (updateData: UpdateDeviceRequest, { dispatch, rejectWithValue }) => {
     try {
-      console.log('Updating device with data:', updateData); // Debug log
+      console.log("Updating device with data:", updateData); // Debug log
 
       // ✅ Pulisci i dati di update rimuovendo campi undefined/null/empty
-      const cleanData = Object.entries(updateData.data).reduce((acc, [key, value]) => {
-        // Mantieni i valori boolean anche se false
-        if (typeof value === 'boolean' || (value !== undefined && value !== null && value !== '')) {
-          acc[key] = value;
-        }
-        return acc;
-      }, {} as any);
+      const cleanData = Object.entries(updateData.data).reduce(
+        (acc, [key, value]) => {
+          // Mantieni i valori boolean anche se false
+          if (
+            typeof value === "boolean" ||
+            (value !== undefined && value !== null && value !== "")
+          ) {
+            acc[key] = value;
+          }
+          return acc;
+        },
+        {} as any
+      );
 
       const payload = {
         id: updateData.id,
         data: cleanData,
       };
 
-      console.log('Final update payload:', payload); // Debug log
+      console.log("Final update payload:", payload); // Debug log
 
       const updatedDevice = await dispatch(
         devicesApi.endpoints.updateDevice.initiate(payload)
@@ -186,17 +213,21 @@ export const updateExistingDevice = createAsyncThunk(
 
       return updatedDevice;
     } catch (error: any) {
-      console.error('Error updating device:', error); // Debug log
-      return rejectWithValue(error.data?.message || "Errore nell'aggiornamento device");
+      console.error("Error updating device:", error); // Debug log
+      return rejectWithValue(
+        error.data?.message || "Errore nell'aggiornamento device"
+      );
     }
   }
 );
 
 export const deleteExistingDevice = createAsyncThunk(
-  'devices/delete',
+  "devices/delete",
   async (deviceId: string, { dispatch, rejectWithValue }) => {
     try {
-      await dispatch(devicesApi.endpoints.deleteDevice.initiate(deviceId)).unwrap();
+      await dispatch(
+        devicesApi.endpoints.deleteDevice.initiate(deviceId)
+      ).unwrap();
 
       // Ricarica sia i devices paginati che tutti i devices
       await dispatch(loadDevices());
@@ -204,49 +235,61 @@ export const deleteExistingDevice = createAsyncThunk(
 
       return deviceId;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || "Errore nell'eliminazione device");
+      return rejectWithValue(
+        error.data?.message || "Errore nell'eliminazione device"
+      );
     }
   }
 );
 
 export const toggleDeviceStatus = createAsyncThunk(
-  'devices/toggleStatus',
+  "devices/toggleStatus",
   async (
     { deviceId, status }: { deviceId: string; status: number },
     { dispatch, rejectWithValue }
   ) => {
     try {
       const updatedDevice = await dispatch(
-        devicesApi.endpoints.toggleDeviceStatus.initiate({ id: deviceId, status })
+        devicesApi.endpoints.toggleDeviceStatus.initiate({
+          id: deviceId,
+          status,
+        })
       ).unwrap();
 
       return updatedDevice;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || 'Errore nel cambio stato device');
+      return rejectWithValue(
+        error.data?.message || "Errore nel cambio stato device"
+      );
     }
   }
 );
 
 export const toggleDeviceBlock = createAsyncThunk(
-  'devices/toggleBlock',
+  "devices/toggleBlock",
   async (
     { deviceId, blocked }: { deviceId: string; blocked: boolean },
     { dispatch, rejectWithValue }
   ) => {
     try {
       const updatedDevice = await dispatch(
-        devicesApi.endpoints.toggleDeviceBlock.initiate({ id: deviceId, blocked })
+        devicesApi.endpoints.toggleDeviceBlock.initiate({
+          id: deviceId,
+          blocked,
+        })
       ).unwrap();
 
       return updatedDevice;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || 'Errore nel blocco/sblocco device');
+      return rejectWithValue(
+        error.data?.message || "Errore nel blocco/sblocco device"
+      );
     }
   }
 );
 
 export const updateDeviceWasteType = createAsyncThunk(
-  'devices/updateWaste',
+  "devices/updateWaste",
   async (
     { deviceId, waste }: { deviceId: string; waste: string },
     { dispatch, rejectWithValue }
@@ -258,16 +301,20 @@ export const updateDeviceWasteType = createAsyncThunk(
 
       return updatedDevice;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || "Errore nell'aggiornamento tipo rifiuto");
+      return rejectWithValue(
+        error.data?.message || "Errore nell'aggiornamento tipo rifiuto"
+      );
     }
   }
 );
 
 export const performBulkAction = createAsyncThunk(
-  'devices/bulkAction',
+  "devices/bulkAction",
   async (request: BulkActionRequest, { dispatch, rejectWithValue }) => {
     try {
-      const response = await dispatch(devicesApi.endpoints.bulkActions.initiate(request)).unwrap();
+      const response = await dispatch(
+        devicesApi.endpoints.bulkActions.initiate(request)
+      ).unwrap();
 
       // Ricarica sia i devices paginati che tutti i devices
       await dispatch(loadDevices());
@@ -279,25 +326,27 @@ export const performBulkAction = createAsyncThunk(
         affectedDeviceIds: request.deviceIds,
       };
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || "Errore nell'operazione bulk");
+      return rejectWithValue(
+        error.data?.message || "Errore nell'operazione bulk"
+      );
     }
   }
 );
 
 export const changePage = createAsyncThunk(
-  'devices/changePage',
+  "devices/changePage",
   async (page: number, { dispatch, rejectWithValue }) => {
     try {
       const response = await dispatch(loadDevices({ page })).unwrap();
       return response;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || 'Errore nel cambio pagina');
+      return rejectWithValue(error.data?.message || "Errore nel cambio pagina");
     }
   }
 );
 
 export const changePageSize = createAsyncThunk(
-  'devices/changePageSize',
+  "devices/changePageSize",
   async (pageSize: number, { dispatch, rejectWithValue }) => {
     try {
       const response = await dispatch(
@@ -308,14 +357,19 @@ export const changePageSize = createAsyncThunk(
       ).unwrap();
       return response;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || 'Errore nel cambio dimensione pagina');
+      return rejectWithValue(
+        error.data?.message || "Errore nel cambio dimensione pagina"
+      );
     }
   }
 );
 
 export const applyFilters = createAsyncThunk(
-  'devices/applyFilters',
-  async (filters: Partial<DevicesQueryParams>, { dispatch, rejectWithValue }) => {
+  "devices/applyFilters",
+  async (
+    filters: Partial<DevicesQueryParams>,
+    { dispatch, rejectWithValue }
+  ) => {
     try {
       const response = await dispatch(
         loadDevices({
@@ -325,39 +379,41 @@ export const applyFilters = createAsyncThunk(
       ).unwrap();
       return response;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || "Errore nell'applicazione filtri");
+      return rejectWithValue(
+        error.data?.message || "Errore nell'applicazione filtri"
+      );
     }
   }
 );
 
 export const resetFilters = createAsyncThunk(
-  'devices/resetFilters',
+  "devices/resetFilters",
   async (_, { dispatch, rejectWithValue }) => {
     try {
       const response = await dispatch(
         loadDevices({
           page: 1,
-          search: '',
-          waste: '',
+          search: "",
+          waste: "",
           status: undefined,
-          city: '',
-          province: '',
-          customer: '',
+          city: "",
+          province: "",
+          customer: "",
           status_machine_blocked: undefined,
           status_ready_d75_3_7: undefined,
-          sortBy: 'createdAt',
-          sortOrder: 'desc',
+          sortBy: "createdAt",
+          sortOrder: "desc",
         })
       ).unwrap();
       return response;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || 'Errore nel reset filtri');
+      return rejectWithValue(error.data?.message || "Errore nel reset filtri");
     }
   }
 );
 
 export const filterByWasteType = createAsyncThunk(
-  'devices/filterByWaste',
+  "devices/filterByWaste",
   async (wasteType: string, { dispatch, rejectWithValue }) => {
     try {
       const response = await dispatch(
@@ -368,13 +424,15 @@ export const filterByWasteType = createAsyncThunk(
       ).unwrap();
       return response;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || 'Errore nel filtro per tipo rifiuto');
+      return rejectWithValue(
+        error.data?.message || "Errore nel filtro per tipo rifiuto"
+      );
     }
   }
 );
 
 export const filterByCity = createAsyncThunk(
-  'devices/filterByCity',
+  "devices/filterByCity",
   async (city: string, { dispatch, rejectWithValue }) => {
     try {
       const response = await dispatch(
@@ -385,13 +443,15 @@ export const filterByCity = createAsyncThunk(
       ).unwrap();
       return response;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || 'Errore nel filtro per città');
+      return rejectWithValue(
+        error.data?.message || "Errore nel filtro per città"
+      );
     }
   }
 );
 
 export const filterByCustomer = createAsyncThunk(
-  'devices/filterByCustomer',
+  "devices/filterByCustomer",
   async (customer: string, { dispatch, rejectWithValue }) => {
     try {
       const response = await dispatch(
@@ -402,13 +462,15 @@ export const filterByCustomer = createAsyncThunk(
       ).unwrap();
       return response;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || 'Errore nel filtro per cliente');
+      return rejectWithValue(
+        error.data?.message || "Errore nel filtro per cliente"
+      );
     }
   }
 );
 
 export const filterByStatus = createAsyncThunk(
-  'devices/filterByStatus',
+  "devices/filterByStatus",
   async (status: number, { dispatch, rejectWithValue }) => {
     try {
       const response = await dispatch(
@@ -419,13 +481,15 @@ export const filterByStatus = createAsyncThunk(
       ).unwrap();
       return response;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || 'Errore nel filtro per stato');
+      return rejectWithValue(
+        error.data?.message || "Errore nel filtro per stato"
+      );
     }
   }
 );
 
 export const filterByBlockStatus = createAsyncThunk(
-  'devices/filterByBlock',
+  "devices/filterByBlock",
   async (blocked: boolean, { dispatch, rejectWithValue }) => {
     try {
       const response = await dispatch(
@@ -436,7 +500,9 @@ export const filterByBlockStatus = createAsyncThunk(
       ).unwrap();
       return response;
     } catch (error: any) {
-      return rejectWithValue(error.data?.message || 'Errore nel filtro per stato blocco');
+      return rejectWithValue(
+        error.data?.message || "Errore nel filtro per stato blocco"
+      );
     }
   }
 );

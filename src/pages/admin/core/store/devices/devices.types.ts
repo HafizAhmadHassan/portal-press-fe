@@ -2,7 +2,7 @@
 
 export interface Device {
   id: string;
-  machine_Name: string;
+  machine__Name: string;
   status: number; // 0 = inactive, 1 = active
   waste:
     | "Plastica"
@@ -40,7 +40,7 @@ export interface Device {
 }
 
 export interface CreateDeviceRequest {
-  machine_name: string;
+  machine__Name: string;
   status?: number;
   waste?:
     | "Plastica"

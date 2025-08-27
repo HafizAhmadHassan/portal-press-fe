@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import Modal from '@components/shared/modal/Modal';
-import { SimpleButton } from '@shared/simple-btn/SimpleButton.component.tsx';
-import { AlertCircle, Plus } from 'lucide-react';
-import styles from './ModalCreateDevices.module.scss';
-import Summary from '@sections_admin//devicesList/_modals/ModalCreateDevice/_components/Summary/Summary.component';
-import BaseInfo from '@sections_admin//devicesList/_modals/ModalCreateDevice/_components/BaseInfo/BaseInfo.component';
-import PositionInfo from '@sections_admin//devicesList/_modals/ModalCreateDevice/_components/PositionInfo/PositionInfo.component';
-import TechnicalInfo from '@sections_admin//devicesList/_modals/ModalCreateDevice/_components/TechnicalInfo/TechnicalInfo.component';
-import StatusInfo from '@sections_admin//devicesList/_modals/ModalCreateDevice/_components/StatusInfo/StatusInfo.component';
+import React, { useState } from "react";
+import Modal from "@components/shared/modal/Modal";
+import { SimpleButton } from "@shared/simple-btn/SimpleButton.component.tsx";
+import { AlertCircle, Plus } from "lucide-react";
+import styles from "./ModalCreateDevices.module.scss";
+import Summary from "@sections_admin//devicesList/_modals/ModalCreateDevice/_components/Summary/Summary.component";
+import BaseInfo from "@sections_admin//devicesList/_modals/ModalCreateDevice/_components/BaseInfo/BaseInfo.component";
+import PositionInfo from "@sections_admin//devicesList/_modals/ModalCreateDevice/_components/PositionInfo/PositionInfo.component";
+import TechnicalInfo from "@sections_admin//devicesList/_modals/ModalCreateDevice/_components/TechnicalInfo/TechnicalInfo.component";
+import StatusInfo from "@sections_admin//devicesList/_modals/ModalCreateDevice/_components/StatusInfo/StatusInfo.component";
 
 interface ModalCreateDeviceProps {
   onSave?: (deviceData: any) => Promise<void>;
@@ -16,14 +16,14 @@ interface ModalCreateDeviceProps {
 
 // ✅ copre tutte le opzioni realmente usate nella select
 type WasteKind =
-  | 'Plastica'
-  | 'Secco'
-  | 'Umido'
-  | 'Vetro'
-  | 'Indifferenziato'
-  | 'Carta'
-  | 'vpl'
-  | '';
+  | "Plastica"
+  | "Secco"
+  | "Umido"
+  | "Vetro"
+  | "Indifferenziato"
+  | "Carta"
+  | "vpl"
+  | "";
 
 interface FormData {
   machineName: string;
@@ -59,58 +59,61 @@ interface FormErrors {
   general?: string;
 }
 
-export const ModalCreateDevice: React.FC<ModalCreateDeviceProps> = ({ onSave, triggerButton }) => {
+export const ModalCreateDevice: React.FC<ModalCreateDeviceProps> = ({
+  onSave,
+  triggerButton,
+}) => {
   const [formData, setFormData] = useState<FormData>({
-    machineName: '',
+    machineName: "",
     status: 1,
-    waste: '',
-    linuxVersion: '',
-    startAvailable: '',
-    endAvailable: '',
-    street: '',
-    postalCode: '',
-    province: '',
-    city: '',
-    country: '',
-    municipality: '',
-    address: '',
+    waste: "",
+    linuxVersion: "",
+    startAvailable: "",
+    endAvailable: "",
+    street: "",
+    postalCode: "",
+    province: "",
+    city: "",
+    country: "",
+    municipality: "",
+    address: "",
     statusReadyD75_3_7: false,
     statusMachineBlocked: false,
-    codiceGps: '',
-    sheetName: '',
-    customerName: '',
-    matricolaBte: '',
-    matricolaKgn: '',
-    customer: '',
-    ipRouter: '',
-    gpsX: '',
-    gpsY: '',
-    note: '',
+    codiceGps: "",
+    sheetName: "",
+    customerName: "",
+    matricolaBte: "",
+    matricolaKgn: "",
+    customer: "",
+    ipRouter: "",
+    gpsX: "",
+    gpsY: "",
+    note: "",
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
 
   const wasteOptions = [
-    { value: '', label: 'Seleziona tipo rifiuto' },
-    { value: 'Plastica', label: 'Plastica' },
-    { value: 'Secco', label: 'Secco' },
-    { value: 'Umido', label: 'Umido' },
-    { value: 'Vetro', label: 'Vetro' },
-    { value: 'Indifferenziato', label: 'Indifferenziato' },
-    { value: 'Carta', label: 'Carta' },
-    { value: 'vpl', label: 'VPL' },
+    { value: "", label: "Seleziona tipo rifiuto" },
+    { value: "Plastica", label: "Plastica" },
+    { value: "Secco", label: "Secco" },
+    { value: "Umido", label: "Umido" },
+    { value: "Vetro", label: "Vetro" },
+    { value: "Indifferenziato", label: "Indifferenziato" },
+    { value: "Carta", label: "Carta" },
+    { value: "vpl", label: "VPL" },
   ];
 
   const statusOptions = [
-    { value: 1, label: 'Attivo' },
-    { value: 0, label: 'Inattivo' },
+    { value: 1, label: "Attivo" },
+    { value: 0, label: "Inattivo" },
   ];
 
   // ✅ camelCase → snake_case per API
   const convertToSnakeCase = (data: FormData) => {
     return {
-      machine_name: data.machineName,
+      machine__Name: data.machineName,
       status: data.status,
       waste: data.waste || null,
       linux_version: data.linuxVersion || null,
@@ -142,13 +145,16 @@ export const ModalCreateDevice: React.FC<ModalCreateDeviceProps> = ({ onSave, tr
     const newErrors: FormErrors = {};
 
     if (!formData.machineName.trim()) {
-      newErrors.machineName = 'Nome macchina è obbligatorio';
+      newErrors.machineName = "Nome macchina è obbligatorio";
     } else if (formData.machineName.length < 2) {
-      newErrors.machineName = 'Nome macchina deve essere almeno 2 caratteri';
+      newErrors.machineName = "Nome macchina deve essere almeno 2 caratteri";
     }
 
-    if (formData.ipRouter && !/^(?:\d{1,3}\.){3}\d{1,3}$/.test(formData.ipRouter)) {
-      newErrors.ipRouter = 'Formato IP non valido (es. 192.168.1.1)';
+    if (
+      formData.ipRouter &&
+      !/^(?:\d{1,3}\.){3}\d{1,3}$/.test(formData.ipRouter)
+    ) {
+      newErrors.ipRouter = "Formato IP non valido (es. 192.168.1.1)";
     }
 
     setErrors(newErrors);
@@ -163,9 +169,11 @@ export const ModalCreateDevice: React.FC<ModalCreateDeviceProps> = ({ onSave, tr
   };
 
   const generateFullAddress = () => {
-    const parts = [formData.street, formData.city, formData.province].filter(Boolean);
-    const fullAddress = parts.join(', ');
-    handleInputChange('address', fullAddress);
+    const parts = [formData.street, formData.city, formData.province].filter(
+      Boolean
+    );
+    const fullAddress = parts.join(", ");
+    handleInputChange("address", fullAddress);
   };
 
   const handleSave = async () => {
@@ -180,35 +188,37 @@ export const ModalCreateDevice: React.FC<ModalCreateDeviceProps> = ({ onSave, tr
 
       // reset
       setFormData({
-        machineName: '',
+        machineName: "",
         status: 1,
-        waste: '',
-        linuxVersion: '',
-        startAvailable: '',
-        endAvailable: '',
-        street: '',
-        postalCode: '',
-        province: '',
-        city: '',
-        country: '',
-        municipality: '',
-        address: '',
+        waste: "",
+        linuxVersion: "",
+        startAvailable: "",
+        endAvailable: "",
+        street: "",
+        postalCode: "",
+        province: "",
+        city: "",
+        country: "",
+        municipality: "",
+        address: "",
         statusReadyD75_3_7: false,
         statusMachineBlocked: false,
-        codiceGps: '',
-        sheetName: '',
-        customerName: '',
-        matricolaBte: '',
-        matricolaKgn: '',
-        customer: '',
-        ipRouter: '',
-        gpsX: '',
-        gpsY: '',
-        note: '',
+        codiceGps: "",
+        sheetName: "",
+        customerName: "",
+        matricolaBte: "",
+        matricolaKgn: "",
+        customer: "",
+        ipRouter: "",
+        gpsX: "",
+        gpsY: "",
+        note: "",
       });
     } catch (error: any) {
-      console.error('Errore nella creazione device:', error);
-      setErrors({ general: error?.message || 'Errore durante la creazione del device' });
+      console.error("Errore nella creazione device:", error);
+      setErrors({
+        general: error?.message || "Errore durante la creazione del device",
+      });
     } finally {
       setIsLoading(false);
     }

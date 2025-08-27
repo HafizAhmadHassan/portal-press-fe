@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import Modal from '@components/shared/modal/Modal';
-import { SimpleButton } from '@shared/simple-btn/SimpleButton.component.tsx';
-import { AlertCircle, Trash2 } from 'lucide-react';
-import type { Device } from '@store_admin/devices/devices.types.ts';
-import './ModalDeleteDevicesConfirm.scss';
+import React, { useState } from "react";
+import Modal from "@components/shared/modal/Modal";
+import { SimpleButton } from "@shared/simple-btn/SimpleButton.component.tsx";
+import { AlertCircle, Trash2 } from "lucide-react";
+import type { Device } from "@store_admin/devices/devices.types.ts";
+import "./ModalDeleteDevicesConfirm.scss";
 
 interface Props {
   device: Device;
@@ -16,10 +16,10 @@ export const ModalDeleteDevicesConfirm: React.FC<Props> = ({
   onConfirm,
   triggerButton,
 }) => {
-  const [confirmText, setConfirmText] = useState('');
+  const [confirmText, setConfirmText] = useState("");
 
   const handleConfirm = async () => {
-    if (confirmText.toLowerCase() !== 'elimina') {
+    if (confirmText.toLowerCase() !== "elimina") {
       return;
     }
 
@@ -32,14 +32,16 @@ export const ModalDeleteDevicesConfirm: React.FC<Props> = ({
     <SimpleButton size="bare" variant="ghost" color="danger" icon={Trash2} />
   );
 
-  const isConfirmEnabled = confirmText.toLowerCase() === 'elimina';
+  const isConfirmEnabled = confirmText.toLowerCase() === "elimina";
 
   return (
     <Modal
       size="md"
       triggerButton={triggerButton || defaultTriggerButton}
       title="Elimina Device"
-      description={`Attenzione! Stai per eliminare definitivamente il device "${device?.machine_name || 'Sconosciuto'}".`}
+      description={`Attenzione! Stai per eliminare definitivamente il device "${
+        device?.machine__Name || "Sconosciuto"
+      }".`}
       confirmText="Elimina Definitivamente"
       cancelText="Annulla"
       icon={<AlertCircle className="modal-delete-icon" size={24} />}
@@ -54,11 +56,15 @@ export const ModalDeleteDevicesConfirm: React.FC<Props> = ({
           <div className="device-main-info">
             <div className="device-id-section">
               <div className="device-id-badge">
-                <span>#{device?.id || 'N/A'}</span>
+                <span>#{device?.id || "N/A"}</span>
               </div>
               <div className="device-primary-info">
-                <h4 className="device-name">{device?.machine_name || 'Nome non disponibile'}</h4>
-                <p className="device-status">{device?.address || 'Indirizzo non disponibile'}</p>
+                <h4 className="device-name">
+                  {device?.machine__Name || "Nome non disponibile"}
+                </h4>
+                <p className="device-status">
+                  {device?.address || "Indirizzo non disponibile"}
+                </p>
               </div>
             </div>
           </div>
@@ -72,14 +78,16 @@ export const ModalDeleteDevicesConfirm: React.FC<Props> = ({
             <div className="specs-grid">
               <div className="spec-row">
                 <span className="spec-label">Indirizzo IP</span>
-                <span className="spec-value">{device?.ip_router || 'Non disponibile'}</span>
+                <span className="spec-value">
+                  {device?.ip_router || "Non disponibile"}
+                </span>
               </div>
               <div className="spec-row">
                 <span className="spec-label">Coordinate GPS</span>
                 <span className="spec-value">
                   {device?.gps_x && device?.gps_y
                     ? `${device.gps_x}, ${device.gps_y}`
-                    : 'Non disponibili'}
+                    : "Non disponibili"}
                 </span>
               </div>
             </div>
@@ -91,10 +99,12 @@ export const ModalDeleteDevicesConfirm: React.FC<Props> = ({
           <div className="warning-content">
             <AlertCircle className="warning-icon" size={20} />
             <div className="warning-text">
-              <p className="warning-title">Attenzione: Questa azione è irreversibile!</p>
+              <p className="warning-title">
+                Attenzione: Questa azione è irreversibile!
+              </p>
               <p className="warning-description">
-                Una volta eliminato, il dispositivo e tutti i suoi dati associati verranno rimossi
-                permanentemente dal sistema.
+                Una volta eliminato, il dispositivo e tutti i suoi dati
+                associati verranno rimossi permanentemente dal sistema.
               </p>
             </div>
           </div>
@@ -109,7 +119,9 @@ export const ModalDeleteDevicesConfirm: React.FC<Props> = ({
             type="text"
             value={confirmText}
             onChange={(e) => setConfirmText(e.target.value)}
-            className={`confirmation-field ${isConfirmEnabled ? 'confirmation-field--valid' : ''}`}
+            className={`confirmation-field ${
+              isConfirmEnabled ? "confirmation-field--valid" : ""
+            }`}
             placeholder="elimina"
           />
         </div>

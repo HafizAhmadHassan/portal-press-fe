@@ -1,7 +1,7 @@
-import { ReactNode } from 'react';
-import type { TypeIcon } from 'lucide-react';
+import { type ReactNode } from "react";
+import type { TypeIcon } from "lucide-react";
 
-export type FilterType = 'email' | 'name' | 'select';
+export type FilterType = "email" | "name" | "select" | "text";
 
 export interface BaseFilter {
   type: FilterType;
@@ -15,10 +15,10 @@ export interface BaseFilter {
 }
 
 export interface InputFilter extends BaseFilter {
-  type: 'email' | 'name' | 'text';
-  typeIcon?: TypeIcon | ReactNode;
-  icon?: TypeIcon | ReactNode;
-  iconPosition?: 'left' | 'right';
+  type: "email" | "name" | "text";
+  typeIcon?: typeof TypeIcon | ReactNode;
+  icon?: typeof TypeIcon | ReactNode;
+  iconPosition?: "left" | "right";
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -28,7 +28,7 @@ export interface SelectOption {
 }
 
 export interface SelectFilter extends BaseFilter {
-  type: 'select';
+  type: "select";
   options: SelectOption[];
   onChange: (value: string | null) => void;
 }
