@@ -1,16 +1,16 @@
 /* Reset and base properties */
-@import './button-accessibility';
-@import './button-animations';
-@import './button-base';
-@import './button-ghost';
-@import './button-groups';
-@import './button-icons';
-@import './button-modifiers';
-@import './button-outline';
-@import './button-responsive';
-@import './button-sizes';
-@import './button-states';
-@import './button-variants';
+@use "./button-accessibility";
+@use "./button-animations";
+@use "./button-base";
+@use "./button-ghost";
+@use "./button-groups";
+@use "./button-icons";
+@use "./button-modifiers";
+@use "./button-outline";
+@use "./button-responsive";
+@use "./button-sizes";
+@use "./button-states";
+@use "./button-variants";
 
 .btn {
   display: inline-flex;
@@ -89,7 +89,7 @@ a.btn:hover {
 }
 
 .btn.loading::after {
-  content: '';
+  content: "";
   position: absolute;
   width: 20px;
   height: 20px;
@@ -582,7 +582,8 @@ a.btn:hover {
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {

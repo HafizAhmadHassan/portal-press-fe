@@ -1,5 +1,4 @@
-@import '../../../styles/globals.scss';
-
+/* @use "@root/pages/admin/styles/globals.scss"; */
 .chartCard {
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
@@ -115,7 +114,6 @@
   @media (max-width: 1024px) {
     flex-direction: column;
     gap: 1.5rem;
-
   }
 
   @media (max-width: 768px) {

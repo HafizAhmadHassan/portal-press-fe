@@ -1,4 +1,4 @@
-@use '../../../../styles/globals.scss';
+/* @use "@root/pages/admin/styles/globals.scss"; */
 
 /* Section-filter.module.scss
    - Usa i token globali (globals.scss) per supportare light/dark
@@ -7,7 +7,7 @@
 
 .sectionFilter {
   display: grid;
-  grid-template-columns: 1fr;        /* mobile first */
+  grid-template-columns: 1fr; /* mobile first */
   gap: 1rem;
   padding: 1.5rem;
 
@@ -85,5 +85,7 @@
     cursor: not-allowed;
   }
 
-  svg { flex-shrink: 0; }
+  svg {
+    flex-shrink: 0;
+  }
 }

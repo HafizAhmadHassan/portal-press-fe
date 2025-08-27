@@ -9,16 +9,15 @@ export interface MenuItem {
 }
 
 // src/_hooks/useMenuItems.ts - Hook per calcolare lo stato active
-import { useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
-import type { MenuItem } from '../types/MenuItem';
+import { useMemo } from "react";
+import { useLocation } from "react-router-dom";
 
 export function useMenuItems(menuItems: MenuItem[]): MenuItem[] {
   const location = useLocation();
 
   return useMemo(() => {
     const calculateActiveState = (items: MenuItem[]): MenuItem[] => {
-      return items.map(item => {
+      return items.map((item) => {
         let isActive = false;
 
         // Calcola se questo item è attivo
@@ -35,17 +34,19 @@ export function useMenuItems(menuItems: MenuItem[]): MenuItem[] {
         }
 
         // Calcola ricorsivamente per i figli
-        const updatedChildren = item.children ? calculateActiveState(item.children) : undefined;
+        const updatedChildren = item.children
+          ? calculateActiveState(item.children)
+          : undefined;
 
         // Se ha figli e uno di essi è attivo, anche il parent è attivo
         if (updatedChildren && !isActive) {
-          isActive = updatedChildren.some(child => child.isActive);
+          isActive = updatedChildren.some((child) => child.isActive);
         }
 
         return {
           ...item,
           isActive,
-          children: updatedChildren
+          children: updatedChildren,
         };
       });
     };

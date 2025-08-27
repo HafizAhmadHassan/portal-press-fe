@@ -1,35 +1,29 @@
-@import "./_reset";
+@use "./_reset";
 // --- Import di Layouts ---
-@import "./layouts/_layouts";
+@use "./layouts/_layouts";
 
 // --- Import di Utilities ---
-@import "./utilities/_borders";
-@import "./utilities/_colors";
-@import "./utilities/_display";
-@import "./utilities/_effects";
-@import "./utilities/_flexbox";
-@import "./utilities/_index";
-@import "./utilities/_interactions";
-@import "./utilities/_misc";
-@import "./utilities/_positions";
-@import "./utilities/_sizing";
-@import "./utilities/_spacing";
-@import "./utilities/_typography";
-
-// --- Altri Import Utili ---
-@import "./_base";
-@import "./_colors";
-@import "./_mixins";
-@import "./_variables";
+@use "./utilities/_borders";
+@use "./utilities/_colors";
+@use "./utilities/_display";
+@use "./utilities/_effects";
+@use "./utilities/_flexbox";
+@use "./utilities/_index";
+@use "./utilities/_interactions";
+@use "./utilities/_misc";
+@use "./utilities/_positions";
+@use "./utilities/_sizing";
+@use "./utilities/_spacing";
+@use "./utilities/_typography";
 
 // --- Import di Componenti ---
-@import "./components/_additional";
-@import "./components/_buttons";
-@import "./components/_cards";
-@import "./components/_forms";
-@import "./components/_map";
+@use "./components/_additional";
+@use "./components/_buttons";
+@use "./components/_cards";
+@use "./components/_forms";
+@use "./components/_map";
 
 // --- Import di Specific Components ---
 
-//@import "../app/layout/layout_components/kgn-header/kgn-header.component.scss";
-//@import "../app/layout/layout_components/kgn-side-nav/kgn-side-nav.component.scss";
+//@use "../app/layout/layout_components/kgn-header/kgn-header.component.scss";
+//@use "../app/layout/layout_components/kgn-side-nav/kgn-side-nav.component.scss";

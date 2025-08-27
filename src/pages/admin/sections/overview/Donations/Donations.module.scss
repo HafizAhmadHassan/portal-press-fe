@@ -1,5 +1,4 @@
-@import '../../../styles/globals.scss';
-
+/* @use "@root/pages/admin/styles/globals.scss"; */
 .donationPanel {
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
@@ -105,11 +104,11 @@
 .donationCardPrimary {
   background: linear-gradient(135deg, #f0fdf4, #dcfce7);
   border-color: #bbf7d0;
-  
+
   .donationValue {
     color: #15803d;
   }
-  
+
   .donationLabel {
     color: #166534;
   }
@@ -128,11 +127,11 @@
 .donationCardSecondary {
   background: linear-gradient(135deg, #fef3c7, #fde68a);
   border-color: #fde68a;
-  
+
   .donationValue {
     color: #d97706;
   }
-  
+
   .donationLabel {
     color: #92400e;
   }
@@ -214,7 +213,7 @@
 
 .impactOrange {
   border-left: 4px solid var(--orange-color);
-  
+
   .impactIcon {
     color: var(--orange-color);
   }
@@ -222,7 +221,7 @@
 
 .impactBlue {
   border-left: 4px solid var(--primary-color);
-  
+
   .impactIcon {
     color: var(--primary-color);
   }
@@ -230,7 +229,7 @@
 
 .impactPurple {
   border-left: 4px solid var(--purple-color);
-  
+
   .impactIcon {
     color: var(--purple-color);
   }
@@ -407,7 +406,11 @@
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem 2rem;
-  background: linear-gradient(135deg, var(--donation-light, #fce7f3), var(--primary-light));
+  background: linear-gradient(
+    135deg,
+    var(--donation-light, #fce7f3),
+    var(--primary-light)
+  );
   border-top: 1px solid var(--border-color);
 
   @media (max-width: 768px) {

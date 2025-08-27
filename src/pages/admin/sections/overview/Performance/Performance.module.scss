@@ -1,5 +1,4 @@
-@import '../../../styles/globals.scss';
-
+/* @use "@root/pages/admin/styles/globals.scss"; */
 .chartCard {
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
@@ -182,17 +181,29 @@
 
 .barVendite {
   width: 12px;
-  background: linear-gradient(to top, var(--primary-dark), var(--primary-color));
+  background: linear-gradient(
+    to top,
+    var(--primary-dark),
+    var(--primary-color)
+  );
 }
 
 .barDonazioni {
   width: 12px;
-  background: linear-gradient(to top, var(--success-dark), var(--success-color));
+  background: linear-gradient(
+    to top,
+    var(--success-dark),
+    var(--success-color)
+  );
 }
 
 .barOrdini {
   width: 12px;
-  background: linear-gradient(to top, var(--warning-dark), var(--warning-color));
+  background: linear-gradient(
+    to top,
+    var(--warning-dark),
+    var(--warning-color)
+  );
 }
 
 .barTooltip {
@@ -213,7 +224,7 @@
   z-index: 10;
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 100%;
     left: 50%;

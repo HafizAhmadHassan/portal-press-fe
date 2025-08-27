@@ -1,57 +1,57 @@
 // Variabili di colore
 $colors: (
-        primary: (
-                main: #3b82f6,
-                light: #60a5fa,
-                dark: #1d4ed8,
-                hover: #2563eb
-        ),
-        secondary: (
-                main: #6b7280,
-                light: #9ca3af,
-                dark: #374151,
-                hover: #4b5563
-        ),
-        success: (
-                main: #10b981,
-                light: #34d399,
-                dark: #047857,
-                hover: #059669
-        ),
-        warning: (
-                main: #f59e0b,
-                light: #fbbf24,
-                dark: #d97706,
-                hover: #ea580c
-        ),
-        danger: (
-                main: #ef4444,
-                light: #f87171,
-                dark: #dc2626,
-                hover: #b91c1c
-        )
+  primary: (
+    main: #3b82f6,
+    light: #60a5fa,
+    dark: #1d4ed8,
+    hover: #2563eb,
+  ),
+  secondary: (
+    main: #6b7280,
+    light: #9ca3af,
+    dark: #374151,
+    hover: #4b5563,
+  ),
+  success: (
+    main: #10b981,
+    light: #34d399,
+    dark: #047857,
+    hover: #059669,
+  ),
+  warning: (
+    main: #f59e0b,
+    light: #fbbf24,
+    dark: #d97706,
+    hover: #ea580c,
+  ),
+  danger: (
+    main: #ef4444,
+    light: #f87171,
+    dark: #dc2626,
+    hover: #b91c1c,
+  ),
 );
 
 // Variabili di dimensione (già in px)
 $sizes: (
-        sm: (
-                checkbox: 16px,
-                icon: 12px,
-                label: 14px,
-                description: 12px
-        ),
-        md: (
-                checkbox: 20px,
-                icon: 14px,
-                label: 14px,
-                description: 12px
-        ),
-        lg: (
-                checkbox: 24px,
-                icon: 16px,
-                label: 16px,
-                description: 14px
-        )
+  sm: (
+    checkbox: 16px,
+    icon: 12px,
+    label: 14px,
+    description: 12px,
+  ),
+  md: (
+    checkbox: 20px,
+    icon: 14px,
+    label: 14px,
+    description: 12px,
+  ),
+  lg: (
+    checkbox: 24px,
+    icon: 16px,
+    label: 16px,
+    description: 14px,
+  ),
 );
 
 // Base _styles
@@ -128,23 +128,23 @@ $sizes: (
   @each $color, $props in $colors {
     &--#{$color} {
       &:not(.checkbox--checked):hover {
-        border-color: map-get($props, light);
+        /*  border-color: map-get($props, light); */
       }
 
       &.checkbox--checked {
-        background-color: map-get($props, main);
-        border-color: map-get($props, main);
+        /*    background-color: map-get($props, main);
+        border-color: map-get($props, main); */
         color: white;
 
-        &:hover {
+        /*  &:hover {
           background-color: map-get($props, hover);
           border-color: map-get($props, hover);
-        }
+        } */
       }
 
-      &:focus-within {
+      /*  &:focus-within {
         box-shadow: 0 0 0 3px rgba(map-get($props, main), 0.1);
-      }
+      } */
     }
   }
 

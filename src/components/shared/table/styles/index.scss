@@ -1,11 +1,12 @@
 // Import all module _styles
-@import './GenericTable.module.scss';
-@import './TableCell.module.scss';
-@import './TablePagination.module.scss';
+@use "./GenericTable.module.scss";
+@use "./TableCell.module.scss";
+@use "./TablePagination.module.scss";
 
 // Global _styles for the table component
 .generic-table-wrapper {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
 
   * {
     box-sizing: border-box;
