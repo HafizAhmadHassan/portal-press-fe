@@ -1,22 +1,25 @@
 // @sections_admin/gpsList/_modals/ModalDetailsGps.component.tsx
-import React from 'react';
-import Modal from '@components/shared/modal/Modal';
-import { SimpleButton } from '@shared/simple-btn/SimpleButton.component';
-import { Eye, MapPin, Satellite, Hash } from 'lucide-react';
-import styles from './ModalDetailsGps.module.scss';
-import type { GpsDevice } from '@store_admin/gps/gps.types';
-import DevicesMap from '../../devicesList/_components/DevicesMap';
-import GpsMap from '../_components/GpsMap';
+import React from "react";
+import Modal from "@components/shared/modal/Modal";
+import { SimpleButton } from "@shared/simple-btn/SimpleButton.component";
+import { Eye, MapPin, Satellite, Hash } from "lucide-react";
+import styles from "./ModalDetailsGps.module.scss";
+import type { GpsDevice } from "@store_admin/gps/gps.types";
+import DevicesMap from "../../devicesList/_components/DevicesMap";
+import GpsMap from "../_components/GpsMap";
 
-export const ModalDetailsGps: React.FC<{ device: GpsDevice }> = ({ device }) => {
-  const fmt = (k: string) => k || 'N/A';
+export const ModalDetailsGps: React.FC<{ device: GpsDevice }> = ({
+  device,
+}) => {
+  const fmt = (k: string) => k || "N/A";
 
   return (
     <Modal
       size="lg"
-      triggerButton={<SimpleButton size="bare" color="primary" variant="ghost" icon={Eye} />}
+      triggerButton={
+        <SimpleButton size="bare" color="primary" variant="ghost" icon={Eye} />
+      }
       cancelText="Chiudi"
-      variant="primary"
     >
       <div className={styles.modalContent}>
         <div className={styles.mapWrapper}>
@@ -27,7 +30,6 @@ export const ModalDetailsGps: React.FC<{ device: GpsDevice }> = ({ device }) => 
             showActions={false}
             mapHeight="100%"
             zoom={14}
-          
           />
         </div>
         <div className={styles.section}>
@@ -55,7 +57,9 @@ export const ModalDetailsGps: React.FC<{ device: GpsDevice }> = ({ device }) => 
             </div>
             <div className={styles.infoItem}>
               <span className={styles.infoLabel}>Comune</span>
-              <span className={styles.infoValue}>{fmt(device.municipility)}</span>
+              <span className={styles.infoValue}>
+                {fmt(device.municipility)}
+              </span>
             </div>
           </div>
         </div>

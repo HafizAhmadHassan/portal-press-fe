@@ -7,7 +7,6 @@ import {
   XCircle,
   Calendar,
   Clock,
-  MapPin,
   Shield,
   FileText,
   Hash,
@@ -19,7 +18,7 @@ import styles from "./ModalTicketDetail.module.scss";
 import type { TicketRead } from "@store_admin/tickets/ticket.types";
 
 type DeviceLite = {
-  machine__Name?: string;
+  machine_Name?: string;
   city?: string;
   province?: string;
   customer_Name?: string;
@@ -79,14 +78,14 @@ export const ModalTicketDetails: React.FC<ModalTicketDetailsProps> = ({
     dev?.customer ?? dev?.customer_Name ?? (ticket as any)?.customer ?? "N/D";
   const machineId =
     (ticket as any)?.machine ?? (ticket as any)?.device_id ?? "N/D";
-  const machineName = dev?.machine__Name;
+  const machine_Name = dev?.machine_Name;
 
   const openedAt =
     (ticket as any)?.date_Time ||
     (ticket as any)?.date_time ||
-    ticket?.created_at;
+    ticket?.created_At;
 
-  const updatedAt = ticket?.updated_at;
+  const updatedAt = ticket?.updated_At;
 
   const openDescription =
     (ticket as any)?.open_Description ||
@@ -111,7 +110,6 @@ export const ModalTicketDetails: React.FC<ModalTicketDetailsProps> = ({
         <SimpleButton size="bare" color="primary" variant="ghost" icon={Eye} />
       }
       cancelText="Chiudi"
-      variant="primary"
     >
       <div className={styles.modalContent}>
         {/* HEADER */}
@@ -132,7 +130,7 @@ export const ModalTicketDetails: React.FC<ModalTicketDetailsProps> = ({
           <div className={styles.ticketMainInfo}>
             <h3 className={styles.title}>
               Ticket #{ticket.id}
-              {machineName ? ` – ${machineName}` : ""}
+              {machine_Name ? ` – ${machine_Name}` : ""}
             </h3>
             <p className={styles.subTitle}>
               {customer} • {dev?.city || "Luogo N/D"}
@@ -186,8 +184,8 @@ export const ModalTicketDetails: React.FC<ModalTicketDetailsProps> = ({
             <div className={styles.infoItem}>
               <span className={styles.infoLabel}>Machine</span>
               <span className={styles.infoValue}>
-                {machineName
-                  ? `${machineName} (#${machineId})`
+                {machine_Name
+                  ? `${machine_Name} (#${machineId})`
                   : `#${machineId}`}
               </span>
             </div>

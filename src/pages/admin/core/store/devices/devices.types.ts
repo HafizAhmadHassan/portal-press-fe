@@ -2,7 +2,7 @@
 
 export interface Device {
   id: string;
-  machine__Name: string;
+  machine_Name: string;
   status: number; // 0 = inactive, 1 = active
   waste:
     | "Plastica"
@@ -40,7 +40,7 @@ export interface Device {
 }
 
 export interface CreateDeviceRequest {
-  machine__Name: string;
+  machine_Name: string;
   status?: number;
   waste?:
     | "Plastica"
@@ -76,7 +76,7 @@ export interface CreateDeviceRequest {
 
 export interface UpdateDeviceRequest {
   id: string;
-  data: Partial<Omit<Device, "id" | "created_at" | "updated_at">>;
+  data: Partial<Omit<Device, "id" | "created_At" | "updated_At">>;
 }
 
 export interface DevicesQueryParams {

@@ -91,9 +91,9 @@ export const useMapDevices = (filters: MapFilters = {}) => {
       total: filteredDevices.length,
       active: filteredDevices.filter((d) => d.status === 1).length,
       inactive: filteredDevices.filter((d) => d.status === 0).length,
-      blocked: filteredDevices.filter((d) => d.statusMachineBlocked === true)
+      blocked: filteredDevices.filter((d) => d.status_Machine_Blocked === true)
         .length,
-      ready: filteredDevices.filter((d) => d.statusReadyD75_3_7 === true)
+      ready: filteredDevices.filter((d) => d.tatus_ready_d75_3_7 === true)
         .length,
       byWaste: {} as Record<string, number>,
       byCities: {} as Record<string, number>,
@@ -141,8 +141,9 @@ export const useMapDevices = (filters: MapFilters = {}) => {
       total: allDevices.length,
       active: allDevices.filter((d) => d.status === 1).length,
       inactive: allDevices.filter((d) => d.status === 0).length,
-      blocked: allDevices.filter((d) => d.statusMachineBlocked === true).length,
-      ready: allDevices.filter((d) => d.statusReadyD75_3_7 === true).length,
+      blocked: allDevices.filter((d) => d.status_Machine_Blocked === true)
+        .length,
+      ready: allDevices.filter((d) => d.tatus_ready_d75_3_7 === true).length,
       plastic: allDevices.filter((d) => d.waste === "Plastica").length,
       dry: allDevices.filter((d) => d.waste === "Secco").length,
       wet: allDevices.filter((d) => d.waste === "Umido").length,

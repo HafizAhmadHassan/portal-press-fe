@@ -13,7 +13,7 @@ export default function Summary({ formData }: any) {
         <div className={styles.summaryContent}>
           <div className={styles.summaryItem}>
             <strong>Nome Macchina:</strong>{" "}
-            {formData.machineName || "Non specificato"}
+            {formData.machine_Name || "Non specificato"}
           </div>
           <div className={styles.summaryItem}>
             <strong>Stato:</strong>{" "}
@@ -38,10 +38,10 @@ export default function Summary({ formData }: any) {
           </div>
           <div className={styles.summaryItem}>
             <strong>Stati:</strong>
-            {formData.statusReadyD75_3_7 && " Pronto D75_3_7"}
-            {formData.statusMachineBlocked && " Bloccato"}
-            {!formData.statusReadyD75_3_7 &&
-              !formData.statusMachineBlocked &&
+            {formData.tatus_ready_d75_3_7 && " Pronto D75_3_7"}
+            {formData.status_Machine_Blocked && " Bloccato"}
+            {!formData.tatus_ready_d75_3_7 &&
+              !formData.status_Machine_Blocked &&
               " Nessuno stato particolare"}
           </div>
         </div>

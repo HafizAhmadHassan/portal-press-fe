@@ -40,7 +40,7 @@ export const ModalDeleteDevicesConfirm: React.FC<Props> = ({
       triggerButton={triggerButton || defaultTriggerButton}
       title="Elimina Device"
       description={`Attenzione! Stai per eliminare definitivamente il device "${
-        device?.machine__Name || "Sconosciuto"
+        device?.machine_Name || "Sconosciuto"
       }".`}
       confirmText="Elimina Definitivamente"
       cancelText="Annulla"
@@ -60,7 +60,7 @@ export const ModalDeleteDevicesConfirm: React.FC<Props> = ({
               </div>
               <div className="device-primary-info">
                 <h4 className="device-name">
-                  {device?.machine__Name || "Nome non disponibile"}
+                  {device?.machine_Name || "Nome non disponibile"}
                 </h4>
                 <p className="device-status">
                   {device?.address || "Indirizzo non disponibile"}

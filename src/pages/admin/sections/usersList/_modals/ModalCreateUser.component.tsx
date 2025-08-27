@@ -170,7 +170,6 @@ export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({
       confirmText="Crea Utente"
       cancelText="Annulla"
       onConfirm={handleSave}
-      variant="filled"
       // loading={isLoading}
     >
       <div className={styles.modalContent}>

@@ -13,7 +13,7 @@ export interface UserInfo {
 
 export interface DeviceInfo {
   id: number;
-  machine__Name: string;
+  machine_Name: string;
   city?: string | null;
   customer?: string | null;
   status: number;
@@ -36,8 +36,8 @@ export interface TicketRead extends TicketBase {
   opened_by_user_id: number;
   created_by_user_id: number;
   assigned_to_user_id?: number | null;
-  created_at: string; // ISO datetime
-  updated_at: string; // ISO datetime
+  created_At: string; // ISO datetime
+  updated_At: string; // ISO datetime
   closed_at?: string | null;
 
   device?: DeviceInfo;

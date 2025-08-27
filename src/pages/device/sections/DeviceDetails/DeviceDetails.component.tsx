@@ -5,9 +5,8 @@ import styles from "./DeviceDetails.module.scss";
 import { SimpleButton } from "@shared/simple-btn/SimpleButton.component.tsx";
 import { Input } from "@shared/inputs/Input.component.tsx";
 import { Checkbox } from "@shared/checkbox/CheckBox.component.tsx";
-import Switch from "@root/components/shared/switch/Switch.component";
 
-import { MapPin, Monitor, Settings, Smartphone, RotateCw } from "lucide-react";
+import { MapPin, Monitor, Settings, Smartphone } from "lucide-react";
 import type { Device } from "@store_admin/devices/devices.types.ts";
 
 import {
@@ -29,7 +28,7 @@ import ModalDeviceHeader from "@root/pages/admin/sections/devicesList/_modals/Mo
    FORM TYPES/MAPPERS (come tua edit page)
    ========================= */
 interface FormData {
-  machineName: string;
+  machine_Name: string;
   waste: string;
   status: number;
   linuxVersion: string;
@@ -42,8 +41,8 @@ interface FormData {
   country: string;
   municipality: string;
   address: string;
-  statusReadyD75_3_7: boolean;
-  statusMachineBlocked: boolean;
+  tatus_ready_d75_3_7: boolean;
+  status_Machine_Blocked: boolean;
   codiceGps: string;
   sheetName: string;
   customerName: string;
@@ -57,7 +56,7 @@ interface FormData {
 }
 
 const deviceToFormData = (d: Device): FormData => ({
-  machineName: d.machine__Name || "",
+  machine_Name: d.machine_Name || "",
   waste: d.waste || "",
   status: d.status ?? 0,
   linuxVersion: d.linux_Version || "",
@@ -70,8 +69,8 @@ const deviceToFormData = (d: Device): FormData => ({
   country: d.country || "",
   municipality: d.municipality || "",
   address: d.address || "",
-  statusReadyD75_3_7: d.status_ready_d75_3_7 || false,
-  statusMachineBlocked: d.status_Machine_Blocked || false,
+  tatus_ready_d75_3_7: d.status_ready_d75_3_7 || false,
+  status_Machine_Blocked: d.status_Machine_Blocked || false,
   codiceGps: d.codice_Gps || "",
   sheetName: d.sheet_Name || "",
   customerName: d.customer_Name || "",
@@ -85,7 +84,7 @@ const deviceToFormData = (d: Device): FormData => ({
 });
 
 const formDataToDevice = (f: FormData) => ({
-  machine__Name: f.machineName,
+  machine_Name: f.machine_Name,
   waste: f.waste || null,
   status: f.status,
   linux_Version: f.linuxVersion || null,
@@ -98,8 +97,8 @@ const formDataToDevice = (f: FormData) => ({
   country: f.country || null,
   municipality: f.municipality || null,
   address: f.address || null,
-  status_ready_d75_3_7: f.statusReadyD75_3_7,
-  status_Machine_Blocked: f.statusMachineBlocked,
+  status_ready_d75_3_7: f.tatus_ready_d75_3_7,
+  status_Machine_Blocked: f.status_Machine_Blocked,
   codice_Gps: f.codiceGps || null,
   sheet_Name: f.sheetName || null,
   customer_Name: f.customerName || null,
@@ -259,7 +258,7 @@ export default function DeviceDetailsPage() {
     );
   }
 
-  const displayName = device?.machine__Name || `Dispositivo ${device?.id}`;
+  const displayName = device?.machine_Name || `Dispositivo ${device?.id}`;
 
   return (
     <>
@@ -305,10 +304,10 @@ export default function DeviceDetailsPage() {
                     <div className={styles.formGrid}>
                       <Input
                         label="Nome Macchina"
-                        name="machineName"
-                        value={formData.machineName}
+                        name="machine_Name"
+                        value={formData.machine_Name}
                         onChange={(e) =>
-                          onChange("machineName", e.target.value)
+                          onChange("machine_Name", e.target.value)
                         }
                         placeholder="Inserisci nome macchina"
                         icon={Monitor}
@@ -596,9 +595,9 @@ export default function DeviceDetailsPage() {
                       <Checkbox
                         label="Status Ready D75_3_7"
                         description="Indica se il dispositivo è pronto per l'uso"
-                        checked={formData.statusReadyD75_3_7}
+                        checked={formData.tatus_ready_d75_3_7}
                         onChange={(checked) =>
-                          onChange("statusReadyD75_3_7", checked)
+                          onChange("tatus_ready_d75_3_7", checked)
                         }
                         disabled={isSaving}
                         color="success"
@@ -606,9 +605,9 @@ export default function DeviceDetailsPage() {
                       <Checkbox
                         label="Macchina Bloccata"
                         description="Indica se la macchina è bloccata"
-                        checked={formData.statusMachineBlocked}
+                        checked={formData.status_Machine_Blocked}
                         onChange={(checked) =>
-                          onChange("statusMachineBlocked", checked)
+                          onChange("status_Machine_Blocked", checked)
                         }
                         disabled={isSaving}
                         color="danger"

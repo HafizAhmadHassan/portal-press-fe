@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 /* import type { Tickets } from '@store_admin/tickets/tickets.types'; */
-import styles from '@sections_admin/ticketsList/_styles/TicketsSummaryBar.module.scss';
+import styles from "@sections_admin/ticketsList/_styles/TicketsSummaryBar.module.scss";
 
 interface TicketsSummaryBarProps {
   tickets: any[]; // Cambiato da Tickets[] a any[]
-  statusFilter?: 'tutti' | 'attivi' | 'disattivati';
+  statusFilter?: "tutti" | "attivi" | "disattivati";
   className?: string;
 }
 
@@ -15,7 +15,12 @@ interface StatCardProps {
   className?: string;
 }
 
-const StatCard: React.FC<StatCardProps> = ({ number, label, variant, className = '' }) => (
+const StatCard: React.FC<StatCardProps> = ({
+  number,
+  label,
+  variant,
+  className = "",
+}) => (
   <div className={`${styles.statCard} ${styles[variant]} ${className}`}>
     <div className={styles.statNumber}>{number}</div>
     <div className={styles.statLabel}>{label}</div>
@@ -25,14 +30,20 @@ const StatCard: React.FC<StatCardProps> = ({ number, label, variant, className =
 
 export const TicketsSummaryBar: React.FC<TicketsSummaryBarProps> = ({
   tickets,
-  className = '',
+  className = "",
 }) => {
   // Calcola le statistiche usando i campi del Device type
   const totalTickets = tickets.length;
   const activeTickets = tickets.filter((device) => device.status === 1).length;
-  const inactiveTickets = tickets.filter((device) => device.status === 0).length;
-  const blockedTickets = tickets.filter((device) => device.statusMachineBlocked === true).length;
-  const readyTickets = tickets.filter((device) => device.statusReadyD75_3_7 === true).length;
+  const inactiveTickets = tickets.filter(
+    (device) => device.status === 0
+  ).length;
+  const blockedTickets = tickets.filter(
+    (device) => device.status_Machine_Blocked === true
+  ).length;
+  const readyTickets = tickets.filter(
+    (device) => device.tatus_ready_d75_3_7 === true
+  ).length;
 
   return (
     <div className={`${styles.ticketsSummary} ${className}`}>
@@ -47,29 +58,65 @@ export const TicketsSummaryBar: React.FC<TicketsSummaryBarProps> = ({
         </div>
 
         <div className={styles.mobileStats}>
-          <StatCard number={activeTickets} label="Attivi" variant="statCard--active" />
-          <StatCard number={inactiveTickets} label="Inattivi" variant="statCard--inactive" />
-          <StatCard number={blockedTickets} label="Bloccati" variant="statCard--blocked" />
-          <StatCard number={readyTickets} label="Pronti" variant="statCard--ready" />
+          <StatCard
+            number={activeTickets}
+            label="Attivi"
+            variant="statCard--active"
+          />
+          <StatCard
+            number={inactiveTickets}
+            label="Inattivi"
+            variant="statCard--inactive"
+          />
+          <StatCard
+            number={blockedTickets}
+            label="Bloccati"
+            variant="statCard--blocked"
+          />
+          <StatCard
+            number={readyTickets}
+            label="Pronti"
+            variant="statCard--ready"
+          />
         </div>
       </div>
 
       {/* Desktop Layout */}
       <div className={styles.desktopLayout}>
         <div className={styles.statsSection}>
-          <StatCard number={totalTickets} label="Totali" variant="statCard--total" />
+          <StatCard
+            number={totalTickets}
+            label="Totali"
+            variant="statCard--total"
+          />
 
           <div className={styles.statDivider}></div>
 
-          <StatCard number={activeTickets} label="Attivi" variant="statCard--active" />
+          <StatCard
+            number={activeTickets}
+            label="Attivi"
+            variant="statCard--active"
+          />
 
-          <StatCard number={inactiveTickets} label="Inattivi" variant="statCard--inactive" />
+          <StatCard
+            number={inactiveTickets}
+            label="Inattivi"
+            variant="statCard--inactive"
+          />
 
           <div className={styles.statDivider}></div>
 
-          <StatCard number={blockedTickets} label="Bloccati" variant="statCard--blocked" />
+          <StatCard
+            number={blockedTickets}
+            label="Bloccati"
+            variant="statCard--blocked"
+          />
 
-          <StatCard number={readyTickets} label="Pronti" variant="statCard--ready" />
+          <StatCard
+            number={readyTickets}
+            label="Pronti"
+            variant="statCard--ready"
+          />
         </div>
       </div>
     </div>

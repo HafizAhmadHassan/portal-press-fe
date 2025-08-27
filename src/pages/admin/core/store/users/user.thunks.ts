@@ -36,7 +36,9 @@ export const loadUsers = createAsyncThunk(
       ).unwrap();
 
       // 🔹 Allinea il Redux slice allo stato ricevuto da RTK Query
-      dispatch(setUsers(response.data ?? response));
+      dispatch(
+        setUsers(Array.isArray(response) ? response : response.data ?? [])
+      );
 
       // Se hai la paginazione nel payload:
       if (response.pagination) {
@@ -81,7 +83,7 @@ export const createNewUser = createAsyncThunk(
       ).unwrap();
 
       // Ricarica la lista utenti per aggiornare la paginazione
-      await dispatch(loadUsers());
+      await dispatch(loadUsers({}));
 
       return newUser;
     } catch (error: any) {
@@ -118,7 +120,7 @@ export const deleteExistingUser = createAsyncThunk(
       await dispatch(usersApi.endpoints.deleteUser.initiate(userId)).unwrap();
 
       // Ricarica la lista per aggiornare la paginazione
-      await dispatch(loadUsers());
+      await dispatch(loadUsers({}));
 
       return userId;
     } catch (error: any) {
@@ -139,7 +141,7 @@ export const performBulkAction = createAsyncThunk(
       ).unwrap();
 
       // Ricarica la lista utenti dopo operazioni bulk
-      await dispatch(loadUsers());
+      await dispatch(loadUsers({}));
 
       return {
         ...response,

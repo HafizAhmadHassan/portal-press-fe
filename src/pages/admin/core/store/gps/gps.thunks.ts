@@ -36,7 +36,7 @@ export const loadGps = createAsyncThunk(
         gpsApi.endpoints.getGps.initiate(query)
       ).unwrap();
 
-      dispatch(setItems(res.data ?? res));
+      dispatch(setItems(Array.isArray(res) ? res : res.data ?? []));
 
       if ((res as any).meta) {
         const m = (res as any).meta;
@@ -64,7 +64,8 @@ export const createNewGps = createAsyncThunk(
       const created = await dispatch(
         gpsApi.endpoints.createGps.initiate(data)
       ).unwrap();
-      await dispatch(loadGps());
+      await dispatch(loadGps({}));
+
       return created;
     } catch (e: any) {
       return rejectWithValue(e?.data?.message || "Errore creazione GPS");
@@ -91,7 +92,8 @@ export const deleteExistingGps = createAsyncThunk(
   async (id: string | number, { dispatch, rejectWithValue }) => {
     try {
       await dispatch(gpsApi.endpoints.deleteGps.initiate(id)).unwrap();
-      await dispatch(loadGps());
+      await dispatch(loadGps({}));
+
       return id;
     } catch (e: any) {
       return rejectWithValue(e?.data?.message || "Errore eliminazione GPS");
@@ -106,7 +108,8 @@ export const performBulkGps = createAsyncThunk(
       const res = await dispatch(
         gpsApi.endpoints.bulkGps.initiate(req)
       ).unwrap();
-      await dispatch(loadGps());
+      await dispatch(loadGps({}));
+
       return res;
     } catch (e: any) {
       return rejectWithValue(e?.data?.message || "Errore bulk GPS");

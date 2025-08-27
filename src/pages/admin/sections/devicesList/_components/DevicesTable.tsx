@@ -44,7 +44,7 @@ const DevicesTable: React.FC<DevicesTableProps> = ({
   return (
     <GenericTableWithLogic
       config={tableConfig}
-      searchFields={["machineName", "city", "customer", "customerName"]}
+      searchFields={["machine_Name", "city", "customer", "customerName"]}
       // loading={isLoading}
     />
   );

@@ -53,7 +53,7 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
     ticketId: ticket?.id,
     date: new Date(),
     info: `Ticket #${ticket?.id}${
-      dev?.machine__Name ? ` – ${dev?.machine__Name}` : ""
+      dev?.machine_Name ? ` – ${dev?.machine_Name}` : ""
     }\nCliente: ${dev?.customer || dev?.customer_Name || "N/D"}${
       (dev as any)?.waste ? `\nTipo rifiuto: ${(dev as any)?.waste}` : ""
     }`,
@@ -92,7 +92,7 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
         ticketId: ticket?.id,
         date: new Date(),
         info: `Ticket #${ticket?.id}${
-          dev?.machine__Name ? ` – ${dev?.machine__Name}` : ""
+          dev?.machine_Name ? ` – ${dev?.machine_Name}` : ""
         }\nCliente: ${dev?.customer || dev?.customer_Name || "N/D"}${
           (dev as any)?.waste ? `\nTipo rifiuto: ${(dev as any)?.waste}` : ""
         }`,
@@ -118,7 +118,6 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
       confirmText="Chiudi Ticket"
       cancelText="Annulla"
       onConfirm={handleSave}
-      variant="primary"
       modalClassName="modal-close-ticket"
     >
       <div className="modal-open-ticket__content">
@@ -132,7 +131,7 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
               <div className="modal-open-ticket__header-info">
                 <h3 className="modal-open-ticket__header-title">
                   Ticket #{ticket?.id}
-                  {dev?.machine__Name ? ` – ${dev?.machine__Name}` : ""}
+                  {dev?.machine_Name ? ` – ${dev?.machine_Name}` : ""}
                 </h3>
                 <div className="modal-open-ticket__header-subtitle">
                   {dev?.customer ||
@@ -180,9 +179,9 @@ const ModalCloseTicket: React.FC<ModalCloseTicketProps> = ({
             <div className="modal-open-ticket__compact-item">
               <strong>Ticket ID:</strong> {ticket?.id}
             </div>
-            {dev?.machine__Name && (
+            {dev?.machine_Name && (
               <div className="modal-open-ticket__compact-item">
-                <strong>Macchina:</strong> {dev.machine__Name}
+                <strong>Macchina:</strong> {dev.machine_Name}
               </div>
             )}
             {(dev as any)?.waste && (

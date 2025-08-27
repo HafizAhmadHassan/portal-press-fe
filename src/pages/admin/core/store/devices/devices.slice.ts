@@ -1,5 +1,5 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { Device } from '@store_admin/devices/devices.types.ts';
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { Device } from "@store_admin/devices/devices.types.ts";
 
 const initialState: any = {
   devices: [], // Devices paginati
@@ -15,21 +15,21 @@ const initialState: any = {
     totalPages: 0,
   },
   filters: {
-    search: '',
-    waste: '',
+    search: "",
+    waste: "",
     status: null,
-    city: '',
-    province: '',
-    customer: '',
-    statusMachineBlocked: null,
-    statusReadyD75_3_7: null,
-    sortBy: 'createdAt',
-    sortOrder: 'desc',
+    city: "",
+    province: "",
+    customer: "",
+    status_Machine_Blocked: null,
+    tatus_ready_d75_3_7: null,
+    sortBy: "createdAt",
+    sortOrder: "desc",
   },
 };
 
 const devicesSlice = createSlice({
-  name: 'devices',
+  name: "devices",
   initialState,
   reducers: {
     // Imposta lista devices paginati
@@ -80,9 +80,13 @@ const devicesSlice = createSlice({
     // Rimuovi device da entrambe le liste
     removeDevice: (state, action: PayloadAction<string>) => {
       // Rimuovi dai devices paginati
-      state.devices = state.devices.filter((device: Device) => device.id !== action.payload);
+      state.devices = state.devices.filter(
+        (device: Device) => device.id !== action.payload
+      );
       // Rimuovi da tutti i devices
-      state.allDevices = state.allDevices.filter((device: Device) => device.id !== action.payload);
+      state.allDevices = state.allDevices.filter(
+        (device: Device) => device.id !== action.payload
+      );
 
       state.pagination.total = Math.max(0, state.pagination.total - 1);
 
@@ -97,11 +101,18 @@ const devicesSlice = createSlice({
       const idsToRemove = new Set(action.payload);
 
       // Rimuovi dai devices paginati
-      state.devices = state.devices.filter((device: Device) => !idsToRemove.has(device.id));
+      state.devices = state.devices.filter(
+        (device: Device) => !idsToRemove.has(device.id)
+      );
       // Rimuovi da tutti i devices
-      state.allDevices = state.allDevices.filter((device: Device) => !idsToRemove.has(device.id));
+      state.allDevices = state.allDevices.filter(
+        (device: Device) => !idsToRemove.has(device.id)
+      );
 
-      state.pagination.total = Math.max(0, state.pagination.total - action.payload.length);
+      state.pagination.total = Math.max(
+        0,
+        state.pagination.total - action.payload.length
+      );
 
       // Rimuovi selectedDevice se è incluso
       if (state.selectedDevice && idsToRemove.has(state.selectedDevice.id)) {
@@ -128,7 +139,7 @@ const devicesSlice = createSlice({
     },
 
     // Imposta filtri
-    setFilters: (state, action: PayloadAction<Partial<any['filters']>>) => {
+    setFilters: (state, action: PayloadAction<Partial<any["filters"]>>) => {
       state.filters = { ...state.filters, ...action.payload };
     },
 
@@ -237,17 +248,24 @@ const devicesSlice = createSlice({
 
       // Aggiorna nei devices paginati
       state.devices = state.devices.map((device: Device) =>
-        idsSet.has(device.id) ? { ...device, statusMachineBlocked: blocked } : device
+        idsSet.has(device.id)
+          ? { ...device, status_Machine_Blocked: blocked }
+          : device
       );
 
       // Aggiorna in tutti i devices
       state.allDevices = state.allDevices.map((device: Device) =>
-        idsSet.has(device.id) ? { ...device, statusMachineBlocked: blocked } : device
+        idsSet.has(device.id)
+          ? { ...device, status_Machine_Blocked: blocked }
+          : device
       );
 
       // Aggiorna selectedDevice se incluso
       if (state.selectedDevice && idsSet.has(state.selectedDevice.id)) {
-        state.selectedDevice = { ...state.selectedDevice, statusMachineBlocked: blocked };
+        state.selectedDevice = {
+          ...state.selectedDevice,
+          status_Machine_Blocked: blocked,
+        };
       }
     },
   },

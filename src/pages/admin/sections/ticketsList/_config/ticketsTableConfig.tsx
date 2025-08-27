@@ -7,7 +7,7 @@ import ModalTicketDetails from "../_modals/ModalDetailTicket/ModalTicketDetail";
 
 // Info minime del device collegate al ticket (arricchite dal join nell'hook)
 type DeviceLite = {
-  machine__Name?: string;
+  machine_Name?: string;
   city?: string;
   province?: string;
   customer_Name?: string;
@@ -121,7 +121,7 @@ export const createTicketsTableConfig = ({
 
         return (
           <div>
-            {t.device.machine__Name && (
+            {t.device.machine_Name && (
               <div
                 style={{
                   fontSize: "14px",
@@ -129,7 +129,7 @@ export const createTicketsTableConfig = ({
                   color: "var(--text-primary)",
                 }}
               >
-                {t.device.machine__Name}
+                {t.device.machine_Name}
               </div>
             )}
             {(t.device.city || t.device.province) && (
@@ -155,7 +155,7 @@ export const createTicketsTableConfig = ({
       sortable: true,
       render: (_: any, t: TicketWithDevice) => {
         const raw =
-          (t as any).date_Time || (t as any).date_time || (t as any).created_at;
+          (t as any).date_Time || (t as any).date_time || (t as any).created_At;
         if (!raw)
           return <span style={{ color: "var(--text-secondary)" }}>N/A</span>;
         const d = new Date(raw);

@@ -1,15 +1,22 @@
-import React from 'react';
-import { Package, TrendingUp, AlertTriangle, Plus, BarChart3, ArrowUp } from 'lucide-react';
+import React from "react";
+import {
+  Package,
+  TrendingUp,
+  AlertTriangle,
+  Plus,
+  BarChart3,
+  ArrowUp,
+} from "lucide-react";
 
-import styles from './Products.module.scss';
-import CircularProgress from '../shared/CircularProgress';
+import styles from "./Products.module.scss";
+import CircularProgress from "../shared/CircularProgress";
 
 interface CategoryData {
   name: string;
   sales: number;
   stock: number;
   growth: string;
-  status: 'high' | 'medium' | 'low' | 'critical';
+  status: "high" | "medium" | "low" | "critical";
 }
 
 interface CategoryStats {
@@ -27,7 +34,7 @@ interface ProductsOverviewProps {
 
 const ProductsOverview: React.FC<ProductsOverviewProps> = ({
   categoryStats,
-  loading = false
+  loading = false,
 }) => {
   const defaultStats: CategoryStats = {
     totalCategories: 8,
@@ -35,49 +42,88 @@ const ProductsOverview: React.FC<ProductsOverviewProps> = ({
     lowStock: 3,
     newArrivals: 15,
     byCategory: [
-      { name: "Cibo Cani", sales: 1200, stock: 850, growth: "+15%", status: "high" },
-      { name: "Cibo Gatti", sales: 980, stock: 620, growth: "+8%", status: "medium" },
-      { name: "Giocattoli", sales: 450, stock: 780, growth: "+23%", status: "high" },
-      { name: "Accessori", sales: 380, stock: 340, growth: "+5%", status: "low" },
-      { name: "Cucce e Trasportini", sales: 290, stock: 180, growth: "+12%", status: "medium" },
-      { name: "Igiene e Cura", sales: 420, stock: 95, growth: "+18%", status: "critical" }
-    ]
+      {
+        name: "Cibo Cani",
+        sales: 1200,
+        stock: 850,
+        growth: "+15%",
+        status: "high",
+      },
+      {
+        name: "Cibo Gatti",
+        sales: 980,
+        stock: 620,
+        growth: "+8%",
+        status: "medium",
+      },
+      {
+        name: "Giocattoli",
+        sales: 450,
+        stock: 780,
+        growth: "+23%",
+        status: "high",
+      },
+      {
+        name: "Accessori",
+        sales: 380,
+        stock: 340,
+        growth: "+5%",
+        status: "low",
+      },
+      {
+        name: "Cucce e Trasportini",
+        sales: 290,
+        stock: 180,
+        growth: "+12%",
+        status: "medium",
+      },
+      {
+        name: "Igiene e Cura",
+        sales: 420,
+        stock: 95,
+        growth: "+18%",
+        status: "critical",
+      },
+    ],
   };
 
   const stats = categoryStats || defaultStats;
 
-  const getStatusColor = (status: CategoryData['status']) => {
+  const getStatusColor = (status: CategoryData["status"]) => {
     switch (status) {
-      case 'high':
-        return 'var(--success-color)';
-      case 'medium':
-        return 'var(--warning-color)';
-      case 'low':
-        return 'var(--orange-color)';
-      case 'critical':
-        return 'var(--error-color)';
+      case "high":
+        return "var(--success-color)";
+      case "medium":
+        return "var(--warning-color)";
+      case "low":
+        return "var(--orange-color)";
+      case "critical":
+        return "var(--error-color)";
       default:
-        return 'var(--gray-400)';
+        return "var(--gray-400)";
     }
   };
 
-  const getStatusLabel = (status: CategoryData['status']) => {
+  const getStatusLabel = (status: CategoryData["status"]) => {
     switch (status) {
-      case 'high':
-        return 'Ottimo';
-      case 'medium':
-        return 'Buono';
-      case 'low':
-        return 'Basso';
-      case 'critical':
-        return 'Critico';
+      case "high":
+        return "Ottimo";
+      case "medium":
+        return "Buono";
+      case "low":
+        return "Basso";
+      case "critical":
+        return "Critico";
       default:
-        return 'N/A';
+        return "N/A";
     }
   };
 
   const totalSales = stats.byCategory.reduce((sum, cat) => sum + cat.sales, 0);
-  const averageStock = Math.round(stats.byCategory.reduce((sum, cat) => sum + cat.stock, 0) / stats.byCategory.length);
+  const averageStock = Math.round(
+    stats.byCategory.reduce((sum, cat) => sum + cat.stock, 0) /
+      stats.byCategory.length
+  );
 
   if (loading) {
     return (
@@ -125,7 +171,9 @@ const ProductsOverview: React.FC<ProductsOverviewProps> = ({
               <Package size={24} />
             </div>
             <div className={styles.summaryContent}>
-              <div className={styles.summaryValue}>{totalSales.toLocaleString()}</div>
+              <div className={styles.summaryValue}>
+                {totalSales.toLocaleString()}
+              </div>
               <div className={styles.summaryLabel}>Vendite Totali</div>
               <div className={styles.summaryGrowth}>
                 <ArrowUp size={12} />
@@ -155,9 +203,7 @@ const ProductsOverview: React.FC<ProductsOverviewProps> = ({
             <div className={styles.summaryContent}>
               <div className={styles.summaryValue}>{stats.lowStock}</div>
               <div className={styles.summaryLabel}>Stock Basso</div>
-              <div className={styles.summaryAlert}>
-                Richiede attenzione
-              </div>
+              <div className={styles.summaryAlert}>Richiede attenzione</div>
             </div>
           </div>
         </div>
@@ -169,12 +215,15 @@ const ProductsOverview: React.FC<ProductsOverviewProps> = ({
             <div className={styles.performanceHeader}>
               <h3>Performance Categorie</h3>
               <span className={styles.performanceSubtitle}>
-                {stats.topSelling}/{stats.totalCategorie} categorie top performer
+                {stats.topSelling}/{stats.totalCategories} categorie top
+                performer
               </span>
             </div>
             <div className={styles.performanceChart}>
-              <CircularProgress 
-                percentage={Math.round((stats.topSelling / stats.totalCategories) * 100)} 
+              <CircularProgress
+                percentage={Math.round(
+                  (stats.topSelling / stats.totalCategories) * 100
+                )}
                 size={120}
                 color="var(--primary-color)"
               />
@@ -200,29 +249,37 @@ const ProductsOverview: React.FC<ProductsOverviewProps> = ({
                 Ordina per vendite
               </button>
             </div>
-            
+
             <div className={styles.categoriesGrid}>
               {stats.byCategory.map((category, index) => (
                 <div key={index} className={styles.categoryCard}>
                   <div className={styles.categoryHeader}>
                     <div className={styles.categoryInfo}>
                       <Package size={16} />
-                      <span className={styles.categoryName}>{category.name}</span>
+                      <span className={styles.categoryName}>
+                        {category.name}
+                      </span>
                     </div>
-                    <div 
+                    <div
                       className={styles.statusIndicator}
-                      style={{ backgroundColor: getStatusColor(category.status) }}
+                      style={{
+                        backgroundColor: getStatusColor(category.status),
+                      }}
                       title={getStatusLabel(category.status)}
                     ></div>
                   </div>
-                  
+
                   <div className={styles.categoryMetrics}>
                     <div className={styles.categoryMetric}>
-                      <span className={styles.metricValue}>{category.sales.toLocaleString()}</span>
+                      <span className={styles.metricValue}>
+                        {category.sales.toLocaleString()}
+                      </span>
                       <span className={styles.metricLabel}>Vendite</span>
                     </div>
                     <div className={styles.categoryMetric}>
-                      <span className={styles.metricValue}>{category.stock}</span>
+                      <span className={styles.metricValue}>
+                        {category.stock}
+                      </span>
                       <span className={styles.metricLabel}>In Stock</span>
                     </div>
                   </div>
@@ -233,11 +290,14 @@ const ProductsOverview: React.FC<ProductsOverviewProps> = ({
                       <span>{category.growth}</span>
                     </div>
                     <div className={styles.stockProgress}>
-                      <div 
+                      <div
                         className={styles.stockProgressFill}
-                        style={{ 
-                          width: `${Math.min((category.stock / 1000) * 100, 100)}%`,
-                          backgroundColor: getStatusColor(category.status)
+                        style={{
+                          width: `${Math.min(
+                            (category.stock / 1000) * 100,
+                            100
+                          )}%`,
+                          backgroundColor: getStatusColor(category.status),
                         }}
                       ></div>
                     </div>

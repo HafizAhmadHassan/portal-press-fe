@@ -33,7 +33,7 @@ export const ModalRiActiveDevice: React.FC<Props> = ({
       triggerButton={triggerButton || defaultTriggerButton}
       title="Riattivazione Device"
       description={`Sei sicuro di voler riattivare il device "${
-        device?.machine__Name || "Sconosciuto"
+        device?.machine_Name || "Sconosciuto"
       }"?`}
       confirmText="Riattiva Device"
       cancelText="Annulla"
@@ -57,7 +57,7 @@ export const ModalRiActiveDevice: React.FC<Props> = ({
 
               <div className="device-primary-info">
                 {/* Se vuoi riattivare il nome, togli il commento */}
-                {/* <h4 className="device-name">{device?.machine__Name || 'Nome non disponibile'}</h4> */}
+                {/* <h4 className="device-name">{device?.machine_Name || 'Nome non disponibile'}</h4> */}
                 <p className="device-status">
                   {device?.address || "Indirizzo non disponibile"}
                 </p>

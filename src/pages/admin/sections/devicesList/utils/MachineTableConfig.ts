@@ -18,7 +18,7 @@ const machineTableConfig: any = {
       },
     },
     {
-      key: "machine__Name",
+      key: "machine_Name",
       header: "Nome Macchina",
       type: "text",
     },
@@ -69,7 +69,7 @@ const machineTableConfig: any = {
   sorting: {
     enabled: true,
     defaultSort: {
-      key: "machine__Name",
+      key: "machine_Name",
       direction: "asc",
     },
   },

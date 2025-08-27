@@ -65,7 +65,6 @@ export const ModalDetails: React.FC<ModalDetailsProps> = ({ user }) => {
         <SimpleButton size="bare" color="primary" variant="ghost" icon={Eye} />
       }
       cancelText="Chiudi"
-      variant="primary"
     >
       <div className={styles.modalContent}>
         {/* Header */}

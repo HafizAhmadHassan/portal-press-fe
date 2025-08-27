@@ -2,23 +2,23 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { plcApi } from "./plc.api";
 import { setItems, setPagination } from "./plc.slice";
 
-export const loadPlc = createAsyncThunk(
+export const loadPlc = createAsyncThunk<any, void>(
   "plc/load",
-  async (params: any = {}, { getState, dispatch, rejectWithValue }) => {
+  async (_: void, { getState, dispatch, rejectWithValue }) => {
     try {
       const state: any = getState();
       const { filters, pagination } = state.plc;
 
       const query: any = {
-        page: params.page ?? pagination.page,
-        page_size: params.page_size ?? pagination.limit,
-        codice: params.codice ?? filters.codice,
-        municipility: params.municipility ?? filters.municipility,
-        customer: params.customer ?? filters.customer,
-        waste: params.waste ?? filters.waste,
-        search: params.search ?? filters.search,
-        sortBy: params.sortBy ?? filters.sortBy,
-        sortOrder: params.sortOrder ?? filters.sortOrder,
+        page: pagination.page,
+        page_size: pagination.limit,
+        codice: filters.codice,
+        municipility: filters.municipility,
+        customer: filters.customer,
+        waste: filters.waste,
+        search: filters.search,
+        sortBy: filters.sortBy,
+        sortOrder: filters.sortOrder,
       };
 
       const res: any = await dispatch(

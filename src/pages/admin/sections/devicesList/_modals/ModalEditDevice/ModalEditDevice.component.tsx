@@ -21,7 +21,7 @@ interface ModalEditDeviceProps {
 }
 
 interface FormData {
-  machineName: string;
+  machine_Name: string;
   waste: string;
   status: number;
   linuxVersion: string;
@@ -34,8 +34,8 @@ interface FormData {
   country: string;
   municipality: string;
   address: string;
-  statusReadyD75_3_7: boolean;
-  statusMachineBlocked: boolean;
+  tatus_ready_d75_3_7: boolean;
+  status_Machine_Blocked: boolean;
   codiceGps: string;
   sheetName: string;
   customerName: string;
@@ -53,7 +53,7 @@ export const ModalEditDevice: React.FC<ModalEditDeviceProps> = ({
   onSave,
 }) => {
   const deviceToFormData = (d: Device): FormData => ({
-    machineName: d.machine__Name || "",
+    machine_Name: d.machine_Name || "",
     waste: d.waste || "",
     status: d.status ?? 0,
     linuxVersion: d.linux_Version || "",
@@ -66,8 +66,8 @@ export const ModalEditDevice: React.FC<ModalEditDeviceProps> = ({
     country: d.country || "",
     municipality: d.municipality || "",
     address: d.address || "",
-    statusReadyD75_3_7: d.status_ready_d75_3_7 || false,
-    statusMachineBlocked: d.status_Machine_Blocked || false,
+    tatus_ready_d75_3_7: d.status_ready_d75_3_7 || false,
+    status_Machine_Blocked: d.status_Machine_Blocked || false,
     codiceGps: d.codice_Gps || "",
     sheetName: d.sheet_Name || "",
     customerName: d.customer_Name || "",
@@ -81,7 +81,7 @@ export const ModalEditDevice: React.FC<ModalEditDeviceProps> = ({
   });
 
   const formDataToDevice = (f: FormData) => ({
-    machine__Name: f.machineName,
+    machine_Name: f.machine_Name,
     waste: f.waste || null,
     status: f.status,
     linux_Version: f.linuxVersion || null,
@@ -94,8 +94,8 @@ export const ModalEditDevice: React.FC<ModalEditDeviceProps> = ({
     country: f.country || null,
     municipality: f.municipality || null,
     address: f.address || null,
-    status_ready_d75_3_7: f.statusReadyD75_3_7,
-    status_Machine_Blocked: f.statusMachineBlocked,
+    status_ready_d75_3_7: f.tatus_ready_d75_3_7,
+    status_Machine_Blocked: f.status_Machine_Blocked,
     codice_Gps: f.codiceGps || null,
     sheet_Name: f.sheetName || null,
     customer_Name: f.customerName || null,
@@ -146,7 +146,7 @@ export const ModalEditDevice: React.FC<ModalEditDeviceProps> = ({
     });
   };
 
-  const displayName = device.machine__Name || `Dispositivo ${device.id}`;
+  const displayName = device.machine_Name || `Dispositivo ${device.id}`;
 
   return (
     <Modal
@@ -158,7 +158,7 @@ export const ModalEditDevice: React.FC<ModalEditDeviceProps> = ({
       confirmText="Salva Modifiche"
       cancelText="Annulla"
       onConfirm={handleSave}
-      variant="primary"
+
       // loading={isLoading}
     >
       <div className={styles.modalContent}>
@@ -203,7 +203,7 @@ export const ModalEditDevice: React.FC<ModalEditDeviceProps> = ({
             <div>
               <p className={styles.systemLabel}>Data Creazione</p>
               <p className={styles.systemValue}>
-                {formatDate(device.created_at)}
+                {formatDate(device.created_At)}
               </p>
             </div>
           </div>
@@ -212,7 +212,7 @@ export const ModalEditDevice: React.FC<ModalEditDeviceProps> = ({
             <div>
               <p className={styles.systemLabel}>Ultimo Aggiornamento</p>
               <p className={styles.systemValue}>
-                {formatDate(device.updated_at)}
+                {formatDate(device.updated_At)}
               </p>
             </div>
           </div>
@@ -228,9 +228,11 @@ export const ModalEditDevice: React.FC<ModalEditDeviceProps> = ({
           <div className={styles.formGrid}>
             <Input
               label="Nome Macchina"
-              name="machineName"
-              value={formData.machineName}
-              onChange={(e) => handleInputChange("machineName", e.target.value)}
+              name="machine_Name"
+              value={formData.machine_Name}
+              onChange={(e) =>
+                handleInputChange("machine_Name", e.target.value)
+              }
               placeholder="Inserisci nome macchina"
               icon={Monitor}
               disabled={isLoading}
@@ -502,9 +504,9 @@ export const ModalEditDevice: React.FC<ModalEditDeviceProps> = ({
             <Checkbox
               label="Status Ready D75_3_7"
               description="Indica se il dispositivo è pronto per l'uso"
-              checked={formData.statusReadyD75_3_7}
+              checked={formData.tatus_ready_d75_3_7}
               onChange={(checked) =>
-                handleInputChange("statusReadyD75_3_7", checked)
+                handleInputChange("tatus_ready_d75_3_7", checked)
               }
               disabled={isLoading}
               color="success"
@@ -512,9 +514,9 @@ export const ModalEditDevice: React.FC<ModalEditDeviceProps> = ({
             <Checkbox
               label="Macchina Bloccata"
               description="Indica se la macchina è bloccata"
-              checked={formData.statusMachineBlocked}
+              checked={formData.status_Machine_Blocked}
               onChange={(checked) =>
-                handleInputChange("statusMachineBlocked", checked)
+                handleInputChange("status_Machine_Blocked", checked)
               }
               disabled={isLoading}
               color="danger"

@@ -152,7 +152,7 @@ export const DevicesListSections: React.FC = () => {
 
   const handleDeleteDevice = useCallback(
     async (device: Device) => {
-      const name = (device as any).machineName || device.id;
+      const name = (device as any).machine_Name || device.id;
       if (
         window.confirm(`Sei sicuro di voler eliminare il dispositivo ${name}?`)
       ) {

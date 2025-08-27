@@ -217,9 +217,9 @@ export const DeviceCard: React.FC<DeviceCardProps> = ({
                 IP: {device.ip_Router}
               </span>
             )}
-            {device.codice_GPS && (
+            {device.codice_Gps && (
               <span className={styles["tech-detail"]}>
-                GPS: {device.codice_GPS}
+                GPS: {device.codice_Gps}
               </span>
             )}
           </div>

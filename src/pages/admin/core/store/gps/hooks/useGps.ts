@@ -12,7 +12,6 @@ export const useGps = (params: GpsQueryParams) => {
   const { data, isLoading, isFetching, error, refetch } = useGetGpsQuery(
     params,
     {
-      keepPreviousData: true,
       pollingInterval: 0,
     }
   );

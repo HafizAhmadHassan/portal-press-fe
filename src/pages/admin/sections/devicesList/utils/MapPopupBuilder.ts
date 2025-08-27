@@ -15,7 +15,7 @@ export const createDevicePopup = (device: Device): string => {
       <!-- HEADER -->
       <div class="popup-header">
         <div class="popup-title">${
-          device.machineName || `Dispositivo ${device.id}`
+          device.machine_Name || `Dispositivo ${device.id}`
         }</div>
         <span class="status-badge status-${statusColor}">${status}</span>
       </div>
@@ -25,7 +25,7 @@ export const createDevicePopup = (device: Device): string => {
         <div class="popup-row">
           <span class="popup-label">Cliente</span>
           <span class="popup-value">${
-            device.customer || device.customerName || "N/A"
+            device.customer || device.customer_Name || "N/A"
           }</span>
         </div>
         <div class="popup-row">

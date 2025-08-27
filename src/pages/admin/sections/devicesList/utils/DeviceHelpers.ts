@@ -25,8 +25,8 @@ export const DeviceHelpers = {
   },
 
   isActive: (device: Device) => device.status === 1,
-  isBlocked: (device: Device) => device.statusMachineBlocked === true,
-  isReady: (device: Device) => device.statusReadyD75_3_7 === true,
+  isBlocked: (device: Device) => device.status_Machine_Blocked === true,
+  isReady: (device: Device) => device.status_ready_d75_3_7 === true,
 
   getFullAddress: (device: Device) => {
     const parts = [
@@ -67,7 +67,7 @@ export const DeviceHelpers = {
       const device = devices.find((d) => d.id === id)!;
       return {
         id: device.id.toString(),
-        name: device.machineName || `Dispositivo ${device.id}`,
+        name: device.machine_Name || `Dispositivo ${device.id}`,
         gps_y: coords!.gps_y,
         gps_x: coords!.gps_x,
         activeStatus: DeviceHelpers.isActive(device),

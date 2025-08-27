@@ -28,10 +28,10 @@ export default function DateHoursInfo({
           </div>
           <div className={stylesDateHours.dateCardContent}>
             <span className={stylesDateHours.dateValue}>
-              {formatDate(device?.created_at)}
+              {formatDate(device?.created_At)}
             </span>
             <span className={stylesDateHours.dateRelative}>
-              {device?.created_at ? getRelativeTime(device?.created_at) : "N/A"}
+              {device?.created_At ? getRelativeTime(device?.created_At) : "N/A"}
             </span>
           </div>
         </div>
@@ -45,11 +45,11 @@ export default function DateHoursInfo({
           </div>
           <div className={stylesDateHours.dateCardContent}>
             <span className={stylesDateHours.dateValue}>
-              {formatDate(device?.updated_at)}
+              {formatDate(device?.updated_At)}
             </span>
             <span className={stylesDateHours.dateRelative}>
-              {device?.updated_at
-                ? getRelativeTime(device?.updated_at)
+              {device?.updated_At
+                ? getRelativeTime(device?.updated_At)
                 : "Mai aggiornato"}
             </span>
           </div>

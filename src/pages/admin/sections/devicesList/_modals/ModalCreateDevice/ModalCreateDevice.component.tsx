@@ -26,7 +26,7 @@ type WasteKind =
   | "";
 
 interface FormData {
-  machineName: string;
+  machine_Name: string;
   status: number;
   waste: WasteKind;
   linuxVersion: string;
@@ -39,8 +39,8 @@ interface FormData {
   country: string;
   municipality: string;
   address: string;
-  statusReadyD75_3_7: boolean;
-  statusMachineBlocked: boolean;
+  tatus_ready_d75_3_7: boolean;
+  status_Machine_Blocked: boolean;
   codiceGps: string;
   sheetName: string;
   customerName: string;
@@ -54,7 +54,7 @@ interface FormData {
 }
 
 interface FormErrors {
-  machineName?: string;
+  machine_Name?: string;
   ip_Router?: string;
   general?: string;
 }
@@ -64,7 +64,7 @@ export const ModalCreateDevice: React.FC<ModalCreateDeviceProps> = ({
   triggerButton,
 }) => {
   const [formData, setFormData] = useState<FormData>({
-    machineName: "",
+    machine_Name: "",
     status: 1,
     waste: "",
     linuxVersion: "",
@@ -77,8 +77,8 @@ export const ModalCreateDevice: React.FC<ModalCreateDeviceProps> = ({
     country: "",
     municipality: "",
     address: "",
-    statusReadyD75_3_7: false,
-    statusMachineBlocked: false,
+    tatus_ready_d75_3_7: false,
+    status_Machine_Blocked: false,
     codiceGps: "",
     sheetName: "",
     customerName: "",
@@ -113,7 +113,7 @@ export const ModalCreateDevice: React.FC<ModalCreateDeviceProps> = ({
   // ✅ camelCase → snake_case per API
   const convertToSnakeCase = (data: FormData) => {
     return {
-      machine__Name: data.machineName,
+      machine_Name: data.machine_Name,
       status: data.status,
       waste: data.waste || null,
       linux_Version: data.linuxVersion || null,
@@ -126,8 +126,8 @@ export const ModalCreateDevice: React.FC<ModalCreateDeviceProps> = ({
       country: data.country || null,
       municipality: data.municipality || null,
       address: data.address || null,
-      status_ready_d75_3_7: data.statusReadyD75_3_7,
-      status_Machine_Blocked: data.statusMachineBlocked,
+      status_ready_d75_3_7: data.tatus_ready_d75_3_7,
+      status_Machine_Blocked: data.status_Machine_Blocked,
       codice_Gps: data.codiceGps || null,
       sheet_Name: data.sheetName || null,
       customer_Name: data.customerName || null,
@@ -144,10 +144,10 @@ export const ModalCreateDevice: React.FC<ModalCreateDeviceProps> = ({
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
-    if (!formData.machineName.trim()) {
-      newErrors.machineName = "Nome macchina è obbligatorio";
-    } else if (formData.machineName.length < 2) {
-      newErrors.machineName = "Nome macchina deve essere almeno 2 caratteri";
+    if (!formData.machine_Name.trim()) {
+      newErrors.machine_Name = "Nome macchina è obbligatorio";
+    } else if (formData.machine_Name.length < 2) {
+      newErrors.machine_Name = "Nome macchina deve essere almeno 2 caratteri";
     }
 
     if (
@@ -188,7 +188,7 @@ export const ModalCreateDevice: React.FC<ModalCreateDeviceProps> = ({
 
       // reset
       setFormData({
-        machineName: "",
+        machine_Name: "",
         status: 1,
         waste: "",
         linuxVersion: "",
@@ -201,8 +201,8 @@ export const ModalCreateDevice: React.FC<ModalCreateDeviceProps> = ({
         country: "",
         municipality: "",
         address: "",
-        statusReadyD75_3_7: false,
-        statusMachineBlocked: false,
+        tatus_ready_d75_3_7: false,
+        status_Machine_Blocked: false,
         codiceGps: "",
         sheetName: "",
         customerName: "",

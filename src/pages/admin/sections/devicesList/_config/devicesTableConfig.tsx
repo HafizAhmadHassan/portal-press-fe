@@ -33,14 +33,14 @@ export const createDevicesTableConfig = ({
   return {
     columns: [
       {
-        key: "machine__Name",
+        key: "machine_Name",
         header: "Nome Macchina",
         type: "custom" as const,
         width: "200px",
         sortable: true,
         render: (_: any, device: Device) => (
           <div className={styles.nameCell}>
-            {device.machine__Name || `Device ${device.id}`}
+            {device.machine_Name || `Device ${device.id}`}
           </div>
         ),
       },
@@ -108,15 +108,15 @@ export const createDevicesTableConfig = ({
         ),
       },
       {
-        key: "created_at",
+        key: "created_At",
         header: "Data Creazione",
         type: "custom" as const,
         width: "150px",
         sortable: true,
         render: (_: any, device: Device) => {
-          if (!device.created_at)
+          if (!device.created_At)
             return <span className={styles.muted}>N/A</span>;
-          const date = new Date(device.created_at);
+          const date = new Date(device.created_At);
           return (
             <div className={styles.dateCell}>
               <div className={styles.datePrimary}>

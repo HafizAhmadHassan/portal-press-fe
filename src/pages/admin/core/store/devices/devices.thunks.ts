@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import type { RootState } from "@store_admin/store.ts";
+import type { RootState } from "@root/store.ts";
 import type {
   BulkActionRequest,
   CreateDeviceRequest,
@@ -34,9 +34,10 @@ export const loadDevices = createAsyncThunk(
         province: params.province ?? currentFilters.province,
         customer: params.customer ?? currentFilters.customer,
         status_Machine_Blocked:
-          params.status_Machine_Blocked ?? currentFilters.statusMachineBlocked,
+          params.status_Machine_Blocked ??
+          currentFilters.status_Machine_Blocked,
         status_ready_d75_3_7:
-          params.status_ready_d75_3_7 ?? currentFilters.statusReadyD75_3_7,
+          params.status_ready_d75_3_7 ?? currentFilters.tatus_ready_d75_3_7,
         sortBy: params.sortBy ?? currentFilters.sortBy,
         sortOrder: params.sortOrder ?? currentFilters.sortOrder,
       };
@@ -114,14 +115,14 @@ export const createNewDevice = createAsyncThunk(
         return rejectWithValue("Device data is required");
       }
 
-      if (!deviceData.machine__Name) {
-        console.error("THUNK - machine__Name is missing from deviceData!");
-        return rejectWithValue("machine__Name is required");
+      if (!deviceData.machine_Name) {
+        console.error("THUNK - machine_Name is missing from deviceData!");
+        return rejectWithValue("machine_Name is required");
       }
 
       // ✅ Assicurati che il payload abbia tutti i campi richiesti
       const payload: CreateDeviceRequest = {
-        machine__Name: deviceData.machine__Name,
+        machine_Name: deviceData.machine_Name,
         status: deviceData.status ?? 1,
         waste: deviceData.waste || null,
         linux_Version: deviceData.linux_Version || null,
@@ -161,7 +162,7 @@ export const createNewDevice = createAsyncThunk(
       console.log("THUNK - Device created successfully:", newDevice);
 
       // Ricarica sia i devices paginati che tutti i devices
-      await dispatch(loadDevices());
+      await dispatch(loadDevices({}));
       await dispatch(loadAllDevices());
 
       return newDevice;
@@ -208,7 +209,7 @@ export const updateExistingDevice = createAsyncThunk(
       ).unwrap();
 
       // Ricarica sia i devices paginati che tutti i devices
-      await dispatch(loadDevices());
+      await dispatch(loadDevices({}));
       await dispatch(loadAllDevices());
 
       return updatedDevice;
@@ -230,7 +231,7 @@ export const deleteExistingDevice = createAsyncThunk(
       ).unwrap();
 
       // Ricarica sia i devices paginati che tutti i devices
-      await dispatch(loadDevices());
+      await dispatch(loadDevices({}));
       await dispatch(loadAllDevices());
 
       return deviceId;
@@ -317,7 +318,7 @@ export const performBulkAction = createAsyncThunk(
       ).unwrap();
 
       // Ricarica sia i devices paginati che tutti i devices
-      await dispatch(loadDevices());
+      await dispatch(loadDevices({}));
       await dispatch(loadAllDevices());
 
       return {

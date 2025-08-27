@@ -75,13 +75,13 @@ export default function ModalDeviceHeader({
           >
             {device?.status === 1 ? "Attivo" : "Inattivo"}
           </span>
-          {device?.statusMachineBlocked && (
+          {device?.status_Machine_Blocked && (
             <span className={styles.blockedBadge}>
               <Shield className={styles.badgeIcon} />
               Bloccato
             </span>
           )}
-          {device?.statusReadyD75_3_7 && (
+          {device?.tatus_ready_d75_3_7 && (
             <span className={styles.readyBadge}>
               <CheckCircle className={styles.badgeIcon} />
               Pronto

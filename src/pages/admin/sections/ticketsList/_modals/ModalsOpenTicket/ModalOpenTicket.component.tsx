@@ -29,7 +29,7 @@ export const ModalOpenTicket: React.FC<ModalOpenTicketProps> = ({
 
   // customer è prelevato dal device e NON è modificabile
   const [formData, setFormData] = useState<MessageCreate>({
-    machine: device.id,
+    machine: Number(device.id),
     problema: [],
     status: 1, // default 1
     open_Description: "",
@@ -83,7 +83,6 @@ export const ModalOpenTicket: React.FC<ModalOpenTicketProps> = ({
       confirmText="Apri Ticket"
       cancelText="Annulla"
       onConfirm={handleSave}
-      variant="primary"
       modalClassName="modal-open-ticket"
     >
       <div className="modal-open-ticket__content">
@@ -96,7 +95,7 @@ export const ModalOpenTicket: React.FC<ModalOpenTicketProps> = ({
               </div>
               <div className="modal-open-ticket__header-info">
                 <h3 className="modal-open-ticket__header-title">
-                  {device.machine__Name}
+                  {device.machine_Name}
                 </h3>
                 <div className="modal-open-ticket__header-subtitle">
                   {device.customer || "Cliente N/D"} •{" "}

@@ -22,7 +22,7 @@ export const ModalCreateGps: React.FC<Props> = ({ onSave, triggerButton }) => {
     waste: "",
     address: "",
   });
-  const [loading, setLoading] = useState(false);
+  const [, /* loading */ setLoading] = useState(false);
   const [errors, setErrors] = useState<{
     codice?: string;
     gps_x?: string;
@@ -80,7 +80,6 @@ export const ModalCreateGps: React.FC<Props> = ({ onSave, triggerButton }) => {
       cancelText="Annulla"
       onConfirm={handleSave}
       // loading={loading}
-      variant="filled"
     >
       <div className={styles.modalContent}>
         <div className={styles.section}>
@@ -91,6 +90,7 @@ export const ModalCreateGps: React.FC<Props> = ({ onSave, triggerButton }) => {
 
           <div className={styles.formGrid}>
             <Input
+              name="codice"
               label="Codice"
               value={form.codice || ""}
               onChange={(e) => set("codice", e.target.value)}
@@ -99,6 +99,7 @@ export const ModalCreateGps: React.FC<Props> = ({ onSave, triggerButton }) => {
               error={errors.codice}
             />
             <Input
+              name="customer"
               label="Cliente"
               value={form.customer || ""}
               onChange={(e) => set("customer", e.target.value)}
@@ -107,6 +108,7 @@ export const ModalCreateGps: React.FC<Props> = ({ onSave, triggerButton }) => {
 
           <div className={styles.formGrid}>
             <Input
+              name="gps_x"
               label="gps_x (lat)"
               value={form.gps_x || ""}
               onChange={(e) => set("gps_x", e.target.value)}
@@ -115,6 +117,7 @@ export const ModalCreateGps: React.FC<Props> = ({ onSave, triggerButton }) => {
               error={errors.gps_x}
             />
             <Input
+              name="gps_y"
               label="gps_y (lng)"
               value={form.gps_y || ""}
               onChange={(e) => set("gps_y", e.target.value)}
@@ -126,12 +129,14 @@ export const ModalCreateGps: React.FC<Props> = ({ onSave, triggerButton }) => {
 
           <div className={styles.formGrid}>
             <Input
+              name="municipility"
               label="Comune"
               value={form.municipility || ""}
               onChange={(e) => set("municipility", e.target.value)}
               icon={MapPin}
             />
             <Input
+              name="waste"
               label="Tipo rifiuto"
               value={form.waste || ""}
               onChange={(e) => set("waste", e.target.value)}
@@ -140,6 +145,7 @@ export const ModalCreateGps: React.FC<Props> = ({ onSave, triggerButton }) => {
 
           <div className={styles.fullWidth}>
             <Input
+              name="address"
               label="Indirizzo"
               value={form.address || ""}
               onChange={(e) => set("address", e.target.value)}

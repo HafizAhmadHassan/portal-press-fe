@@ -84,7 +84,7 @@ export default function DevicePLC_DATA() {
 
   const [rows, setRows] = useState<TableKeyValueRow[]>([]);
   const [original, setOriginal] = useState<TableKeyValueRow[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [, /* loading */ setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
   const [searchParams] = useSearchParams();
@@ -172,7 +172,7 @@ export default function DevicePLC_DATA() {
     [original]
   );
 
-  const notFound = !loading && (!plcData || (rows.length === 0 && !error));
+  /* const notFound = !loading && (!plcData || (rows.length === 0 && !error)); */
 
   return (
     <>
@@ -188,15 +188,13 @@ export default function DevicePLC_DATA() {
           editable={isEdit}
           showActionsColumn
           allowHeaderEditToggle={false}
-          showRowEditSwitch
-          rowSwitchCancelBehavior="revert"
           onRowSave={saveRow}
           onRowCancel={cancelRow}
-          emptyState={
+          /*  emptyState={
             notFound
               ? "Nessun dato PLC (plc_data) trovato per questo device."
               : undefined
-          }
+          } */
           footerActions={{
             show: editable,
             cancelLabel: "Annulla",

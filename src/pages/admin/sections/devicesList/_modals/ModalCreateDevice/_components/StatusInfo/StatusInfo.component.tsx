@@ -1,8 +1,12 @@
-import styles from '../../../../_styles/Sections.module.scss';
-import { Shield } from 'lucide-react';
-import { Checkbox } from '@shared/checkbox/CheckBox.component';
+import styles from "../../../../_styles/Sections.module.scss";
+import { Shield } from "lucide-react";
+import { Checkbox } from "@shared/checkbox/CheckBox.component";
 
-export default function StatusInfo({ formData, isLoading, handleInputChange }: any) {
+export default function StatusInfo({
+  formData,
+  isLoading,
+  handleInputChange,
+}: any) {
   return (
     <div className={styles.section}>
       <div className={styles.sectionHeader}>
@@ -11,25 +15,29 @@ export default function StatusInfo({ formData, isLoading, handleInputChange }: a
       </div>
 
       <div className={styles.sectionContent}>
-      <div className={styles.privilegesGrid}>
-        <Checkbox
-          label="Device Pronto D75_3_7"
-          description="Indica se il device è pronto per l'operazione D75_3_7"
-          checked={formData.statusReadyD75_3_7}
-          onChange={(checked) => handleInputChange('statusReadyD75_3_7', checked)}
-          disabled={isLoading}
-          color="success"
-        />
+        <div className={styles.privilegesGrid}>
+          <Checkbox
+            label="Device Pronto D75_3_7"
+            description="Indica se il device è pronto per l'operazione D75_3_7"
+            checked={formData.tatus_ready_d75_3_7}
+            onChange={(checked) =>
+              handleInputChange("tatus_ready_d75_3_7", checked)
+            }
+            disabled={isLoading}
+            color="success"
+          />
 
-        <Checkbox
-          label="Macchina Bloccata"
-          description="Indica se la macchina è attualmente bloccata"
-          checked={formData.statusMachineBlocked}
-          onChange={(checked) => handleInputChange('statusMachineBlocked', checked)}
-          disabled={isLoading}
-          color="warning"
-        />
-      </div>
+          <Checkbox
+            label="Macchina Bloccata"
+            description="Indica se la macchina è attualmente bloccata"
+            checked={formData.status_Machine_Blocked}
+            onChange={(checked) =>
+              handleInputChange("status_Machine_Blocked", checked)
+            }
+            disabled={isLoading}
+            color="warning"
+          />
+        </div>
       </div>
     </div>
   );

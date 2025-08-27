@@ -18,7 +18,7 @@ export default function TechnicalInfo({ device }: any) {
         <div className={stylesTechnical.infoItem}>
           <span className={stylesTechnical.infoLabel}>Nome Macchina</span>
           <span className={stylesTechnical.infoValue}>
-            {device?.machine__Name || "Non specificato"}
+            {device?.machine_Name || "Non specificato"}
           </span>
         </div>
         <div className={stylesTechnical.infoItem}>

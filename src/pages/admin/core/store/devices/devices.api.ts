@@ -68,7 +68,7 @@ export const devicesApi = apiSlice.injectEndpoints({
 
     createDevice: builder.mutation<Device, CreateDeviceRequest>({
       query: (body) => {
-        if (!body?.machine__Name) throw new Error("machine__Name is required");
+        if (!body?.machine_Name) throw new Error("machine_Name is required");
         return {
           url: "joined-machines-gps/",
           method: "POST",

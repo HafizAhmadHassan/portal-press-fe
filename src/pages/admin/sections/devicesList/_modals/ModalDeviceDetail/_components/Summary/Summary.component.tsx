@@ -4,9 +4,9 @@ import { CheckCircle, Shield, XCircle } from "lucide-react";
 export default function Summary({ device }: { device: any }) {
   const isActive = device?.status === 1;
   const blocked =
-    device?.status_Machine_Blocked ?? device?.statusMachineBlocked ?? false;
+    device?.status_Machine_Blocked ?? device?.status_Machine_Blocked ?? false;
   const ready =
-    device?.status_ready_d75_3_7 ?? device?.statusReadyD75_3_7 ?? false;
+    device?.status_ready_d75_3_7 ?? device?.tatus_ready_d75_3_7 ?? false;
 
   return (
     <div className={styles.statusSection}>
