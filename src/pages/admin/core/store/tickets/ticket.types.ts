@@ -1,5 +1,5 @@
 // --- STATUS / PRIORITY / CATEGORY (legacy) ---
-export type TicketStatus = "open" | "in_progress" | "closed";
+export type TicketStatus = 1 | 2;
 export type TicketPriority = "low" | "medium" | "high" | "critical";
 export type TicketCategory = "ELECTRIC" | "DATABASE" | "MECHANIC" | "HYDRAULIC";
 
@@ -102,6 +102,10 @@ export interface TicketUpdate {
   category?: TicketCategory[];
   assigned_to_user_id?: number | null;
   due_date?: string | null;
+  close_Description?: string | null;
+  open_Description?: string | null;
+  guarantee_status?: string[] | null;
+  extra?: string[] | null;
 }
 
 // Payload per update
