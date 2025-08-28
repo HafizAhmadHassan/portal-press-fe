@@ -5,7 +5,7 @@ import {
   useNavigate,
   useSearchParams,
 } from "react-router-dom";
-import styles from "./DevicePLC_DATA.module.scss";
+import styles from "../_styles/DevicesPLC.module.scss";
 
 import TableKeyValue, {
   type TableKeyValueRow,

@@ -4,7 +4,7 @@ import type { RouteObject } from "react-router-dom";
 import DeviceLayout from "@root/layouts/device/Device-layout.component";
 import DevicePLC_IO from "@root/pages/device/sections/DevicePLC_IO/DevicePLC_IO.component";
 import DeviceDetailsPage from "@root/pages/device/sections/DeviceDetails/DeviceDetails.component";
-import DeviceOverview from "@root/pages/device/sections/DeviceOverview/DeviceOverview.component";
+import DeviceOverview from "@root/pages/device/sections/DeviceMACHINE_STATUS/DeviceMACHINE_STATUS.component";
 import DevicePLC_DATA from "@root/pages/device/sections/DevicePLC_DATA/DevicePLC_DATA.component";
 import DevicePLC_STATUS from "@root/pages/device/sections/DevicePLC_STATUS/DevicePLC_STATUS.component";
 import { UserRoles } from "@root/utils/constants/userRoles";

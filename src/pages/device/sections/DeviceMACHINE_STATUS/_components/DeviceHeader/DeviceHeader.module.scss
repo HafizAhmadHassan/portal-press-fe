@@ -1,0 +1,75 @@
+.header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 1rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.titleWrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.title {
+  margin: 0;
+  font-weight: 800;
+  font-size: clamp(1.2rem, 1.1rem + 0.5vw, 1.6rem);
+  letter-spacing: 0.01em;
+}
+
+.heroImg {
+  width: 140px;
+  height: 84px;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+/* Badge base */
+.badge {
+  inline-size: max-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.badgeOnline {
+  background: var(--success-light);
+  color: var(--success-color);
+  border-color: color-mix(in oklab, var(--success-color) 25%, transparent);
+}
+.badgeOffline {
+  background: var(--danger-light);
+  color: var(--danger-color);
+  border-color: color-mix(in oklab, var(--danger-color) 25%, transparent);
+}
+.badgeUnknown {
+  background: var(--warning-light);
+  color: var(--warning-color);
+  border-color: color-mix(in oklab, var(--warning-color) 25%, transparent);
+}
