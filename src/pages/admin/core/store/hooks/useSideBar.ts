@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from '@store_admin/store.hooks';
+import { useAppDispatch, useAppSelector } from "@store_admin/store.hooks";
 import {
   selectAccordionDirection,
   selectAnySidebarOpen,
@@ -7,7 +7,7 @@ import {
   selectMobileState,
   selectSidebarConfig,
   selectSidebarPosition,
-} from '@store_admin/ui/sidebar/sidebar.selectors';
+} from "@store_admin/ui/sidebar/sidebar.selectors";
 import {
   closeAllSidebars,
   closeMobileSidebar,
@@ -20,9 +20,9 @@ import {
   setSidebarPosition,
   toggleMobileSidebar,
   toggleSidebarCollapse,
-} from '@store_admin/ui/sidebar/sidebar.slice';
+} from "@store_admin/ui/sidebar/sidebar.slice";
 
-export const useSidebar = () => {
+export const useSideBar = () => {
   const dispatch = useAppDispatch();
 
   // State individuali
@@ -52,7 +52,8 @@ export const useSidebar = () => {
     toggleSidebar: () => dispatch(toggleSidebarCollapse()),
     collapseSidebar: () => dispatch(collapseSidebar()),
     expandSidebar: () => dispatch(expandSidebar()),
-    setSidebarCollapsed: (collapsed: boolean) => dispatch(setSidebarCollapsed(collapsed)),
+    setSidebarCollapsed: (collapsed: boolean) =>
+      dispatch(setSidebarCollapsed(collapsed)),
 
     // Mobile Sidebar Actions
     toggleMobile: () => dispatch(toggleMobileSidebar()),
@@ -60,8 +61,10 @@ export const useSidebar = () => {
     closeMobile: () => dispatch(closeMobileSidebar()),
 
     // Settings
-    setPosition: (position: 'left' | 'right') => dispatch(setSidebarPosition(position)),
-    setDirection: (direction: 'up' | 'down') => dispatch(setAccordionDirection(direction)),
+    setPosition: (position: "left" | "right") =>
+      dispatch(setSidebarPosition(position)),
+    setDirection: (direction: "up" | "down") =>
+      dispatch(setAccordionDirection(direction)),
 
     // Utility
     closeAll: () => dispatch(closeAllSidebars()),

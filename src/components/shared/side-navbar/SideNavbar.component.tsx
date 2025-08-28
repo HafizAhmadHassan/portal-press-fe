@@ -1,14 +1,13 @@
-import React from 'react';
-import styles from './styles/SideNav.module.scss';
-import { SideNavMobileToggle } from './components/SideNavMobileToggle.component';
-import { SideNavOverlay } from './components/SideNavOverlay.component';
-import { SideNavHeader } from './components/SideNavHeader.component';
-import { SideNavContent } from './components/SideNavContent.component';
-import { SideNavFooter } from './components/SideNavFooter.component';
+import React from "react";
+import styles from "./styles/SideNav.module.scss";
+import { SideNavMobileToggle } from "./components/SideNavMobileToggle.component";
+import { SideNavOverlay } from "./components/SideNavOverlay.component";
+import { SideNavHeader } from "./components/SideNavHeader.component";
+import { SideNavContent } from "./components/SideNavContent.component";
+import { SideNavFooter } from "./components/SideNavFooter.component";
 
-import { useSidebar } from '@store_admin/hooks/useSidebar';
-import type { MenuItem } from '@shared/side-navbar/types/MenuItem.types';
-
+import { useSideBar } from "@store_admin/hooks/useSideBar";
+import type { MenuItem } from "@shared/side-navbar/types/MenuItem.types";
 
 interface Props {
   menuItems: MenuItem[];
@@ -24,14 +23,13 @@ interface Props {
 }
 
 export default function SideNav({
-                                  menuItems,
-                                  showCollapseButton = true,
-                                  showMobileToggle = true,
-                                  brand,
-                                  className = '',
-                                  footer,
-                                }: Props) {
-
+  menuItems,
+  showCollapseButton = true,
+  showMobileToggle = true,
+  brand,
+  className = "",
+  footer,
+}: Props) {
   const {
     isMobileOpen,
     isSidebarCollapsed,
@@ -41,23 +39,22 @@ export default function SideNav({
     closeMobile,
     toggleSidebar,
     handleLinkClick,
-  } = useSidebar();
+  } = useSideBar();
 
   const sideNavClasses = [
     styles.sideNav,
     styles[position],
-    isSidebarCollapsed ? styles.collapsed : '',
-    isMobileOpen ? styles.mobileOpen : '',
+    isSidebarCollapsed ? styles.collapsed : "",
+    isMobileOpen ? styles.mobileOpen : "",
     className,
-  ].filter(Boolean).join(' ');
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <>
       {showMobileToggle && (
-        <SideNavMobileToggle
-          isOpen={isMobileOpen}
-          onToggle={toggleMobile}
-        />
+        <SideNavMobileToggle isOpen={isMobileOpen} onToggle={toggleMobile} />
       )}
 
       {isMobileOpen && <SideNavOverlay onClick={closeMobile} />}
@@ -77,9 +74,7 @@ export default function SideNav({
           onLinkClick={handleLinkClick}
         />
 
-        <SideNavFooter
-          customFooter={footer}
-        />
+        <SideNavFooter customFooter={footer} />
       </nav>
     </>
   );

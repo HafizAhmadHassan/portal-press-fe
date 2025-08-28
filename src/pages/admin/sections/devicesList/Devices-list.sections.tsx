@@ -62,15 +62,8 @@ export const DevicesListSections: React.FC = () => {
     page,
     page_size: pageSize,
   };
-  const {
-    devices,
-    isLoading,
-    meta,
-    deleteDevice,
-    createDevice,
-    updateDevice,
-    refetch,
-  } = useDevices(queryParamsTable);
+  const { devices, isLoading, meta, deleteDevice, updateDevice, refetch } =
+    useDevices(queryParamsTable);
 
   const pagination = usePagination({
     initialPage: page,
@@ -168,23 +161,21 @@ export const DevicesListSections: React.FC = () => {
   );
 
   const onToggleDeviceStatus = useCallback(
-    async (_device: Device) => refetchAll(),
+    async () => refetchAll(),
     [refetchAll]
   );
   const onExportClick = () => console.log("Esporta devices");
-  const onRefreshClick = () =>
-    useCallback(async (_device: Device) => refetchAll(), [refetchAll]);
+  const onRefreshClick = async () => refetchAll();
 
   const updateExistingDevice = useCallback(
-    async (deviceId: string, deviceData: any) => {
+    async (deviceId: string, deviceData: any): Promise<void> => {
       try {
         if (!deviceData) throw new Error("Device data is required");
-        const result = await updateDevice({
+        await updateDevice({
           id: deviceId,
           data: deviceData,
         }).unwrap();
         setTimeout(() => refetchAll(), 100);
-        return result;
       } catch (error: any) {
         throw new Error(
           error?.data?.detail || error?.message || "Errore durante la modifica"

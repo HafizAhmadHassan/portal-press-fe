@@ -16,7 +16,6 @@ interface UsersTableConfigProps {
 
 export const createUsersTableConfig = ({
   users,
-  onView,
   onEdit,
   onDelete,
   isLoading = false,

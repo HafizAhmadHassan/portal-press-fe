@@ -2,7 +2,8 @@ export interface MapDataItem {
   id?: string | number;
   name?: string;
   latitude?: number;
-  longitude?: number;
+  gps_x?: number;
+  gps_y?: number;
   activeStatus?: boolean;
   popupContent?: string;
   additionalData?: any;

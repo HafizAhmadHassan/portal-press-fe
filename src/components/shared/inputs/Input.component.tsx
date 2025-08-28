@@ -12,7 +12,7 @@ type InputProps = {
   label: string;
   name: string;
   placeholder?: string;
-  type?: "text" | "email" | "password" | "date" | "time";
+  type?: "text" | "email" | "password" | "date" | "time" | "number";
   value: string;
   onChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

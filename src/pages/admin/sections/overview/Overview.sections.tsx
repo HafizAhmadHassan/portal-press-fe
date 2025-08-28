@@ -1,27 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
-import styles from './OverviewSection.module.scss';
-import DashboardHeader from './Header/Header';
-import QuickStatsBar from './QuickStats/QuickStats';
-import MainStatsGrid from './MainStats/MainStats';
-import PerformanceChart from './Performance/Performance';
-import CategoryChart from './Charts/Charts';
-import TrafficSources from './Traffic/Traffic';
-import ProductsOverview from './Products/Products';
-import ActivityFeed from './Activity/Activity';
-import TopProducts from './TopProducts/TopProducts';
-import DonationPanel from './Donations/Donations';
-import InsightsPanel from './Insights/Insights';
-import AlertsPanel from './Alerts/Alerts';
-import SatisfactionPanel from './Satisfactions/Satisfactions';
-import { useUi } from '@store_admin/ui/useUi';
+import styles from "./OverviewSection.module.scss";
+import DashboardHeader from "./Header/Header";
+import QuickStatsBar from "./QuickStats/QuickStats";
+import MainStatsGrid from "./MainStats/MainStats";
+import PerformanceChart from "./Performance/Performance";
+import CategoryChart from "./Charts/Charts";
+import TrafficSources from "./Traffic/Traffic";
+import ProductsOverview from "./Products/Products";
+import ActivityFeed from "./Activity/Activity";
+import TopProducts from "./TopProducts/TopProducts";
+import DonationPanel from "./Donations/Donations";
+import InsightsPanel from "./Insights/Insights";
+import AlertsPanel from "./Alerts/Alerts";
+import SatisfactionPanel from "./Satisfactions/Satisfactions";
+import { useUi } from "@store_admin/ui/useUi";
 interface AnalyticsOverviewProps {
   darkMode?: boolean;
 }
 
 const AnalyticsOverview: React.FC<AnalyticsOverviewProps> = () => {
-  const [selectedTimeRange, setSelectedTimeRange] = useState('7d');
-  
+  const [selectedTimeRange, setSelectedTimeRange] = useState("7d");
+
   const [isAnimated, setIsAnimated] = useState(false);
 
   useEffect(() => {
@@ -29,13 +29,18 @@ const AnalyticsOverview: React.FC<AnalyticsOverviewProps> = () => {
   }, []);
 
   const { isDark } = useUi();
-  const themeClass = isDark ? styles.darkMode : '';
+  const themeClass = isDark ? styles.darkMode : "";
 
   return (
-    <div className={`${styles.analyticsDashboard} ${themeClass} ${isAnimated ? styles.animated : ''}`}>
+    <div
+      className={`${styles.analyticsDashboard} ${themeClass} ${
+        isAnimated ? styles.animated : ""
+      }`}
+    >
       {/* Header */}
-      <DashboardHeader 
+      <DashboardHeader
         setSelectedTimeRange={setSelectedTimeRange}
+        selectedTimeRange={selectedTimeRange}
       />
 
       {/* Quick Stats */}
@@ -51,8 +56,6 @@ const AnalyticsOverview: React.FC<AnalyticsOverviewProps> = () => {
         <PerformanceChart />
       </div>
 
-      
-      
       {/* Products Overview - FULL WIDTH */}
       <div className={styles.fullWidthSection}>
         <ProductsOverview />
@@ -74,7 +77,6 @@ const AnalyticsOverview: React.FC<AnalyticsOverviewProps> = () => {
         <TopProducts />
         <InsightsPanel />
         <AlertsPanel />
-        
       </div>
     </div>
   );

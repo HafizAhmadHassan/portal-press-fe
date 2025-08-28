@@ -1,11 +1,14 @@
-import React, { useMemo } from 'react';
-import styles from './Section-filter.module.scss';
-import { Input } from '@shared/inputs/Input.component.tsx';
-import { Select } from '@shared/select/Select.component.tsx';
-import { Accordion, type AccordionItemType } from '@shared/accordion/Accordion.component.tsx';
-import { SimpleButton } from '@shared/simple-btn/SimpleButton.component.tsx';
-import { Filter, RotateCcwIcon } from 'lucide-react';
-import type { FilterConfig } from '@utils/types/filters.types.ts';
+import React, { useMemo } from "react";
+import styles from "./Section-filter.module.scss";
+import { Input } from "@shared/inputs/Input.component.tsx";
+import { Select } from "@shared/select/Select.component.tsx";
+import {
+  Accordion,
+  type AccordionItemType,
+} from "@shared/accordion/Accordion.component.tsx";
+import { SimpleButton } from "@shared/simple-btn/SimpleButton.component.tsx";
+import { Filter, RotateCcwIcon } from "lucide-react";
+import type { FilterConfig } from "@utils/types/filters.types.ts";
 
 type SectionFilterProps = {
   filters: FilterConfig[];
@@ -22,11 +25,11 @@ export const SectionFilterComponent: React.FC<SectionFilterProps> = ({
   const activeFiltersCount = useMemo(() => {
     return filters.reduce((count, f) => {
       const hasValue =
-        f.type === 'select'
-          ? f.value !== '' && f.value != null
-          : f.type === 'email' || f.type === 'text'
-            ? typeof f.value === 'string' && f.value.trim() !== ''
-            : false;
+        f.type === "select"
+          ? f.value !== "" && f.value != null
+          : f.type === "email" || f.type === "text"
+          ? typeof f.value === "string" && f.value.trim() !== ""
+          : false;
 
       return hasValue ? count + 1 : count;
     }, 0);
@@ -37,23 +40,23 @@ export const SectionFilterComponent: React.FC<SectionFilterProps> = ({
 
   const renderFilterField = (filter: FilterConfig) => {
     switch (filter.type) {
-      case 'select':
+      case "select":
         return (
           <Select
             key={filter.key}
             label={filter.label}
             name={filter.name}
             placeholder={filter.placeholder}
-            value={filter.value ?? ''}
-            onChange={(value) => filter.onChange(value)}
+            value={filter.value ?? ""}
+            onChange={(value) => filter.onChange(String(value))}
             options={filter.options || []}
             disabled={filter.disabled || isLoading}
             icon={filter.icon}
             iconPosition={filter.iconPosition}
           />
         );
-      case 'email':
-      case 'text':
+      case "email":
+      case "text":
       default:
         return (
           <Input
@@ -61,9 +64,11 @@ export const SectionFilterComponent: React.FC<SectionFilterProps> = ({
             label={filter.label}
             name={filter.name}
             placeholder={filter.placeholder}
-            type={filter.type === 'email' ? 'email' : 'text'}
-            value={filter.value ?? ''}
-            onChange={(e) => filter.onChange(e.target?.value ?? '')}
+            type={filter.type === "email" ? "email" : "text"}
+            value={filter.value ?? ""}
+            onChange={(e) =>
+              filter.onChange(e as React.ChangeEvent<HTMLInputElement>)
+            }
             required={filter.required}
             icon={filter.icon}
             iconPosition={filter.iconPosition}
@@ -74,8 +79,10 @@ export const SectionFilterComponent: React.FC<SectionFilterProps> = ({
 
   const accordionItems: AccordionItemType[] = [
     {
-      id: 'filters',
-      title: `Filtri di Ricerca${hasActiveFilters ? ` (${activeFiltersCount})` : ''}`,
+      id: "filters",
+      title: `Filtri di Ricerca${
+        hasActiveFilters ? ` (${activeFiltersCount})` : ""
+      }`,
       icon: Filter,
       content: (
         <div className={styles.sectionFilter}>
@@ -105,7 +112,7 @@ export const SectionFilterComponent: React.FC<SectionFilterProps> = ({
     <Accordion
       activeItems={activeFiltersCount}
       items={accordionItems}
-      defaultOpenItems={['']}
+      defaultOpenItems={[""]}
       variant="default"
       size="md"
     />

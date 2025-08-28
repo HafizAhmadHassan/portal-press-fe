@@ -4,12 +4,12 @@ import { UserRoleLabels, UserRoles } from "@utils/constants/userRoles.ts";
 // import { UserFields } from '@utils/constants/userFields.ts'; // se esiste già
 // OPPURE definiscilo qui se non esiste:
 
-export enum UserFields {
-  EMAIL = "email",
-  USERNAME = "username",
-  USER_PERMISSIONS = "userPermissions",
-  isActive = "isActive",
-}
+export const UserFields = {
+  EMAIL: "email",
+  USERNAME: "username",
+  USER_PERMISSIONS: "userPermissions",
+  isActive: "isActive",
+};
 
 export const createUsersFilterConfig = ({
   filters,

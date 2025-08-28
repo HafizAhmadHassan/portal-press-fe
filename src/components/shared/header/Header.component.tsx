@@ -16,13 +16,13 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "@root/pages/admin/core/store/store.hooks";
-import { useSidebar } from "@store_admin/hooks/useSidebar";
+import { useSideBar } from "@store_admin/hooks/useSideBar";
 
 export default function KgnHeader() {
   const [searchText, setSearchText] = useState("");
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const { isMobileOpen, toggleSidebar, toggleMobile, closeMobile } =
-    useSidebar();
+    useSideBar();
 
   const dispatch = useAppDispatch();
   const scopedCustomer = useAppSelector(selectScopedCustomer);

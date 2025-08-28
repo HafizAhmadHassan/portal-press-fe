@@ -1,8 +1,8 @@
 import React from "react";
 import styles from "../styles/SideNavContent.module.scss";
-import { SideNavItem } from "./SideNavItem.component.tsx";
-import type { AccordionDirection, MenuItem } from "../types/MenuItem.ts";
-import { useMenuItems } from "../../../../routes/_hooks/useMenuItems.ts";
+import { useMenuItems, type MenuItem } from "@root/routes/_hooks/useMenuItems";
+import type { AccordionDirection } from "@root/components/shared/side-navbar/types/MenuItem.types";
+import { SideNavItem } from "@root/components/shared/side-navbar/components/SideNavItem.component";
 
 interface Props {
   menuItems: MenuItem[];

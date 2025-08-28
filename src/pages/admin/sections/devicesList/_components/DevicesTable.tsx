@@ -1,7 +1,7 @@
 import React from "react";
 import { GenericTableWithLogic } from "@shared/table/components/GenericTableWhitLogic.component.tsx";
 import { createDevicesTableConfig } from "@sections_admin//devicesList/_config/devicesTableConfig";
-import type { Device } from "@store_admin/devices/device.types";
+import type { Device } from "@store_admin/devices/devices.types";
 
 interface DevicesTableProps {
   devices: Device[];
@@ -12,16 +12,18 @@ interface DevicesTableProps {
 
 const DevicesTable: React.FC<DevicesTableProps> = ({
   devices,
-  statusFilter = "tutti",
   isLoading = false,
   onDeviceAction,
 }) => {
-  const handleView = (device: Device) => {
+  /* const handleView = (device: Device) => {
     onDeviceAction?.("view", device);
   };
-
-  const handleEdit = (device: Device) => {
-    onDeviceAction?.("edit", device);
+ */
+  const handleEdit = async (deviceId: string, updatedData: any) => {
+    const device = devices.find((d) => d.id === deviceId);
+    if (device) {
+      onDeviceAction?.("edit", { ...device, ...updatedData });
+    }
   };
 
   const handleDelete = (device: Device) => {
@@ -34,7 +36,6 @@ const DevicesTable: React.FC<DevicesTableProps> = ({
 
   const tableConfig = createDevicesTableConfig({
     devices,
-    onView: handleView,
     onEdit: handleEdit,
     onDelete: handleDelete,
     onToggleStatus: handleToggleStatus,

@@ -32,7 +32,7 @@ export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({
   onSave,
 }) => {
   const [formData, setFormData] = useState({
-    id: user.id || 0,
+    id: user.id ? String(user.id) : "",
     username: user.username || "",
     email: user.email || "",
     firstName: user.firstName || "",
@@ -48,7 +48,7 @@ export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({
 
   useEffect(() => {
     setFormData({
-      id: user.id || 0,
+      id: user.id ? String(user.id) : "",
       username: user.username || "",
       email: user.email || "",
       firstName: user.firstName || "",
@@ -85,7 +85,7 @@ export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({
         setIsLoading(false);
         return;
       }
-      await onSave?.(formData);
+      onSave?.(formData);
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error("Errore nel salvataggio:", error);
@@ -122,7 +122,7 @@ export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({
       <div className={styles.modalContent}>
         {/* Header con avatar */}
         <div className={styles.userHeader}>
-          <Avatar user={user} size="lg" />
+          <Avatar user={user} />
           <div className={styles.userInfo}>
             <h3 className={styles.userName}>
               {user.fullName ||

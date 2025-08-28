@@ -44,8 +44,7 @@ export const ModalDeleteDevicesConfirm: React.FC<Props> = ({
       }".`}
       confirmText="Elimina Definitivamente"
       cancelText="Annulla"
-      icon={<AlertCircle className="modal-delete-icon" size={24} />}
-      variant="danger"
+      icon={AlertCircle}
       onConfirm={isConfirmEnabled ? handleConfirm : undefined}
       modalClassName="modal-delete"
     >

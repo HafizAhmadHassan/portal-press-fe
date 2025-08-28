@@ -70,7 +70,7 @@ export const ModalDetails: React.FC<ModalDetailsProps> = ({ user }) => {
         {/* Header */}
         <div className={styles.userHeader}>
           <div className={styles.avatarSection}>
-            <Avatar user={user} size="xl" />
+            <Avatar user={user} />
             <div className={styles.statusIndicator}>
               {user.isActive ? (
                 <CheckCircle className={styles.statusIconActive} />

@@ -4,9 +4,9 @@ import { SideNavIcon } from "./SideNavIcon.component";
 import { SideNavLabel } from "./SideNavLabel.component";
 import { SideNavBadge } from "./SideNavBadge.component";
 import { SideNavChevron } from "./SideNavChevron.component";
-import type { AccordionDirection, MenuItem } from "../types/MenuItem";
-import { useSidebar } from "@store_admin/hooks/useSidebar";
+import { useSideBar } from "@store_admin/hooks/useSideBar";
 import { Link } from "react-router-dom";
+import type { AccordionDirection, MenuItem } from "../types/MenuItem.types";
 
 interface Props {
   item: MenuItem;
@@ -27,7 +27,7 @@ export function SideNavLink({
   onToggle,
   onLinkClick,
 }: Props) {
-  const { isSidebarCollapsed } = useSidebar();
+  const { isSidebarCollapsed } = useSideBar();
 
   const handleClick = () => {
     if (hasChildren) {

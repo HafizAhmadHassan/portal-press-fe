@@ -113,7 +113,6 @@ const formDataToDevice = (f: FormData) => ({
 
 export default function DeviceDetailsPage() {
   const { deviceId } = useParams<{ deviceId: string }>();
-  const parsedId = deviceId ? Number(deviceId) : undefined;
 
   const {
     data: device,
@@ -121,7 +120,7 @@ export default function DeviceDetailsPage() {
     /*  isFetching,
     isLoading, */
     isError,
-  } = useGetDeviceByIdQuery(parsedId!, { skip: !parsedId });
+  } = useGetDeviceByIdQuery(deviceId!, { skip: !deviceId });
 
   const [updateDevice, { isLoading: isSaving }] = useUpdateDeviceMutation();
 
@@ -225,6 +224,7 @@ export default function DeviceDetailsPage() {
       await updateDevice({
         id: device.id,
         ...formDataToDevice(formData),
+        data: undefined,
       }).unwrap();
       setDirty(false);
       setIsEdit(false);
@@ -238,7 +238,7 @@ export default function DeviceDetailsPage() {
     }
   };
 
-  if (!parsedId) {
+  if (!deviceId) {
     return (
       <section className={styles.page}>
         <div className={styles.errorState}>Nessun device selezionato.</div>

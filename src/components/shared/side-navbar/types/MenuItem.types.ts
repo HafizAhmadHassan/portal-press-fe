@@ -11,6 +11,8 @@ export interface MenuItem {
   iconColor?: string; // es. 'var(--primary-color)' o '#3b82f6'
   iconActiveColor?: string; // es. 'var(--primary-dark)'
   allowedRoles?: (UserRoles | string)[];
+  isActive?: boolean;
+  onClick?: () => void;
 }
 
 export interface UserProfile {

@@ -127,7 +127,11 @@ const Modal = ({
                 <div className={styles.body}>
                   {(title || icon) && (
                     <div className={styles.header}>
-                      {icon && <div className={styles.icon}>{icon}</div>}
+                      {icon && (
+                        <div className={styles.icon}>
+                          {React.createElement(icon)}
+                        </div>
+                      )}
                       {title && <h2 className={styles.title}>{title}</h2>}
                     </div>
                   )}

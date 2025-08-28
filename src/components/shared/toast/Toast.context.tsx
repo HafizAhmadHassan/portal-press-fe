@@ -1,25 +1,32 @@
 // src/toast/Toast.context.tsx
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
-import type { Toast } from './Toast.utility';
-import { toastQueue } from './Toast.utility';
-import ToastContainer from './ToastContainer';
+import {
+  createContext,
+  type ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import type { Toast } from "./Toast.utility";
+import { toastQueue } from "./Toast.utility";
+import ToastContainer from "./ToastContainer";
 
 interface ToastContextValue {
-  showToast: (toast: Omit<Toast, 'id'>) => void;
+  showToast: (toast: Omit<Toast, "id">) => void;
 }
 
 const ToastContext = createContext<ToastContextValue | undefined>(undefined);
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useToast = () => {
   const context = useContext(ToastContext);
-  if (!context) throw new Error('useToast must be used within a ToastProvider');
+  if (!context) throw new Error("useToast must be used within a ToastProvider");
   return context;
 };
 
 export const ToastProvider = ({ children }: { children: ReactNode }) => {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
-  const showToast = (toast: Omit<Toast, 'id'>) => {
+  const showToast = (toast: Omit<Toast, "id">) => {
     const id = crypto.randomUUID();
     setToasts((prev) => [...prev, { ...toast, id }]);
     setTimeout(() => {
