@@ -45,10 +45,10 @@ export default function DatesCard({ user }: { user: User }) {
           </div>
           <div className={styles.dateCardContent}>
             <span className={styles.dateValue}>
-              {formatDate(user.dateJoined)}
+              {formatDate(user.date_joined)}
             </span>
             <span className={styles.dateRelative}>
-              {getRelativeTime(user.dateJoined)}
+              {getRelativeTime(user.date_joined)}
             </span>
           </div>
         </div>
@@ -60,11 +60,11 @@ export default function DatesCard({ user }: { user: User }) {
           </div>
           <div className={styles.dateCardContent}>
             <span className={styles.dateValue}>
-              {formatDate(user.lastLogin)}
+              {formatDate(user.last_login)}
             </span>
             <span className={styles.dateRelative}>
-              {user.lastLogin
-                ? getRelativeTime(user.lastLogin)
+              {user.last_login
+                ? getRelativeTime(user.last_login)
                 : "Mai effettuato login"}
             </span>
           </div>

@@ -285,7 +285,6 @@ export function withErrorHandling<Args extends unknown[], R>(
         throw new Error(appError.message);
       }
 
-      // @ts-expect-error: intentionally returning undefined when rethrow=false
       return undefined;
     }
   };

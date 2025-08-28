@@ -9,8 +9,8 @@ type Props = { user: User };
 
 export default function UserHeader({ user }: Props) {
   const displayName =
-    user.fullName ||
-    `${user.firstName || ""} ${user.lastName || ""}`.trim() ||
+    user.full_name ||
+    `${user.first_name || ""} ${user.last_name || ""}`.trim() ||
     user.username;
 
   return (
@@ -18,7 +18,7 @@ export default function UserHeader({ user }: Props) {
       <div className={styles.avatarSection}>
         <Avatar user={user} />
         <div className={styles.statusIndicator}>
-          {user.isActive ? (
+          {user.is_active ? (
             <CheckCircle className={styles.statusIconActive} />
           ) : (
             <XCircle className={styles.statusIconInactive} />
@@ -35,18 +35,18 @@ export default function UserHeader({ user }: Props) {
           <RoleBadge user={user} />
           <span
             className={`${styles.statusBadge} ${
-              user.isActive ? styles.statusActive : styles.statusInactive
+              user.is_active ? styles.statusActive : styles.statusInactive
             }`}
           >
-            {user.isActive ? "Attivo" : "Inattivo"}
+            {user.is_active ? "Attivo" : "Inattivo"}
           </span>
-          {user.isStaff && (
+          {user.is_staff && (
             <span className={styles.staffBadge}>
               <Settings className={styles.badgeIcon} />
               Staff
             </span>
           )}
-          {user.isSuperuser && (
+          {user.is_superuser && (
             <span className={styles.superuserBadge}>
               <Crown className={styles.badgeIcon} />
               Super Admin

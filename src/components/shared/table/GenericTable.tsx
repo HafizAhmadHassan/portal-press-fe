@@ -4,10 +4,7 @@ import { TableCell } from "./components/TableCell.component";
 import { TablePagination } from "./components/TablePagination.component";
 import styles from "./styles/GenericTable.module.scss";
 
-import type {
-  GenericTableProps,
-  TableColumn,
-} from "./types/GenericTable.types";
+import type { TableColumn } from "./types/GenericTable.types";
 
 // Estensione opzionale per proprietà extra di paginazione usate nel componente
 type ExtendedPagination = {
@@ -59,7 +56,7 @@ const GenericTable = <
   onPageChange,
   onSelectAll,
   onSelectItem,
-}: GenericTableProps<T, K, Id>): React.JSX.Element => {
+}: any): React.JSX.Element => {
   const getCellValue = useCallback(
     (item: T, column: TableColumn<T, K>) => getCellValueGeneric(item, column),
     []

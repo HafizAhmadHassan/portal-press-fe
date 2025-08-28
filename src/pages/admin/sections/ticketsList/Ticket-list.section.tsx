@@ -1,47 +1,64 @@
-import React, { useCallback, useEffect, useMemo } from "react";
-import { useListQueryParams } from "@hooks/useListQueryParams";
-import { createTicketsTableConfig } from "./_config/ticketsTableConfig";
+// TicketsListSections.tsx - VERSIONE COMPLETAMENTE CORRETTA
+import React, { useCallback, useMemo, useEffect } from "react";
+import { RefreshCw } from "lucide-react";
+import { toAppError } from "@root/utils/errorHandling";
+import { Divider } from "@shared/divider/Divider.component";
+import styles from "./_styles/TicketsListSection.module.scss";
 import {
   createTicketsFilterConfig,
   TicketFields,
 } from "./_config/ticketsFilterConfig";
-import styles from "./_styles/TicketsListSection.module.scss";
+import { getTicketsColumns } from "./_config/ticketsTableConfig";
+import type { TicketRead } from "@store_admin/tickets/ticket.types";
+import { GenericTableWithLogic } from "@shared/table/components/GenericTableWhitLogic.component";
 import { SectionHeaderComponent } from "@sections_admin/_commons/components/SectionHeader/Section-header.component";
 import { SectionFilterComponent } from "@sections_admin/_commons/components/SectionFilters/Section-filters.component";
-import { GenericTableWithLogic } from "@shared/table/components/GenericTableWhitLogic.component";
-import { usePagination } from "@hooks/usePagination.ts";
+
+// CAMBIA QUESTO: usa il tuo hook personalizzato invece di useGetTicketsQuery
 import { useTicketsWithDevices } from "@store_admin/tickets/hooks/useTicketWithDevices";
-import { Divider } from "@shared/divider/Divider.component.tsx";
-import { useUpdateTicketMutation } from "@store_admin/tickets/ticket.api";
-import type { TicketRead } from "@store_admin/tickets/ticket.types";
+import {
+  useUpdateTicketMutation,
+  useDeleteTicketMutation,
+} from "@store_admin/tickets/ticket.api";
+
+import { useCrud } from "@hooks/useCrud";
 import { useAppSelector } from "../../core/store/store.hooks";
 import { selectScopedCustomer } from "../../core/store/scope/scope.selectors";
 
+// RIMUOVI useListController - usa il tuo hook existente
+// import { useListController } from "@hooks/useListController";
+
+// Tipo per i dati di chiusura ticket
+export type CloseTicketData = {
+  ticketId: number;
+  date?: Date;
+  note?: string;
+  info?: string;
+  address?: string;
+  inGaranzia?: boolean;
+  fuoriGaranzia?: boolean;
+  machine_retrival?: boolean;
+  machine_not_repairable?: boolean;
+};
+
 export const TicketsListSections: React.FC = () => {
   const scopedCustomer = useAppSelector(selectScopedCustomer);
-  // ✅ Query params management
-  const {
-    filters,
-    sortBy,
-    sortOrder,
-    page,
-    pageSize,
-    setFilter,
-    setSort,
-    setPage,
-    setPageSize,
-    resetAll,
-  } = useListQueryParams({
-    initialFilters: {
-      [TicketFields.TITLE]: "",
-      [TicketFields.STATUS]: "",
-      [TicketFields.PRIORITY]: "",
-      [TicketFields.CATEGORY]: "",
-      [TicketFields.ASSIGNED_TO]: "",
-    },
+
+  // USA IL TUO HOOK ESISTENTE che già funziona
+  const [filters, setFilters] = React.useState({
+    [TicketFields.TITLE]: "",
+    [TicketFields.STATUS]: "",
+    [TicketFields.PRIORITY]: "",
+    [TicketFields.CATEGORY]: "",
+    [TicketFields.ASSIGNED_TO]: "",
   });
 
-  // ✅ Build query params for API call
+  const [page, setPage] = React.useState(1);
+  const [pageSize, setPageSize] = React.useState(10);
+  const [sortBy, setSortBy] = React.useState("date_Time");
+  const [sortOrder, setSortOrder] = React.useState<"asc" | "desc">("desc");
+
+  // Query params per l'API
   const queryParams = useMemo(
     () => ({
       ...filters,
@@ -53,115 +70,82 @@ export const TicketsListSections: React.FC = () => {
     [filters, sortBy, sortOrder, page, pageSize]
   );
 
-  // ✅ API calls con device join
-  const {
-    tickets,
-    meta,
-    isLoading,
-    /* error, */
-    refetch,
-    /* createNewTicket, */
-    updateExistingTicket,
-    deleteExistingTicket,
-  } = useTicketsWithDevices(queryParams);
+  // USA IL TUO HOOK CHE GIÀ FUNZIONA
+  const { tickets, meta, isLoading, refetch } =
+    useTicketsWithDevices(queryParams);
 
-  // ✅ Mutation diretta per UPDATE
-  const [updateTicket] = useUpdateTicketMutation();
+  // Mutation hooks
+  const [updateTicketTrigger] = useUpdateTicketMutation();
+  const [deleteTicketTrigger] = useDeleteTicketMutation();
+  const { execUpdate, execDelete } = useCrud();
 
-  // ✅ Pagination management (unica istanza)
-  const pagination = usePagination({
-    initialPage: page,
-    initialPageSize: pageSize,
-    totalItems: meta?.total,
-    totalPages: meta?.total_pages,
-    onChange: (newPage, newSize) => {
-      setPage(newPage);
-      setPageSize(newSize);
-    },
-  });
-
-  // ✅ Reset handler unificato
-  const handleResetAll = () => {
-    resetAll();
-    pagination.resetPagination();
-    refetch();
-  };
-
-  // ✅ CRUD operations base
-  /*   const handleCreate = useCallback(
-    async (data) => {
-      const created =
-        (await (createNewTicket as any)(data).unwrap?.()) ??
-        (await (createNewTicket as any)(data));
-      refetch();
-      return created;
-    },
-    [createNewTicket, refetch]
-  ); */
-
+  // Handlers stabili
   const handleEdit = useCallback(
-    async ({ id, ...rest }) => {
-      const updated =
-        (await (updateExistingTicket as any)({ id, data: rest }).unwrap?.()) ??
-        (await (updateExistingTicket as any)({ id, data: rest }));
+    async (ticketData: { id: number; [key: string]: any }) => {
+      const { id, ...data } = ticketData;
+      const res = await execUpdate(updateTicketTrigger, {
+        id: id,
+        data: data as Partial<TicketRead>,
+      });
+      if (!res.success) {
+        const appErr = toAppError(
+          res.error,
+          "Errore durante la modifica del ticket"
+        );
+        console.error(appErr.message);
+        throw new Error(appErr.message);
+      }
       refetch();
-      return updated;
     },
-    [updateExistingTicket, refetch]
+    [execUpdate, updateTicketTrigger, refetch]
   );
 
   const handleDelete = useCallback(
     async (ticket: TicketRead) => {
       if (window.confirm(`Confermi eliminazione ticket #${ticket.id}?`)) {
-        await ((deleteExistingTicket as any)(ticket.id).unwrap?.() ??
-          (deleteExistingTicket as any)(ticket.id));
+        const res = await execDelete(deleteTicketTrigger, ticket.id);
+        if (!res.success) {
+          const appErr = toAppError(
+            res.error,
+            "Errore durante l'eliminazione del ticket"
+          );
+          console.error(appErr.message);
+          throw new Error(appErr.message);
+        }
         refetch();
       }
     },
-    [deleteExistingTicket, refetch]
+    [execDelete, deleteTicketTrigger, refetch]
   );
 
-  // ✅ CLOSE ticket con il body richiesto per la chiusura
   const handleClose = useCallback(
-    async (data: {
-      ticketId: number;
-      note?: string;
-      inGaranzia?: boolean;
-      fuoriGaranzia?: boolean;
-      machine_retrival?: boolean;
-      machine_not_repairable?: boolean;
-    }) => {
-      // 1) Recupero il ticket corrente per ottenere machine & customer
-      const t = tickets?.find((x) => String(x.id) === String(data.ticketId)) as
-        | (TicketRead & { device?: any })
-        | undefined;
-      if (!t) {
-        alert("Ticket non trovato per la chiusura.");
-        throw new Error("Ticket not found");
+    async (data: CloseTicketData) => {
+      const ticket = tickets?.find(
+        (x) => String(x.id) === String(data.ticketId)
+      ) as (TicketRead & { device?: any }) | undefined;
+
+      if (!ticket) {
+        throw new Error("Ticket non trovato per la chiusura.");
       }
 
-      const machineId = (t as any).machine ?? (t as any).device_id;
+      const machineId = (ticket as any).machine ?? (ticket as any).device_id;
       const customer =
-        t?.device?.customer ??
-        t?.device?.customer_Name ??
-        (t as any).customer ??
+        ticket?.device?.customer ??
+        ticket?.device?.customer_Name ??
+        (ticket as any).customer ??
         "";
 
       if (!machineId) {
-        alert("ID macchina non disponibile per la chiusura.");
-        throw new Error("Machine id missing");
+        throw new Error("ID macchina non disponibile per la chiusura.");
       }
       if (!customer) {
-        alert("Customer non disponibile per la chiusura.");
-        throw new Error("Customer missing");
+        throw new Error("Customer non disponibile per la chiusura.");
       }
 
-      // 2) Mappo guanratee_status
       const guanratee_status: string[] = [];
       if (data.inGaranzia) guanratee_status.push("in_garanzia");
       if (data.fuoriGaranzia) guanratee_status.push("fuori_garanzia");
 
-      // 3) Compongo la close_Description
       const extra: string[] = [];
       if (data.machine_retrival) extra.push("Ripristino macchina");
       if (data.machine_not_repairable)
@@ -170,105 +154,146 @@ export const TicketsListSections: React.FC = () => {
         .filter(Boolean)
         .join("\n• ");
 
-      // 4) Payload finale richiesto
       const payload = {
         guanratee_status,
-        status: 2, // numerico, obbligatorio per chiusura
+        status: 2,
         close_Description,
         machine: Number(machineId),
         customer,
       };
 
-      // 5) Invio con la mutation esistente (PUT tickets/:id/) — se il tuo backend usa endpoint diverso, cambia qui.
-      const updated = await updateTicket({
+      const res = await execUpdate(updateTicketTrigger, {
         id: data.ticketId,
         data: payload as any,
-      }).unwrap();
+      });
 
-      await refetch();
-      return updated;
+      if (!res.success) {
+        const appErr = toAppError(
+          res.error,
+          "Errore durante la chiusura del ticket"
+        );
+        console.error(appErr.message);
+        throw new Error(appErr.message);
+      }
+
+      refetch();
+      return res.data;
     },
-    [tickets, updateTicket, refetch]
+    [tickets, execUpdate, updateTicketTrigger, refetch]
   );
 
-  // ✅ Table configuration
-  const tableConfig = useMemo(
+  // Funzione setFilter stabile
+  const setFilter = useCallback(
+    (key: string, value: string | number | boolean | null | undefined) => {
+      setFilters((prev) => ({ ...prev, [key]: value }));
+      setPage(1); // Reset a pagina 1 quando cambiano i filtri
+    },
+    []
+  );
+
+  // Reset all stabile
+  const resetAll = useCallback(() => {
+    setFilters({
+      [TicketFields.TITLE]: "",
+      [TicketFields.STATUS]: "",
+      [TicketFields.PRIORITY]: "",
+      [TicketFields.CATEGORY]: "",
+      [TicketFields.ASSIGNED_TO]: "",
+    });
+    setSortBy("date_Time");
+    setSortOrder("desc");
+    setPage(1);
+    setPageSize(10);
+  }, []);
+
+  const onRefreshClick = useCallback(() => refetch(), [refetch]);
+
+  // Configurazioni memoizzate
+  const columns = useMemo(
     () =>
-      createTicketsTableConfig({
-        tickets,
+      getTicketsColumns({
         onEdit: handleEdit,
         onDelete: handleDelete,
-        onClose: handleClose, // ← handler per chiusura (quando status ≠ 2)
-        isLoading,
-        sortBy,
-        sortOrder,
-        onSort: setSort,
-        pagination: {
-          enabled: true,
-          currentPage: meta?.page ?? page,
-          pageSize,
-          totalPages: meta?.total_pages ?? 1,
-          totalItems: meta?.total ?? 0,
-          onPageChange: setPage,
-          onPageSizeChange: setPageSize,
-          hasNext: meta?.has_next,
-          hasPrev: meta?.has_prev,
-        },
+        onClose: handleClose,
       }),
-    [
-      tickets,
-      handleEdit,
-      handleDelete,
-      handleClose,
-      isLoading,
-      sortBy,
-      sortOrder,
-      setSort,
-      meta,
-      page,
-      pageSize,
-      setPage,
-      setPageSize,
-    ]
+    [handleEdit, handleDelete, handleClose]
   );
 
-  // 🔁 Quando cambia il cliente scelto in header:
-  // - resetta paginazione
-  // - rifai la fetch degli utenti
+  // Table config manuale (evita buildTableConfig che può causare problemi)
+  const tableConfig = useMemo(
+    () => ({
+      columns,
+      data: tickets || [],
+      loading: isLoading,
+      pagination: {
+        enabled: true,
+        currentPage: page,
+        pageSize,
+        totalPages: meta?.total_pages ?? 1,
+        totalItems: meta?.total ?? 0,
+        onPageChange: setPage,
+        onPageSizeChange: setPageSize,
+        hasNext: meta?.has_next,
+        hasPrev: meta?.has_prev,
+        nextPage: meta?.next_page,
+        prevPage: meta?.prev_page,
+      },
+      sorting: {
+        enabled: true,
+        onSort: (key: string, direction: "asc" | "desc") => {
+          setSortBy(key);
+          setSortOrder(direction);
+        },
+      },
+      emptyMessage: "Nessun ticket trovato.",
+    }),
+    [columns, tickets, isLoading, page, pageSize, meta]
+  );
+
+  const filtersConfig = useMemo(
+    () => createTicketsFilterConfig({ filters, setFilter }),
+    [filters, setFilter]
+  );
+
+  // Effect per scoped customer - MA SENZA DIPENDENZE CHE CAMBIANO
   useEffect(() => {
-    setPage(1);
-    refetch();
-  }, [scopedCustomer]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (scopedCustomer) {
+      resetAll();
+      // refetch verrà chiamato automaticamente quando cambiano i queryParams
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scopedCustomer]);
 
   return (
     <div className={styles["tickets-list-page"]}>
       <SectionHeaderComponent
         title="Tickets"
         subTitle={`Gestisci i tickets (${meta?.total ?? 0} totali)`}
+        buttons={[
+          {
+            onClick: onRefreshClick,
+            variant: "outline",
+            color: "secondary",
+            size: "sm",
+            icon: RefreshCw,
+            label: "Aggiorna",
+            disabled: isLoading,
+          },
+        ]}
       />
 
       <div className={styles["tickets-list-page__filters"]}>
         <SectionFilterComponent
-          filters={createTicketsFilterConfig({ filters, setFilter })}
-          onResetFilters={handleResetAll}
-          // isLoading={isLoading}
+          isLoading={isLoading}
+          filters={filtersConfig}
+          onResetFilters={resetAll}
         />
       </div>
 
       <Divider />
 
       <div className={styles["tickets-list-page__table-wrapper"]}>
-        <GenericTableWithLogic
-          config={tableConfig}
-          // loading={isLoading}
-          pagination={{
-            page: meta?.page ?? page,
-            pageSize,
-            total: meta?.total ?? 0,
-            totalPages: meta?.total_pages ?? 1,
-          }}
-          onPageChange={setPage}
-        />
+        <GenericTableWithLogic config={tableConfig} />
       </div>
     </div>
   );

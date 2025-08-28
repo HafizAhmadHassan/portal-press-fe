@@ -1,4 +1,4 @@
-export interface User {
+/* export interface User {
   id: number;
   username: string;
   email: string;
@@ -10,6 +10,24 @@ export interface User {
   isSuperuser: boolean;
   lastLogin?: string | null;
   dateJoined: string;
+  groups: string[];
+  permissions: string[];
+  avatar?: string;
+  avatarUrl?: string;
+  role: string;
+} */
+export interface User {
+  id: number;
+  username: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  full_name: string;
+  is_active: boolean;
+  is_staff: boolean;
+  is_superuser: boolean;
+  last_login?: string | null;
+  date_joined: string;
   groups: string[];
   permissions: string[];
   avatar?: string;

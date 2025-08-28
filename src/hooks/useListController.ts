@@ -1,3 +1,4 @@
+// useListController.ts - VERSIONE CORRETTA SENZA LOOP INFINITO
 import { useCallback, useMemo, useState } from "react";
 import { usePagination } from "@hooks/usePagination";
 import type {
@@ -89,30 +90,33 @@ export function useListController<P extends object, T>({
     []
   );
 
+  // PROBLEMA RISOLTO: Rimossa dipendenza instabile da pagination
   const resetAll = useCallback(() => {
     setFilters(initialFilters);
     setSortBy(initialSort.sortBy ?? "date_joined");
     setSortOrder(initialSort.sortOrder ?? "desc");
-    pagination.resetPagination();
-  }, [initialFilters, initialSort, pagination]);
+    setPage(initialPage); // Usa direttamente initialPage invece di pagination.resetPagination()
+    setPageSize(initialPageSize); // Usa direttamente initialPageSize
+  }, [initialFilters, initialSort, initialPage, initialPageSize]);
 
   const setSort = useCallback((key: string, order: SortOrder) => {
     setSortBy(key);
     setSortOrder(order);
   }, []);
 
+  // PROBLEMA RISOLTO: Dipendenze stabili per buildTableConfig
   const buildTableConfig = useCallback(
-    (
-      columns: TableColumn<T>[],
-      extra?: Partial<Omit<TableConfig<T>, "columns" | "data">>
-    ): TableConfig<T> => {
-      return createTableConfig<T>({
+    <K extends keyof T | string = keyof T | string>(
+      columns: TableColumn<T, K>[],
+      extra?: Partial<Omit<TableConfig<T, K>, "columns" | "data">>
+    ): TableConfig<T, K> => {
+      return createTableConfig<T, K>({
         data: items,
         columns,
         apiMeta: meta ?? undefined,
         loading: isLoading || isFetching,
-        onPageChange: pagination.setPage,
-        onPageSizeChange: pagination.setPageSize,
+        onPageChange: setPage, // Usa direttamente setPage invece di pagination.setPage
+        onPageSizeChange: setPageSize, // Usa direttamente setPageSize
         onSort: (key, direction) =>
           setSort(String(key), direction as SortOrder),
         enablePagination: true,
@@ -126,8 +130,8 @@ export function useListController<P extends object, T>({
       meta,
       isLoading,
       isFetching,
-      pagination.setPage,
-      pagination.setPageSize,
+      setPage, // Dipendenza stabile
+      setPageSize, // Dipendenza stabile
       setSort,
     ]
   );
@@ -147,14 +151,14 @@ export function useListController<P extends object, T>({
     sortOrder,
     filters,
 
-    // azioni
-    setPage: pagination.setPage,
-    setPageSize: pagination.setPageSize,
+    // azioni - usa direttamente le funzioni di stato invece di pagination
+    setPage,
+    setPageSize,
     setSort,
     setFilter,
     resetAll,
 
-    // oggetto paginazione per UI (se ti serve direttamente)
+    // oggetto paginazione per compatibilità (se serve)
     pagination,
 
     // builder per la table config

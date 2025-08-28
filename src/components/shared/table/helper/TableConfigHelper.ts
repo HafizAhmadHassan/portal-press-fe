@@ -6,16 +6,20 @@ import type { ApiMeta } from "@root/utils/genericApi";
 
 import { useMemo } from "react";
 
-interface CreateTableConfigOptions<T> {
+// Aggiornato per supportare chiavi generiche K
+interface CreateTableConfigOptions<
+  T,
+  K extends keyof T | string = keyof T | string
+> {
   data: T[];
-  columns: TableColumn<T>[];
+  columns: TableColumn<T, K>[];
   apiMeta?: ApiMeta | null;
   loading?: boolean;
   emptyMessage?: string;
   className?: string;
   onPageChange?: (page: number) => void;
   onPageSizeChange?: (size: number) => void;
-  onSort?: (key: keyof T | string, direction: "asc" | "desc") => void;
+  onSort?: (key: K, direction: "asc" | "desc") => void;
 
   onSelectionChange?: (selectedItems: PropertyKey[]) => void;
 
@@ -36,7 +40,11 @@ function toPageNumber(v: unknown): number | null {
   return null;
 }
 
-export function createTableConfig<T>({
+// Funzione principale aggiornata con tipizzazione generica
+export function createTableConfig<
+  T,
+  K extends keyof T | string = keyof T | string
+>({
   data,
   columns,
   apiMeta,
@@ -51,8 +59,8 @@ export function createTableConfig<T>({
   enableSorting = true,
   enableSelection = false,
   idField = "id" as keyof T,
-}: CreateTableConfigOptions<T>): TableConfig<T> {
-  const config: TableConfig<T> = {
+}: CreateTableConfigOptions<T, K>): TableConfig<T, K> {
+  const config: TableConfig<T, K> = {
     columns,
     data,
     loading,
@@ -103,14 +111,18 @@ export function createTableConfig<T>({
   return config;
 }
 
-export function useApiTableConfig<T>(
+// Hook aggiornato con tipizzazione generica
+export function useApiTableConfig<
+  T,
+  K extends keyof T | string = keyof T | string
+>(
   data: T[],
-  columns: TableColumn<T>[],
+  columns: TableColumn<T, K>[],
   apiMeta: ApiMeta | null,
-  options: Partial<CreateTableConfigOptions<T>> = {}
+  options: Partial<CreateTableConfigOptions<T, K>> = {}
 ) {
   return useMemo(() => {
-    return createTableConfig({
+    return createTableConfig<T, K>({
       data,
       columns,
       apiMeta,

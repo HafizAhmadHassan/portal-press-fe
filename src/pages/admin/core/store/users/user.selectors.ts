@@ -55,11 +55,11 @@ export const selectUserById = createSelector(
 );
 
 export const selectActiveUsers = createSelector([selectAllUsers], (users) =>
-  users.filter((user) => user.isActive)
+  users.filter((user) => user.is_active)
 );
 
 export const selectInactiveUsers = createSelector([selectAllUsers], (users) =>
-  users.filter((user) => !user.isActive)
+  users.filter((user) => !user.is_active)
 );
 
 export const selectUsersByRole = createSelector(
@@ -90,8 +90,8 @@ export const selectUsersCount = createSelector([selectAllUsers], (users) => {
 
   return {
     total: users.length,
-    active: users.filter((u) => u.isActive).length,
-    inactive: users.filter((u) => !u.isActive).length,
+    active: users.filter((u) => u.is_active).length,
+    inactive: users.filter((u) => !u.is_active).length,
     admin: users.filter((u) => u.role === UserRoles.ADMIN).length,
     user: users.filter((u) => u.role === UserRoles.USER).length,
   };
@@ -113,13 +113,13 @@ export const selectFilteredUsers = createSelector(
           user.username.toLowerCase().includes(filters.search.toLowerCase())) ||
         (user.email &&
           user.email.toLowerCase().includes(filters.search.toLowerCase())) ||
-        (user.fullName &&
-          user.fullName.toLowerCase().includes(filters.search.toLowerCase()));
+        (user.full_name &&
+          user.full_name.toLowerCase().includes(filters.search.toLowerCase()));
 
       const matchesRole = !filters.role || user.role === filters.role;
 
       const matchesStatus =
-        filters.isActive === null || user.isActive === filters.isActive;
+        filters.isActive === null || user.is_active === filters.isActive;
 
       return matchesSearch && matchesRole && matchesStatus;
     });

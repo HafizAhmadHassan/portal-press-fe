@@ -58,10 +58,9 @@ function compare(a: unknown, b: unknown): number {
 // ---------------------------------------------------------------
 export type UseGenericTableParams<
   T,
-  K extends keyof T | string = keyof T | string,
-  Id extends PropertyKey = PropertyKey
+  K extends keyof T | string = keyof T | string
 > = {
-  config: TableConfig<T, K, Id>;
+  config: TableConfig<T, K>;
   searchFields?: Array<Extract<keyof T, string>>;
   searchValue?: string;
   customFilters?: Array<FilterDef<T>>;
@@ -101,7 +100,7 @@ export function useGenericTable<
   T,
   K extends keyof T | string = keyof T | string,
   Id extends PropertyKey = PropertyKey
->(params: UseGenericTableParams<T, K, Id>): UseGenericTableReturn<T, K, Id> {
+>(params: UseGenericTableParams<T, K>): UseGenericTableReturn<T, K, Id> {
   const {
     config,
     searchFields = [],
@@ -118,7 +117,7 @@ export function useGenericTable<
     config.sorting?.defaultSort ?? (null as SortState<K>)
   );
   const [selectedItems, setSelectedItems] = useState<Id[]>(
-    config.selection?.selectedItems ?? ([] as Id[])
+    (config.selection?.selectedItems as Id[]) ?? ([] as Id[])
   );
 
   // Debugs (facoltativi): commentali in produzione

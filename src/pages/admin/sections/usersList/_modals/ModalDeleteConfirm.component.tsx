@@ -21,7 +21,7 @@ export const ModalDeleteConfirm: React.FC<ModalDeleteConfirmProps> = ({
           {""}
         </SimpleButton>
       }
-      title={`Cancellazione Utente ${user?.fullName}`}
+      title={`Cancellazione Utente ${user?.full_name}`}
       description="Sei sicuro di voler cancellare questo utente?"
       confirmText="Conferma la cancellazione"
       cancelText="Annulla"

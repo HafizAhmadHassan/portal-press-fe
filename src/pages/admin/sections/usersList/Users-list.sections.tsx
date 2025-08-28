@@ -1,11 +1,14 @@
 import { RefreshCw } from "lucide-react";
+import { useCrud } from "@root/hooks/useCrud";
 import React, { useCallback, useMemo } from "react";
-
+import { toAppError } from "@root/utils/errorHandling";
 import { Divider } from "@shared/divider/Divider.component";
+import { getUsersColumns } from "./config/usersTableConfig";
 import styles from "./styles/User-list.sections.module.scss";
-
+import usersListHeaderBtns from "./config/usersListHeaderBtns";
+import { useListController } from "@root/hooks/useListController";
 import { createUsersFilterConfig } from "./config/userFilterConfig";
-
+import { UserFields } from "@root/utils/constants/userFields.constants";
 import type { User, UsersQueryParams } from "@store_admin/users/user.types";
 import { GenericTableWithLogic } from "@shared/table/components/GenericTableWhitLogic.component";
 import { SectionHeaderComponent } from "@sections_admin/_commons/components/SectionHeader/Section-header.component";
@@ -15,13 +18,6 @@ import {
   useUpdateUserMutation,
   useDeleteUserMutation,
 } from "@store_admin/users/user.api";
-
-import { getUsersColumns } from "./config/usersTableConfig";
-import { useCrud } from "@root/hooks/useCrud";
-import { useListController } from "@root/hooks/useListController";
-import { UserFields } from "@root/utils/constants/userFields.constants";
-import { toAppError } from "@root/utils/errorHandling";
-import usersListHeaderBtns from "./config/usersListHeaderBtns";
 
 export const UsersListSections: React.FC = () => {
   const {
@@ -37,21 +33,21 @@ export const UsersListSections: React.FC = () => {
     initialFilters: {
       [UserFields.EMAIL]: "",
       [UserFields.USERNAME]: "",
-      [UserFields.USER_PERMISSIONS]: "",
       [UserFields.IS_ACTIVE]: "",
+      [UserFields.USER_PERMISSIONS]: "",
     },
     initialSort: { sortBy: "date_joined", sortOrder: "desc" },
   });
 
+  const { execUpdate, execDelete } = useCrud();
   const [updateUserTrigger] = useUpdateUserMutation();
   const [deleteUserTrigger] = useDeleteUserMutation();
-  const { execUpdate, execDelete } = useCrud();
 
   const handleEditUser = useCallback(
     async (userData: Partial<User> & { id: number | string }) => {
       const { id, ...data } = userData;
       const res = await execUpdate(updateUserTrigger, {
-        id: String(id),
+        id: id,
         data: data as Partial<User>,
       });
       if (!res.success) throw new Error(res.error);
@@ -62,7 +58,7 @@ export const UsersListSections: React.FC = () => {
 
   const handleDeleteUser = useCallback(
     async (user: User) => {
-      const res = await execDelete(deleteUserTrigger, String(user.id));
+      const res = await execDelete(deleteUserTrigger, user.id);
       if (!res.success) {
         const appErr = toAppError(
           res.error,

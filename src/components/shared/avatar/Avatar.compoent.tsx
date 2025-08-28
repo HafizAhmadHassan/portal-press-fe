@@ -8,7 +8,7 @@ export function Avatar({ user }: { user: User }) {
       {user.avatarUrl || user.avatar ? (
         <img
           src={user.avatarUrl || user.avatar}
-          alt={user.fullName || user.username}
+          alt={user.full_name || user.username}
           style={{
             width: "40px",
             height: "40px",
@@ -32,7 +32,7 @@ export function Avatar({ user }: { user: User }) {
           borderRadius: "50%",
           color: "#fff",
           background: getColorFromLetter(
-            (user.fullName || user.username || "U").charAt(0).toUpperCase()
+            (user.full_name || user.username || "U").charAt(0).toUpperCase()
           ),
           display: user.avatarUrl || user.avatar ? "none" : "flex",
           alignItems: "center",
@@ -41,7 +41,7 @@ export function Avatar({ user }: { user: User }) {
           fontSize: "16px",
         }}
       >
-        {(user.fullName || user.username || "U").charAt(0).toUpperCase()}
+        {(user.full_name || user.username || "U").charAt(0).toUpperCase()}
       </div>
     </>
   );

@@ -15,19 +15,19 @@ export default function PersonalInfoCard({ user }: { user: User }) {
         <div className={styles.infoItem}>
           <span className={styles.infoLabel}>Nome</span>
           <span className={styles.infoValue}>
-            {user.firstName || "Non specificato"}
+            {user.first_name || "Non specificato"}
           </span>
         </div>
         <div className={styles.infoItem}>
           <span className={styles.infoLabel}>Cognome</span>
           <span className={styles.infoValue}>
-            {user.lastName || "Non specificato"}
+            {user.last_name || "Non specificato"}
           </span>
         </div>
         <div className={styles.infoItem}>
           <span className={styles.infoLabel}>Nome Completo</span>
           <span className={styles.infoValue}>
-            {user.fullName || "Non specificato"}
+            {user.full_name || "Non specificato"}
           </span>
         </div>
       </div>

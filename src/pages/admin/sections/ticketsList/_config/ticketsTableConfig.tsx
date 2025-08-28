@@ -1,11 +1,12 @@
+// ./_config/ticketsTableConfig.ts - VERSIONE CORRETTA
 import React from "react";
-import type { TicketRead } from "@store_admin/tickets/ticket.types";
-import { StatusBadge } from "@shared/badges/StatusBadge.tsx";
-import ModalCloseTicket from "../_modals/ModalCloseTIcket/ModalCloseTicket.component";
 import { PowerIcon } from "lucide-react";
+import { StatusBadge } from "@shared/badges/StatusBadge.tsx";
+import type { TicketRead } from "@store_admin/tickets/ticket.types";
 import ModalTicketDetails from "../_modals/ModalDetailTicket/ModalTicketDetail";
+import ModalCloseTicket from "../_modals/ModalCloseTIcket/ModalCloseTicket.component";
 
-// Info minime del device collegate al ticket (arricchite dal join nell'hook)
+// Info del device collegato al ticket
 type DeviceLite = {
   machine_Name?: string;
   city?: string;
@@ -20,12 +21,12 @@ type DeviceLite = {
   country?: string;
 };
 
-// Ticket che arriva in tabella con (eventuale) device
+// Ticket con device opzionale
 type TicketWithDevice = TicketRead & {
   device?: DeviceLite | null;
 };
 
-// Payload che il ModalCloseTicket manderà all'onSave
+// Tipo per i dati di chiusura ticket
 export type CloseTicketData = {
   ticketId: number | string;
   date?: Date;
@@ -38,154 +39,187 @@ export type CloseTicketData = {
   machine_not_repairable?: boolean;
 };
 
-interface TicketsTableConfigProps {
-  tickets: TicketRead[];
-  onEdit: (data: { id: number | string; [key: string]: any }) => Promise<any>;
-  onDelete: (ticket: TicketRead) => void;
-  onClose: (data: CloseTicketData) => Promise<any>; // handler chiusura
-  isLoading?: boolean;
-  sortBy?: string;
-  sortOrder?: "asc" | "desc";
-  onSort?: (field: string, order: "asc" | "desc") => void;
-  pagination?: any;
+interface GetTicketsColumnsOptions {
+  onEdit: (ticketData: {
+    id: number | string;
+    [key: string]: any;
+  }) => Promise<any>;
+  onDelete: (ticket: TicketRead) => Promise<void>;
+  onClose: (data: CloseTicketData) => Promise<any>;
 }
+
+// Definizione chiavi per evitare problemi TypeScript
+/* type TicketColumnKey =
+  | keyof TicketRead
+  | "machine"
+  | "actions"
+  | "open_Description"
+  | "customer"
+  | "date_Time"; */
 
 const isClosed = (t: any) =>
   t?.status === 2 || t?.status === "closed" || t?.status === "CLOSED";
 
-export const createTicketsTableConfig = ({
-  tickets,
-  onEdit,
-  onDelete,
-  onClose,
-  isLoading = false,
-  sortBy,
-  sortOrder,
-  onSort,
-  pagination,
-}: TicketsTableConfigProps) => ({
-  columns: [
-    {
-      key: "id",
-      header: "ID",
-      type: "text" as const,
-      width: "80px",
-      sortable: true,
+// PROBLEMA RISOLTO: Restituisci il tipo corretto
+export const getTicketsColumns = ({ onClose }: GetTicketsColumnsOptions) => [
+  // Colonna ID
+  {
+    key: "id",
+    header: "ID",
+    type: "text",
+    width: "80px",
+    sortable: true,
+    textConfig: {
+      overflow: "ellipsis",
+      maxWidth: "60px",
+      showTooltip: true,
     },
-    {
-      key: "open_Description",
-      header: "Descrizione",
-      type: "text" as const,
-      width: "250px",
-      sortable: true,
-      textConfig: {
-        overflow: "smart" as const,
-        maxLines: 3,
-        maxWidth: "250px",
-        showTooltip: true,
-      },
-    },
-    {
-      key: "status",
-      header: "Stato",
-      type: "custom" as const,
-      sortable: true,
-      width: "120px",
-      render: (_: any, t: TicketWithDevice) => (
-        <StatusBadge status={t.status as any} />
-      ),
-    },
-    {
-      key: "customer",
-      header: "Cliente",
-      type: "text" as const,
-      sortable: true,
-    },
+  },
 
-    {
-      key: "machine",
-      header: "Macchina",
-      type: "custom" as const,
-      width: "220px",
-      sortable: true,
-      render: (_: any, t: TicketWithDevice) => {
-        if (!t.device) {
-          return (
-            <span
-              style={{ color: "var(--text-secondary)", fontStyle: "italic" }}
+  // Colonna Descrizione
+  {
+    key: "open_Description",
+    header: "Descrizione",
+    type: "text",
+    width: "250px",
+    sortable: true,
+    textConfig: {
+      overflow: "smart",
+      maxLines: 3,
+      maxWidth: "250px",
+      showTooltip: true,
+    },
+    accessor: (ticket: TicketRead) => ticket.open_Description || "N/A",
+  },
+
+  // Colonna Stato con badge personalizzato
+  {
+    key: "status",
+    header: "Stato",
+    type: "custom",
+    sortable: true,
+    width: "120px",
+    render: (_, ticket) => (
+      <StatusBadge status={(ticket as TicketWithDevice).status as any} />
+    ),
+  },
+
+  // Colonna Cliente
+  {
+    key: "customer",
+    header: "Cliente",
+    type: "text",
+    sortable: true,
+    width: "150px",
+    textConfig: {
+      overflow: "ellipsis",
+      maxWidth: "130px",
+      showTooltip: true,
+    },
+    accessor: (ticket: TicketRead) => {
+      const t = ticket as TicketWithDevice;
+      return (
+        t.device?.customer_Name ||
+        (t.device as any)?.customer ||
+        ticket.customer_Name ||
+        "N/A"
+      );
+    },
+  },
+
+  // Colonna Macchina personalizzata
+  {
+    key: "machine",
+    header: "Macchina",
+    type: "custom",
+    width: "220px",
+    sortable: true,
+    render: (_, ticket) => {
+      const t = ticket as TicketWithDevice;
+      if (!t.device) {
+        return (
+          <span style={{ color: "var(--text-secondary)", fontStyle: "italic" }}>
+            Macchina non trovata
+          </span>
+        );
+      }
+
+      return (
+        <div>
+          {t.device.machine_Name && (
+            <div
+              style={{
+                fontSize: "14px",
+                fontWeight: 600,
+                color: "var(--text-primary)",
+              }}
             >
-              Macchina non trovata
-            </span>
-          );
-        }
-
-        return (
-          <div>
-            {t.device.machine_Name && (
-              <div
-                style={{
-                  fontSize: "14px",
-                  fontWeight: 600,
-                  color: "var(--text-primary)",
-                }}
-              >
-                {t.device.machine_Name}
-              </div>
-            )}
-            {(t.device.city || t.device.province) && (
-              <div style={{ fontSize: "12px", color: "var(--text-secondary)" }}>
-                {t.device.city}
-                {t.device.province ? `, ${t.device.province}` : ""}
-              </div>
-            )}
-            {(t.device.customer_Name || (t.device as any).customer) && (
-              <div style={{ fontSize: "12px", color: "var(--text-secondary)" }}>
-                {t.device.customer_Name || (t.device as any).customer}
-              </div>
-            )}
-          </div>
-        );
-      },
-    },
-    {
-      key: "date_Time",
-      header: "Data Apertura",
-      type: "custom" as const,
-      width: "200px",
-      sortable: true,
-      render: (_: any, t: TicketWithDevice) => {
-        const raw =
-          (t as any).date_Time || (t as any).date_time || (t as any).created_At;
-        if (!raw)
-          return <span style={{ color: "var(--text-secondary)" }}>N/A</span>;
-        const d = new Date(raw);
-        return (
-          <div>
-            <div style={{ fontSize: "14px", color: "var(--text-primary)" }}>
-              {d.toLocaleDateString("it-IT")}
+              {t.device.machine_Name}
             </div>
+          )}
+          {(t.device.city || t.device.province) && (
             <div style={{ fontSize: "12px", color: "var(--text-secondary)" }}>
-              {d.toLocaleTimeString("it-IT", {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
+              {t.device.city}
+              {t.device.province ? `, ${t.device.province}` : ""}
             </div>
-          </div>
-        );
-      },
+          )}
+          {(t.device.customer_Name || (t.device as any).customer) && (
+            <div style={{ fontSize: "12px", color: "var(--text-secondary)" }}>
+              {t.device.customer_Name || (t.device as any).customer}
+            </div>
+          )}
+        </div>
+      );
     },
-    {
-      key: "actions",
-      header: "Azioni",
-      type: "custom" as const,
-      width: "160px",
-      render: (_: any, t: TicketWithDevice) => (
-        <div style={{ display: "flex", gap: "8px" }}>
+  },
+
+  // Colonna Data Apertura
+  {
+    key: "date_Time",
+    header: "Data Apertura",
+    type: "custom",
+    width: "200px",
+    sortable: true,
+    render: (_, ticket) => {
+      const raw =
+        ticket.date_Time ||
+        ticket.date_time ||
+        ticket.created_At ||
+        ticket.createdAt;
+
+      if (!raw)
+        return <span style={{ color: "var(--text-secondary)" }}>N/A</span>;
+
+      const date = new Date(raw);
+      return (
+        <div>
+          <div style={{ fontSize: "14px", color: "var(--text-primary)" }}>
+            {date.toLocaleDateString("it-IT")}
+          </div>
+          <div style={{ fontSize: "12px", color: "var(--text-secondary)" }}>
+            {date.toLocaleTimeString("it-IT", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </div>
+        </div>
+      );
+    },
+  },
+
+  // Colonna Azioni
+  {
+    key: "actions",
+    header: "Azioni",
+    type: "custom",
+    width: "160px",
+    render: (_, ticket) => {
+      const t = ticket as TicketWithDevice;
+      return (
+        <div style={{ display: "flex", gap: "8px", justifyContent: "center" }}>
           {isClosed(t) ? (
-            // 👇 occhio: modale dettagli stile "utente"
             <ModalTicketDetails ticket={t as any} />
           ) : (
-            // 👇 altrimenti: modale per CHIUDERE il ticket
             <ModalCloseTicket
               ticket={t as any}
               onSave={onClose}
@@ -203,6 +237,7 @@ export const createTicketsTableConfig = ({
                     border: "1px solid var(--border-color)",
                     background: "var(--surface-1)",
                     cursor: "pointer",
+                    color: "var(--text-primary)",
                   }}
                 >
                   <PowerIcon size={14} />
@@ -211,18 +246,7 @@ export const createTicketsTableConfig = ({
             />
           )}
         </div>
-      ),
+      );
     },
-  ],
-  data: tickets,
-  loading: isLoading,
-  pagination,
-  sorting: {
-    enabled: true,
-    currentSort:
-      sortBy && sortOrder ? { key: sortBy, direction: sortOrder } : undefined,
-    onSort,
-    defaultSort: { key: "date_Time", direction: "desc" as const },
   },
-  emptyMessage: "Nessun ticket trovato.",
-});
+];

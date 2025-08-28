@@ -1,8 +1,6 @@
 import * as React from "react";
 import GenericTable from "../GenericTable";
 
-import type { GenericTableWithLogicProps as GTWLProps } from "../types/GenericTable.types";
-
 // Helper: safe extraction of an ID value from item
 function getItemId<T, Id extends PropertyKey>(
   item: T,
@@ -20,7 +18,7 @@ export const GenericTableWithLogic = <
 >({
   config,
   onSelectionChange,
-}: GTWLProps<T, K, Id>): React.JSX.Element => {
+}: any): React.JSX.Element => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const paginatedData: T[] = (config.data ?? []) as T[];
 

@@ -39,6 +39,9 @@ export interface TicketRead extends TicketBase {
   created_At: string; // ISO datetime
   updated_At: string; // ISO datetime
   closed_at?: string | null;
+  customer_Name?: string | null;
+  open_Description?: string | null;
+  closed_Description?: string | null;
 
   device?: DeviceInfo;
   opened_by?: UserInfo;

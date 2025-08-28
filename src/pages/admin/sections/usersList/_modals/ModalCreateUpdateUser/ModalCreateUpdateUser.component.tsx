@@ -75,12 +75,12 @@ export const ModalCreateUpdateUser: React.FC<ModalCreateUpdateUserProps> = ({
     isEdit,
     initialUser?.username,
     initialUser?.email,
-    initialUser?.firstName,
-    initialUser?.lastName,
-    initialUser?.fullName,
-    initialUser?.isActive,
-    initialUser?.isStaff,
-    initialUser?.isSuperuser,
+    initialUser?.first_name,
+    initialUser?.last_name,
+    initialUser?.full_name,
+    initialUser?.is_active,
+    initialUser?.is_staff,
+    initialUser?.is_superuser,
     JSON.stringify(initialUser?.permissions),
   ]);
 
