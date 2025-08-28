@@ -5,6 +5,7 @@ import type {
   CreateTicketRequest, // alias a MessageCreate
   UpdateTicketRequest,
   BulkActionRequest,
+  TicketRead,
 } from "./ticket.types";
 import { ticketsApi } from "./ticket.api";
 import {
@@ -38,7 +39,29 @@ export const loadTickets = createAsyncThunk(
         ticketsApi.endpoints.getTickets.initiate(query)
       ).unwrap();
 
-      dispatch(setTickets(response.data));
+      // Map device.id to number for type safety
+      const mappedTickets = Array.isArray(response.data)
+        ? response.data
+            .map((ticket) => {
+              if (!ticket.device) return { ...ticket, device: undefined };
+              const id =
+                typeof ticket.device.id === "string"
+                  ? Number(ticket.device.id)
+                  : ticket.device.id;
+              // Only include tickets with valid device id (number)
+              if (typeof id !== "number" || isNaN(id)) return null;
+              return {
+                ...ticket,
+                device: {
+                  ...ticket.device,
+                  id,
+                },
+              };
+            })
+            .filter(Boolean)
+        : response.data;
+
+      dispatch(setTickets(mappedTickets as TicketRead[]));
       if (response.meta) dispatch(setPagination(response.meta));
       return response;
     } catch (error: any) {
@@ -56,8 +79,29 @@ export const loadAllTickets = createAsyncThunk(
       const all = await dispatch(
         ticketsApi.endpoints.getAllTickets.initiate()
       ).unwrap();
-      dispatch(setAllTickets(all));
-      return all;
+      // Convert device.id from string to number if needed and ensure type safety
+      const mappedAll = Array.isArray(all)
+        ? all
+            .map((ticket) => {
+              if (!ticket.device) return { ...ticket, device: undefined };
+              const id =
+                typeof ticket.device.id === "string"
+                  ? Number(ticket.device.id)
+                  : ticket.device.id;
+              // Only include tickets with valid device id (number)
+              if (typeof id !== "number" || isNaN(id)) return null;
+              return {
+                ...ticket,
+                device: {
+                  ...ticket.device,
+                  id,
+                },
+              };
+            })
+            .filter(Boolean)
+        : all;
+      dispatch(setAllTickets(mappedAll as TicketRead[]));
+      return mappedAll;
     } catch (error: any) {
       dispatch(setError(error.data?.message || error.message));
       return rejectWithValue(error.data?.message);
@@ -72,7 +116,7 @@ export const createNewTicket = createAsyncThunk(
       const created = await dispatch(
         ticketsApi.endpoints.createTicket.initiate(ticketData)
       ).unwrap();
-      await dispatch(loadTickets());
+      await dispatch(loadTickets({}));
       await dispatch(loadAllTickets());
       return created;
     } catch (error: any) {
@@ -94,7 +138,7 @@ export const updateExistingTicket = createAsyncThunk(
       const updated = await dispatch(
         ticketsApi.endpoints.updateTicket.initiate(updateData)
       ).unwrap();
-      await dispatch(loadTickets());
+      await dispatch(loadTickets({}));
       await dispatch(loadAllTickets());
       return updated;
     } catch (error: any) {
@@ -115,7 +159,7 @@ export const deleteExistingTicket = createAsyncThunk(
       await dispatch(
         ticketsApi.endpoints.deleteTicket.initiate(ticketId)
       ).unwrap();
-      await dispatch(loadTickets());
+      await dispatch(loadTickets({}));
       await dispatch(loadAllTickets());
       return ticketId;
     } catch (error: any) {
@@ -136,7 +180,7 @@ export const performBulkTicketAction = createAsyncThunk(
       const response = await dispatch(
         ticketsApi.endpoints.bulkTickets.initiate(request)
       ).unwrap();
-      await dispatch(loadTickets());
+      await dispatch(loadTickets({}));
       await dispatch(loadAllTickets());
       return {
         ...response,

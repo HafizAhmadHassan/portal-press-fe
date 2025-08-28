@@ -22,9 +22,9 @@ const SCOPE_ALLOWLIST: RegExp[] = [
 /** (opzionale) helper per disattivare lo scope su una singola request */
 export function noScope<T extends string | FetchArgs>(args: T): T {
   if (typeof args === "string") {
-    return { url: args, /* @ts-expect-error */ __skipScope: true } as any;
+    return { url: args, __skipScope: true } as any;
   }
-  return { ...(args as any), /* @ts-expect-error */ __skipScope: true };
+  return { ...(args as any), __skipScope: true };
 }
 
 const rawBaseQuery = fetchBaseQuery({

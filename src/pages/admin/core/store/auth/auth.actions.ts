@@ -8,7 +8,7 @@ export {
   setLoading,
   updateUser,
   logout,
-} from './auth.slice.ts';
+} from "./auth.slice.ts";
 
 // 2) Thunk asincroni
 export {
@@ -20,17 +20,16 @@ export {
   checkSessionTimeout,
   forgotPasswordAsync,
   resetPasswordAsync,
-} from './auth.thunks.ts';
+} from "./auth.thunks.ts";
 
 // 3) Hook RTK Query
 export {
   useLoginMutation,
   useRegisterMutation,
   useLogoutMutation,
-  useRefreshTokenMutation,
   useGetCurrentUserQuery,
   useForgotPasswordMutation,
   useResetPasswordMutation,
   useChangePasswordMutation,
   useUpdateProfileMutation,
-} from './auth.api.ts';
+} from "./auth.api.ts";

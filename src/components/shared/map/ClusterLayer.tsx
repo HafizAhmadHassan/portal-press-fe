@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet.markercluster";
+import type { MarkerClusterGroup } from "leaflet.markercluster";
 import type { MapDataItem } from "./types/Map.types";
 import { createCustomIcon, getClusterIcon } from "./utils";
 import "./styles/ClusterIcon.module.scss"; // Needed for custom-cluster-icon
@@ -23,8 +24,8 @@ const ClusterLayer = ({
   inactiveIconUrl,
   renderPopup,
 }: Props) => {
+  const clusterGroupRef = useRef<MarkerClusterGroup | null>(null);
   const map = useMap();
-  const clusterGroupRef = useRef<L.MarkerClusterGroup | null>(null);
   const markersRef = useRef<L.Marker[]>([]);
 
   useEffect(() => {

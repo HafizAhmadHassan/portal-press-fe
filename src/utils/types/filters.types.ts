@@ -28,11 +28,12 @@ export interface SelectOption {
 }
 
 export interface SelectFilter extends BaseFilter {
-  icon: LucideIcon;
-  iconPosition: "left" | "right";
   type: "select";
   options: SelectOption[];
   onChange: (value: string | null) => void;
+  // Rese opzionali le proprietà icon
+  icon?: LucideIcon;
+  iconPosition?: "left" | "right";
 }
 
 export type FilterConfig = InputFilter | SelectFilter;

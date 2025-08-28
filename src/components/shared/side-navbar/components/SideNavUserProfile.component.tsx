@@ -6,8 +6,9 @@ import { SideNavUserInfo } from "./SideNavUserInfo.component";
 import { SideNavUserMenu } from "./SideNavUserMenu.component";
 import { useSideBar } from "@store_admin/hooks/useSideBar.ts";
 import { useAuth } from "@store_admin/auth/hooks/useAuth.ts";
+import type { User } from "@root/pages/admin/types/overview";
 
-export function SideNavUserProfile({ user }: User) {
+export function SideNavUserProfile({ user }: { user: User }) {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const { isSidebarCollapsed } = useSideBar();
 

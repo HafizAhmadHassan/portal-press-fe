@@ -44,7 +44,7 @@ export const DevicesSummaryBar: React.FC<DevicesSummaryBarProps> = ({
     (d) => d.status_Machine_Blocked === true
   ).length;
   const readyDevices = devices.filter(
-    (d) => d.tatus_ready_d75_3_7 === true
+    (d) => d.status_ready_d75_3_7 === true
   ).length;
 
   return (

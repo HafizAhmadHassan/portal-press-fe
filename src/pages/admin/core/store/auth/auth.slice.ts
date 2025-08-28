@@ -1,6 +1,7 @@
 // store/auth/auth.slice.ts
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { AuthState, User } from "./auth.types";
+import { mapBackendUserToUser } from "./auth.types";
 import { authApi } from "./auth.api";
 import {
   initializeAuthAsync,
@@ -52,7 +53,9 @@ const saveToStorage = (
       localStorage.removeItem(USER_KEY);
       localStorage.removeItem(LAST_ACTIVITY_KEY);
     }
-  } catch {}
+  } catch {
+    /* empty */
+  }
 };
 
 const { token, refresh, user, lastActivity } = loadFromStorage();
@@ -114,7 +117,8 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(loginAsync.fulfilled, (state, { payload }) => {
-        state.user = payload.user;
+        const user = mapBackendUserToUser(payload.user);
+        state.user = user;
         state.token = payload.token;
         state.refresh = payload.refresh;
         state.isAuthenticated = true;
@@ -122,12 +126,7 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.error = null;
         state.lastActivity = Date.now();
-        saveToStorage(
-          payload.token,
-          payload.refresh,
-          payload.user,
-          state.lastActivity
-        );
+        saveToStorage(payload.token, payload.refresh, user, state.lastActivity);
       })
       .addCase(loginAsync.rejected, (state, { payload }) => {
         state.isLoading = false;
@@ -142,19 +141,15 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(registerAsync.fulfilled, (state, { payload }) => {
-        state.user = payload.user;
+        const user = mapBackendUserToUser(payload.user);
+        state.user = user;
         state.token = payload.token;
         state.refresh = payload.refresh;
         state.isAuthenticated = true;
         state.isLoading = false;
         state.error = null;
         state.lastActivity = Date.now();
-        saveToStorage(
-          payload.token,
-          payload.refresh,
-          payload.user,
-          state.lastActivity
-        );
+        saveToStorage(payload.token, payload.refresh, user, state.lastActivity);
       })
       .addCase(registerAsync.rejected, (state, { payload }) => {
         state.isLoading = false;
@@ -174,21 +169,17 @@ const authSlice = createSlice({
 
     // INITIALIZE AUTH ASYNC
     builder
-      .addCase(initializeAuthAsync.pending, (state) => {
+      .addCase(initializeAuthAsync.pending, () => {
         // Non cambiare isLoading qui per non interferire con il login
       })
       .addCase(initializeAuthAsync.fulfilled, (state, { payload }) => {
         state.isInitialized = true;
         if (payload) {
-          state.user = payload;
+          const user = payload;
+          state.user = user;
           state.isAuthenticated = true;
           state.lastActivity = Date.now();
-          saveToStorage(
-            state.token,
-            state.refresh,
-            payload,
-            state.lastActivity
-          );
+          saveToStorage(state.token, state.refresh, user, state.lastActivity);
         } else {
           // Payload è null - nessun token da verificare, ma inizializzazione completata
           if (!state.isAuthenticated) {
@@ -230,15 +221,11 @@ const authSlice = createSlice({
       .addMatcher(
         authApi.endpoints.getCurrentUser.matchFulfilled,
         (state, { payload }) => {
-          state.user = payload;
+          const user = payload;
+          state.user = user;
           state.isAuthenticated = true;
           state.lastActivity = Date.now();
-          saveToStorage(
-            state.token,
-            state.refresh,
-            payload,
-            state.lastActivity
-          );
+          saveToStorage(state.token, state.refresh, user, state.lastActivity);
         }
       )
       .addMatcher(authApi.endpoints.getCurrentUser.matchRejected, (state) => {

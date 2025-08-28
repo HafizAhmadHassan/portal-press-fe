@@ -253,7 +253,6 @@ export const {
   useLoginMutation,
   useRegisterMutation,
   useLogoutMutation,
-  useRefreshTokenMutation,
   useGetCurrentUserQuery,
   useForgotPasswordMutation,
   useResetPasswordMutation,

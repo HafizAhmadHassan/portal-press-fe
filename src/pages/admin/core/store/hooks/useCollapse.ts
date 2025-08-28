@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from '@store_admin/store.hooks';
+import { useAppDispatch, useAppSelector } from "@store_admin/store.hooks";
 import {
   closeAllCollapses,
   closeCollapse,
@@ -8,7 +8,7 @@ import {
   setActiveGroup,
   toggleCollapse,
   unregisterCollapse,
-} from '@store_admin/ui/collapse/collapse.slice';
+} from "@store_admin/ui/collapse/collapse.slice";
 import {
   selectActiveGroup,
   selectCollapseById,
@@ -16,14 +16,16 @@ import {
   selectCollapseLoading,
   selectIsCollapseOpen,
   selectOpenCollapses,
-} from '@store_admin/ui/collapse/collapse.selectors';
+} from "@store_admin/ui/collapse/collapse.selectors";
 
 export const useCollapse = (id?: string) => {
   const dispatch = useAppDispatch();
 
   // Stato specifico per ID
   const collapseItem = useAppSelector(id ? selectCollapseById(id) : () => null);
-  const isCollapseOpen = useAppSelector(id ? selectIsCollapseOpen(id) : () => false);
+  const isCollapseOpen = useAppSelector(
+    id ? selectIsCollapseOpen(id) : () => false
+  );
 
   // Stato globale
   const openCollapses = useAppSelector(selectOpenCollapses);

@@ -1,7 +1,7 @@
 // store/auth/_hooks/useAuth.ts
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch } from "@store_admin/store";
+import type { AppDispatch } from "@root/store";
 import {
   selectAuthError,
   selectAuthLoading,

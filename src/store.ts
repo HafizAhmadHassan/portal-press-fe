@@ -1,4 +1,4 @@
-// @store_admin/store/store.ts
+// @root/store/store.ts
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 

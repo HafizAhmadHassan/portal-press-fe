@@ -1,4 +1,4 @@
-// store/auth/types.ts
+// store/auth/auth.types.ts
 export type PermissionAction = "view" | "add" | "change" | "delete";
 export type PermissionMap = Record<string, PermissionAction[]>;
 
@@ -15,7 +15,7 @@ export interface BackendSessionUser {
   permissions: PermissionMap;
 }
 
-/** Forma usata dall’app (compatibile con quella che avevi) */
+/** Forma usata dall'app (compatibile con quella che avevi) */
 export interface User {
   id: string | number; // prima era string, ora accetta anche number
   username: string;
@@ -51,11 +51,13 @@ export interface AuthResponse {
   refresh: string;
 }
 
+// AGGIUNTA la proprietà mancante isInitialized
 export interface AuthState {
   user: User | null;
   token: string | null;
   refresh: string | null;
   isAuthenticated: boolean;
+  isInitialized: boolean; // ← AGGIUNTA QUESTA PROPRIETÀ
   isLoading: boolean;
   error: string | null;
   lastActivity: number | null;
@@ -67,7 +69,7 @@ export interface ApiError {
   status?: number;
 }
 
-/** Helper: mappa utente backend → utente usato nell’app */
+/** Helper: mappa utente backend → utente usato nell'app */
 export function mapBackendUserToUser(u: BackendSessionUser): User {
   const name =
     [u.first_name, u.last_name].filter(Boolean).join(" ").trim() || u.username;

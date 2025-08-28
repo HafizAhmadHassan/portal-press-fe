@@ -36,7 +36,7 @@ export const ticketsApi = apiSlice.injectEndpoints({
 
           if (devicesResult) {
             const deviceMap = new Map<number, Device>();
-            devicesResult.forEach((d) => deviceMap.set(d.id, d));
+            devicesResult.forEach((d) => deviceMap.set(Number(d.id), d));
 
             const enriched: TicketWithDevice[] = ticketsResponse.data.map(
               (t) => ({
