@@ -49,8 +49,12 @@
   --bg-secondary: #f9fafb;
   --text-primary: #111827;
   --text-secondary: #6b7280;
-  --text-on-primary: #ffffff; /* aggiunta sicura */
+  --text-muted: #9ca3af;
+  --text-light: #6b7280;
+  --text-dark: #111827;
+  --text-on-primary: #ffffff;
   --border-color: #e5e7eb;
+  --background-light: #f8f9fa;
 
   /* Layout */
   --border-radius: 16px;
@@ -63,11 +67,34 @@
   --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1),
     0 8px 10px -6px rgb(0 0 0 / 0.1);
   --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.12);
+  --shadow-card: 0 10px 40px rgba(0, 0, 0, 0.1);
   --glass-bg: rgba(255, 255, 255, 0.85);
   --glass-border: rgba(255, 255, 255, 0.2);
 
-  /* Alias non invasivo per i moduli che usano --radius-md */
+  /* Transition */
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Alias per compatibilità */
   --radius-md: 12px;
+
+  /* Gradients per login */
+  --gradient-primary: linear-gradient(
+    135deg,
+    var(--primary-color) 0%,
+    var(--purple-color) 100%
+  );
+  --gradient-secondary: linear-gradient(
+    135deg,
+    var(--primary-color) 0%,
+    var(--primary-dark) 100%
+  );
+  --gradient-accent: linear-gradient(
+    135deg,
+    var(--purple-color) 0%,
+    var(--primary-color) 100%
+  );
 
   /* =========================
      Map tokens (LIGHT)
@@ -77,7 +104,7 @@
   --map-saturation: 1.05;
   --map-brightness: 1;
   --map-contrast: 1;
-  --map-sepia: 0.15; /* un po’ di seppia */
+  --map-sepia: 0.15;
   --map-invert: 0;
   --map-filter: sepia(var(--map-sepia)) hue-rotate(var(--map-hue))
     saturate(var(--map-saturation)) brightness(var(--map-brightness))
@@ -108,8 +135,12 @@ html[data-theme="dark"],
   --bg-secondary: #1f2937;
   --text-primary: #ffffff;
   --text-secondary: #d1d5db;
+  --text-muted: #9ca3af;
+  --text-light: #d1d5db;
+  --text-dark: #ffffff;
   --text-on-primary: #0b1220;
   --border-color: #374151;
+  --background-light: #1f2937;
 
   --primary-light: rgba(59, 130, 246, 0.1);
   --success-light: rgba(16, 185, 129, 0.1);
@@ -118,11 +149,15 @@ html[data-theme="dark"],
   --purple-light: rgba(139, 92, 246, 0.1);
   --orange-light: rgba(249, 115, 22, 0.1);
 
+  --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.3);
+  --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.4);
+  --shadow-card: 0 10px 40px rgba(0, 0, 0, 0.5);
+
   /* =========================
      Map tokens (DARK)
      blu tenue, niente seppia
      ========================= */
-  --map-hue: 200deg; /* viraggio blu */
+  --map-hue: 200deg;
   --map-saturation: 1.1;
   --map-brightness: 0.92;
   --map-contrast: 1.06;
@@ -135,7 +170,7 @@ html[data-theme="dark"],
   --map-tint-opacity: 0.22;
 }
 
-/* Base reset (lasciati come nel tuo file) */
+/* Base reset */
 * {
   box-sizing: border-box;
   margin: 0;

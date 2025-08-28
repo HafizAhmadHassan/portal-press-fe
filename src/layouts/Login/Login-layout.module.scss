@@ -1,0 +1,94 @@
+// pages/Login/styles/Login-layout.module.scss
+
+// Main login page layout
+.loginPage {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-200) 100%);
+  position: relative;
+  overflow: hidden;
+  font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.loginContainer {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.loginContent {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 60px;
+  align-items: center;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.bottomInfo {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.securityBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--text-light);
+  font-size: 12px;
+
+  svg {
+    opacity: 0.7;
+  }
+}
+
+// Responsive Design
+@media (max-width: 1024px) {
+  .loginContent {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    text-align: center;
+  }
+
+  // SidePanel order adjustment handled in SidePanel component
+}
+
+@media (max-width: 768px) {
+  .loginContainer {
+    padding: 20px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .loginContainer {
+    padding: 16px 12px;
+  }
+
+  .bottomInfo {
+    margin-top: 24px;
+  }
+
+  .securityBadge {
+    font-size: 11px;
+  }
+}
+
+// Dark mode support
+:global {
+  html[data-theme="dark"],
+  .darkMode {
+    .loginPage {
+      background: linear-gradient(
+        135deg,
+        var(--gray-900) 0%,
+        var(--gray-800) 100%
+      );
+    }
+  }
+}

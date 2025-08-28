@@ -1,0 +1,66 @@
+// components/LoginCard/LoginCard.module.scss
+
+.loginCard {
+  background: var(--white);
+  border-radius: var(--border-radius-lg);
+  padding: 40px;
+  box-shadow: var(--shadow-card);
+  position: relative;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.cardGlow {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--purple-color),
+    var(--primary-dark)
+  );
+  border-radius: var(--border-radius-lg);
+  z-index: -1;
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.loginCard:hover .cardGlow {
+  opacity: 0.1;
+}
+
+// Responsive Design
+@media (max-width: 1024px) {
+  .loginCard {
+    order: 1;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .loginCard {
+    padding: 32px 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .loginCard {
+    padding: 24px 20px;
+    border-radius: 16px;
+  }
+}
+
+// Dark mode support
+:global {
+  html[data-theme="dark"],
+  .darkMode {
+    .loginCard {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+    }
+  }
+}

@@ -1,0 +1,136 @@
+// components/SidePanel/SidePanel.module.scss
+
+.sidePanel {
+}
+
+.featureList {
+  margin-bottom: 40px;
+}
+
+.featureItem {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 32px;
+}
+
+.featureIcon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  background: var(--white);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+  box-shadow: var(--shadow-light);
+}
+
+.featureText {
+  h4 {
+    margin: 0 0 4px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-dark);
+  }
+
+  p {
+    margin: 0;
+    color: var(--text-light);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.statItem {
+  text-align: center;
+  padding: 20px;
+  background: var(--white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-light);
+}
+
+.statNumber {
+  font-size: 24px;
+  font-weight: 700;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color) 0%,
+    var(--purple-color) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 4px;
+}
+
+.statLabel {
+  font-size: 12px;
+  color: var(--text-light);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .featureItem {
+    margin-bottom: 24px;
+  }
+
+  .featureIcon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .featureText h4 {
+    font-size: 16px;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  .statItem {
+    padding: 16px;
+  }
+
+  .statNumber {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .featureItem {
+    text-align: left;
+  }
+
+  .featureText h4 {
+    font-size: 15px;
+  }
+
+  .featureText p {
+    font-size: 13px;
+  }
+}
+
+// Dark mode support
+:global {
+  html[data-theme="dark"],
+  .darkMode {
+    .featureIcon,
+    .statItem {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+    }
+  }
+}

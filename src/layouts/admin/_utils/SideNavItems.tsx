@@ -9,10 +9,7 @@ import {
   Users,
   WashingMachine,
 } from "lucide-react";
-import type {
-  MenuItem,
-  UserProfile,
-} from "@shared/side-navbar/types/MenuItem.types";
+import type { MenuItem } from "@shared/side-navbar/types/MenuItem.types";
 import { UserRoles } from "@root/utils/constants/userRoles";
 
 /** Badge in input dal "mondo esterno" (RTK Query meta, contatori ecc.) */
@@ -23,7 +20,6 @@ export type AdminNavBadges = {
   gps?: number;
   logs?: number;
   analytics?: {
-    /** se vuoi passare un totale esplicito per il parent */
     total?: number;
     overview?: number;
     reports?: number;
@@ -124,13 +120,4 @@ export const buildAdminLayoutSideNavItems = (
       ],
     },
   ];
-};
-
-/** opzionale: profilo utente (puoi sostituirlo con i dati reali dal tuo auth store) */
-export const AdminLayoutUserProfile: UserProfile = {
-  name: "John Doe",
-  email: "john@example.com",
-  role: "Administrator",
-  avatar:
-    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
 };

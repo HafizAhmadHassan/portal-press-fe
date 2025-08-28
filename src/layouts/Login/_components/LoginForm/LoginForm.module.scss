@@ -1,0 +1,314 @@
+// components/LoginForm/LoginForm.module.scss
+
+.loginForm {
+}
+
+.formHeader {
+  text-align: center;
+  margin-bottom: 32px;
+
+  h3 {
+    margin: 0 0 8px 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-dark);
+  }
+
+  p {
+    margin: 0;
+    color: var(--text-light);
+    font-size: 14px;
+  }
+}
+
+// Error message styles
+.errorMessage {
+  background: var(--error-light);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 20px;
+  color: var(--error-dark);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+.formGroup {
+  margin-bottom: 24px;
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-dark);
+    font-weight: 500;
+    font-size: 14px;
+  }
+}
+
+.inputWrapper {
+  position: relative;
+
+  input {
+    width: 100%;
+    padding: 16px 48px 16px 16px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: 15px;
+    transition: var(--transition);
+    background: var(--white);
+    box-sizing: border-box;
+    color: var(--text-dark);
+
+    &[type="email"] {
+      padding-left: 48px;
+      padding-right: 16px;
+    }
+
+    &[type="password"] {
+      padding-right: 48px;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    &::placeholder {
+      color: var(--text-muted);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      background-color: var(--gray-50);
+    }
+  }
+}
+
+.inputIcon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-light);
+  pointer-events: none;
+}
+
+.passwordToggle {
+  position: absolute;
+  right: 16px;
+  top: 58%;
+  padding: 0 !important;
+  width: 20px !important;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.formOptions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text-dark);
+
+  input[type="checkbox"] {
+    opacity: 0;
+    position: absolute;
+
+    &:checked + .checkmark {
+      background: var(--primary-color);
+      border-color: var(--primary-color);
+
+      &::after {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  }
+}
+
+.checkmark {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border-color);
+  border-radius: 4px;
+  margin-right: 8px;
+  position: relative;
+  transition: var(--transition);
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 1px;
+    width: 6px;
+    height: 10px;
+    border: solid var(--white);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg) scale(0);
+    opacity: 0;
+    transition: var(--transition);
+  }
+}
+
+.forgotLink {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: var(--transition);
+
+  &:hover {
+    color: var(--purple-color);
+  }
+}
+
+.loginBtn {
+  width: 100%;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color) 0%,
+    var(--purple-color) 100%
+  );
+  color: var(--white);
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transition: left 0.5s;
+  }
+
+  &:hover::before {
+    left: 100%;
+  }
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top: 2px solid var(--white);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loginFooter {
+  text-align: center;
+  margin-top: 24px;
+
+  p {
+    margin: 0;
+    color: var(--text-light);
+    font-size: 14px;
+  }
+}
+
+.signupLink {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+// Responsive Design
+@media (max-width: 480px) {
+  .formHeader {
+    margin-bottom: 24px;
+
+    h3 {
+      font-size: 20px;
+    }
+  }
+
+  .formGroup {
+    margin-bottom: 20px;
+  }
+
+  .inputWrapper input {
+    padding: 14px 16px;
+    font-size: 14px;
+
+    &[type="email"] {
+      padding-left: 40px;
+    }
+
+    &[type="password"] {
+      padding-right: 40px;
+    }
+  }
+
+  .formOptions {
+    margin-bottom: 24px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .loginBtn {
+    padding: 14px;
+    font-size: 15px;
+  }
+}

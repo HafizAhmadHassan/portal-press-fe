@@ -1,0 +1,247 @@
+// components/BackgroundDecorations/BackgroundDecorations.module.scss
+
+@mixin gradient-background($deg: 135deg) {
+  background: linear-gradient(
+    $deg,
+    var(--primary-color) 0%,
+    var(--purple-color) 50%,
+    var(--primary-dark) 100%
+  );
+}
+
+.backgroundDecorations {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.decorationCircle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.1;
+
+  &.circle1 {
+    width: 300px;
+    height: 300px;
+    @include gradient-background();
+    top: -150px;
+    right: -150px;
+    animation: float 8s ease-in-out infinite;
+  }
+
+  &.circle2 {
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(
+      45deg,
+      var(--primary-color) 0%,
+      var(--primary-dark) 100%
+    );
+    bottom: -100px;
+    left: -100px;
+    animation: float 10s ease-in-out infinite reverse;
+  }
+
+  &.circle3 {
+    width: 150px;
+    height: 150px;
+    background: linear-gradient(
+      90deg,
+      var(--purple-color) 0%,
+      var(--primary-color) 100%
+    );
+    top: 20%;
+    left: 10%;
+    animation: float 12s ease-in-out infinite;
+  }
+}
+
+.decorationBlob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.15;
+
+  &.blob1 {
+    width: 400px;
+    height: 400px;
+    @include gradient-background(45deg);
+    top: 10%;
+    right: 20%;
+    animation: blob 15s ease-in-out infinite;
+  }
+
+  &.blob2 {
+    width: 300px;
+    height: 300px;
+    background: linear-gradient(
+      90deg,
+      var(--primary-dark) 0%,
+      var(--primary-color) 100%
+    );
+    bottom: 20%;
+    left: 15%;
+    animation: blob 20s ease-in-out infinite reverse;
+  }
+}
+
+.floatingShapes {
+  .shape {
+    position: absolute;
+    opacity: 0.05;
+    animation: floating 6s ease-in-out infinite;
+
+    &::before {
+      content: "";
+      display: block;
+      @include gradient-background();
+    }
+
+    &.shape1 {
+      top: 10%;
+      left: 5%;
+      &::before {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+      }
+      animation-delay: 0s;
+    }
+
+    &.shape2 {
+      top: 20%;
+      right: 10%;
+      &::before {
+        width: 15px;
+        height: 15px;
+        transform: rotate(45deg);
+      }
+      animation-delay: 1s;
+    }
+
+    &.shape3 {
+      bottom: 30%;
+      left: 8%;
+      &::before {
+        width: 25px;
+        height: 25px;
+        border-radius: 30%;
+      }
+      animation-delay: 2s;
+    }
+
+    &.shape4 {
+      bottom: 40%;
+      right: 15%;
+      &::before {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+      }
+      animation-delay: 3s;
+    }
+
+    &.shape5 {
+      top: 60%;
+      left: 20%;
+      &::before {
+        width: 12px;
+        height: 12px;
+        transform: rotate(45deg);
+      }
+      animation-delay: 4s;
+    }
+
+    &.shape6 {
+      top: 70%;
+      right: 25%;
+      &::before {
+        width: 22px;
+        height: 22px;
+        border-radius: 40%;
+      }
+      animation-delay: 5s;
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 480px) {
+  .backgroundDecorations {
+    .decorationCircle {
+      &.circle1 {
+        width: 200px;
+        height: 200px;
+        top: -100px;
+        right: -100px;
+      }
+
+      &.circle2 {
+        width: 150px;
+        height: 150px;
+        bottom: -75px;
+        left: -75px;
+      }
+
+      &.circle3 {
+        width: 100px;
+        height: 100px;
+      }
+    }
+
+    .decorationBlob {
+      &.blob1 {
+        width: 250px;
+        height: 250px;
+      }
+
+      &.blob2 {
+        width: 200px;
+        height: 200px;
+      }
+    }
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes blob {
+  0%,
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+}
+
+@keyframes floating {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-10px) rotate(90deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(180deg);
+  }
+  75% {
+    transform: translateY(-15px) rotate(270deg);
+  }
+}

@@ -8,10 +8,6 @@ import {
 import { UserRoles } from "@root/utils/constants/userRoles";
 import type { MenuItem } from "@shared/side-navbar/types/MenuItem.types";
 
-/**
- * Genera gli item della side-nav inserendo l'ID del device dopo /device/.
- * Se deviceId è assente, usa i percorsi base senza ID (es. /device).
- */
 export const deviceLayoutSideNavItems = (deviceId?: number): MenuItem[] => {
   const base = deviceId ? `/device/${deviceId}` : "/device";
 
@@ -59,8 +55,6 @@ export const deviceLayoutSideNavItems = (deviceId?: number): MenuItem[] => {
       iconColor: "var(--primary-color)",
       iconActiveColor: "var(--primary-dark)",
       allowedRoles: [UserRoles.ADMIN, UserRoles.SUPER_ADMIN, UserRoles.USER],
-      // Se/Quando servirà una route:
-      // route: `${base}/analytics`
     },
   ];
 };

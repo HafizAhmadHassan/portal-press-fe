@@ -155,7 +155,7 @@
     --btn-hover-border: transparent;
 
     &:not(:disabled):hover {
-      background: var(--btn-hover-bg);
+      /* background: var(--btn-hover-bg); */
       color: var(--btn-hover-text);
       border-color: var(--btn-hover-border);
     }
