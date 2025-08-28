@@ -1,14 +1,5 @@
-export interface MenuItem {
-  label: string;
-  route?: string;
-  icon?: string;
-  children?: MenuItem[];
-  onClick?: () => void;
-  badge?: string | number;
-  isActive?: boolean;
-}
-
 // src/_hooks/useMenuItems.ts - Hook per calcolare lo stato active
+import type { MenuItem } from "@root/components/shared/side-navbar/types/MenuItem.types";
 import { useMemo } from "react";
 import { useLocation } from "react-router-dom";
 

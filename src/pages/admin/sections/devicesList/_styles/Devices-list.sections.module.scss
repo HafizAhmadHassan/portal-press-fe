@@ -20,16 +20,16 @@
   background: var(--bg-secondary);
   scroll-margin-top: 20px;
   @media (min-width: 1600px) {
-    adding: 2rem;
+    padding: 2rem;
   }
   @media (min-width: 1200px) and (max-width: 1599px) {
-    adding: 1.5rem;
+    padding: 1.5rem;
   }
   @media (min-width: 768px) and (max-width: 1199px) {
-    adding: 1rem;
+    padding: 1rem;
   }
   @media (max-width: 767px) {
-    adding: 1rem;
+    padding: 1rem;
   }
 }
 

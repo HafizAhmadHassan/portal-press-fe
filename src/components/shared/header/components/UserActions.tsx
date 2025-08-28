@@ -38,7 +38,9 @@ function loadReadIds(): Set<string> {
 function saveReadIds(set: Set<string>) {
   try {
     localStorage.setItem(READ_IDS_KEY, JSON.stringify(Array.from(set)));
-  } catch {}
+  } catch {
+    /*  */
+  }
 }
 function computeSeverity(
   name_alarm?: string,
@@ -59,9 +61,7 @@ function computeSeverity(
 
 export default function UserActions({
   MailIcon,
-  GridIcon,
   logs: logsOverride,
-  loadingLogs,
   onMarkAllRead,
   onOpenInbox,
   onClickLog,
@@ -79,7 +79,6 @@ export default function UserActions({
   // ✅ query logs (customer_Name iniettato da baseQuery)
   const {
     data: logsResponse,
-    isFetching: isFetchingLogs,
     refetch, // 👈 lo useremo sul cambio cliente
   } = useGetLogsQuery(
     {
@@ -102,11 +101,11 @@ export default function UserActions({
   const [readIds, setReadIds] = useState<Set<string>>(() => loadReadIds());
   useEffect(() => saveReadIds(readIds), [readIds]);
 
-  const logsFromApi: EmailLog[] = useMemo(() => {
+  const logsFromApi = useMemo(() => {
     const raw = logsResponse?.data ?? [];
     return raw.map((item) => {
-      const id = String(item?.id);
-      const unread = !readIds.has(id);
+      const id = Number(item?.id);
+      const unread = !readIds.has(String(id));
       return {
         id,
         subject: `${item?.name_alarm} (${item?.code_alarm})`,
@@ -114,7 +113,7 @@ export default function UserActions({
         timestamp: item?.date_and_time,
         unread,
         severity: computeSeverity(item?.name_alarm, item?.code_alarm),
-      } as EmailLog;
+      };
     });
   }, [logsResponse?.data, readIds]);
 

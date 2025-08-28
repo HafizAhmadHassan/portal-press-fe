@@ -362,7 +362,7 @@ export default function TableKeyValue({
                     ) : editable || forceAll ? (
                       // quando tutta la colonna è editabile non ha senso l’azione per riga
                       <span className={styles.actionHint}>—</span>
-                    ) : editingRows.has(r.id) ? (
+                    ) : editingRows.has(String(r.id)) ? (
                       <div className={styles.rowActions}>
                         <button
                           type="button"

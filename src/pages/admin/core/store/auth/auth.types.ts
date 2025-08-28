@@ -7,22 +7,6 @@ export type PermissionMap = Record<string, PermissionAction[]>;
 export type UserRole = "SUPER_ADMIN" | "ADMIN" | "MANAGER" | "USER" | string; // fallback per ruoli eventuali
 
 /** Forma che arriva dal backend (session/login) */
-export interface BackendSessionUser {
-  id: number;
-  username: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  role: UserRole;
-  permissions: PermissionMap;
-
-  fullName?: string;
-  isActive?: boolean;
-  isStaff?: boolean;
-  isSuperuser?: boolean;
-  dateJoined?: string;
-  groups: string[];
-}
 
 /** Forma usata dall'app (compatibile con quella che avevi) */
 
@@ -41,7 +25,7 @@ export interface RegisterCredentials {
 
 /** Il login può restituire token + l'oggetto utente backend */
 export interface AuthResponse {
-  user: BackendSessionUser;
+  user: User;
   token: string;
   refresh: string;
 }

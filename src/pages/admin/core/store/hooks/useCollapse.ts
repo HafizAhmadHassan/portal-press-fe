@@ -18,7 +18,7 @@ import {
   selectOpenCollapses,
 } from "@store_admin/ui/collapse/collapse.selectors";
 
-export const useCollapse = (id?: number) => {
+export const useCollapse = (id?: string) => {
   const dispatch = useAppDispatch();
 
   // Stato specifico per ID

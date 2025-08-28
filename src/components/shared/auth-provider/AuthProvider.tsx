@@ -1,10 +1,11 @@
 // src/_components/shared/auth-provider/AuthProvider.tsx
 import React, { type ReactNode, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { initializeAuthAsync as initializeAuth } from "@store_admin/auth/auth.thunks";
 import { setInitialized } from "@store_admin/auth/auth.slice";
 import type { RootState } from "@root/store";
 import { useAuth } from "@store_admin/auth/hooks/useAuth";
+import { useAppDispatch } from "@root/pages/admin/core/store/store.hooks";
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -15,7 +16,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
   children,
   fallback = <div>Caricamento autenticazione…</div>,
 }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+
   const { isInitialized } = useAuth();
   const token = useSelector((state: RootState) => state.auth.token);
 

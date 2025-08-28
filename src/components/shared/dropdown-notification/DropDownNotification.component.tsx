@@ -23,7 +23,7 @@ type Props = {
   open: boolean;
   onClose: () => void;
 
-  logs: EmailLog[];
+  logs: any[];
   loading?: boolean;
 
   onMarkAllRead?: () => void;

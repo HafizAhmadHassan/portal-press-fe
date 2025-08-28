@@ -2,7 +2,7 @@ import React from "react";
 import styles from "../styles/SideNavBadge.module.scss";
 
 interface Props {
-  value?: number;
+  value?: string;
 }
 
 export function SideNavBadge({ value }: Props) {

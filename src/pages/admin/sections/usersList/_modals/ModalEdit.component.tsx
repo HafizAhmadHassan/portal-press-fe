@@ -32,7 +32,7 @@ export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({
   onSave,
 }) => {
   const [formData, setFormData] = useState({
-    id: user.id ? String(user.id) : "",
+    id: user.id,
     username: user.username || "",
     email: user.email || "",
     firstName: user.firstName || "",
@@ -48,7 +48,7 @@ export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({
 
   useEffect(() => {
     setFormData({
-      id: user.id ? String(user.id) : "",
+      id: user.id,
       username: user.username || "",
       email: user.email || "",
       firstName: user.firstName || "",

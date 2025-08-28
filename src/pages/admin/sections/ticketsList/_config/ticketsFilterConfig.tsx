@@ -22,7 +22,9 @@ export const createTicketsFilterConfig = ({
       type: "text" as const,
       placeholder: "Cerca per titolo o descrizione...",
       value: filters[TicketFields.TITLE] || "",
-      onChange: (value: string) => setFilter(TicketFields.TITLE, value),
+      // Corretto: onChange riceve React.ChangeEvent<HTMLInputElement>
+      onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+        setFilter(TicketFields.TITLE, e.target.value),
     },
     {
       key: TicketFields.STATUS,
@@ -30,7 +32,9 @@ export const createTicketsFilterConfig = ({
       type: "select" as const,
       placeholder: "Tutti gli stati",
       value: filters[TicketFields.STATUS] || "",
-      onChange: (value: string) => setFilter(TicketFields.STATUS, value),
+      // Per select rimane string
+      onChange: (value: string | null) =>
+        setFilter(TicketFields.STATUS, value || ""),
       options: [
         { value: "", label: "Tutti gli stati" },
         { value: "open", label: "Aperto" },
@@ -44,7 +48,9 @@ export const createTicketsFilterConfig = ({
       type: "select" as const,
       placeholder: "Tutte le priorità",
       value: filters[TicketFields.PRIORITY] || "",
-      onChange: (value: string) => setFilter(TicketFields.PRIORITY, value),
+      // Per select rimane string
+      onChange: (value: string | null) =>
+        setFilter(TicketFields.PRIORITY, value || ""),
       options: [
         { value: "", label: "Tutte le priorità" },
         { value: "low", label: "Bassa" },
@@ -59,7 +65,9 @@ export const createTicketsFilterConfig = ({
       type: "select" as const,
       placeholder: "Tutte le categorie",
       value: filters[TicketFields.CATEGORY] || "",
-      onChange: (value: string) => setFilter(TicketFields.CATEGORY, value),
+      // Per select rimane string
+      onChange: (value: string | null) =>
+        setFilter(TicketFields.CATEGORY, value || ""),
       options: [
         { value: "", label: "Tutte le categorie" },
         { value: "bug", label: "Bug" },
@@ -78,7 +86,9 @@ export const createTicketsFilterConfig = ({
       type: "text" as const,
       placeholder: "Nome o email...",
       value: filters[TicketFields.ASSIGNED_TO] || "",
-      onChange: (value: string) => setFilter(TicketFields.ASSIGNED_TO, value),
+      // Corretto: onChange riceve React.ChangeEvent<HTMLInputElement>
+      onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+        setFilter(TicketFields.ASSIGNED_TO, e.target.value),
     },
   ];
 };
