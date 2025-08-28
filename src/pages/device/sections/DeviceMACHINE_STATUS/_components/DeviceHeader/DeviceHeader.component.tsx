@@ -2,19 +2,19 @@ import React from "react";
 import { AlertTriangle, Power, Wifi } from "lucide-react";
 import styles from "./DeviceHeader.module.scss";
 
-type DeviceStatus = "online" | "offline" | "unknown";
+export type DeviceStatus = "online" | "offline" | "unknown";
 
-interface DeviceHeaderProps {
+interface Props {
   deviceName: string;
   deviceStatus: DeviceStatus;
   imageUrl?: string;
 }
 
-export function DeviceHeader({
+export default function DeviceHeader({
   deviceName,
   deviceStatus,
   imageUrl,
-}: DeviceHeaderProps) {
+}: Props) {
   const statusBadge = {
     online: {
       label: "Online",

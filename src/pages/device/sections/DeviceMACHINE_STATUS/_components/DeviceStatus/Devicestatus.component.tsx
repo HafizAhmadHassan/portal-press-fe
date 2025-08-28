@@ -1,6 +1,9 @@
 import React from "react";
 import { Gauge, CheckCircle2 } from "lucide-react";
+
 import styles from "./DeviceStatus.module.scss";
+import DeviceCard from "../../../_components/DeviceCard/DeviceCard.component";
+import { formatNumber } from "@root/utils/formatNumber";
 
 export type StatusItem =
   | { key: string; label: string; type: "boolean"; value: boolean }
@@ -13,14 +16,11 @@ export interface DeviceStatusProps {
 
 export default function DeviceStatus({ statusList }: DeviceStatusProps) {
   return (
-    <div className={styles.card}>
-      <div className={styles.cardHeader}>
-        <div className={styles.cardTitle}>
-          <Gauge size={16} />
-          <span>Stato</span>
-        </div>
-      </div>
-
+    <DeviceCard
+      title="Stato"
+      icon={<Gauge size={16} />}
+      bodyClassName={styles.cardBody}
+    >
       <div className={styles.statGrid}>
         {statusList.map((s) => (
           <div key={s.key} className={styles.statItem}>
@@ -51,17 +51,6 @@ export default function DeviceStatus({ statusList }: DeviceStatusProps) {
           </div>
         ))}
       </div>
-    </div>
+    </DeviceCard>
   );
-}
-
-/** Util per numeri */
-function formatNumber(n: number) {
-  try {
-    return new Intl.NumberFormat("it-IT", { maximumFractionDigits: 3 }).format(
-      n
-    );
-  } catch {
-    return String(n);
-  }
 }

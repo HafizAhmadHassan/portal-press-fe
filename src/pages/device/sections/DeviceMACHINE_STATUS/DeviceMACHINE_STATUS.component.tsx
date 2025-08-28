@@ -1,17 +1,24 @@
 import React, { useMemo } from "react";
 import { useParams } from "react-router-dom";
-
-import DeviceStatus, {
-  type StatusItem as DeviceStatusItem,
-} from "./_components/DeviceStatus/Devicestatus.component";
+import DeviceHeader from "./_components/DeviceHeader/DeviceHeader.component";
 
 import styles from "./DeviceMACHINE_STATUS.module.scss";
 import type { CommandItem } from "./_components/DeviceCommands/DeviceCommands.component";
-import { DeviceEmptyState } from "./_components/DeviceEmptyState/DeviceEmptyState.component";
+import EmptyState from "./_components/DeviceEmptyState/DeviceEmptyState.component";
 import DeviceCommands from "./_components/DeviceCommands/DeviceCommands.component";
+import DeviceStatus from "./_components/DeviceStatus/Devicestatus.component";
+
+type DeviceStatusType = "online" | "offline" | "unknown";
 
 export default function DeviceOverview() {
   const { deviceId } = useParams<{ deviceId?: string }>();
+
+  const deviceName = useMemo(
+    () => (deviceId ? `Dispositivo #${deviceId}` : "Dispositivo"),
+    [deviceId]
+  );
+  const deviceStatus: DeviceStatusType = "online";
+  const imageUrl = undefined as string | undefined;
 
   const commands: CommandItem[] = useMemo(
     () => [
@@ -24,8 +31,7 @@ export default function DeviceOverview() {
     []
   );
 
-  // Tipizziamo il generic di useMemo per evitare che 'type' si allarghi a 'string'
-  const statusList = useMemo<DeviceStatusItem[]>(
+  const statusList = useMemo(
     () => [
       {
         key: "basket-in",
@@ -70,10 +76,15 @@ export default function DeviceOverview() {
     []
   );
 
-  if (!deviceId) return <DeviceEmptyState />;
+  if (!deviceId) return <EmptyState />;
 
   return (
     <section className={styles.wrapper}>
+      <DeviceHeader
+        deviceName={deviceName}
+        deviceStatus={deviceStatus}
+        imageUrl={imageUrl}
+      />
       <DeviceCommands commands={commands} />
       <DeviceStatus statusList={statusList} />
     </section>

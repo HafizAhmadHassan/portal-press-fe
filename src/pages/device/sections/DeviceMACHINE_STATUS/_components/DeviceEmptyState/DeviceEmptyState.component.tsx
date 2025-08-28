@@ -1,21 +1,23 @@
 import React from "react";
 import { AlertTriangle } from "lucide-react";
-import styles from "./DeviceEmptyState.module.scss";
+import styles from "./EmptyState.module.scss";
+import DeviceCard from "../../../_components/DeviceCard/DeviceCard.component";
 
-export function DeviceEmptyState() {
+export default function EmptyState() {
   return (
     <section className={styles.wrapper}>
-      <div className={styles.card}>
-        <div className={styles.cardHeader}>
-          <div className={styles.cardTitle}>
+      <DeviceCard
+        title={
+          <>
             <AlertTriangle size={16} />
             <span>Nessun device selezionato</span>
-          </div>
-        </div>
-        <div style={{ padding: "1rem" }}>
+          </>
+        }
+      >
+        <div className={styles.body}>
           Apri un device dalla lista per vedere l’overview.
         </div>
-      </div>
+      </DeviceCard>
     </section>
   );
 }
