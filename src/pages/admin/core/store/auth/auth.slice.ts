@@ -125,7 +125,13 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.error = null;
         state.lastActivity = Date.now();
-        saveToStorage(payload.token, payload.refresh, user, state.lastActivity);
+        // CORRETTO: usa payload.user invece di user
+        saveToStorage(
+          payload.token,
+          payload.refresh,
+          payload.user,
+          state.lastActivity
+        );
       })
       .addCase(loginAsync.rejected, (state, { payload }) => {
         state.isLoading = false;
@@ -147,7 +153,13 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.error = null;
         state.lastActivity = Date.now();
-        saveToStorage(payload.token, payload.refresh, user, state.lastActivity);
+        // CORRETTO: usa payload.user invece di user
+        saveToStorage(
+          payload.token,
+          payload.refresh,
+          payload.user,
+          state.lastActivity
+        );
       })
       .addCase(registerAsync.rejected, (state, { payload }) => {
         state.isLoading = false;

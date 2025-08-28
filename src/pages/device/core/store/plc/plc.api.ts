@@ -8,7 +8,7 @@ export const plcApi = apiSlice.injectEndpoints({
           if (v !== undefined && v !== null && v !== "") acc[k] = v;
           return acc;
         }, {});
-        return { url: "http://35.152.52.213/myapi/plc/", params: clean };
+        return { url: "plc/", params: clean };
       },
       providesTags: [
         { type: "LIST", id: "Plc" },
@@ -25,13 +25,13 @@ export const plcApi = apiSlice.injectEndpoints({
     }),
 
     getPlcById: builder.query({
-      query: (id: number | number) => `http://35.152.52.213/myapi/plc/${id}`,
+      query: (id: number | number) => `plc/${id}`,
       providesTags: (_r, _e, id) => [{ type: "ENTITY", id }],
     }),
 
     createPlc: builder.mutation({
       query: (body: any) => ({
-        url: "http://35.152.52.213/myapi/plc/",
+        url: "plc/",
         method: "POST",
         body,
       }),
@@ -43,7 +43,7 @@ export const plcApi = apiSlice.injectEndpoints({
 
     updatePlc: builder.mutation({
       query: ({ id, data }: any) => ({
-        url: `http://35.152.52.213/myapi/plc/${id}`,
+        url: `plc/${id}`,
         method: "PUT",
         body: data,
       }),
@@ -68,7 +68,7 @@ export const plcApi = apiSlice.injectEndpoints({
 
     deletePlc: builder.mutation({
       query: (id: number | number) => ({
-        url: `http://35.152.52.213/myapi/plc/${id}`,
+        url: `plc/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: (_r, _e, id) => [
@@ -80,7 +80,7 @@ export const plcApi = apiSlice.injectEndpoints({
 
     searchPlc: builder.query({
       query: ({ query, limit = 10 }: { query: string; limit?: number }) => ({
-        url: "http://35.152.52.213/myapi/plc/search",
+        url: "plc/search",
         params: { q: query, limit },
       }),
       providesTags: [{ type: "LIST", id: "Plc" }],
@@ -88,7 +88,7 @@ export const plcApi = apiSlice.injectEndpoints({
 
     bulkPlc: builder.mutation({
       query: (body: any) => ({
-        url: "http://35.152.52.213/myapi/plc/bulk",
+        url: "plc/bulk",
         method: "POST",
         body,
       }),
@@ -100,7 +100,7 @@ export const plcApi = apiSlice.injectEndpoints({
 
     // Se esiste un endpoint di stats:
     getPlcStats: builder.query({
-      query: () => "http://35.152.52.213/myapi/plc/stats",
+      query: () => "plc/stats",
       providesTags: [{ type: "STATS", id: "Plc" }],
     }),
   }),
