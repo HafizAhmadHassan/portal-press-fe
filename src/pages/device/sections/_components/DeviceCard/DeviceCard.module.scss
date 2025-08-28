@@ -34,5 +34,6 @@
 }
 
 .cardBody {
-  /* Nessun padding di default: i figli (grid) lo gestiscono da sé */
+  /* Nessun padding di default:
+     ogni sotto-componente aggiunge il proprio padding via bodyClassName */
 }

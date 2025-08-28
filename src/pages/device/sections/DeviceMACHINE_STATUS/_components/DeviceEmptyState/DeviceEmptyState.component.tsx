@@ -1,6 +1,6 @@
 import React from "react";
 import { AlertTriangle } from "lucide-react";
-import styles from "./EmptyState.module.scss";
+import styles from "./DeviceEmptyState.module.scss";
 import DeviceCard from "../../../_components/DeviceCard/DeviceCard.component";
 
 export default function EmptyState() {

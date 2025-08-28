@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Loader2, Power, RefreshCw, AlertTriangle } from "lucide-react";
 import styles from "./DeviceCommands.module.scss";
+import { RefreshCw, AlertTriangle } from "lucide-react";
+import { DeviceCommandsBtn } from "./_components/DeviceCommandsBtn/DeviceCommandsBtn.component";
 
 export type CommandItem = {
   key: string;
@@ -57,29 +58,12 @@ export default function DeviceCommands({
         {commands.map((cmd) => {
           const isRunning = currentRunning === cmd.key;
           return (
-            <button
+            <DeviceCommandsBtn
               key={cmd.key}
-              type="button"
-              className={[
-                styles.cmdItem,
-                cmd.danger ? styles.isDanger : "",
-              ].join(" ")}
-              onClick={() => handleCommand(cmd.key)}
-              disabled={cmd.disabled || isRunning}
-              title={cmd.label}
-            >
-              <div className={styles.cmdIcon}>
-                {isRunning ? (
-                  <Loader2 className={styles.spin} size={16} />
-                ) : (
-                  cmd.icon ?? <Power size={16} />
-                )}
-              </div>
-              <div className={styles.cmdLabel}>{cmd.label}</div>
-              <div className={styles.cmdActionChip}>
-                {isRunning ? "Esecuzione…" : "Press"}
-              </div>
-            </button>
+              cmd={cmd}
+              isRunning={isRunning}
+              handleCommand={handleCommand}
+            />
           );
         })}
       </div>
