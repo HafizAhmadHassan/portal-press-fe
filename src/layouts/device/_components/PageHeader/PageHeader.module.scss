@@ -1,0 +1,93 @@
+.pageHeader {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-primary);
+
+  padding: 10px 12px;
+  box-shadow: var(--shadow-sm);
+}
+
+// Stile alternativo del backBtn nella pageHeader
+.pageHeader .backBtn {
+  color: var(--text-secondary);
+
+  svg {
+    color: var(--text-secondary);
+  }
+  &:hover {
+    background: var(--bg-secondary);
+  }
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+.pageActions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.topBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 20px 20px 10px;
+}
+
+.backBtn {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  height: 36px;
+  padding: 0 12px;
+
+  border-radius: var(--border-radius-sm, 8px);
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-xs);
+
+  transition: background-color 0.15s ease, border-color 0.15s ease,
+    transform 0.06s ease;
+
+  svg {
+    width: 18px;
+    height: 18px;
+    color: var(--text-primary);
+  }
+
+  &:hover {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+  }
+}
+
+.backLabel {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+@media (max-width: 520px) {
+  .topBar {
+    margin: 8px 12px 12px 12px;
+  }
+  .backLabel {
+    display: none;
+  }
+}

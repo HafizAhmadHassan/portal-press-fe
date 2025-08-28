@@ -6,20 +6,16 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import { useMemo, useEffect } from "react";
-import { ArrowLeft, RotateCw } from "lucide-react";
 import LogoKgn from "@assets/images/kgn-logo.png";
-import styles from "./Device-layout.module.scss";
 import Header from "@shared/header/Header.component.tsx";
-import SideNav from "@shared/side-navbar/SideNavbar.component.tsx";
-import { deviceLayoutSideNavItems } from "@layouts/device/_utils/SideNavItems.tsx";
-import { SimpleButton } from "@root/components/shared/simple-btn/SimpleButton.component";
-import { useGetDeviceByIdQuery } from "@root/pages/admin/core/store/devices/devices.api";
-import Switch from "@root/components/shared/switch/Switch.component";
-import { useSession } from "@root/pages/admin/core/store/auth/hooks/useSession";
 import { UserRoles } from "@root/utils/constants/userRoles";
-
-// 👉 qui usiamo il dettaglio PLC per id
+import SideNav from "@shared/side-navbar/SideNavbar.component.tsx";
 import { useGetPlcByIdQuery } from "@store_device/plc/hooks/usePlcApi";
+import styles from "../_commons/_styles/LayoutStyles_commons.module.scss";
+import { PageHeader } from "./_components/PageHeader/PageHeader.component";
+import { useSession } from "@root/pages/admin/core/store/auth/hooks/useSession";
+import { deviceLayoutSideNavItems } from "@layouts/device/_utils/SideNavItems.tsx";
+import { useGetDeviceByIdQuery } from "@root/pages/admin/core/store/devices/devices.api";
 
 export default function DeviceLayout() {
   const navigate = useNavigate();
@@ -109,6 +105,11 @@ export default function DeviceLayout() {
     return !isDetailPage;
   }, [isSuperAdmin, isDetailPage]);
 
+  const refetchAll = () => {
+    refetch();
+    refetchPlc();
+  };
+
   return (
     <div className={styles.layout}>
       <Header />
@@ -121,16 +122,23 @@ export default function DeviceLayout() {
         />
 
         <main className={styles.content}>
-          <div className={styles.pageHeader}>
+          <PageHeader
+            editMode={editMode}
+            showEditSwitch={showEditSwitch}
+            onToggleEdit={handleToggleEdit}
+            refetch={refetchAll}
+            navigateTo={() => navigate("/admin")}
+          />
+          {/* <div className={stylesDevice.pageHeader}>
             <button
-              className={styles.backBtn}
+              className={stylesDevice.backBtn}
               onClick={() => navigate("/admin")}
             >
               <ArrowLeft size={18} />
               <span>Torna alla Dashboard</span>
             </button>
 
-            <div className={styles.pageActions}>
+            <div className={stylesDevice.pageActions}>
               <SimpleButton
                 size="sm"
                 color="secondary"
@@ -166,7 +174,7 @@ export default function DeviceLayout() {
                 />
               )}
             </div>
-          </div>
+          </div> */}
 
           <Outlet />
         </main>
