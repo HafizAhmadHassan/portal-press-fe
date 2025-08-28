@@ -1,0 +1,21 @@
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* alert di errore generale */
+.errorAlert {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: var(--border-radius);
+  background: var(--error-light);
+  border: 1px solid color-mix(in oklab, var(--error-color) 40%, transparent);
+  color: var(--error-dark);
+}
+.errorIcon {
+  width: 18px;
+  height: 18px;
+}
