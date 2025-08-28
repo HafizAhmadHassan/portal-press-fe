@@ -1,0 +1,27 @@
+.editStack {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Nota informativa in edit */
+.infoNote {
+  padding: 12px;
+  background-color: color-mix(
+    in srgb,
+    var(--warning-color) 10%,
+    var(--bg-secondary)
+  );
+  border: 1px solid
+    color-mix(in srgb, var(--warning-color) 35%, var(--border-color));
+  border-radius: var(--radius-md, 8px);
+}
+.infoNoteText {
+  font-size: 12px;
+  color: color-mix(in srgb, var(--warning-color) 60%, var(--text-primary));
+  margin: 0;
+  line-height: 1.4;
+  strong {
+    font-weight: 600;
+  }
+}

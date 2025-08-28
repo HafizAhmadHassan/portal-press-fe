@@ -1,6 +1,5 @@
 import { Settings } from "lucide-react";
 import { Input } from "@shared/inputs/Input.component.tsx";
-import styles from "./NotesFormCard.module.scss";
 import DeviceCard from "../../../_components/DeviceCard/DeviceCard.component";
 
 type Props = {
@@ -11,11 +10,7 @@ type Props = {
 
 export default function NotesFormCard({ note, isSaving, onChange }: Props) {
   return (
-    <DeviceCard
-      title="Note"
-      icon={<Settings size={18} />}
-      bodyClassName={styles.body}
-    >
+    <DeviceCard title="Note" icon={<Settings size={18} />}>
       <Input
         label="Note aggiuntive"
         name="note"

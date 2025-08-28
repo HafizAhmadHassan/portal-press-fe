@@ -1,7 +1,7 @@
 import { Smartphone } from "lucide-react";
-import styles from "./TechnicalInfoFormCard.module.scss";
 import { Input } from "@shared/inputs/Input.component.tsx";
 import DeviceCard from "../../../_components/DeviceCard/DeviceCard.component";
+import { DeviceFormGrid } from "../../../_components/DeviceFormGrid/DeviceFormGrid.component";
 
 type Props = {
   formData: {
@@ -23,12 +23,8 @@ export default function TechnicalInfoFormCard({
   onChange,
 }: Props) {
   return (
-    <DeviceCard
-      title="Informazioni Tecniche"
-      icon={<Smartphone size={18} />}
-      bodyClassName={styles.body}
-    >
-      <div className={styles.formGrid}>
+    <DeviceCard title="Informazioni Tecniche" icon={<Smartphone size={18} />}>
+      <DeviceFormGrid>
         <Input
           label="IP Router"
           name="ip_Router"
@@ -45,9 +41,9 @@ export default function TechnicalInfoFormCard({
           placeholder="Codice identificativo GPS"
           disabled={isSaving}
         />
-      </div>
+      </DeviceFormGrid>
 
-      <div className={styles.formGrid}>
+      <DeviceFormGrid>
         <Input
           label="Coordinate GPS X (Longitudine)"
           name="gpsX"
@@ -64,9 +60,9 @@ export default function TechnicalInfoFormCard({
           placeholder="es. 41.9028"
           disabled={isSaving}
         />
-      </div>
+      </DeviceFormGrid>
 
-      <div className={styles.formGrid}>
+      <DeviceFormGrid>
         <Input
           label="Matricola BTE"
           name="matricolaBte"
@@ -83,7 +79,7 @@ export default function TechnicalInfoFormCard({
           placeholder="Codice matricola KGN"
           disabled={isSaving}
         />
-      </div>
+      </DeviceFormGrid>
 
       <Input
         label="Sheet Name"

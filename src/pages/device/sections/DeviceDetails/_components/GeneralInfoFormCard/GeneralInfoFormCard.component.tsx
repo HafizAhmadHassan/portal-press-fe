@@ -2,6 +2,7 @@ import { Settings, Monitor } from "lucide-react";
 import styles from "./GeneralInfoFormCard.module.scss";
 import { Input } from "@shared/inputs/Input.component.tsx";
 import DeviceCard from "../../../_components/DeviceCard/DeviceCard.component";
+import { DeviceFormGrid } from "../../../_components/DeviceFormGrid/DeviceFormGrid.component";
 
 type Props = {
   formData: {
@@ -22,12 +23,8 @@ export default function GeneralInfoFormCard({
   onChange,
 }: Props) {
   return (
-    <DeviceCard
-      title="Informazioni Generali"
-      icon={<Settings size={18} />}
-      bodyClassName={styles.body}
-    >
-      <div className={styles.formGrid}>
+    <DeviceCard title="Informazioni Generali" icon={<Settings size={18} />}>
+      <DeviceFormGrid>
         <Input
           label="Nome Macchina"
           name="machine_Name"
@@ -56,9 +53,9 @@ export default function GeneralInfoFormCard({
             <option value="vpl">VPL</option>
           </select>
         </div>
-      </div>
+      </DeviceFormGrid>
 
-      <div className={styles.formGrid}>
+      <DeviceFormGrid>
         <div className={styles.selectGroup}>
           <label className={styles.selectLabel}>Stato</label>
           <select
@@ -80,9 +77,9 @@ export default function GeneralInfoFormCard({
           placeholder="es. Ubuntu 22.04"
           disabled={isSaving}
         />
-      </div>
+      </DeviceFormGrid>
 
-      <div className={styles.formGrid}>
+      <DeviceFormGrid>
         <Input
           label="Orario Inizio"
           name="startAvailable"
@@ -99,7 +96,7 @@ export default function GeneralInfoFormCard({
           onChange={(e) => onChange("endAvailable", e.target.value)}
           disabled={isSaving}
         />
-      </div>
+      </DeviceFormGrid>
     </DeviceCard>
   );
 }

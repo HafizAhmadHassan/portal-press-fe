@@ -38,7 +38,7 @@
   animation: spin 1s linear infinite;
 }
 
-/* sticky action bar già usata in altre pagine */
+/* sticky action bar */
 .actionBar {
   position: sticky;
   bottom: 0;
@@ -51,28 +51,6 @@
   border-top: 1px solid var(--border-color);
   backdrop-filter: blur(6px);
   z-index: 5;
-}
-
-/* Nota informativa in edit */
-.infoNote {
-  padding: 12px;
-  background-color: color-mix(
-    in srgb,
-    var(--warning-color) 10%,
-    var(--bg-secondary)
-  );
-  border: 1px solid
-    color-mix(in srgb, var(--warning-color) 35%, var(--border-color));
-  border-radius: var(--radius-md, 8px);
-}
-.infoNoteText {
-  font-size: 12px;
-  color: color-mix(in srgb, var(--warning-color) 60%, var(--text-primary));
-  margin: 0;
-  line-height: 1.4;
-  strong {
-    font-weight: 600;
-  }
 }
 
 /* ====== ANIMS ====== */

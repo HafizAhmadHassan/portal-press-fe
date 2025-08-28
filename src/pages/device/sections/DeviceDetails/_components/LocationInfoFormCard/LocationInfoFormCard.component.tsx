@@ -1,7 +1,7 @@
 import { MapPin } from "lucide-react";
 import { Input } from "@shared/inputs/Input.component.tsx";
-import styles from "./LocationInfoFormCard.module.scss";
 import DeviceCard from "../../../_components/DeviceCard/DeviceCard.component";
+import { DeviceFormGrid } from "../../../_components/DeviceFormGrid/DeviceFormGrid.component";
 
 type Props = {
   formData: {
@@ -23,12 +23,8 @@ export default function LocationInfoFormCard({
   onChange,
 }: Props) {
   return (
-    <DeviceCard
-      title="Informazioni di Ubicazione"
-      icon={<MapPin size={18} />}
-      bodyClassName={styles.body}
-    >
-      <div className={styles.formGrid}>
+    <DeviceCard title="Informazioni di Ubicazione" icon={<MapPin size={18} />}>
+      <DeviceFormGrid>
         <Input
           label="Indirizzo/Via"
           name="street"
@@ -45,9 +41,9 @@ export default function LocationInfoFormCard({
           placeholder="Nome città"
           disabled={isSaving}
         />
-      </div>
+      </DeviceFormGrid>
 
-      <div className={styles.formGrid}>
+      <DeviceFormGrid>
         <Input
           label="Provincia"
           name="province"
@@ -64,9 +60,9 @@ export default function LocationInfoFormCard({
           placeholder="Codice postale"
           disabled={isSaving}
         />
-      </div>
+      </DeviceFormGrid>
 
-      <div className={styles.formGrid}>
+      <DeviceFormGrid>
         <Input
           label="Paese"
           name="country"
@@ -83,7 +79,7 @@ export default function LocationInfoFormCard({
           placeholder="Nome municipalità"
           disabled={isSaving}
         />
-      </div>
+      </DeviceFormGrid>
 
       <Input
         label="Indirizzo Completo"

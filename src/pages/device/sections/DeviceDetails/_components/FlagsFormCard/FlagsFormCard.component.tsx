@@ -1,7 +1,7 @@
 import { Settings } from "lucide-react";
-import styles from "./FlagsFormCard.module.scss";
 import { Checkbox } from "@shared/checkbox/CheckBox.component.tsx";
 import DeviceCard from "../../../_components/DeviceCard/DeviceCard.component";
+import { DeviceFormGrid } from "../../../_components/DeviceFormGrid/DeviceFormGrid.component";
 
 type Props = {
   formData: {
@@ -14,12 +14,8 @@ type Props = {
 
 export default function FlagsFormCard({ formData, isSaving, onChange }: Props) {
   return (
-    <DeviceCard
-      title="Stati e Flag"
-      icon={<Settings size={18} />}
-      bodyClassName={styles.body}
-    >
-      <div className={styles.checkboxGrid}>
+    <DeviceCard title="Stati e Flag" icon={<Settings size={18} />}>
+      <DeviceFormGrid>
         <Checkbox
           label="Status Ready D75_3_7"
           description="Indica se il dispositivo è pronto per l'uso"
@@ -36,7 +32,7 @@ export default function FlagsFormCard({ formData, isSaving, onChange }: Props) {
           disabled={isSaving}
           color="danger"
         />
-      </div>
+      </DeviceFormGrid>
     </DeviceCard>
   );
 }
