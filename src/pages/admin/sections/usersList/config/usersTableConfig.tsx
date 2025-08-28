@@ -1,7 +1,7 @@
 import React from "react";
 import type { User } from "@store_admin/users/user.types";
 import { ModalDeleteConfirm } from "@sections_admin/usersList/_modals/ModalDeleteConfirm.component";
-import { ModalDetails } from "@sections_admin/usersList/_modals/ModalDetails.component";
+import { ModalDetails } from "@root/pages/admin/sections/usersList/_modals/ModalDetails/ModalDetails.component";
 import { Avatar } from "@shared/avatar/Avatar.compoent.tsx";
 import { RoleBadge } from "@shared/roleBadge/RoleBadge.tsx";
 import { ModalCreateUpdateUser } from "../_modals/ModalCreateUpdateUser/ModalCreateUpdateUser.component";

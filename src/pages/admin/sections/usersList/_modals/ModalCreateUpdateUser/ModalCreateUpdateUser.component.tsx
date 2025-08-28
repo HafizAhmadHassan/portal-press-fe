@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Modal from "@components/shared/modal/Modal";
 import { SimpleButton } from "@shared/simple-btn/SimpleButton.component.tsx";
-import { AlertCircle, Edit, Eye, Plus } from "lucide-react";
+import { AlertCircle, Edit, Plus } from "lucide-react";
 
 import CredentialsCard from "./_components/CredentialsCard/CredentialsCard.component";
 import PersonalInfoCard from "./_components/PersonalInfoCard/PersonalInfoCard.component";

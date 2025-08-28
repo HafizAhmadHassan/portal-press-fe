@@ -1,0 +1,50 @@
+.body {
+  padding: 20px;
+}
+.permissionsContainer {
+}
+.permissionsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.permissionChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: color-mix(in srgb, var(--primary-color) 10%, transparent);
+  color: color-mix(in srgb, var(--primary-color) 85%, white);
+  border: 1px solid var(--primary-color);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+.permissionChip:hover {
+  transform: scale(1.05);
+}
+.permissionIcon {
+  width: 14px;
+  height: 14px;
+}
+
+.noPermissions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 32px;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+.noPermissionsIcon {
+  width: 20px;
+  height: 20px;
+}
+
+@media (max-width: 768px) {
+  .body {
+    padding: 16px;
+  }
+}

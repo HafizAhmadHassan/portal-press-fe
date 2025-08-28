@@ -1,0 +1,34 @@
+.body {
+  padding: 20px;
+}
+.groupsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.groupChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: color-mix(in srgb, var(--success-color) 10%, transparent);
+  color: color-mix(in srgb, var(--success-color) 85%, white);
+  border: 1px solid color-mix(in srgb, var(--success-color) 40%, transparent);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+.groupChip:hover {
+  transform: scale(1.05);
+}
+.groupIcon {
+  width: 14px;
+  height: 14px;
+}
+
+@media (max-width: 768px) {
+  .body {
+    padding: 16px;
+  }
+}
