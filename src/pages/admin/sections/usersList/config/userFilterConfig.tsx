@@ -1,15 +1,9 @@
 import type { FilterConfig } from "@utils/types/filters.types.ts";
 import { UserRoleLabels, UserRoles } from "@utils/constants/userRoles.ts";
+import { UserFields } from "@root/utils/constants/userFields.constants";
 // Importa UserFields dal file corretto
 // import { UserFields } from '@utils/constants/userFields.ts'; // se esiste già
 // OPPURE definiscilo qui se non esiste:
-
-export const UserFields = {
-  EMAIL: "email",
-  USERNAME: "username",
-  USER_PERMISSIONS: "permissions",
-  isActive: "isActive",
-};
 
 export const createUsersFilterConfig = ({
   filters,
@@ -50,13 +44,13 @@ export const createUsersFilterConfig = ({
     ],
   },
   {
-    key: UserFields.isActive,
+    key: UserFields.IS_ACTIVE,
     type: "select",
     label: "Stato",
-    name: UserFields.isActive,
+    name: UserFields.IS_ACTIVE,
     placeholder: "Tutti",
-    value: filters[UserFields.isActive] || "", // usa la costante come chiave
-    onChange: (value) => setFilter(UserFields.isActive, value),
+    value: filters[UserFields.IS_ACTIVE] || "", // usa la costante come chiave
+    onChange: (value) => setFilter(UserFields.IS_ACTIVE, value),
     options: [
       { label: "Tutti", value: "" }, // opzione per resettare il filtro
       { label: "Attivo", value: "true" },

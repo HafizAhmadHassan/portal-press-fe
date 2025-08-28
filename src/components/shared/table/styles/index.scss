@@ -1,7 +1,7 @@
 // Import all module _styles
-@use "./GenericTable.module.scss";
-@use "./TableCell.module.scss";
-@use "./TablePagination.module.scss";
+@import "./GenericTable.module.scss";
+@import "./TableCell.module.scss";
+@import "./TablePagination.module.scss";
 
 // Global _styles for the table component
 .generic-table-wrapper {

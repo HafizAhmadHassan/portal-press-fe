@@ -1,90 +1,91 @@
-import React from 'react';
-import GenericTable from '../GenericTable';
+import * as React from "react";
+import GenericTable from "../GenericTable";
 
-interface GenericTableWithLogicProps<T = any> {
-  config: any;
-  searchFields?: string[];
-  searchValue?: string;
-  customFilters?: Array<{
-    field: string;
-    value: any;
-    operator?: 'equals' | 'includes' | 'startsWith' | 'custom';
-    customFilter?: (item: T, value: any) => boolean;
-  }>;
-  onDataChange?: (filteredData: T[]) => void;
-  onSelectionChange?: (selectedItems: T[]) => void;
-  pagination?: {
-    page: number;
-    pageSize: number;
-    total: number;
-    totalPages: number;
-  };
-  loading?: boolean;
-  onPageChange?: (page: number) => void;
+import type { GenericTableWithLogicProps as GTWLProps } from "../types/GenericTable.types";
+
+// Helper: safe extraction of an ID value from item
+function getItemId<T, Id extends PropertyKey>(
+  item: T,
+  idField: keyof T | undefined
+): Id | undefined {
+  if (!idField) return undefined as unknown as Id;
+  const rec = item as unknown as Record<PropertyKey, unknown>;
+  return rec[idField as unknown as PropertyKey] as Id;
 }
 
-export const GenericTableWithLogic = <T,>({
+export const GenericTableWithLogic = <
+  T,
+  K extends keyof T | string = keyof T | string,
+  Id extends PropertyKey = PropertyKey
+>({
   config,
   onSelectionChange,
-  pagination,
-  loading = false,
-  onPageChange,
-}: GenericTableWithLogicProps<T>) => {
-  const paginatedData = config.data || [];
+}: GTWLProps<T, K, Id>): React.JSX.Element => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const paginatedData: T[] = (config.data ?? []) as T[];
 
-  const currentPage = config.pagination?.currentPage || pagination?.page || 1;
-  const totalPages = config.pagination?.totalPages || pagination?.totalPages || 1;
+  const currentPage: number = config.pagination?.currentPage ?? 1;
+  const totalPages: number =
+    config.pagination &&
+    config.pagination.pageSize &&
+    config.pagination.totalItems
+      ? Math.ceil(config.pagination.totalItems / config.pagination.pageSize)
+      : 1;
 
-  const [selectedItems, setSelectedItems] = React.useState<any[]>([]);
+  const [selectedItems, setSelectedItems] = React.useState<Id[]>([]);
 
   const handleSort = React.useCallback(
-    (key: string) => {
-      if (!config.sorting?.enabled) return;
+    (key: K) => {
+      // Delego lo sort al livello superiore (server-side) se presente nella config
+      config.sorting?.onSort?.(key, "asc");
     },
     [config.sorting]
   );
 
   const handlePageChange = React.useCallback(
     (page: number) => {
-      if (config.pagination?.onPageChange) {
-        config.pagination.onPageChange(page);
-      } else if (onPageChange) {
-        onPageChange(page);
-      }
+      config.pagination?.onPageChange?.(page);
     },
-    [config.pagination, onPageChange]
+    [config.pagination]
   );
 
   const handleSelectAll = React.useCallback(
     (checked: boolean) => {
       if (!config.selection?.enabled) return;
 
-      const idField = config.selection.idField || 'id';
-      const newSelected = checked ? paginatedData.map((item: any) => item[idField]) : [];
+      const idField = config.selection.idField ?? ("id" as keyof T);
+      const newSelected: Id[] = checked
+        ? paginatedData.map((item) => getItemId<T, Id>(item, idField) as Id)
+        : [];
       setSelectedItems(newSelected);
 
-      const selectedObjs = checked ? paginatedData : [];
+      const selectedObjs: T[] = checked ? paginatedData : [];
       onSelectionChange?.(selectedObjs);
-      config.selection?.onSelectionChange?.(newSelected);
+      config.selection.onSelectionChange?.(newSelected);
     },
-    [paginatedData, config.selection, onSelectionChange]
+    [config.selection, onSelectionChange, paginatedData]
   );
 
   const handleSelectItem = React.useCallback(
-    (item: any, checked: boolean) => {
+    (item: T, checked: boolean) => {
       if (!config.selection?.enabled) return;
 
-      const idField = config.selection.idField || 'id';
-      const itemId = item[idField];
-      const newSelected = checked
+      const idField = config.selection.idField ?? ("id" as keyof T);
+      const itemId = getItemId<T, Id>(item, idField) as Id;
+
+      const newSelected: Id[] = checked
         ? [...selectedItems, itemId]
         : selectedItems.filter((id) => id !== itemId);
 
       setSelectedItems(newSelected);
 
-      const selectedObjects = newSelected
-        .map((id) => config.data.find((itm: any) => itm[idField] === id))
-        .filter(Boolean);
+      const selectedObjects: T[] = newSelected
+        .map((id) =>
+          (config.data as T[]).find(
+            (itm) => getItemId<T, Id>(itm, idField) === id
+          )
+        )
+        .filter((x): x is T => Boolean(x));
 
       onSelectionChange?.(selectedObjects);
       config.selection.onSelectionChange?.(newSelected);
@@ -92,16 +93,11 @@ export const GenericTableWithLogic = <T,>({
     [selectedItems, config.data, config.selection, onSelectionChange]
   );
 
-  const updatedConfig = React.useMemo(
-    () => ({
-      ...config,
-      loading: loading || config.loading,
-    }),
-    [config, loading]
-  );
+  // Usa direttamente la config (niente props top-level `loading`/`pagination`)
+  const updatedConfig = React.useMemo(() => config, [config]);
 
   return (
-    <GenericTable
+    <GenericTable<T, K, Id>
       config={updatedConfig}
       paginatedData={paginatedData}
       currentPage={currentPage}
@@ -115,3 +111,5 @@ export const GenericTableWithLogic = <T,>({
     />
   );
 };
+
+export default GenericTableWithLogic;

@@ -1,6 +1,11 @@
-import React from 'react';
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
-import styles from '../styles/TablePagination.module.scss';
+import React from "react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+} from "lucide-react";
+import styles from "../styles/TablePagination.module.scss";
 
 interface TablePaginationProps {
   currentPage: number;
@@ -56,23 +61,23 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
         for (let i = 1; i <= 4; i++) {
           pages.push(i);
         }
-        pages.push('...');
+        pages.push("...");
         pages.push(totalPages);
       } else if (currentPage >= totalPages - 2) {
         // Fine: 1 ... 7 8 9 10
         pages.push(1);
-        pages.push('...');
+        pages.push("...");
         for (let i = totalPages - 3; i <= totalPages; i++) {
           pages.push(i);
         }
       } else {
         // Mezzo: 1 ... 4 5 6 ... 10
         pages.push(1);
-        pages.push('...');
+        pages.push("...");
         for (let i = currentPage - 1; i <= currentPage + 1; i++) {
           pages.push(i);
         }
-        pages.push('...');
+        pages.push("...");
         pages.push(totalPages);
       }
     }
@@ -118,7 +123,9 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
         <button
           onClick={handlePrevious}
           disabled={!canGoPrev}
-          className={`${styles.mobileButton} ${!canGoPrev ? styles.disabled : ''}`}
+          className={`${styles.mobileButton} ${
+            !canGoPrev ? styles.disabled : ""
+          }`}
         >
           <ChevronLeft size={16} />
           <span>Indietro</span>
@@ -133,7 +140,9 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
         <button
           onClick={handleNext}
           disabled={!canGoNext}
-          className={`${styles.mobileButton} ${!canGoNext ? styles.disabled : ''}`}
+          className={`${styles.mobileButton} ${
+            !canGoNext ? styles.disabled : ""
+          }`}
         >
           <span>Avanti</span>
           <ChevronRight size={16} />
@@ -145,12 +154,17 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
         {/* Results Info */}
         <div className={styles.resultsInfo}>
           <p className={styles.infoText}>
-            Mostrando <span className={styles.highlight}>{startItem.toLocaleString()}</span>
-            {' - '}
+            Mostrando{" "}
+            <span className={styles.highlight}>
+              {startItem.toLocaleString()}
+            </span>
+            {" - "}
             <span className={styles.highlight}>{endItem.toLocaleString()}</span>
-            {' di '}
-            <span className={styles.highlight}>{totalItems.toLocaleString()}</span>
-            {' risultati'}
+            {" di "}
+            <span className={styles.highlight}>
+              {totalItems.toLocaleString()}
+            </span>
+            {" risultati"}
           </p>
 
           {/* Page Size Selector */}
@@ -184,7 +198,9 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
           <button
             onClick={() => onPageChange(1)}
             disabled={!canGoFirst}
-            className={`${styles.navButton} ${styles.iconButton} ${!canGoFirst ? styles.disabled : ''}`}
+            className={`${styles.navButton} ${styles.iconButton} ${
+              !canGoFirst ? styles.disabled : ""
+            }`}
             title="Prima pagina"
           >
             <ChevronsLeft size={16} />
@@ -194,7 +210,9 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
           <button
             onClick={handlePrevious}
             disabled={!canGoPrev}
-            className={`${styles.navButton} ${styles.iconButton} ${!canGoPrev ? styles.disabled : ''}`}
+            className={`${styles.navButton} ${styles.iconButton} ${
+              !canGoPrev ? styles.disabled : ""
+            }`}
             title="Pagina precedente"
           >
             <ChevronLeft size={16} />
@@ -204,12 +222,14 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
           <div className={styles.pageNumbers}>
             {visiblePages.map((page, index) => (
               <React.Fragment key={index}>
-                {page === '...' ? (
+                {page === "..." ? (
                   <span className={styles.ellipsis}>⋯</span>
                 ) : (
                   <button
                     onClick={() => onPageChange(page as number)}
-                    className={`${styles.pageButton} ${currentPage === page ? styles.active : ''}`}
+                    className={`${styles.pageButton} ${
+                      currentPage === page ? styles.active : ""
+                    }`}
                   >
                     {page}
                   </button>
@@ -222,7 +242,9 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
           <button
             onClick={handleNext}
             disabled={!canGoNext}
-            className={`${styles.navButton} ${styles.iconButton} ${!canGoNext ? styles.disabled : ''}`}
+            className={`${styles.navButton} ${styles.iconButton} ${
+              !canGoNext ? styles.disabled : ""
+            }`}
             title="Pagina successiva"
           >
             <ChevronRight size={16} />
@@ -232,7 +254,9 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
           <button
             onClick={() => onPageChange(totalPages)}
             disabled={!canGoLast}
-            className={`${styles.navButton} ${styles.iconButton} ${!canGoLast ? styles.disabled : ''}`}
+            className={`${styles.navButton} ${styles.iconButton} ${
+              !canGoLast ? styles.disabled : ""
+            }`}
             title="Ultima pagina"
           >
             <ChevronsRight size={16} />
