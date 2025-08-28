@@ -10,11 +10,7 @@ type Props = {
 
 const DescriptionsCard: React.FC<Props> = ({ title, text }) => {
   return (
-    <DeviceCard
-      title={title}
-      icon={<FileText size={18} />}
-      bodyClassName={styles.body}
-    >
+    <DeviceCard title={title} icon={<FileText size={18} />}>
       <div className={styles.textBlock}>
         <pre className={styles.pre}>{text}</pre>
       </div>

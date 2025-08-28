@@ -4,6 +4,7 @@ import DeviceCard from "@root/pages/device/sections/_components/DeviceCard/Devic
 import styles from "./DatesCard.module.scss";
 import { formatDateTime, relativeTime } from "../../_utils/ticketHelpers";
 import type { TicketWithDevice } from "../../_types/TicketWithDevice.types";
+import { DeviceFormGrid } from "@root/pages/device/sections/_components/DeviceFormGrid/DeviceFormGrid.component";
 
 type Props = { ticket: TicketWithDevice };
 
@@ -16,34 +17,17 @@ const DatesCard: React.FC<Props> = ({ ticket }) => {
   const updatedAt = (ticket as any)?.updated_At;
 
   return (
-    <DeviceCard
-      title="Date"
-      icon={<Calendar size={18} />}
-      bodyClassName={styles.body}
-    >
-      <div className={styles.grid}>
-        <div className={styles.card}>
-          <div className={styles.cardHeader}>
-            <Calendar className={styles.icon} />
-            <span className={styles.title}>Apertura</span>
-          </div>
-          <div className={styles.cardContent}>
-            <span className={styles.value}>{formatDateTime(openedAt)}</span>
-            <span className={styles.relative}>{relativeTime(openedAt)}</span>
-          </div>
-        </div>
-
-        <div className={styles.card}>
-          <div className={styles.cardHeader}>
-            <Clock className={styles.icon} />
-            <span className={styles.title}>Ultimo Aggiornamento</span>
-          </div>
-          <div className={styles.cardContent}>
-            <span className={styles.value}>{formatDateTime(updatedAt)}</span>
-            <span className={styles.relative}>{relativeTime(updatedAt)}</span>
-          </div>
-        </div>
-      </div>
+    <DeviceCard title="Date" icon={<Calendar size={18} />}>
+      <DeviceFormGrid>
+        <DeviceCard title="Apertura" icon={<Calendar size={12} />}>
+          <span className={styles.value}>{formatDateTime(openedAt)}</span>
+          <span className={styles.relative}>{relativeTime(openedAt)}</span>
+        </DeviceCard>
+        <DeviceCard title="Chiusura" icon={<Clock size={12} />}>
+          <span className={styles.value}>{formatDateTime(updatedAt)}</span>
+          <span className={styles.relative}>{relativeTime(updatedAt)}</span>
+        </DeviceCard>
+      </DeviceFormGrid>
     </DeviceCard>
   );
 };

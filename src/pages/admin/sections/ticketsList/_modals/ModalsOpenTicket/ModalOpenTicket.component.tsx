@@ -12,10 +12,10 @@ import type {
 
 import styles from "./ModalOpenTicket.module.scss";
 
-import OpenTicketHeader from "./_components/OpenTicketHeader/OpenTicketHeader.component";
-import DeviceCompactCard from "./_components/DeviceCompactCard/DeviceCompactCard.component";
+import TicketHeader from "../_commons/TicketHeader/TicketHeader.component";
+import DeviceCompactCard from "../_commons/DeviceCompactCard/DeviceCompactCard.component";
 import OpenTicketForm from "./_components/OpenTicketForm/OpenTicketForm.component";
-import InfoNote from "./_components/InfoNote/InfoNote.component";
+import InfoNote from "../_commons/InfoNote/InfoNote.component";
 
 type Props = {
   device: Device;
@@ -93,7 +93,7 @@ export const ModalOpenTicket: React.FC<Props> = ({
       modalClassName={styles.modal}
     >
       <div className={styles.content}>
-        <OpenTicketHeader device={device} />
+        <TicketHeader device={device} />
         <DeviceCompactCard
           device={device}
           customer={formData.customer}
@@ -105,7 +105,11 @@ export const ModalOpenTicket: React.FC<Props> = ({
           onChange={handleChange}
           problemOptions={PROBLEM_OPTIONS}
         />
-        <InfoNote />
+        <InfoNote>
+          <strong>Importante:</strong> La <em>descrizione del problema</em> è
+          obbligatoria. Le altre opzioni sono facoltative e aiutano a
+          contestualizzare l'apertura.
+        </InfoNote>
       </div>
     </Modal>
   );

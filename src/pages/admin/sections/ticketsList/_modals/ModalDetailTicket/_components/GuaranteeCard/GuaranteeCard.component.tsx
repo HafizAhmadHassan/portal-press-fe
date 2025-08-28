@@ -9,11 +9,7 @@ type Props = {
 
 const GuaranteeCard: React.FC<Props> = ({ items }) => {
   return (
-    <DeviceCard
-      title="Garanzia"
-      icon={<Shield size={18} />}
-      bodyClassName={styles.body}
-    >
+    <DeviceCard title="Garanzia" icon={<Shield size={18} />}>
       <div className={styles.list}>
         {items.map((g, idx) => (
           <span key={`${g}-${idx}`} className={styles.chip}>

@@ -3,6 +3,7 @@ import { Hash, MapPin, User as UserIcon } from "lucide-react";
 import DeviceCard from "@root/pages/device/sections/_components/DeviceCard/DeviceCard.component";
 import styles from "./SummaryCard.module.scss";
 import type { TicketWithDevice } from "../../_types/TicketWithDevice.types";
+import { DeviceFormGrid } from "@root/pages/device/sections/_components/DeviceFormGrid/DeviceFormGrid.component";
 
 type Props = { ticket: TicketWithDevice };
 
@@ -21,12 +22,8 @@ const SummaryCard: React.FC<Props> = ({ ticket }) => {
     null;
 
   return (
-    <DeviceCard
-      title="Riepilogo"
-      icon={<UserIcon size={18} />}
-      bodyClassName={styles.body}
-    >
-      <div className={styles.grid}>
+    <DeviceCard title="Riepilogo" icon={<UserIcon size={18} />}>
+      <DeviceFormGrid>
         <div className={styles.item}>
           <span className={styles.label}>ID Ticket</span>
           <span className={styles.value}>
@@ -56,7 +53,7 @@ const SummaryCard: React.FC<Props> = ({ ticket }) => {
             </span>
           </div>
         )}
-      </div>
+      </DeviceFormGrid>
     </DeviceCard>
   );
 };
