@@ -6,7 +6,7 @@ import {
   createUsersFilterConfig,
   UserFields,
 } from "@sections_admin/usersList/config/userFilterConfig";
-import { ModalCreateUser } from "@root/pages/admin/sections/usersList/_modals/ModalCreateUser/ModalCreateUser.component";
+import { ModalCreateUpdateUser } from "@root/pages/admin/sections/usersList/_modals/ModalCreateUpdateUser/ModalCreateUpdateUser.component";
 import type { CreateUserRequest, User } from "@store_admin/users/user.types";
 import styles from "./styles/User-list.sections.module.scss";
 import { SectionHeaderComponent } from "@sections_admin/_commons/components/SectionHeader/Section-header.component";
@@ -188,7 +188,8 @@ export const UsersListSections: React.FC = () => {
           },
           {
             component: (
-              <ModalCreateUser
+              <ModalCreateUpdateUser
+                mode="create"
                 onSave={handleCreateUser}
                 triggerButton={
                   <SimpleButton

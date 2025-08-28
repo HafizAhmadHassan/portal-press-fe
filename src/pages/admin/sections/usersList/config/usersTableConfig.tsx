@@ -1,10 +1,10 @@
 import React from "react";
 import type { User } from "@store_admin/users/user.types";
-import { ModalEditComponent } from "@sections_admin/usersList/_modals/ModalEdit.component";
 import { ModalDeleteConfirm } from "@sections_admin/usersList/_modals/ModalDeleteConfirm.component";
 import { ModalDetails } from "@sections_admin/usersList/_modals/ModalDetails.component";
 import { Avatar } from "@shared/avatar/Avatar.compoent.tsx";
 import { RoleBadge } from "@shared/roleBadge/RoleBadge.tsx";
+import { ModalCreateUpdateUser } from "../_modals/ModalCreateUpdateUser/ModalCreateUpdateUser.component";
 
 interface UsersTableConfigProps {
   users: User[];
@@ -113,7 +113,11 @@ export const createUsersTableConfig = ({
             style={{ display: "flex", gap: "12px", justifyContent: "center" }}
           >
             <ModalDetails user={user} />
-            <ModalEditComponent user={user} onSave={onEdit} />
+            <ModalCreateUpdateUser
+              mode="edit"
+              initialUser={user}
+              onSave={async (payload) => onEdit({ ...user, ...payload })}
+            />
             <ModalDeleteConfirm user={user} onConfirm={onDelete} />
           </div>
         ),
