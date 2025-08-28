@@ -131,7 +131,7 @@ export const createNewTicket = createAsyncThunk(
 export const updateExistingTicket = createAsyncThunk(
   "tickets/update",
   async (
-    updateData: UpdateTicketRequest & { id: string },
+    updateData: UpdateTicketRequest & { id: number },
     { dispatch, rejectWithValue }
   ) => {
     try {
@@ -154,14 +154,14 @@ export const updateExistingTicket = createAsyncThunk(
 
 export const deleteExistingTicket = createAsyncThunk(
   "tickets/delete",
-  async (ticketId: string, { dispatch, rejectWithValue }) => {
+  async (ticketid: number, { dispatch, rejectWithValue }) => {
     try {
       await dispatch(
-        ticketsApi.endpoints.deleteTicket.initiate(ticketId)
+        ticketsApi.endpoints.deleteTicket.initiate(ticketid)
       ).unwrap();
       await dispatch(loadTickets({}));
       await dispatch(loadAllTickets());
-      return ticketId;
+      return ticketid;
     } catch (error: any) {
       const msg =
         error.data?.message ||

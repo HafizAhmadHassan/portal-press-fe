@@ -7,7 +7,9 @@ import type {
   UsersQueryParams,
 } from "@store_admin/users/user.types.ts";
 import { usersApi } from "@store_admin/users/user.api.ts";
-import { setPagination, setUsers } from "@store_admin/users/user.slice.ts";
+import {
+  /* setPagination, */ setUsers,
+} from "@store_admin/users/user.slice.ts";
 
 // Carica utenti con parametri di paginazione
 export const loadUsers = createAsyncThunk(
@@ -41,9 +43,9 @@ export const loadUsers = createAsyncThunk(
       );
 
       // Se hai la paginazione nel payload:
-      if (response.pagination) {
+      /*  if (response.pagination) {
         dispatch(setPagination(response.pagination));
-      }
+      } */
 
       return response;
     } catch (error: any) {
@@ -115,7 +117,7 @@ export const updateExistingUser = createAsyncThunk(
 // Elimina utente
 export const deleteExistingUser = createAsyncThunk(
   "users/delete",
-  async (userId: string, { dispatch, rejectWithValue }) => {
+  async (userId: number, { dispatch, rejectWithValue }) => {
     try {
       await dispatch(usersApi.endpoints.deleteUser.initiate(userId)).unwrap();
 

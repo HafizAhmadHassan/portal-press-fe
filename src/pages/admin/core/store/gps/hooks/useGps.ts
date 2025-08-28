@@ -29,7 +29,7 @@ export const useGps = (params: GpsQueryParams) => {
     isLoading: isLoading || isFetching,
     error,
     refetch,
-    deleteGps: (id: string | number) => deleteMutation(id),
+    deleteGps: (id: number | number) => deleteMutation(id),
     createGps: (payload: CreateGpsRequest) => createMutation(payload),
     updateGps: (payload: any) => updateMutation(payload),
   };

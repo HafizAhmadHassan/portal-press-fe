@@ -1,5 +1,5 @@
 export interface CollapseItem {
-  id: string;
+  id: number;
   isOpen: boolean;
   autoClose?: boolean; // Se true, chiude automaticamente altri collapse
 }

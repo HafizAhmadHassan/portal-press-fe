@@ -14,7 +14,8 @@ export const plcApi = apiSlice.injectEndpoints({
         { type: "LIST", id: "Plc" },
         { type: "STATS", id: "Plc" },
       ],
-      keepPreviousData: true,
+      // Sostituisci keepPreviousData con keepUnusedDataFor
+      keepUnusedDataFor: 60, // mantiene i dati per 60 secondi
       transformResponse: (res: any) => {
         if (!res?.meta || !Array.isArray(res?.data)) {
           throw new Error("Invalid API response structure");
@@ -24,7 +25,7 @@ export const plcApi = apiSlice.injectEndpoints({
     }),
 
     getPlcById: builder.query({
-      query: (id: string | number) => `http://35.152.52.213/myapi/plc/${id}`,
+      query: (id: number | number) => `http://35.152.52.213/myapi/plc/${id}`,
       providesTags: (_r, _e, id) => [{ type: "ENTITY", id }],
     }),
 
@@ -53,24 +54,20 @@ export const plcApi = apiSlice.injectEndpoints({
       ],
       async onQueryStarted({ id, data }: any, { dispatch, queryFulfilled }) {
         const patch = dispatch(
-          apiSlice.util.updateQueryData(
-            "getPlcById",
-            id as any,
-            (draft: any) => {
-              Object.assign(draft, data);
-            }
-          )
+          plcApi.util.updateQueryData("getPlcById", id as any, (draft: any) => {
+            Object.assign(draft, data);
+          })
         );
         try {
           await queryFulfilled;
         } catch {
-          (patch as any).undo?.();
+          patch.undo();
         }
       },
     }),
 
     deletePlc: builder.mutation({
-      query: (id: string | number) => ({
+      query: (id: number | number) => ({
         url: `http://35.152.52.213/myapi/plc/${id}`,
         method: "DELETE",
       }),

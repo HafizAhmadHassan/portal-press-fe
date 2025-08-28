@@ -220,9 +220,9 @@ export const ModalDetails: React.FC<ModalDetailsProps> = ({ user }) => {
           </div>
 
           <div className={styles.permissionsContainer}>
-            {user.userPermissions && user.userPermissions.length > 0 ? (
+            {user.permissions && user.permissions.length > 0 ? (
               <div className={styles.permissionsList}>
-                {user.userPermissions.map((permission, index) => (
+                {user.permissions.map((permission, index) => (
                   <div key={index} className={styles.permissionChip}>
                     <Shield className={styles.permissionIcon} />
                     {UserRoleLabels[permission] || permission}

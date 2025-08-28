@@ -9,7 +9,7 @@ import styles from "../_styles/DevicesTableConfig.module.scss";
 
 interface DevicesTableConfigProps {
   devices: Device[];
-  onEdit: (deviceId: string, updatedData: any) => Promise<void>;
+  onEdit: (deviceid: number, updatedData: any) => Promise<void>;
   onDelete: (device: Device) => void;
   onToggleStatus: (device: Device) => void;
   isLoading?: boolean;

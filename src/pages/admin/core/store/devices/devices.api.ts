@@ -40,7 +40,7 @@ export const devicesApi = apiSlice.injectEndpoints({
 
     getAllDevices: builder.query<Device[], { filters?: any } | void>({
       query: (args) => {
-        const filters = args?.filters ?? {};
+        const filters = args && args.filters ? args.filters : {};
         const cleanParams = Object.entries(filters).reduce(
           (acc, [key, value]) => {
             if (value !== undefined && value !== null && value !== "") {
@@ -61,7 +61,7 @@ export const devicesApi = apiSlice.injectEndpoints({
       },
     }),
 
-    getDeviceById: builder.query<Device, string>({
+    getDeviceById: builder.query<Device, number>({
       query: (id) => `joined-machines-gps/${id}`,
       providesTags: (_r, _e, id) => [{ type: "ENTITY" as const, id }],
     }),
@@ -97,21 +97,21 @@ export const devicesApi = apiSlice.injectEndpoints({
       ],
       async onQueryStarted({ id, data }, { dispatch, queryFulfilled }) {
         const patch = dispatch(
-          apiSlice.util.updateQueryData("getDeviceById", id, (draft: any) => {
+          devicesApi.util.updateQueryData("getDeviceById", id, (draft: any) => {
             Object.assign(draft, data);
           })
         );
         try {
           await queryFulfilled;
         } catch {
-          (patch as any).undo?.();
+          patch.undo();
         }
       },
     }),
 
     deleteDevice: builder.mutation<
       { success: boolean; message: string },
-      string
+      number
     >({
       query: (id) => ({ url: `joined-machines-gps/${id}`, method: "DELETE" }),
       invalidatesTags: (_r, _e, id) => [
@@ -122,7 +122,7 @@ export const devicesApi = apiSlice.injectEndpoints({
       ],
       async onQueryStarted(id, { dispatch, queryFulfilled }) {
         const patch1 = dispatch(
-          apiSlice.util.updateQueryData("getDevices", {}, (draft: any) => {
+          devicesApi.util.updateQueryData("getDevices", {}, (draft: any) => {
             if (draft?.data) {
               const i = draft.data.findIndex((d: Device) => d.id === id);
               if (i !== -1) {
@@ -145,7 +145,7 @@ export const devicesApi = apiSlice.injectEndpoints({
         );
 
         const patch2 = dispatch(
-          apiSlice.util.updateQueryData(
+          devicesApi.util.updateQueryData(
             "getAllDevices",
             undefined,
             (draft: Device[]) => {
@@ -158,15 +158,15 @@ export const devicesApi = apiSlice.injectEndpoints({
         try {
           await queryFulfilled;
         } catch {
-          (patch1 as any).undo?.();
-          (patch2 as any).undo?.();
+          patch1.undo();
+          patch2.undo();
         }
       },
     }),
 
     toggleDeviceStatus: builder.mutation<
       Device,
-      { id: string; status: number }
+      { id: number; status: number }
     >({
       query: ({ id, status }) => ({
         url: `joined-machines-gps/${id}`,
@@ -183,7 +183,7 @@ export const devicesApi = apiSlice.injectEndpoints({
 
     toggleDeviceBlock: builder.mutation<
       Device,
-      { id: string; blocked: boolean }
+      { id: number; blocked: boolean }
     >({
       query: ({ id, blocked }) => ({
         url: `joined-machines-gps/${id}`,
@@ -198,7 +198,7 @@ export const devicesApi = apiSlice.injectEndpoints({
       ],
     }),
 
-    updateDeviceWaste: builder.mutation<Device, { id: string; waste: string }>({
+    updateDeviceWaste: builder.mutation<Device, { id: number; waste: string }>({
       query: ({ id, waste }) => ({
         url: `joined-machines-gps/${id}`,
         method: "PUT",

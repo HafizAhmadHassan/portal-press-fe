@@ -79,7 +79,7 @@ export const SectionFilterComponent: React.FC<SectionFilterProps> = ({
 
   const accordionItems: AccordionItemType[] = [
     {
-      id: "filters",
+      id: 1,
       title: `Filtri di Ricerca${
         hasActiveFilters ? ` (${activeFiltersCount})` : ""
       }`,
@@ -112,7 +112,7 @@ export const SectionFilterComponent: React.FC<SectionFilterProps> = ({
     <Accordion
       activeItems={activeFiltersCount}
       items={accordionItems}
-      defaultOpenItems={[""]}
+      defaultOpenItems={[]}
       variant="default"
       size="md"
     />

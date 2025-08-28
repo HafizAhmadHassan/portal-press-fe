@@ -37,12 +37,12 @@ export default function DeviceLayout() {
   const currentDeviceId = deviceId ?? id ?? pathId;
 
   const menuItems = useMemo(
-    () => deviceLayoutSideNavItems(currentDeviceId),
+    () => deviceLayoutSideNavItems(Number(currentDeviceId)),
     [currentDeviceId]
   );
 
   const parsedId = deviceId ? Number(deviceId) : undefined;
-  const { data: device, refetch } = useGetDeviceByIdQuery(parsedId!, {
+  const { refetch } = useGetDeviceByIdQuery(parsedId!, {
     skip: !parsedId,
   });
 
@@ -52,7 +52,7 @@ export default function DeviceLayout() {
     isLoading: plcLoading,
     error: plcError,
     refetch: refetchPlc,
-  } = useGetPlcByIdQuery(currentDeviceId as string, {
+  } = useGetPlcByIdQuery(Number(currentDeviceId), {
     skip: !currentDeviceId,
   });
 

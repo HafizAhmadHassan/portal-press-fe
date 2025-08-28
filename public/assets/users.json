@@ -12,7 +12,7 @@
     "isActive": true,
     "dateJoined": "2024-10-04T09:18:40.970596Z",
     "groups": [],
-    "userPermissions": []
+    "permissions": []
   },
   {
     "id": 2,
@@ -27,7 +27,7 @@
     "isActive": true,
     "dateJoined": "2024-10-05T09:38:00Z",
     "groups": [],
-    "userPermissions": []
+    "permissions": []
   },
   {
     "id": 3,
@@ -42,7 +42,7 @@
     "isActive": true,
     "dateJoined": "2024-10-05T10:38:49Z",
     "groups": [],
-    "userPermissions": [32]
+    "permissions": [32]
   },
   {
     "id": 7,
@@ -57,7 +57,7 @@
     "isActive": true,
     "dateJoined": "2024-10-05T10:47:32Z",
     "groups": [],
-    "userPermissions": []
+    "permissions": []
   },
   {
     "id": 8,
@@ -72,7 +72,7 @@
     "isActive": true,
     "dateJoined": "2024-10-05T10:48:52Z",
     "groups": [],
-    "userPermissions": []
+    "permissions": []
   },
   {
     "id": 11,
@@ -87,7 +87,7 @@
     "isActive": true,
     "dateJoined": "2025-02-21T08:50:10Z",
     "groups": [],
-    "userPermissions": [32]
+    "permissions": [32]
   },
   {
     "id": 12,
@@ -102,7 +102,7 @@
     "isActive": true,
     "dateJoined": "2025-03-05T10:27:17Z",
     "groups": [],
-    "userPermissions": []
+    "permissions": []
   },
   {
     "id": 14,
@@ -117,7 +117,7 @@
     "isActive": true,
     "dateJoined": "2025-04-14T12:41:49Z",
     "groups": [],
-    "userPermissions": []
+    "permissions": []
   },
   {
     "id": 19,
@@ -132,7 +132,7 @@
     "isActive": true,
     "dateJoined": "2025-05-19T14:12:39Z",
     "groups": [],
-    "userPermissions": []
+    "permissions": []
   },
   {
     "id": 20,
@@ -147,7 +147,7 @@
     "isActive": true,
     "dateJoined": "2025-06-11T14:08:37Z",
     "groups": [],
-    "userPermissions": []
+    "permissions": []
   },
   {
     "id": 21,
@@ -162,7 +162,7 @@
     "isActive": true,
     "dateJoined": "2025-06-11T14:10:15Z",
     "groups": [],
-    "userPermissions": []
+    "permissions": []
   },
   {
     "id": 22,
@@ -177,7 +177,7 @@
     "isActive": true,
     "dateJoined": "2025-06-11T14:11:42Z",
     "groups": [],
-    "userPermissions": []
+    "permissions": []
   },
   {
     "id": 23,
@@ -192,7 +192,7 @@
     "isActive": true,
     "dateJoined": "2025-06-21T09:18:27Z",
     "groups": [],
-    "userPermissions": []
+    "permissions": []
   },
   {
     "id": 24,
@@ -207,6 +207,6 @@
     "isActive": true,
     "dateJoined": "2025-06-21T15:17:25Z",
     "groups": [],
-    "userPermissions": []
+    "permissions": []
   }
 ]

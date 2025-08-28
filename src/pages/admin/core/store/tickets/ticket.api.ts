@@ -7,11 +7,12 @@ import type {
   TicketsQueryParams,
   MessageCreate,
 } from "./ticket.types";
-import type { Device } from "@store_admin/devices/devices.types";
 import { devicesApi } from "@store_admin/devices/devices.api";
+import type { Device } from "@store_admin/devices/devices.types";
 
-export interface TicketWithDevice extends TicketRead {
-  device?: Device;
+// Ridefiniamo TicketWithDevice per evitare conflitti di tipo
+export interface TicketWithDevice extends Omit<TicketRead, "device"> {
+  device?: Device; // Usa il tipo Device invece di DeviceInfo
 }
 
 export const ticketsApi = apiSlice.injectEndpoints({
@@ -29,7 +30,7 @@ export const ticketsApi = apiSlice.injectEndpoints({
         try {
           const { data: ticketsResponse } = await queryFulfilled;
 
-          // usa devicesApi per garantire che l’endpoint esista
+          // usa devicesApi per garantire che l'endpoint esista
           const devicesResult = await dispatch(
             devicesApi.endpoints.getAllDevices.initiate()
           ).unwrap();
@@ -46,7 +47,7 @@ export const ticketsApi = apiSlice.injectEndpoints({
             );
 
             dispatch(
-              apiSlice.util.updateQueryData(
+              ticketsApi.util.updateQueryData(
                 "getTickets",
                 args,
                 (draft: any) => {
@@ -83,7 +84,7 @@ export const ticketsApi = apiSlice.injectEndpoints({
             );
 
             dispatch(
-              apiSlice.util.updateQueryData(
+              ticketsApi.util.updateQueryData(
                 "getAllTickets",
                 args,
                 () => enriched
@@ -96,8 +97,8 @@ export const ticketsApi = apiSlice.injectEndpoints({
       },
     }),
 
-    getTicketById: builder.query<TicketWithDevice, string>({
-      query: (id) => `message/`,
+    getTicketById: builder.query<TicketWithDevice, number>({
+      query: (id) => `message/${id}/`,
       providesTags: (_r, _e, id) => [{ type: "ENTITY" as const, id }],
       async onQueryStarted(id, { queryFulfilled, dispatch }) {
         try {
@@ -105,14 +106,12 @@ export const ticketsApi = apiSlice.injectEndpoints({
 
           if (ticket?.machine) {
             const device = await dispatch(
-              devicesApi.endpoints.getDeviceById.initiate(
-                ticket.machine.toString()
-              )
+              devicesApi.endpoints.getDeviceById.initiate(ticket.machine)
             ).unwrap();
 
             if (device) {
               dispatch(
-                apiSlice.util.updateQueryData(
+                ticketsApi.util.updateQueryData(
                   "getTicketById",
                   id,
                   (draft: any) => {
@@ -139,7 +138,7 @@ export const ticketsApi = apiSlice.injectEndpoints({
 
     updateTicket: builder.mutation<
       TicketRead,
-      { id: string; data: TicketUpdate }
+      { id: number; data: TicketUpdate }
     >({
       query: ({ id, data }) => ({
         url: `message/${id}/`,
@@ -154,8 +153,8 @@ export const ticketsApi = apiSlice.injectEndpoints({
       ],
     }),
 
-    deleteTicket: builder.mutation<{ success: boolean }, string>({
-      query: (id) => ({ url: `message/`, method: "DELETE" }),
+    deleteTicket: builder.mutation<{ success: boolean }, number>({
+      query: (id) => ({ url: `message/${id}/`, method: "DELETE" }),
       invalidatesTags: (_r, _e, id) => [
         { type: "ENTITY" as const, id },
         { type: "LIST" as const, id: "Tickets" },

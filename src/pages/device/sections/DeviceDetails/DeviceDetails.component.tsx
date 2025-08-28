@@ -112,15 +112,16 @@ const formDataToDevice = (f: FormData) => ({
 });
 
 export default function DeviceDetailsPage() {
-  const { deviceId } = useParams<{ deviceId: string }>();
-
+  const { deviceId } = useParams<{ deviceId?: string }>();
   const {
     data: device,
     refetch,
     /*  isFetching,
     isLoading, */
     isError,
-  } = useGetDeviceByIdQuery(deviceId!, { skip: !deviceId });
+  } = useGetDeviceByIdQuery(deviceId ? Number(deviceId) : undefined, {
+    skip: !deviceId,
+  });
 
   const [updateDevice, { isLoading: isSaving }] = useUpdateDeviceMutation();
 

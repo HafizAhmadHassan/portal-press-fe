@@ -48,7 +48,7 @@ export const selectAllPlcStatus = createSelector([selectAllPlc], (items) =>
 );
 
 /** --- BY ID (usa l'id presente in ciascun blocco) --- */
-const getIdArg = (_: RootState, id: string | number) => id;
+const getIdArg = (_: RootState, id: number | number) => id;
 
 /** PlcItem by id (match su plc_data.id | plc_status.id | plc_io.id) */
 export const selectPlcItemById = createSelector(

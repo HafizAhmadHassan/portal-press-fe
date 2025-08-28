@@ -70,7 +70,7 @@ export const GpsListSections: React.FC = () => {
   };
 
   const handleEdit = useCallback(
-    async (payload: Partial<GpsDevice> & { id: string | number }) => {
+    async (payload: Partial<GpsDevice> & { id: number | number }) => {
       const { id, ...data } = payload;
       await updateGps({ id, data }).unwrap();
       refetch();
@@ -81,7 +81,7 @@ export const GpsListSections: React.FC = () => {
   const handleDelete = useCallback(
     async (d: GpsDevice) => {
       if (window.confirm(`Eliminare il dispositivo codice ${d.codice}?`)) {
-        await deleteGps(d.id).unwrap();
+        await deleteGps(Number(d.id)).unwrap();
       }
     },
     [deleteGps]

@@ -78,7 +78,7 @@ const devicesSlice = createSlice({
     },
 
     // Rimuovi device da entrambe le liste
-    removeDevice: (state, action: PayloadAction<string>) => {
+    removeDevice: (state, action: PayloadAction<number>) => {
       // Rimuovi dai devices paginati
       state.devices = state.devices.filter(
         (device: Device) => device.id !== action.payload
@@ -97,7 +97,7 @@ const devicesSlice = createSlice({
     },
 
     // Rimuovi più devices da entrambe le liste
-    removeDevices: (state, action: PayloadAction<string[]>) => {
+    removeDevices: (state, action: PayloadAction<number[]>) => {
       const idsToRemove = new Set(action.payload);
 
       // Rimuovi dai devices paginati
@@ -177,7 +177,7 @@ const devicesSlice = createSlice({
     },
 
     // Reset completo dello stato
-    resetDevicesState: (_state) => {
+    resetDevicesState: () => {
       return initialState;
     },
 
@@ -185,7 +185,7 @@ const devicesSlice = createSlice({
     updateMultipleDevices: (
       state,
       action: PayloadAction<{
-        deviceIds: string[];
+        deviceIds: number[];
         updates: Partial<Device>;
       }>
     ) => {
@@ -212,7 +212,7 @@ const devicesSlice = createSlice({
     toggleMultipleDevicesStatus: (
       state,
       action: PayloadAction<{
-        deviceIds: string[];
+        deviceIds: number[];
         status: number;
       }>
     ) => {
@@ -239,7 +239,7 @@ const devicesSlice = createSlice({
     toggleMultipleDevicesBlock: (
       state,
       action: PayloadAction<{
-        deviceIds: string[];
+        deviceIds: number[];
         blocked: boolean;
       }>
     ) => {

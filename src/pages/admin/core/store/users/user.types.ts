@@ -1,5 +1,5 @@
 export interface User {
-  id: string;
+  id: number;
   username: string;
   email: string;
   firstName: string;
@@ -11,11 +11,11 @@ export interface User {
   lastLogin?: string | null;
   dateJoined: string;
   groups: string[];
-  userPermissions: string[];
+  permissions: string[];
   avatar?: string;
   avatarUrl?: string;
+  role: string;
 }
-
 
 export interface UsersState {
   users: User[];
@@ -33,7 +33,7 @@ export interface UsersState {
     role: string;
     isActive: boolean | null;
     sortBy: string;
-    sortOrder: 'asc' | 'desc';
+    sortOrder: "asc" | "desc";
   };
 }
 
@@ -42,13 +42,13 @@ export interface CreateUserRequest {
   firstName: string;
   lastName: string;
   username: string;
-  role?: 'admin' | 'user' | 'moderator';
+  role?: "admin" | "user" | "moderator";
   isActive?: boolean;
 }
 
 export interface UpdateUserRequest {
-  id: string;
-  data: Partial<Omit<User, 'id' | 'createdAt' | 'updatedAt'>>;
+  id: number;
+  data: Partial<Omit<User, "id" | "createdAt" | "updatedAt">>;
 }
 
 export interface UsersQueryParams {
@@ -58,7 +58,7 @@ export interface UsersQueryParams {
   role?: string;
   isActive?: boolean;
   sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
+  sortOrder?: "asc" | "desc";
 }
 
 // Nuova struttura di risposta dell'API con meta
@@ -86,9 +86,9 @@ export interface UsersResponse extends ApiResponse<User> {
 
 export interface BulkActionRequest {
   userIds: string[];
-  action: 'activate' | 'deactivate' | 'delete' | 'updateRole';
+  action: "activate" | "deactivate" | "delete" | "updateRole";
   data?: {
-    role?: 'admin' | 'user' | 'moderator';
+    role?: "admin" | "user" | "moderator";
     isActive?: boolean;
   };
 }

@@ -29,7 +29,7 @@ export const usersApi = apiSlice.injectEndpoints({
         { type: "LIST" as const, id: "Users" },
         { type: "STATS" as const, id: "Users" },
       ],
-      keepPreviousData: true,
+      keepUnusedDataFor: 60,
       transformResponse: (response: UsersResponse) => {
         if (!response?.meta || !Array.isArray(response?.data)) {
           throw new Error("Invalid API response structure");
@@ -38,7 +38,7 @@ export const usersApi = apiSlice.injectEndpoints({
       },
     }),
 
-    getUserById: builder.query<User, string>({
+    getUserById: builder.query<User, number>({
       query: (id) => `user/${id}`,
       providesTags: (_r, _e, id) => [{ type: "ENTITY" as const, id }],
     }),
@@ -64,19 +64,19 @@ export const usersApi = apiSlice.injectEndpoints({
       ],
       async onQueryStarted({ id, data }, { dispatch, queryFulfilled }) {
         const patch = dispatch(
-          apiSlice.util.updateQueryData("getUserById", id, (draft: any) => {
+          usersApi.util.updateQueryData("getUserById", id, (draft: any) => {
             Object.assign(draft, data);
           })
         );
         try {
           await queryFulfilled;
         } catch {
-          (patch as any).undo?.();
+          patch.undo();
         }
       },
     }),
 
-    deleteUser: builder.mutation<{ success: boolean; message: string }, string>(
+    deleteUser: builder.mutation<{ success: boolean; message: string }, number>(
       {
         query: (id) => ({ url: `user/${id}`, method: "DELETE" }),
         invalidatesTags: (_r, _e, id) => [
@@ -86,7 +86,7 @@ export const usersApi = apiSlice.injectEndpoints({
         ],
         async onQueryStarted(id, { dispatch, queryFulfilled }) {
           const patch = dispatch(
-            apiSlice.util.updateQueryData(
+            usersApi.util.updateQueryData(
               "getUsers",
               {},
               (draft: UsersResponse) => {
@@ -114,7 +114,7 @@ export const usersApi = apiSlice.injectEndpoints({
           try {
             await queryFulfilled;
           } catch {
-            (patch as any).undo?.();
+            patch.undo();
           }
         },
       }

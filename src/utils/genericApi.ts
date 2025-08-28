@@ -95,7 +95,7 @@ export function createCrudApi<
       // Update entità
       [`update${singularName}`]: builder.mutation<
         Entity,
-        { id: string; data: UpdateDto }
+        { id: number; data: UpdateDto }
       >({
         query: ({ id, data }) => ({
           url: `${resourcePath}/${id}`,

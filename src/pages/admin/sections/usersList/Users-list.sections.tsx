@@ -7,7 +7,7 @@ import {
   UserFields,
 } from "@sections_admin/usersList/config/userFilterConfig";
 import { ModalCreateUser } from "@sections_admin/usersList/_modals/ModalCreateUser.component";
-import type { User } from "@store_admin/users/user.types";
+import type { CreateUserRequest, User } from "@store_admin/users/user.types";
 import styles from "./styles/User-list.sections.module.scss";
 import { SectionHeaderComponent } from "@sections_admin/_commons/components/SectionHeader/Section-header.component";
 import { SectionFilterComponent } from "@sections_admin/_commons/components/SectionFilters/Section-filters.component";
@@ -32,7 +32,6 @@ export const UsersListSections: React.FC = () => {
     page,
     pageSize,
     setFilter,
-    setSort,
     setPage,
     setPageSize,
     resetAll,
@@ -113,7 +112,7 @@ export const UsersListSections: React.FC = () => {
   );
 
   const handleCreateUser = useCallback(
-    async (userData: Partial<User>) => {
+    async (userData: CreateUserRequest) => {
       try {
         await createUser(userData).unwrap();
         refetch();
@@ -136,9 +135,6 @@ export const UsersListSections: React.FC = () => {
     onEdit: handleEditUser,
     onDelete: handleDeleteUser,
     isLoading,
-    sortBy,
-    sortOrder,
-    onSort: setSort,
   });
 
   const tableConfig = {

@@ -224,17 +224,17 @@ export const updateExistingDevice = createAsyncThunk(
 
 export const deleteExistingDevice = createAsyncThunk(
   "devices/delete",
-  async (deviceId: string, { dispatch, rejectWithValue }) => {
+  async (deviceid: number, { dispatch, rejectWithValue }) => {
     try {
       await dispatch(
-        devicesApi.endpoints.deleteDevice.initiate(deviceId)
+        devicesApi.endpoints.deleteDevice.initiate(deviceid)
       ).unwrap();
 
       // Ricarica sia i devices paginati che tutti i devices
       await dispatch(loadDevices({}));
       await dispatch(loadAllDevices());
 
-      return deviceId;
+      return deviceid;
     } catch (error: any) {
       return rejectWithValue(
         error.data?.message || "Errore nell'eliminazione device"
@@ -246,13 +246,13 @@ export const deleteExistingDevice = createAsyncThunk(
 export const toggleDeviceStatus = createAsyncThunk(
   "devices/toggleStatus",
   async (
-    { deviceId, status }: { deviceId: string; status: number },
+    { deviceid, status }: { deviceid: number; status: number },
     { dispatch, rejectWithValue }
   ) => {
     try {
       const updatedDevice = await dispatch(
         devicesApi.endpoints.toggleDeviceStatus.initiate({
-          id: deviceId,
+          id: deviceid,
           status,
         })
       ).unwrap();
@@ -269,13 +269,13 @@ export const toggleDeviceStatus = createAsyncThunk(
 export const toggleDeviceBlock = createAsyncThunk(
   "devices/toggleBlock",
   async (
-    { deviceId, blocked }: { deviceId: string; blocked: boolean },
+    { deviceid, blocked }: { deviceid: number; blocked: boolean },
     { dispatch, rejectWithValue }
   ) => {
     try {
       const updatedDevice = await dispatch(
         devicesApi.endpoints.toggleDeviceBlock.initiate({
-          id: deviceId,
+          id: deviceid,
           blocked,
         })
       ).unwrap();
@@ -292,12 +292,12 @@ export const toggleDeviceBlock = createAsyncThunk(
 export const updateDeviceWasteType = createAsyncThunk(
   "devices/updateWaste",
   async (
-    { deviceId, waste }: { deviceId: string; waste: string },
+    { deviceid, waste }: { deviceid: number; waste: string },
     { dispatch, rejectWithValue }
   ) => {
     try {
       const updatedDevice = await dispatch(
-        devicesApi.endpoints.updateDeviceWaste.initiate({ id: deviceId, waste })
+        devicesApi.endpoints.updateDeviceWaste.initiate({ id: deviceid, waste })
       ).unwrap();
 
       return updatedDevice;

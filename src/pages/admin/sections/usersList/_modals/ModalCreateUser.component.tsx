@@ -39,7 +39,7 @@ interface FormData {
   isActive: boolean;
   isStaff: boolean;
   isSuperuser: boolean;
-  userPermissions: string[];
+  permissions: string[];
 }
 
 interface FormErrors {
@@ -65,7 +65,7 @@ export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({
     isActive: true,
     isStaff: false,
     isSuperuser: false,
-    userPermissions: [],
+    permissions: [],
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -133,7 +133,7 @@ export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({
         isActive: true,
         isStaff: false,
         isSuperuser: false,
-        userPermissions: [],
+        permissions: [],
       });
     } catch (error: any) {
       setErrors({
@@ -380,9 +380,9 @@ export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({
                   role
                 ].toLowerCase()}`,
               }))}
-              value={formData.userPermissions}
+              value={formData.permissions}
               onChange={(permissions) =>
-                handleInputChange("userPermissions", permissions)
+                handleInputChange("permissions", permissions)
               }
               layout="grid"
               columns={2}
@@ -419,10 +419,8 @@ export const ModalCreateUser: React.FC<ModalCreateUserProps> = ({
             </div>
             <div className={styles.summaryItem}>
               <strong>Permessi:</strong>{" "}
-              {formData.userPermissions.length > 0
-                ? formData.userPermissions
-                    .map((p) => UserRoleLabels[p])
-                    .join(", ")
+              {formData.permissions.length > 0
+                ? formData.permissions.map((p) => UserRoleLabels[p]).join(", ")
                 : "Nessun permesso"}
             </div>
           </div>

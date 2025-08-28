@@ -1,14 +1,12 @@
-import React from 'react';
-import styles from '../styles/SideNavBadge.module.scss';
+import React from "react";
+import styles from "../styles/SideNavBadge.module.scss";
 
 interface Props {
-    value?: string | number;
+  value?: number;
 }
 
 export function SideNavBadge({ value }: Props) {
-    if (!value) return null;
+  if (!value) return null;
 
-    return (
-        <span className={styles.badge}>{value}</span>
-    );
+  return <span className={styles.badge}>{value}</span>;
 }

@@ -5,8 +5,9 @@ import type {
   AuthResponse,
   LoginCredentials,
   RegisterCredentials,
-  User,
 } from "./auth.types";
+import type { User } from "../users/user.types";
+import { UserRoles } from "@root/utils/constants/userRoles";
 
 const apiHassanUrl = import.meta.env.VITE_API_HASSAN_URL;
 
@@ -43,27 +44,25 @@ export const authApi = createApi({
         body: new URLSearchParams({
           username,
           password,
-          // Se il backend vuole davvero grant_type, tienilo. Per SimpleJWT non serve.
-          // grant_type: "password",
           ...(rememberMe ? { remember_me: "true" } : {}),
         }),
       }),
       transformResponse: (response: any): AuthResponse => {
         // Log utile in dev
-        // console.log("API: Raw login response:", response);
 
         // 1) Django SimpleJWT (access/refresh)
         if (response?.access && response?.refresh) {
+          console.log("API: Raw login response:", response);
           return {
             token: response.access,
             refresh: response.refresh,
             user:
               response.user ??
               ({
-                id: "temp",
-                email: "",
-                name: response?.user?.username ?? "User",
-                role: "user",
+                id: response?.user?.id ?? "temp",
+                email: response?.user?.email ?? "unknown",
+                username: response?.user?.username ?? "User",
+                role: response?.user?.role ?? UserRoles.USER,
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString(),
               } as unknown as User),
@@ -78,10 +77,10 @@ export const authApi = createApi({
             user:
               response.user ??
               ({
-                id: "temp",
-                email: "unknown",
-                name: "User",
-                role: "user",
+                id: response?.user?.id ?? "temp",
+                email: response?.user?.email ?? "unknown",
+                name: response?.user?.name ?? "User",
+                role: response?.user?.role ?? UserRoles.USER,
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString(),
               } as unknown as User),

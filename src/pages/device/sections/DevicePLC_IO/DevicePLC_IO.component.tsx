@@ -36,7 +36,7 @@ function buildRowsFromPlcIo(
   if (idEntry) {
     const [, v] = idEntry;
     rows.push({
-      id: "id",
+      id: Number(v ?? 0),
       key: "id",
       label: "ID Dispositivo",
       type: "number",
@@ -57,7 +57,7 @@ function buildRowsFromPlcIo(
       else type = "text"; // stringhe tipo "default_"
 
       rows.push({
-        id: k,
+        id: rows.length + 1,
         key: k,
         label,
         type,
@@ -71,7 +71,7 @@ function buildRowsFromPlcIo(
 
 export default function DevicePLC_IO() {
   const navigate = useNavigate();
-  const { deviceId } = useParams<{ deviceId: string }>();
+  const { deviceId } = useParams<{ deviceId?: string }>();
   const location = useLocation();
   const editable = useMemo(
     () => location.pathname.endsWith("/edit"),
@@ -87,7 +87,7 @@ export default function DevicePLC_IO() {
   const isEdit = searchParams.get("edit") === "1";
 
   // === FETCH plc/${id} e prendi SOLO plc_io ===
-  const currentId = deviceId ?? "";
+  const currentId = deviceId ? Number(deviceId) : undefined;
   const {
     data: plcDetail,
     isLoading,

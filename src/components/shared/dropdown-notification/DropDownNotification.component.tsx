@@ -10,9 +10,9 @@ import styles from "./DropDownNotification.module.scss";
 export type LogSeverity = "info" | "warning" | "error";
 
 export interface EmailLog {
-  id: string | number;
+  id: number;
   subject: string;
-  timestamp: string | number | Date;
+  timestamp: number | Date;
   preview?: string;
   unread?: boolean;
   severity?: LogSeverity;

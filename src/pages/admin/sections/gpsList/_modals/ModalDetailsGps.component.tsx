@@ -6,6 +6,7 @@ import { Eye, MapPin, Satellite } from "lucide-react";
 import styles from "./ModalDetailsGps.module.scss";
 import type { GpsDevice } from "@store_admin/gps/gps.types";
 import GpsMap from "../_components/GpsMap";
+import type { Device } from "@root/pages/admin/core/store/devices/devices.types";
 
 export const ModalDetailsGps: React.FC<{ device: GpsDevice }> = ({
   device,
@@ -26,11 +27,14 @@ export const ModalDetailsGps: React.FC<{ device: GpsDevice }> = ({
             mapData={[
               {
                 ...device,
+                id: device.id,
                 machine_Name: "",
                 status: 0,
                 status_ready_d75_3_7: false,
                 status_Machine_Blocked: false,
-                status_Machine_Ready: false,
+                created_At: "",
+                updated_At: "",
+                waste: device.waste as Device["waste"],
               },
             ]}
             isCollapsed={false}

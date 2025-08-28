@@ -145,7 +145,7 @@ export const DevicesListSections: React.FC = () => {
 
   const handleDeleteDevice = useCallback(
     async (device: Device) => {
-      const name = (device as any).machine_Name || device.id;
+      const name = device.machine_Name || device.id;
       if (
         window.confirm(`Sei sicuro di voler eliminare il dispositivo ${name}?`)
       ) {
@@ -168,11 +168,11 @@ export const DevicesListSections: React.FC = () => {
   const onRefreshClick = async () => refetchAll();
 
   const updateExistingDevice = useCallback(
-    async (deviceId: string, deviceData: any): Promise<void> => {
+    async (deviceid: number, deviceData: any): Promise<void> => {
       try {
         if (!deviceData) throw new Error("Device data is required");
         await updateDevice({
-          id: deviceId,
+          id: deviceid,
           data: deviceData,
         }).unwrap();
         setTimeout(() => refetchAll(), 100);

@@ -1,7 +1,7 @@
 // @store_admin/gps/gps.types.ts
 
 export interface GpsDevice {
-  id: number | string;
+  id: number;
   codice: string;
   gps_x: string; // lat
   gps_y: string; // lng
@@ -64,7 +64,7 @@ export interface CreateGpsRequest extends Partial<GpsDevice> {
 }
 
 export interface UpdateGpsRequest {
-  id: string | number;
+  id: number | number;
   data: Partial<GpsDevice>;
 }
 

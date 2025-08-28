@@ -41,7 +41,7 @@ export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({
     isActive: user.isActive || false,
     isStaff: user.isStaff || false,
     isSuperuser: user.isSuperuser || false,
-    userPermissions: user.userPermissions || [],
+    permissions: user.permissions || [],
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -57,7 +57,7 @@ export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({
       isActive: user.isActive || false,
       isStaff: user.isStaff || false,
       isSuperuser: user.isSuperuser || false,
-      userPermissions: user.userPermissions || [],
+      permissions: user.permissions || [],
     });
   }, [user]);
 
@@ -268,9 +268,9 @@ export const ModalEditComponent: React.FC<ModalEditComponentProps> = ({
                 label: UserRoleLabels[role],
                 value: role,
               }))}
-              value={formData.userPermissions}
+              value={formData.permissions}
               onChange={(permissions) =>
-                handleInputChange("userPermissions", permissions)
+                handleInputChange("permissions", permissions)
               }
               layout="grid"
               columns={2}

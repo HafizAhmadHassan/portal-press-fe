@@ -3,7 +3,7 @@ import styles from "./Accordion.module.scss";
 import { ChevronDown, type LucideIcon } from "lucide-react";
 
 export type AccordionItemType = {
-  id: string;
+  id: number;
   title: string;
   content: React.ReactNode; // Accetta qualsiasi componente React
   icon?: LucideIcon;
@@ -13,7 +13,7 @@ export type AccordionItemType = {
 type AccordionProps = {
   items: AccordionItemType[];
   allowMultiple?: boolean;
-  defaultOpenItems?: string[];
+  defaultOpenItems?: number[];
   variant?: "default" | "bordered" | "minimal";
   size?: "sm" | "md" | "lg";
   activeItems?: number;
@@ -27,24 +27,24 @@ export const Accordion: React.FC<AccordionProps> = ({
   size = "md",
   activeItems = 0,
 }) => {
-  const [openItems, setOpenItems] = useState<string[]>(defaultOpenItems);
+  const [openItems, setOpenItems] = useState<number[]>(defaultOpenItems);
 
-  const toggleItem = (itemId: string) => {
-    const item = items.find((item) => item?.id === itemId);
+  const toggleItem = (itemid: number) => {
+    const item = items.find((item) => item?.id === itemid);
     if (item?.disabled) return;
 
     setOpenItems((prev) => {
-      const isOpen = prev.includes(itemId);
+      const isOpen = prev.includes(itemid);
 
       if (allowMultiple) {
-        return isOpen ? prev.filter((id) => id !== itemId) : [...prev, itemId];
+        return isOpen ? prev.filter((id) => id !== itemid) : [...prev, itemid];
       } else {
-        return isOpen ? [] : [itemId];
+        return isOpen ? [] : [itemid];
       }
     });
   };
 
-  const isItemOpen = (itemId: string) => openItems.includes(itemId);
+  const isItemOpen = (itemid: number) => openItems.includes(itemid);
 
   return (
     <div className={`${styles.accordion} ${styles[variant]} ${styles[size]}`}>

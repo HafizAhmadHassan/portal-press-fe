@@ -103,7 +103,7 @@ export interface TicketUpdate {
 
 // Payload per update
 export interface UpdateTicketRequest {
-  id: string | number;
+  id: number | number;
   data: TicketUpdate;
 }
 

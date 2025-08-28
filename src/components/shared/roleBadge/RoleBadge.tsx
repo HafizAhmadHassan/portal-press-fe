@@ -1,7 +1,5 @@
-import {
-  UserRoleGroupsLabels,
-  UserRoleLabels,
-} from "@utils/constants/userRoles.ts";
+import type { User } from "@root/pages/admin/core/store/users/user.types";
+import { UserRoleGroupsLabels } from "@utils/constants/userRoles.ts";
 
 export const RoleBadge = ({ user }: { user: User }) => {
   const hardcodedStyles = {

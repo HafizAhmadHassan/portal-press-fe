@@ -58,9 +58,9 @@ export const TicketsListSections: React.FC = () => {
     tickets,
     meta,
     isLoading,
-    error,
+    /* error, */
     refetch,
-    createNewTicket,
+    /* createNewTicket, */
     updateExistingTicket,
     deleteExistingTicket,
   } = useTicketsWithDevices(queryParams);
@@ -88,7 +88,7 @@ export const TicketsListSections: React.FC = () => {
   };
 
   // ✅ CRUD operations base
-  const handleCreate = useCallback(
+  /*   const handleCreate = useCallback(
     async (data) => {
       const created =
         (await (createNewTicket as any)(data).unwrap?.()) ??
@@ -97,7 +97,7 @@ export const TicketsListSections: React.FC = () => {
       return created;
     },
     [createNewTicket, refetch]
-  );
+  ); */
 
   const handleEdit = useCallback(
     async ({ id, ...rest }) => {
@@ -124,7 +124,7 @@ export const TicketsListSections: React.FC = () => {
   // ✅ CLOSE ticket con il body richiesto per la chiusura
   const handleClose = useCallback(
     async (data: {
-      ticketId: number | string;
+      ticketId: number;
       note?: string;
       inGaranzia?: boolean;
       fuoriGaranzia?: boolean;
@@ -181,7 +181,7 @@ export const TicketsListSections: React.FC = () => {
 
       // 5) Invio con la mutation esistente (PUT tickets/:id/) — se il tuo backend usa endpoint diverso, cambia qui.
       const updated = await updateTicket({
-        id: String(data.ticketId),
+        id: data.ticketId,
         data: payload as any,
       }).unwrap();
 

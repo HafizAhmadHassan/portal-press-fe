@@ -1,6 +1,6 @@
 export type Toast = {
   id: string;
-  type: 'success' | 'error';
+  type: "success" | "error";
   message: string;
   title?: string;
   duration?: number;
@@ -13,7 +13,7 @@ export const toastQueue: Toast[] = [];
  * Può essere usato globalmente (es. nei thunk)
  * Aggiunge l'id internamente.
  */
-export const triggerGlobalToast = (toast: Omit<Toast, 'id'>) => {
+export const triggerGlobalToast = (toast: Omit<Toast, "id">) => {
   toastQueue.push({
     ...toast,
     id: crypto.randomUUID(),

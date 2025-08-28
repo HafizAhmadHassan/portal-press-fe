@@ -19,8 +19,8 @@ const DevicesTable: React.FC<DevicesTableProps> = ({
     onDeviceAction?.("view", device);
   };
  */
-  const handleEdit = async (deviceId: string, updatedData: any) => {
-    const device = devices.find((d) => d.id === deviceId);
+  const handleEdit = async (deviceid: number, updatedData: any) => {
+    const device = devices.find((d) => d.id === deviceid);
     if (device) {
       onDeviceAction?.("edit", { ...device, ...updatedData });
     }

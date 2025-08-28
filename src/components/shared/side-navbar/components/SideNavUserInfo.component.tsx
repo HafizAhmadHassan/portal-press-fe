@@ -10,11 +10,11 @@ interface Props {
 }
 
 export function SideNavUserInfo({ user, showMenu }: Props) {
-  // Se userPermissions è array o stringa, adattalo qui:
-  const roles = Array.isArray(user.userPermissions)
-    ? user.userPermissions
-    : user.userPermissions
-    ? [user.userPermissions]
+  // Se permissions è array o stringa, adattalo qui:
+  const roles = Array.isArray(user.permissions)
+    ? user.permissions
+    : user.permissions
+    ? [user.permissions]
     : [];
 
   const hasRoles = roles.length > 0;

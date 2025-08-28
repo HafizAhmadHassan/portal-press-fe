@@ -48,7 +48,7 @@ export const selectUserEmail = createSelector(
 
 export const selectUserName = createSelector(
   [selectUser],
-  (user) => user?.name
+  (user) => user?.username
 );
 
 export const selectUserRole = createSelector(
@@ -178,16 +178,4 @@ export const selectCanManageUsers = createSelector(
 );
 
 // Selettore per dati profilo completi
-export const selectUserProfile = createSelector([selectUser], (user) =>
-  user
-    ? {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        avatar: user.avatar,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-      }
-    : null
-);
+export const selectUserProfile = createSelector([selectUser], (user) => user);

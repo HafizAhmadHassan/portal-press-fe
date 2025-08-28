@@ -7,7 +7,7 @@ import { Check, Edit3, X } from "lucide-react";
 /** === Row definition (riutilizzabile ovunque) === */
 export type TableKeyValueRow =
   | {
-      id: string;
+      id: number;
       key: string;
       label: string;
       type: "boolean";
@@ -15,7 +15,7 @@ export type TableKeyValueRow =
       readOnly?: boolean;
     }
   | {
-      id: string;
+      id: number;
       key: string;
       label: string;
       type: "number";
@@ -28,7 +28,7 @@ export type TableKeyValueRow =
       validate?: (v: number) => string | undefined;
     }
   | {
-      id: string;
+      id: number;
       key: string;
       label: string;
       type: "text";
@@ -37,7 +37,7 @@ export type TableKeyValueRow =
       readOnly?: boolean;
     }
   | {
-      id: string;
+      id: number;
       key: string;
       label: string;
       type: "multiline";
@@ -46,7 +46,7 @@ export type TableKeyValueRow =
       readOnly?: boolean;
     }
   | {
-      id: string;
+      id: number;
       key: string;
       label: string;
       type: "select";
@@ -117,15 +117,15 @@ export default function TableKeyValue({
   const hasActions = showActionsColumn || allowHeaderEditToggle;
 
   const isRowEditableNow = (row: TableKeyValueRow) =>
-    !row.readOnly && (editable || forceAll || editingRows.has(row.id));
+    !row.readOnly && (editable || forceAll || editingRows.has(String(row.id)));
 
   const startRowEdit = (row: TableKeyValueRow) => {
     if (row.readOnly) return;
-    if (!editingRows.has(row.id)) {
+    if (!editingRows.has(String(row.id))) {
       // salva snapshot originale della riga
       originalsRef.current[row.id] = JSON.parse(JSON.stringify(row));
       const next = new Set(editingRows);
-      next.add(row.id);
+      next.add(String(row.id));
       setEditingRows(next);
     }
   };
@@ -139,7 +139,7 @@ export default function TableKeyValue({
     }
     delete originalsRef.current[row.id];
     const next = new Set(editingRows);
-    next.delete(row.id);
+    next.delete(String(row.id));
     setEditingRows(next);
     onRowCancel?.(row, index);
   };
@@ -150,7 +150,7 @@ export default function TableKeyValue({
     } finally {
       delete originalsRef.current[row.id];
       const next = new Set(editingRows);
-      next.delete(row.id);
+      next.delete(String(row.id));
       setEditingRows(next);
     }
   };
@@ -222,7 +222,7 @@ export default function TableKeyValue({
             const readonly = !isRowEditableNow(r);
             const errorMsg =
               r.type === "number" &&
-              (r.validate?.(Number((r as any).value)) ?? undefined);
+              (r.validate?.(Number(r.value)) ?? undefined);
 
             return (
               <div key={r.id} className={styles.row}>
@@ -283,9 +283,9 @@ export default function TableKeyValue({
                           onChange={(e) =>
                             handleValue(i, (e.target as HTMLInputElement).value)
                           }
-                          min={(r as any).min}
+                          /*  min={(r as any).min}
                           max={(r as any).max}
-                          step={(r as any).step ?? "any"}
+                          step={(r as any).step ?? "any"} */
                           size="sm"
                           containerClassName={styles.inputContainer}
                           inputClassName={styles.inputField}

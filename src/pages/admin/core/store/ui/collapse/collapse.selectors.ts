@@ -11,10 +11,10 @@ export const selectCollapseLoading = (state: RootState) =>
 export const selectCollapseError = (state: RootState) =>
   state.ui.collapse.error;
 
-export const selectCollapseById = (id: string) => (state: RootState) =>
+export const selectCollapseById = (id: number) => (state: RootState) =>
   state.ui.collapse.items[id];
 
-export const selectIsCollapseOpen = (id: string) => (state: RootState) =>
+export const selectIsCollapseOpen = (id: number) => (state: RootState) =>
   state.ui.collapse.items[id]?.isOpen || false;
 
 export const selectOpenCollapses = createSelector(

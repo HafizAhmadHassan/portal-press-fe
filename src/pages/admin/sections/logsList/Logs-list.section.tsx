@@ -41,8 +41,8 @@ export const LogsListSections: React.FC = () => {
       [LogsFields.DATE_TO]: "",
       [LogsFields.SEARCH]: "",
     },
-    initialSortBy: "date_and_time",
-    initialSortOrder: "desc",
+    /* initialSortBy: "date_and_time",
+    initialSortOrder: "desc", */
   });
 
   const queryParams = {

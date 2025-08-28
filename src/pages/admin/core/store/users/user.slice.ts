@@ -1,5 +1,5 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { User, UsersState } from '@store_admin/users/user.types.ts'; // ✅ Aggiungi User import
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { User, UsersState } from "@store_admin/users/user.types.ts"; // ✅ Aggiungi User import
 
 const initialState: UsersState = {
   users: [],
@@ -13,16 +13,16 @@ const initialState: UsersState = {
     totalPages: 0,
   },
   filters: {
-    search: '',
-    role: '',
+    search: "",
+    role: "",
     isActive: null,
-    sortBy: 'createdAt',
-    sortOrder: 'desc',
+    sortBy: "createdAt",
+    sortOrder: "desc",
   },
 };
 
 const usersSlice = createSlice({
-  name: 'users',
+  name: "users",
   initialState,
   reducers: {
     // Imposta lista utenti
@@ -40,7 +40,9 @@ const usersSlice = createSlice({
 
     // Aggiorna utente esistente nella lista
     updateUserInList: (state, action: PayloadAction<User>) => {
-      const index = state.users.findIndex(user => user.id === action.payload.id);
+      const index = state.users.findIndex(
+        (user) => user.id === action.payload.id
+      );
       if (index !== -1) {
         state.users[index] = action.payload;
       }
@@ -51,8 +53,8 @@ const usersSlice = createSlice({
     },
 
     // Rimuovi utente dalla lista
-    removeUser: (state, action: PayloadAction<string>) => {
-      state.users = state.users.filter(user => user.id !== action.payload);
+    removeUser: (state, action: PayloadAction<number>) => {
+      state.users = state.users.filter((user) => user.id !== action.payload);
       state.pagination.total = Math.max(0, state.pagination.total - 1);
       // Rimuovi selectedUser se è lo stesso
       if (state.selectedUser?.id === action.payload) {
@@ -61,10 +63,13 @@ const usersSlice = createSlice({
     },
 
     // Rimuovi più utenti dalla lista
-    removeUsers: (state, action: PayloadAction<string[]>) => {
+    removeUsers: (state, action: PayloadAction<number[]>) => {
       const idsToRemove = new Set(action.payload);
-      state.users = state.users.filter(user => !idsToRemove.has(user.id));
-      state.pagination.total = Math.max(0, state.pagination.total - action.payload.length);
+      state.users = state.users.filter((user) => !idsToRemove.has(user.id));
+      state.pagination.total = Math.max(
+        0,
+        state.pagination.total - action.payload.length
+      );
       // Rimuovi selectedUser se è incluso
       if (state.selectedUser && idsToRemove.has(state.selectedUser.id)) {
         state.selectedUser = null;
@@ -77,17 +82,23 @@ const usersSlice = createSlice({
     },
 
     // Imposta paginazione
-    setPagination: (state, action: PayloadAction<{
-      page: number;
-      limit: number;
-      total: number;
-      totalPages: number;
-    }>) => {
+    setPagination: (
+      state,
+      action: PayloadAction<{
+        page: number;
+        limit: number;
+        total: number;
+        totalPages: number;
+      }>
+    ) => {
       state.pagination = action.payload;
     },
 
     // Imposta filtri
-    setFilters: (state, action: PayloadAction<Partial<UsersState['filters']>>) => {
+    setFilters: (
+      state,
+      action: PayloadAction<Partial<UsersState["filters"]>>
+    ) => {
       state.filters = { ...state.filters, ...action.payload };
     },
 
@@ -116,19 +127,22 @@ const usersSlice = createSlice({
     },
 
     // Reset completo dello stato
-    resetUsersState: (state) => {
+    resetUsersState: () => {
       return initialState;
     },
 
     // Aggiorna stato di più utenti (per bulk actions)
-    updateMultipleUsers: (state, action: PayloadAction<{
-      userIds: string[];
-      updates: Partial<User>;
-    }>) => {
+    updateMultipleUsers: (
+      state,
+      action: PayloadAction<{
+        userIds: number[];
+        updates: Partial<User>;
+      }>
+    ) => {
       const { userIds, updates } = action.payload;
       const idsSet = new Set(userIds);
 
-      state.users = state.users.map(user =>
+      state.users = state.users.map((user) =>
         idsSet.has(user.id) ? { ...user, ...updates } : user
       );
 

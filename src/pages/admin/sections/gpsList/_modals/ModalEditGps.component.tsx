@@ -10,7 +10,7 @@ import type { GpsDevice } from "@store_admin/gps/gps.types";
 interface Props {
   device: GpsDevice;
   onSave?: (
-    updated: Partial<GpsDevice> & { id: string | number }
+    updated: Partial<GpsDevice> & { id: number | number }
   ) => void | Promise<void>;
 }
 

@@ -7,7 +7,7 @@ import { UserRoleLabels, UserRoles } from "@utils/constants/userRoles.ts";
 export const UserFields = {
   EMAIL: "email",
   USERNAME: "username",
-  USER_PERMISSIONS: "userPermissions",
+  USER_PERMISSIONS: "permissions",
   isActive: "isActive",
 };
 

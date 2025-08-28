@@ -45,7 +45,7 @@ function buildRowsFromPlcStatus(
   if (idEntry) {
     const [, v] = idEntry;
     rows.push({
-      id: "id",
+      id: Number(v ?? 0),
       key: "id",
       label: "ID Dispositivo",
       type: "number",
@@ -71,7 +71,7 @@ function buildRowsFromPlcStatus(
         type === "number" && !Number.isInteger(normalized) ? 0.001 : 1;
 
       rows.push({
-        id: k,
+        id: rows.length + 1,
         key: k,
         label,
         type,
@@ -85,7 +85,7 @@ function buildRowsFromPlcStatus(
 
 export default function DevicePLC_STATUS() {
   const navigate = useNavigate();
-  const { deviceId } = useParams<{ deviceId: string }>();
+  const { deviceId } = useParams<{ deviceId?: string }>();
   const location = useLocation();
   const editable = useMemo(
     () => location.pathname.endsWith("/edit"),
@@ -101,14 +101,14 @@ export default function DevicePLC_STATUS() {
   const isEdit = searchParams.get("edit") === "1";
 
   // === FETCH plc/${id} e prendi SOLO plc_status ===
-  const currentId = deviceId ?? "";
+  const currentId = deviceId ? Number(deviceId) : undefined;
   const {
     data: plcDetail,
     isLoading,
     isFetching,
     error,
     refetch,
-  } = useGetPlcByIdQuery(currentId, { skip: !currentId });
+  } = useGetPlcByIdQuery(currentId as number, { skip: !currentId });
 
   const plcStatus = plcDetail?.plc_status ?? null;
 

@@ -1,11 +1,11 @@
 // src/core/store/ui/ui.types.ts
 
-export type ThemeMode = 'light' | 'dark' | 'system';
+export type ThemeMode = "light" | "dark" | "system";
 
 export interface UiState {
   // Global theme handling
-  themeMode: ThemeMode;    // user preference
-  isDark: boolean;         // resolved theme applied to the DOM
+  themeMode: ThemeMode; // user preference
+  isDark: boolean; // resolved theme applied to the DOM
   isLoading?: boolean;
   error?: string | null;
 }
@@ -13,15 +13,15 @@ export interface UiState {
 export interface SidebarState {
   // Desktop sidebar
   isCollapsed: boolean;
-  position: 'left' | 'right';
-  accordionDirection: 'up' | 'down';
+  position: "left" | "right";
+  accordionDirection: "up" | "down";
 
   // Mobile sidebar
   isMobileOpen: boolean;
 }
 
 export interface CollapseItem {
-  id: string;
+  id: number;
   isOpen: boolean;
   autoClose?: boolean;
 }

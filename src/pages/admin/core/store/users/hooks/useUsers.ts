@@ -1,11 +1,15 @@
-import { useMemo } from 'react';
+import { useMemo } from "react";
 import {
   useCreateUserMutation,
   useDeleteUserMutation,
   useGetUsersQuery,
   useUpdateUserMutation,
-} from '@store_admin/users/user.api';
-import type { CreateUserRequest, UsersQueryParams } from '@store_admin/users/user.types';
+} from "@store_admin/users/user.api";
+import type {
+  CreateUserRequest,
+  UpdateUserRequest,
+  UsersQueryParams,
+} from "@store_admin/users/user.types";
 
 export const useUsers = (params: UsersQueryParams) => {
   const {
@@ -15,7 +19,6 @@ export const useUsers = (params: UsersQueryParams) => {
     error,
     refetch,
   } = useGetUsersQuery(params, {
-    keepPreviousData: true,
     pollingInterval: 0,
   });
 
@@ -26,9 +29,9 @@ export const useUsers = (params: UsersQueryParams) => {
   const users = useMemo(() => apiResponse?.data ?? [], [apiResponse?.data]);
   const meta = apiResponse?.meta ?? null;
 
-  const deleteUser = (userId: string) => deleteMutation(userId);
+  const deleteUser = (userId: number) => deleteMutation(userId);
   const createUser = (userData: CreateUserRequest) => createMutation(userData);
-  const updateUser = (userData: Partial<any>) => updateMutation(userData);
+  const updateUser = (userData: UpdateUserRequest) => updateMutation(userData);
 
   return {
     users,

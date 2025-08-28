@@ -3,7 +3,8 @@ import styles from "../styles/SideNavContent.module.scss";
 import { SideNavItem } from "./SideNavItem.component.tsx";
 
 import { useMenuItems } from "../../../../routes/_hooks/useMenuItems.ts";
-import type { AccordionDirection, MenuItem } from "../types/MenuItem.types.ts";
+import type { AccordionDirection } from "../types/MenuItem.types.ts";
+import type { MenuItem } from "../../../../routes/_hooks/useMenuItems.ts";
 
 interface Props {
   menuItems: MenuItem[];

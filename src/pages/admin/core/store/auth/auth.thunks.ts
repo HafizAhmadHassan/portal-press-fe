@@ -5,10 +5,10 @@ import type {
   AuthResponse,
   LoginCredentials,
   RegisterCredentials,
-  User,
 } from "./auth.types";
 import { authApi } from "./auth.api";
 import { logout } from "./auth.slice";
+import type { User } from "../users/user.types";
 
 // Login con credenziali
 export const loginAsync = createAsyncThunk<

@@ -1,5 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit";
 import type { RootState } from "@root/store.ts";
+import { UserRoles } from "@root/utils/constants/userRoles";
 
 // Selettori base
 export const selectUsersState = (state: RootState) => state.users;
@@ -49,7 +50,7 @@ export const selectUsersFilters = createSelector(
 
 // Selettori computati
 export const selectUserById = createSelector(
-  [selectAllUsers, (state: RootState, userId: string) => userId],
+  [selectAllUsers, (state: RootState, userId: number) => userId],
   (users, userId) => users.find((user) => user.id === userId)
 );
 
@@ -67,15 +68,11 @@ export const selectUsersByRole = createSelector(
 );
 
 export const selectAdminUsers = createSelector([selectAllUsers], (users) =>
-  users.filter((user) => user.role === "admin")
-);
-
-export const selectModeratorUsers = createSelector([selectAllUsers], (users) =>
-  users.filter((user) => user.role === "moderator")
+  users.filter((user) => user.role === UserRoles.ADMIN)
 );
 
 export const selectRegularUsers = createSelector([selectAllUsers], (users) =>
-  users.filter((user) => user.role === "user")
+  users.filter((user) => user.role === UserRoles.USER)
 );
 
 export const selectUsersCount = createSelector([selectAllUsers], (users) => {
@@ -95,9 +92,8 @@ export const selectUsersCount = createSelector([selectAllUsers], (users) => {
     total: users.length,
     active: users.filter((u) => u.isActive).length,
     inactive: users.filter((u) => !u.isActive).length,
-    admin: users.filter((u) => u.role === "admin").length,
-    moderator: users.filter((u) => u.role === "moderator").length,
-    user: users.filter((u) => u.role === "user").length,
+    admin: users.filter((u) => u.role === UserRoles.ADMIN).length,
+    user: users.filter((u) => u.role === UserRoles.USER).length,
   };
 });
 

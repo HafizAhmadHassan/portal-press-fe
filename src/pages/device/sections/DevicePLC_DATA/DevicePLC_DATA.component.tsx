@@ -38,7 +38,7 @@ function buildRowsFromPlcData(
   if (idEntry) {
     const [, v] = idEntry;
     rows.push({
-      id: "id",
+      id: Number(v ?? 0),
       key: "id",
       label: "ID Dispositivo",
       type: "number",
@@ -61,7 +61,7 @@ function buildRowsFromPlcData(
         : "text";
 
       rows.push({
-        id: k,
+        id: rows.length + 1,
         key: k,
         label,
         type,
@@ -75,7 +75,7 @@ function buildRowsFromPlcData(
 
 export default function DevicePLC_DATA() {
   const navigate = useNavigate();
-  const { deviceId } = useParams<{ deviceId: string }>();
+  const { deviceId } = useParams<{ deviceId?: string }>();
   const location = useLocation();
   const editable = useMemo(
     () => location.pathname.endsWith("/edit"),
@@ -91,7 +91,7 @@ export default function DevicePLC_DATA() {
   const isEdit = searchParams.get("edit") === "1";
 
   // === FETCH plc/${id} e prendi SOLO plc_data ===
-  const currentId = deviceId ?? "";
+  const currentId = deviceId ? Number(deviceId) : undefined;
   const {
     data: plcDetail,
     isLoading,

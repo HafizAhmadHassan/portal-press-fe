@@ -1,7 +1,7 @@
 // devices.types.ts - Versione finale con le chiavi esatte del backend
 
 export interface Device {
-  id: string;
+  id: number;
   machine_Name: string;
   status: number; // 0 = inactive, 1 = active
   waste:
@@ -75,7 +75,7 @@ export interface CreateDeviceRequest {
 }
 
 export interface UpdateDeviceRequest {
-  id: string;
+  id: number;
   data: Partial<Omit<Device, "id" | "created_At" | "updated_At">>;
 }
 

@@ -1,7 +1,6 @@
 // store/auth/auth.slice.ts
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { AuthState, User } from "./auth.types";
-import { mapBackendUserToUser } from "./auth.types";
+import type { AuthState } from "./auth.types";
 import { authApi } from "./auth.api";
 import {
   initializeAuthAsync,
@@ -10,6 +9,7 @@ import {
   refreshTokenAsync,
   registerAsync,
 } from "./auth.thunks";
+import type { User } from "../users/user.types";
 
 // LocalStorage keys
 const TOKEN_KEY = "auth_token";
@@ -117,8 +117,7 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(loginAsync.fulfilled, (state, { payload }) => {
-        const user = mapBackendUserToUser(payload.user);
-        state.user = user;
+        state.user = payload.user;
         state.token = payload.token;
         state.refresh = payload.refresh;
         state.isAuthenticated = true;
@@ -141,8 +140,7 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(registerAsync.fulfilled, (state, { payload }) => {
-        const user = mapBackendUserToUser(payload.user);
-        state.user = user;
+        state.user = payload.user;
         state.token = payload.token;
         state.refresh = payload.refresh;
         state.isAuthenticated = true;

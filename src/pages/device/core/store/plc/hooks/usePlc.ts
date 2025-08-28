@@ -10,7 +10,6 @@ export const usePlc = (params: any) => {
   const { data, isLoading, isFetching, error, refetch } = useGetPlcQuery(
     params,
     {
-      keepPreviousData: true,
       pollingInterval: 0,
     }
   );
@@ -28,7 +27,7 @@ export const usePlc = (params: any) => {
     isLoading: isLoading || isFetching,
     error,
     refetch,
-    deletePlc: (id: string | number) => deleteMutation(id),
+    deletePlc: (id: number | number) => deleteMutation(id),
     createPlc: (payload: any) => createMutation(payload),
     updatePlc: (payload: any) => updateMutation(payload),
   };

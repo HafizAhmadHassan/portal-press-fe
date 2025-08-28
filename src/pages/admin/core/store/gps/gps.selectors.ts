@@ -23,6 +23,6 @@ export const selectGpsFilters = createSelector(
 );
 
 export const selectGpsById = createSelector(
-  [selectAllGps, (_: RootState, id: string | number) => id],
+  [selectAllGps, (_: RootState, id: number | number) => id],
   (items, id) => items.find((x) => x.id === id)
 );

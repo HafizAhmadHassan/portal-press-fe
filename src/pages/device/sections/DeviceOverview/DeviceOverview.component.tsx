@@ -30,8 +30,7 @@ type StatusItem =
 
 export default function DeviceOverview() {
   // prende l'id dal path /device/:deviceId
-  const { deviceId } = useParams<{ deviceId: string }>();
-
+  const { deviceId } = useParams<{ deviceId?: string }>();
   // Dati placeholder per mostrare la UI finché non colleghi i dati reali alla view
   const deviceName = useMemo(
     () => (deviceId ? `Dispositivo #${deviceId}` : "Dispositivo"),

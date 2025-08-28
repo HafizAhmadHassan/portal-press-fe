@@ -11,11 +11,11 @@ export interface MainStat {
   title: string;
   value: string;
   change: string;
-  changeType: 'positive' | 'negative';
+  changeType: "positive" | "negative";
   subtitle: string;
   period: string;
   status: string;
-  color: 'green' | 'blue' | 'purple' | 'orange';
+  color: "green" | "blue" | "purple" | "orange";
   icon: React.ReactNode;
   trend: number[];
 }
@@ -25,7 +25,7 @@ export interface Activity {
   customer: string;
   action: string;
   time: string;
-  type: 'success' | 'donation' | 'review' | 'warning' | 'info';
+  type: "success" | "donation" | "review" | "warning" | "info";
   details: string;
   location: string;
 }
@@ -96,7 +96,7 @@ export interface DonationStats {
 
 export interface Alert {
   id: number;
-  type: 'critical' | 'warning' | 'info';
+  type: "critical" | "warning" | "info";
   message: string;
   time: string;
 }
@@ -105,7 +105,7 @@ export interface Insight {
   id: number;
   title: string;
   description: string;
-  type: 'trend' | 'achievement' | 'goal';
+  type: "trend" | "achievement" | "goal";
   icon: React.ReactNode;
 }
 
@@ -119,7 +119,7 @@ export interface SystemMetric {
   label: string;
   value: string;
   icon: React.ReactNode;
-  status: 'good' | 'warning' | 'error';
+  status: "good" | "warning" | "error";
 }
 
 export interface Goal {
@@ -134,7 +134,7 @@ export interface Update {
   title: string;
   description: string;
   timestamp: string;
-  type: 'feature' | 'improvement' | 'bugfix';
+  type: "feature" | "improvement" | "bugfix";
 }
 
 // Extended interfaces for more complex data
@@ -147,19 +147,19 @@ export interface SalesData {
 }
 
 export interface InventoryItem {
-  id: string;
+  id: number;
   name: string;
   category: string;
   currentStock: number;
   minStock: number;
   maxStock: number;
   price: number;
-  status: 'in_stock' | 'low_stock' | 'out_of_stock';
+  status: "in_stock" | "low_stock" | "out_of_stock";
   lastUpdated: string;
 }
 
 export interface Customer {
-  id: string;
+  id: number;
   name: string;
   email: string;
   totalOrders: number;
@@ -167,24 +167,24 @@ export interface Customer {
   avgOrderValue: number;
   lastOrderDate: string;
   location: string;
-  status: 'active' | 'inactive' | 'new';
+  status: "active" | "inactive" | "new";
   satisfactionScore: number;
 }
 
 export interface Order {
-  id: string;
-  customerId: string;
+  id: number;
+  customerid: number;
   customerName: string;
   items: OrderItem[];
   total: number;
-  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
   createdAt: string;
   shippingAddress: Address;
   paymentMethod: string;
 }
 
 export interface OrderItem {
-  productId: string;
+  productid: number;
   productName: string;
   quantity: number;
   price: number;
@@ -200,18 +200,18 @@ export interface Address {
 }
 
 export interface Donation {
-  id: string;
+  id: number;
   donorName: string;
   amount: number;
   shelter: string;
-  animalType: 'dog' | 'cat' | 'bird' | 'other';
+  animalType: "dog" | "cat" | "bird" | "other";
   message?: string;
   createdAt: string;
-  status: 'completed' | 'pending' | 'failed';
+  status: "completed" | "pending" | "failed";
 }
 
 export interface Shelter {
-  id: string;
+  id: number;
   name: string;
   location: string;
   animalsHelped: number;
@@ -256,7 +256,7 @@ export interface ProductsOverviewProps {
 export interface TopProductsProps {
   products?: Product[];
   maxItems?: number;
-  sortBy?: 'sales' | 'revenue' | 'rating';
+  sortBy?: "sales" | "revenue" | "rating";
 }
 
 export interface DonationPanelProps {
@@ -355,7 +355,7 @@ export interface AnalyticsData {
 }
 
 export interface AnalyticsDataRequest {
-  timeRange: FilterOptions['timeRange'];
+  timeRange: FilterOptions["timeRange"];
   filters?: Partial<FilterOptions>;
   includeComparisons?: boolean;
   includePredictions?: boolean;
@@ -391,14 +391,14 @@ export interface ErrorResponse {
 
 // Filter and search types
 export interface FilterOptions {
-  timeRange: '24h' | '7d' | '30d' | '90d' | '1y';
+  timeRange: "24h" | "7d" | "30d" | "90d" | "1y";
   category?: string;
   location?: string;
   status?: string;
   minValue?: number;
   maxValue?: number;
   sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
+  sortOrder?: "asc" | "desc";
 }
 
 export interface SearchOptions {
@@ -409,7 +409,7 @@ export interface SearchOptions {
 }
 
 // Theme and UI types
-export type ThemeMode = 'light' | 'dark' | 'auto';
+export type ThemeMode = "light" | "dark" | "auto";
 
 export interface ThemeContextType {
   isDark: boolean;
@@ -427,10 +427,10 @@ export interface LayoutSettings {
 
 // Notification types
 export interface Notification {
-  id: string;
+  id: number;
   title: string;
   message: string;
-  type: 'info' | 'success' | 'warning' | 'error';
+  type: "info" | "success" | "warning" | "error";
   timestamp: string;
   read: boolean;
   actionUrl?: string;
@@ -439,7 +439,7 @@ export interface Notification {
 
 // Export and reporting types
 export interface ExportOptions {
-  format: 'pdf' | 'excel' | 'csv' | 'json';
+  format: "pdf" | "excel" | "csv" | "json";
   dateRange: {
     start: string;
     end: string;
@@ -452,7 +452,7 @@ export interface ExportOptions {
 export interface ReportConfig {
   title: string;
   description?: string;
-  frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly';
+  frequency: "daily" | "weekly" | "monthly" | "quarterly";
   recipients: string[];
   template: string;
   filters: FilterOptions;
@@ -460,7 +460,7 @@ export interface ReportConfig {
 
 // Webhook and integration types
 export interface WebhookEvent {
-  id: string;
+  id: number;
   type: string;
   data: any;
   timestamp: string;
@@ -468,24 +468,24 @@ export interface WebhookEvent {
 }
 
 export interface Integration {
-  id: string;
+  id: number;
   name: string;
-  type: 'webhook' | 'api' | 'database';
-  status: 'active' | 'inactive' | 'error';
+  type: "webhook" | "api" | "database";
+  status: "active" | "inactive" | "error";
   config: Record<string, any>;
   lastSync?: string;
 }
 
 // User and permissions
-export interface User {
-  id: string;
+/* export interface User {
+  id: number;
   name: string;
   email: string;
   role: 'admin' | 'manager' | 'viewer';
   permissions: string[];
   lastLogin: string;
   preferences: UserPreferences;
-}
+} */
 
 export interface UserPreferences {
   theme: ThemeMode;
@@ -523,7 +523,14 @@ export interface ValidationRule {
 export interface FormField {
   name: string;
   label: string;
-  type: 'text' | 'number' | 'email' | 'password' | 'select' | 'checkbox' | 'date';
+  type:
+    | "text"
+    | "number"
+    | "email"
+    | "password"
+    | "select"
+    | "checkbox"
+    | "date";
   value: any;
   validation?: ValidationRule;
   options?: { label: string; value: any }[];

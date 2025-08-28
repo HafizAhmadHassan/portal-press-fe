@@ -14,7 +14,7 @@ export const gpsApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getGps: builder.query<GpsResponse, GpsQueryParams | void>({
       query: (params = {}) => {
-        const clean = Object.entries(params).reduce((acc, [k, v]) => {
+        const clean = Object.entries(params || {}).reduce((acc, [k, v]) => {
           if (v !== undefined && v !== null && v !== "") (acc as any)[k] = v;
           return acc;
         }, {} as Record<string, any>);
@@ -24,7 +24,7 @@ export const gpsApi = apiSlice.injectEndpoints({
         { type: "LIST" as const, id: "Gps" },
         { type: "STATS" as const, id: "Gps" },
       ],
-      keepPreviousData: true,
+      keepUnusedDataFor: 60,
       transformResponse: (res: GpsResponse) => {
         if (!res?.meta || !Array.isArray(res?.data)) {
           throw new Error("Invalid API response structure");
@@ -59,18 +59,14 @@ export const gpsApi = apiSlice.injectEndpoints({
       ],
       async onQueryStarted({ id, data }, { dispatch, queryFulfilled }) {
         const patch = dispatch(
-          apiSlice.util.updateQueryData(
-            "getGpsById",
-            id as any,
-            (draft: any) => {
-              Object.assign(draft, data);
-            }
-          )
+          gpsApi.util.updateQueryData("getGpsById", id, (draft: any) => {
+            Object.assign(draft, data);
+          })
         );
         try {
           await queryFulfilled;
         } catch {
-          (patch as any).undo?.();
+          patch.undo();
         }
       },
     }),

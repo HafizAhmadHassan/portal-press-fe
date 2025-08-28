@@ -77,7 +77,7 @@ export const updateExistingPlc = createAsyncThunk(
 
 export const deleteExistingPlc = createAsyncThunk(
   "plc/delete",
-  async (id: string | number, { dispatch, rejectWithValue }) => {
+  async (id: number | number, { dispatch, rejectWithValue }) => {
     try {
       await dispatch(plcApi.endpoints.deletePlc.initiate(id)).unwrap();
       await dispatch(loadPlc());

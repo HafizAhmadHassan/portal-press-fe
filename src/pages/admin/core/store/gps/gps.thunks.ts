@@ -89,7 +89,7 @@ export const updateExistingGps = createAsyncThunk(
 
 export const deleteExistingGps = createAsyncThunk(
   "gps/delete",
-  async (id: string | number, { dispatch, rejectWithValue }) => {
+  async (id: number | number, { dispatch, rejectWithValue }) => {
     try {
       await dispatch(gpsApi.endpoints.deleteGps.initiate(id)).unwrap();
       await dispatch(loadGps({}));

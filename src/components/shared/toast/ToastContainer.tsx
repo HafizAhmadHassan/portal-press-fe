@@ -1,11 +1,11 @@
-import React from 'react';
+import React from "react";
 
-import Toast from './Toast';
+import Toast from "./Toast";
 
 interface ToastContainerProps {
   toasts: {
-    id: string;
-    type: 'success' | 'error';
+    id: number;
+    type: "success" | "error";
     message: string;
     title?: string;
   }[];
