@@ -22,6 +22,8 @@ import {
   useDeleteTicketMutation,
   useGetTicketsQuery,
 } from "@store_admin/tickets/ticket.api";
+import { TicketsSummaryBar } from "./_components/TicketsSummaryBar";
+import { resolver } from "@root/utils/severityResolver";
 
 // Tipi extra
 export type CloseTicketData = {
@@ -36,6 +38,7 @@ export type CloseTicketData = {
 export const TicketsListSections: React.FC = () => {
   // Usa useListController come per Users
   const {
+    items: tickets = [],
     meta,
     isLoading,
     refetch,
@@ -184,6 +187,8 @@ export const TicketsListSections: React.FC = () => {
           onResetFilters={resetAll}
         />
       </div>
+
+      <TicketsSummaryBar tickets={tickets} severityResolver={resolver} />
 
       <Divider />
 

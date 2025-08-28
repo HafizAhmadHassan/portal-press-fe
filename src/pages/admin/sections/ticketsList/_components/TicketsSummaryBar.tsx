@@ -1,124 +1,65 @@
 import React from "react";
-/* import type { Tickets } from '@store_admin/tickets/tickets.types'; */
-import styles from "@sections_admin/ticketsList/_styles/TicketsSummaryBar.module.scss";
+import {
+  SummaryBar,
+  type SummaryItem,
+} from "../../_commons/components/SectionSummary/SectionSummary.component";
+import type { TicketRead } from "@store_admin/tickets/ticket.types";
 
-interface TicketsSummaryBarProps {
-  tickets: any[]; // Cambiato da Tickets[] a any[]
-  statusFilter?: "tutti" | "attivi" | "disattivati";
+type Props = {
+  tickets: TicketRead[];
   className?: string;
-}
+  /**
+   * Facoltativo: risolvi la severità del ticket.
+   * Ritorna "warning" | "error" | null per ogni ticket.
+   */
+  severityResolver?: (t: TicketRead) => "warning" | "error" | null;
+};
 
-interface StatCardProps {
-  number: number;
-  label: string;
-  variant: string;
-  className?: string;
-}
+/** Mappa stati:
+ *  - 1 => aperto
+ *  - 2 => chiuso
+ */
+const isOpen = (t: TicketRead) => Number((t as any).status) === 1;
+const isClosed = (t: TicketRead) => Number((t as any).status) === 2;
 
-const StatCard: React.FC<StatCardProps> = ({
-  number,
-  label,
-  variant,
-  className = "",
-}) => (
-  <div className={`${styles.statCard} ${styles[variant]} ${className}`}>
-    <div className={styles.statNumber}>{number}</div>
-    <div className={styles.statLabel}>{label}</div>
-    {/*{percentage !== undefined && <div className={_styles.statPercentage}>{percentage}%</div>}*/}
-  </div>
-);
-
-export const TicketsSummaryBar: React.FC<TicketsSummaryBarProps> = ({
+export const TicketsSummaryBar: React.FC<Props> = ({
   tickets,
-  className = "",
+  className,
+  severityResolver,
 }) => {
-  // Calcola le statistiche usando i campi del Device type
-  const totalTickets = tickets.length;
-  const activeTickets = tickets.filter((device) => device.status === 1).length;
-  const inactiveTickets = tickets.filter(
-    (device) => device.status === 0
-  ).length;
-  const blockedTickets = tickets.filter(
-    (device) => device.status_Machine_Blocked === true
-  ).length;
-  const readyTickets = tickets.filter(
-    (device) => device.tatus_ready_d75_3_7 === true
-  ).length;
+  const total = tickets.length;
+
+  const openCount = tickets.filter(isOpen).length;
+  const closedCount = tickets.filter(isClosed).length;
+
+  // Severità: se non passi un resolver, restano a 0
+  let warningCount = 0;
+  let errorCount = 0;
+
+  if (typeof severityResolver === "function") {
+    for (const t of tickets) {
+      const sev = severityResolver(t);
+      if (sev === "warning") warningCount++;
+      if (sev === "error") errorCount++;
+    }
+  }
+
+  const items: SummaryItem[] = [
+    { number: openCount, label: "Aperti", variant: "statCard--open" },
+    { number: closedCount, label: "Chiusi", variant: "statCard--closed" },
+    { number: warningCount, label: "Warning", variant: "statCard--warning" },
+    { number: errorCount, label: "Error", variant: "statCard--error" },
+  ];
 
   return (
-    <div className={`${styles.ticketsSummary} ${className}`}>
-      {/* Mobile Layout */}
-      <div className={styles.mobileLayout}>
-        <div className={styles.mobileHeader}>
-          <h3 className={styles.mobileTitle}>Dashboard Dispositivi</h3>
-          <div className={styles.mobileTotal}>
-            <span className={styles.mobileTotalNumber}>{totalTickets}</span>
-            <span className={styles.mobileTotalLabel}>dispositivi totali</span>
-          </div>
-        </div>
-
-        <div className={styles.mobileStats}>
-          <StatCard
-            number={activeTickets}
-            label="Attivi"
-            variant="statCard--active"
-          />
-          <StatCard
-            number={inactiveTickets}
-            label="Inattivi"
-            variant="statCard--inactive"
-          />
-          <StatCard
-            number={blockedTickets}
-            label="Bloccati"
-            variant="statCard--blocked"
-          />
-          <StatCard
-            number={readyTickets}
-            label="Pronti"
-            variant="statCard--ready"
-          />
-        </div>
-      </div>
-
-      {/* Desktop Layout */}
-      <div className={styles.desktopLayout}>
-        <div className={styles.statsSection}>
-          <StatCard
-            number={totalTickets}
-            label="Totali"
-            variant="statCard--total"
-          />
-
-          <div className={styles.statDivider}></div>
-
-          <StatCard
-            number={activeTickets}
-            label="Attivi"
-            variant="statCard--active"
-          />
-
-          <StatCard
-            number={inactiveTickets}
-            label="Inattivi"
-            variant="statCard--inactive"
-          />
-
-          <div className={styles.statDivider}></div>
-
-          <StatCard
-            number={blockedTickets}
-            label="Bloccati"
-            variant="statCard--blocked"
-          />
-
-          <StatCard
-            number={readyTickets}
-            label="Pronti"
-            variant="statCard--ready"
-          />
-        </div>
-      </div>
-    </div>
+    <SummaryBar
+      className={className}
+      title="Dashboard Tickets"
+      totalLabel="tickets totali"
+      totalNumber={total}
+      items={items}
+    />
   );
 };
+
+export default TicketsSummaryBar;
