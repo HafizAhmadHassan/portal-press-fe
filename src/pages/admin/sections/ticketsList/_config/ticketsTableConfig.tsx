@@ -3,7 +3,7 @@ import React from "react";
 import { PowerIcon } from "lucide-react";
 import { StatusBadge } from "@shared/badges/StatusBadge.tsx";
 import type { TicketRead } from "@store_admin/tickets/ticket.types";
-import ModalTicketDetails from "../_modals/ModalDetailTicket/ModalTicketDetail";
+import ModalTicketDetails from "../_modals/ModalDetailTicket/ModalTicketDetail.component";
 import ModalCloseTicket from "../_modals/ModalCloseTIcket/ModalCloseTicket.component";
 
 // Info del device collegato al ticket

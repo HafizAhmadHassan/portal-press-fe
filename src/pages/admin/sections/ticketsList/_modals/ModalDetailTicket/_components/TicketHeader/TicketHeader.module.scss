@@ -1,0 +1,134 @@
+/* Header “hero” come le altre modali */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px;
+  background: linear-gradient(
+    135deg,
+    var(--primary-light) 0%,
+    var(--bg-secondary) 100%
+  );
+  border-radius: 12px;
+  border: 1px solid
+    color-mix(in srgb, var(--primary-color) 35%, var(--border-color));
+  position: relative;
+  overflow: hidden;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), #a855f7, #2563eb);
+    border-radius: 12px 12px 0 0;
+  }
+}
+
+.iconSection {
+  position: relative;
+  flex-shrink: 0;
+}
+.iconCircle {
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  background: var(--bg-primary);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+}
+.headerIcon {
+  width: 26px;
+  height: 26px;
+  color: var(--primary-color);
+}
+
+.statusIndicator {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  background: var(--bg-primary);
+  border-radius: 50%;
+  padding: 2px;
+  box-shadow: var(--shadow-sm);
+}
+.statusIconActive {
+  width: 20px;
+  height: 20px;
+  color: #16a34a;
+}
+.statusIconInactive {
+  width: 20px;
+  height: 20px;
+  color: #dc2626;
+}
+
+.mainInfo {
+  flex: 1;
+  min-width: 0;
+}
+.title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 4px;
+}
+.subTitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0 0 12px;
+}
+
+.badgesRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.statusOpen {
+  background: color-mix(in srgb, var(--warning-color) 12%, transparent);
+  color: color-mix(in srgb, var(--warning-color) 85%, white);
+  border: 1px solid color-mix(in srgb, var(--warning-color) 45%, transparent);
+}
+.statusClosed {
+  background: color-mix(in srgb, var(--success-color) 15%, transparent);
+  color: color-mix(in srgb, var(--success-color) 85%, white);
+  border: 1px solid color-mix(in srgb, var(--success-color) 45%, transparent);
+}
+.infoBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 16px;
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+}
+.badgeIcon {
+  width: 12px;
+  height: 12px;
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+    padding: 20px;
+  }
+}

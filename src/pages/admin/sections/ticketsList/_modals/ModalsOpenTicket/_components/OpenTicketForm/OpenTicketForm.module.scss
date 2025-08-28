@@ -1,0 +1,88 @@
+/* src/sections/ticketsList/_modals/ModalOpenTicket/_components/OpenTicketForm/OpenTicketForm.module.scss */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.required {
+  color: var(--error-color);
+  margin-left: 4px;
+}
+
+.optionsRow {
+  display: flex;
+  gap: 12px;
+  background: var(--bg-primary);
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-primary);
+
+  input[type="radio"] {
+    width: 14px;
+    height: 14px;
+    accent-color: var(--primary-color);
+    cursor: pointer;
+  }
+}
+
+/* wrapper dei checkbox problemi: forza il colore testo */
+.checkboxWrap {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 10px;
+  color: var(--text-primary);
+
+  /* se il CheckboxGroup usa label interne non ereditate */
+  :global(label) {
+    color: var(--text-primary);
+  }
+}
+
+.errorLine {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--error-color);
+  margin-top: 4px;
+}
+
+.errorIcon {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .optionsRow {
+    gap: 10px;
+  }
+}

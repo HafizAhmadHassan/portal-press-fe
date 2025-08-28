@@ -1,0 +1,12 @@
+/* Usa solo token globali per dark/light mode */
+.modal {
+  /* hook per eventuali override del container Modal */
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 100%;
+}

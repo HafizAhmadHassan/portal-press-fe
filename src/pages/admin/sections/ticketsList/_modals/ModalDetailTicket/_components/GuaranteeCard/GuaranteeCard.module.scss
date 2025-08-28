@@ -1,0 +1,31 @@
+.body {
+  padding: 16px;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: color-mix(in srgb, var(--primary-color) 10%, transparent);
+  color: color-mix(in srgb, var(--primary-color) 85%, white);
+  border: 1px solid var(--primary-color);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  transition: transform 0.2s ease;
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.icon {
+  width: 14px;
+  height: 14px;
+}
