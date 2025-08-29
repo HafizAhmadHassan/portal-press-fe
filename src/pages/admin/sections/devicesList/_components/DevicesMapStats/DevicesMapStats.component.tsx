@@ -1,5 +1,5 @@
-import React from 'react';
-import styles from '@sections_admin/devicesList/_styles/Devices-list.sections.module.scss';
+import React from "react";
+import styles from "@sections_admin/devicesList/Devices-list.sections.module.scss";
 
 type MapStats = {
   total: number;
@@ -32,8 +32,8 @@ export const DevicesMapStats: React.FC<Props> = ({ mapStats, wasteColors }) => {
             <span
               key={waste}
               style={{
-                color: wasteColors[waste] || 'var(--text-primary)',
-                fontWeight: 'bold',
+                color: wasteColors[waste] || "var(--text-primary)",
+                fontWeight: "bold",
               }}
             >
               {waste}: {count}

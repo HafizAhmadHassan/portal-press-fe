@@ -3,7 +3,7 @@ import type { Device } from "@store_admin/devices/devices.types";
 import {
   SummaryBar,
   type SummaryItem,
-} from "../../_commons/components/SectionSummary/SectionSummary.component";
+} from "../../../_commons/components/SectionSummary/SectionSummary.component";
 
 type Props = {
   devices: Device[];

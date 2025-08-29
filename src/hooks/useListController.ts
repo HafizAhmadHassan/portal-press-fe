@@ -158,6 +158,8 @@ export function useListController<P extends object, T>({
     setFilter,
     resetAll,
 
+    queryParams,
+
     // oggetto paginazione per compatibilità (se serve)
     pagination,
 

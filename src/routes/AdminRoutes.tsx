@@ -5,7 +5,7 @@ import { type RouteObject, Outlet } from "react-router-dom";
 import AdminLayout from "@layouts/admin/Admin-layout.component.tsx";
 
 // Sezioni
-import DevicesListSections from "@sections_admin/devicesList/Devices-list.sections.tsx";
+import { DevicesListSections } from "@sections_admin/devicesList/Devices-list.sections.tsx";
 import { UsersListSections } from "@sections_admin/usersList/Users-list.sections.tsx";
 import AnalyticsReportsSections from "@sections_admin/analytics/AnalyticsReports.sections.tsx";
 import { TicketsListSections } from "@sections_admin/ticketsList/Ticket-list.section.tsx";

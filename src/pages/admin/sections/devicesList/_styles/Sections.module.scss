@@ -1,283 +1,182 @@
 /* @use "@root/pages/admin/styles/globals.scss"; */
 
-/* =========================
-   Sections – token based
-   ========================= */
+/* Devices-list.sections.module.scss
+   - All colors come from global CSS variables (globals.scss)
+   - Works automatically with .darkMode on <html>/<body>
+*/
 
-.section {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md, 8px);
-  box-shadow: var(--shadow-lg);
-  overflow: hidden;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease,
-    background-color 0.2s ease;
-
-  &:hover {
-    border-color: color-mix(
-      in srgb,
-      var(--primary-color) 45%,
-      var(--border-color)
-    );
-    box-shadow: var(--shadow-sm);
-  }
-
-  /* entrance anim */
-  animation: slideInUp 0.3s ease-out;
-}
-
-.sectionHeader {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 16px 20px;
-  background-color: var(--bg-primary);
-  border-bottom: 1px solid var(--border-color);
-}
-
-.sectionIcon {
-  width: 18px;
-  height: 18px;
-  color: var(--primary-color);
-  flex-shrink: 0;
-}
-
-.sectionTitle {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin: 0;
-  flex: 1;
-}
-
-/* Badges */
-.sectionBadge {
-  padding: 2px 8px;
-  background-color: color-mix(
-    in srgb,
-    var(--danger-color) 16%,
-    var(--bg-secondary)
-  );
-  color: color-mix(in srgb, var(--danger-color) 80%, var(--text-primary));
-  border-radius: 12px;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.sectionBadgeOptional {
-  padding: 2px 8px;
-  background-color: color-mix(
-    in srgb,
-    var(--text-secondary) 12%,
-    var(--bg-secondary)
-  );
-  color: var(--text-secondary);
-  border-radius: 12px;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  padding: 20px;
-}
-
-.sectionContent {
-  padding: 20px;
+/* Page container */
+.devices-list-page {
+  min-height: 100vh;
+  background-color: var(--bg-secondary);
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  color: var(--text-primary);
+
+  &__container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    @media (min-width: 768px) {
+      padding: 2rem 1.5rem;
+    }
+  }
+
+  &__section {
+    margin-bottom: 2rem;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__filters {
+    padding: 0 1rem;
+
+    @media (min-width: 768px) {
+      padding: 0 1.5rem;
+    }
+  }
+
+  /* Table wrapper */
+  &__table-wrapper {
+    padding: 1.5rem;
+  }
+
+  /* Footer actions */
+  &__actions {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      gap: 1rem;
+      align-items: stretch;
+    }
+  }
 }
 
-.fullWidth {
-  grid-column: span 2;
+/* Devices specific styles */
+.devicesListSection {
+  padding: 1rem;
+
+  @media (min-width: 768px) {
+    padding: 1.5rem;
+  }
 }
 
-/* Grids */
-.formGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+.viewContainer {
+  width: 100%;
 }
 
-.privilegesGrid {
+/* Devices grid layout */
+.devicesGrid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 16px;
-  padding: 20px;
-}
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 
-/* Accent per sezioni (facoltativo) */
-.section:nth-child(2) {
-  .sectionIcon {
-    color: var(--accent-1, var(--primary-color));
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
   }
-  &:hover {
-    border-color: color-mix(
-      in srgb,
-      var(--accent-1, var(--primary-color)) 50%,
-      var(--border-color)
-    );
-  }
-}
 
-.section:nth-child(3) {
-  .sectionIcon {
-    color: var(--accent-2, var(--warning-color));
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
   }
-  &:hover {
-    border-color: color-mix(
-      in srgb,
-      var(--accent-2, var(--warning-color)) 50%,
-      var(--border-color)
-    );
+
+  @media (min-width: 1280px) {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
-.section:nth-child(4) {
-  .sectionIcon {
-    color: var(--accent-3, #ca8a04);
-  } /* fallback giallo */
-  &:hover {
-    border-color: color-mix(
-      in srgb,
-      var(--accent-3, #ca8a04) 50%,
-      var(--border-color)
-    );
+/* Loading and error states */
+.loadingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  color: var(--text-secondary);
+  gap: 1rem;
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--border-color);
+    border-left-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
   }
 }
 
-.section:nth-child(5) {
-  .sectionIcon {
-    color: var(--success-color);
-  }
-  &:hover {
-    border-color: color-mix(
-      in srgb,
-      var(--success-color) 50%,
-      var(--border-color)
-    );
+.errorState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  color: var(--error-color);
+  gap: 1rem;
+
+  button {
+    padding: 0.5rem 1rem;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: var(--primary-dark);
+    }
   }
 }
 
-/* =========================
-   Responsive
-   ========================= */
-@media (max-width: 768px) {
-  .formGrid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-    padding: 16px;
-  }
-
-  .sectionHeader {
-    padding: 12px 16px;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .sectionTitle {
-    font-size: 15px;
-  }
-}
-
-@media (max-width: 480px) {
-  .formGrid {
-    padding: 12px;
-    gap: 10px;
-  }
-
-  .sectionHeader {
-    padding: 10px 12px;
-  }
-  .sectionTitle {
-    font-size: 14px;
-  }
-}
-
-/* =========================
-   Animazioni
-   ========================= */
-@keyframes slideInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* opzionale se ti serve anche lo slideInDown in altre parti */
-@keyframes slideInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* =========================
-   Utilities / Validazione
-   ========================= */
-:global(.input-error) {
-  border-color: var(--danger-color) !important;
-
-  &:focus {
-    box-shadow: 0 0 0 2px
-      color-mix(in srgb, var(--danger-color) 20%, transparent) !important;
-  }
-}
-
-:global(.input-success) {
-  border-color: var(--success-color) !important;
-
-  &:focus {
-    box-shadow: 0 0 0 2px
-      color-mix(in srgb, var(--success-color) 20%, transparent) !important;
-  }
-}
-
-:global(.input-textarea) {
-  min-height: 80px;
-  resize: vertical;
-}
-
-/* Helper IP */
-:global(.input-group:has([name="ip_Router"])) {
-  position: relative;
+.spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: var(--text-secondary);
+  font-size: 14px;
 
   &::before {
-    content: "🌐";
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 1;
-    font-size: 16px;
-  }
-
-  input {
-    padding-left: 36px;
+    content: "";
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-color);
+    border-left-color: var(--primary-color);
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    animation: spin 1s linear infinite;
   }
 }
 
-/* Helper GPS (aggiunge °) */
-.formGrid:has([name="gpsX"]) .input-group {
-  position: relative;
+/* Animations */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
-  &::after {
-    content: "°";
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-secondary);
-    font-size: 14px;
-    pointer-events: none;
+/* Optional helper for outline buttons */
+.button-outline {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  border-radius: var(--border-radius-sm);
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+
+  &:hover {
+    background: var(--primary-light);
+    border-color: var(--primary-color);
   }
 }

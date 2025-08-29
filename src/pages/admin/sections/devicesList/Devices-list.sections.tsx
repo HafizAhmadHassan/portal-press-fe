@@ -1,29 +1,37 @@
-import React, { useCallback, useEffect, useMemo, useRef } from "react";
-import { useListQueryParams } from "@hooks/useListQueryParams";
-import { createDevicesTableConfig } from "@sections_admin/devicesList/_config/devicesTableConfig";
-import { useInfiniteDevices } from "@hooks/useInfiniteScroll.ts";
-import { useMapDevices } from "./_hooks/useMapDevices";
-import {
-  createDevicesFilterConfig,
-  DeviceFields,
-} from "@sections_admin/devicesList/_config/deviceFilterConfig";
-import type { Device } from "@store_admin/devices/devices.types";
-import styles from "./_styles/Devices-list.sections.module.scss";
+import React, { useCallback, useMemo, useRef } from "react";
+import { RefreshCw } from "lucide-react";
+import { useCrud } from "@root/hooks/useCrud";
+import { Divider } from "@shared/divider/Divider.component";
+import { createDevicesTableConfig } from "./_config/devicesTableConfig";
+import styles from "./Devices-list.sections.module.scss";
+
+import { useListController } from "@root/hooks/useListController";
+import { createDevicesFilterConfig } from "./_config/deviceFilterConfig";
+import type {
+  Device,
+  DevicesQueryParams,
+} from "@store_admin/devices/devices.types";
+import { GenericTableWithLogic } from "@shared/table/components/GenericTableWhitLogic.component";
 import { SectionHeaderComponent } from "@sections_admin/_commons/components/SectionHeader/Section-header.component";
 import { SectionFilterComponent } from "@sections_admin/_commons/components/SectionFilters/Section-filters.component";
-import { GenericTableWithLogic } from "@shared/table/components/GenericTableWhitLogic.component";
-import { usePagination } from "@hooks/usePagination.ts";
-import DevicesMap from "@sections_admin/devicesList/_components/DevicesMap";
-import { DevicesSummaryBar } from "@sections_admin/devicesList/_components/DevicesSummaryBar";
-import { DeviceCard } from "@sections_admin/devicesList/_components/DeviceCard";
-import { useDevices } from "@store_admin/devices/hooks/useDevices.ts";
+import {
+  useUpdateDeviceMutation,
+  useDeleteDeviceMutation,
+  useCreateDeviceMutation,
+  useGetDevicesQuery,
+} from "@store_admin/devices/devices.api";
+import { useInfiniteDevices } from "@hooks/useInfiniteScroll.ts";
+import { useMapDevices } from "./_hooks/useMapDevices";
 import { useDevicesListView } from "./_hooks/useDevicesListView";
-import { createHeaderBtnConfig } from "@sections_admin/devicesList/_config/deviceHeaderBtnsConfig";
-import { DevicesMapStats } from "@sections_admin/devicesList/_components/DevicesMapStats";
-import { Divider } from "@shared/divider/Divider.component.tsx";
 
+import { DevicesSummaryBar } from "@root/pages/admin/sections/devicesList/_components/DevicesSummaryBar/DevicesSummaryBar.component";
+import { DevicesBox } from "@sections_admin/devicesList/_components/DevicesBox/DevicesBox.component";
+import { DevicesMapStats } from "@root/pages/admin/sections/devicesList/_components/DevicesMapStats/DevicesMapStats.component";
 import { useAppSelector } from "@root/pages/admin/core/store/store.hooks";
 import { selectScopedCustomer } from "@store_admin/scope/scope.selectors";
+import { DeviceFields } from "@root/utils/constants/deviceFields.constants";
+import devicesListHeaderBtns from "./_config/deviceHeaderBtnsConfig";
+import DevicesMap from "./_components/DevicesMap/DevicesMap";
 
 export const DevicesListSections: React.FC = () => {
   const { isCards, isTable, isMap, toggleCardsTable, toggleMap } =
@@ -32,17 +40,17 @@ export const DevicesListSections: React.FC = () => {
   const scopedCustomer = useAppSelector(selectScopedCustomer);
 
   const {
+    items: devices,
+    meta,
+    isLoading,
+    refetch,
     filters,
-    sortBy,
-    sortOrder,
-    page,
-    pageSize,
     setFilter,
-    setSort,
-    setPage,
-    setPageSize,
     resetAll,
-  } = useListQueryParams({
+    buildTableConfig,
+    queryParams,
+  } = useListController<DevicesQueryParams, Device>({
+    listHook: useGetDevicesQuery,
     initialFilters: {
       [DeviceFields.SEARCH]: "",
       [DeviceFields.WASTE]: "",
@@ -51,30 +59,15 @@ export const DevicesListSections: React.FC = () => {
       [DeviceFields.PROVINCE]: "",
       [DeviceFields.STATUS_MACHINE_BLOCKED]: "",
     },
-  });
-
-  // ⬇️ TABELLAAAA (usa la sua paginazione condivisa)
-  const queryParamsTable = {
-    ...filters,
-    customer_Name: scopedCustomer || undefined,
-    sortBy,
-    sortOrder,
-    page,
-    page_size: pageSize,
-  };
-  const { devices, isLoading, meta, deleteDevice, updateDevice, refetch } =
-    useDevices(queryParamsTable);
-
-  const pagination = usePagination({
-    initialPage: page,
-    initialPageSize: pageSize,
-    totalItems: meta?.total,
-    totalPages: meta?.total_pages,
-    onChange: (newPage, newSize) => {
-      setPage(newPage);
-      setPageSize(newSize);
+    additionalParams: {
+      customer_Name: scopedCustomer || undefined,
     },
   });
+
+  const { execUpdate, execDelete, execCreate } = useCrud();
+  const [updateDeviceTrigger] = useUpdateDeviceMutation();
+  const [deleteDeviceTrigger] = useDeleteDeviceMutation();
+  const [createDeviceTrigger] = useCreateDeviceMutation();
 
   // ⬇️ GRID INFINITA (pagina interna separata)
   const infiniteFilters = useMemo(
@@ -85,7 +78,6 @@ export const DevicesListSections: React.FC = () => {
     [filters, scopedCustomer]
   );
 
-  // opzionale: se la lista scorre in un container, passa il ref come root
   const gridScrollRef = useRef<HTMLDivElement | null>(null);
 
   const {
@@ -96,11 +88,8 @@ export const DevicesListSections: React.FC = () => {
     sentinelRef,
   } = useInfiniteDevices({
     filters: infiniteFilters,
-    sortBy,
-    sortOrder,
-    pageSize,
+    pageSize: queryParams?.page_size,
     key: `${scopedCustomer ?? "all"}|${JSON.stringify(filters)}`,
-    // rootRef: gridScrollRef, // <- decommenta se hai un contenitore scrollabile
   });
 
   // 🌍 MAPPA
@@ -129,19 +118,30 @@ export const DevicesListSections: React.FC = () => {
     totalDevicesCount,
   } = useMapDevices(mapFilters);
 
-  const handleResetAll = () => {
-    resetAll();
-    pagination.resetPagination(); // tabella → torna a 1
-    reloadGrid(); // grid → torna a 1 internamente
-    refetch(); // tabella
-    refetchMap(); // mappa
-  };
+  const handleCreateDevice = useCallback(
+    async (deviceData: Partial<Device>) => {
+      const res = await execCreate(createDeviceTrigger, deviceData);
+      if (!res.success) throw new Error(res.error);
+      refetch();
+      refetchMap();
+      reloadGrid();
+    },
+    [execCreate, createDeviceTrigger, refetch, refetchMap, reloadGrid]
+  );
 
-  const refetchAll = useCallback(() => {
-    refetch();
-    refetchMap();
-    reloadGrid();
-  }, [refetch, refetchMap, reloadGrid]);
+  const handleEditDevice = useCallback(
+    async (deviceId: number, updatedData: Partial<Device>) => {
+      const res = await execUpdate(updateDeviceTrigger, {
+        id: deviceId,
+        data: updatedData,
+      });
+      if (!res.success) throw new Error(res.error);
+      refetch();
+      refetchMap();
+      reloadGrid();
+    },
+    [execUpdate, updateDeviceTrigger, refetch, refetchMap, reloadGrid]
+  );
 
   const handleDeleteDevice = useCallback(
     async (device: Device) => {
@@ -149,78 +149,57 @@ export const DevicesListSections: React.FC = () => {
       if (
         window.confirm(`Sei sicuro di voler eliminare il dispositivo ${name}?`)
       ) {
-        try {
-          await deleteDevice(device.id).unwrap();
-          refetchAll();
-        } catch (e: any) {
-          alert(`Errore: ${e.message || "sconosciuto"}`);
-        }
+        const res = await execDelete(deleteDeviceTrigger, device.id);
+        if (!res.success) throw new Error(res.error);
+        refetch();
+        refetchMap();
+        reloadGrid();
       }
     },
-    [deleteDevice, refetchAll]
+    [execDelete, deleteDeviceTrigger, refetch, refetchMap, reloadGrid]
   );
 
-  const onToggleDeviceStatus = useCallback(
-    async () => refetchAll(),
-    [refetchAll]
-  );
+  const handleToggleStatus = useCallback(async () => {
+    refetch();
+    refetchMap();
+    reloadGrid();
+  }, [refetch, refetchMap, reloadGrid]);
+
+  const handleResetAll = () => {
+    resetAll();
+    reloadGrid();
+    refetch();
+    refetchMap();
+  };
+
   const onExportClick = () => console.log("Esporta devices");
-  const onRefreshClick = async () => refetchAll();
+  const onRefreshClick = () => {
+    refetch();
+    refetchMap();
+    reloadGrid();
+  };
 
-  const updateExistingDevice = useCallback(
-    async (deviceid: number, deviceData: any): Promise<void> => {
-      try {
-        if (!deviceData) throw new Error("Device data is required");
-        await updateDevice({
-          id: deviceid,
-          data: deviceData,
-        }).unwrap();
-        setTimeout(() => refetchAll(), 100);
-      } catch (error: any) {
-        throw new Error(
-          error?.data?.detail || error?.message || "Errore durante la modifica"
-        );
-      }
-    },
-    [updateDevice, refetchAll]
-  );
-
-  const tableConfig = useMemo(
+  const columns = useMemo(
     () =>
       createDevicesTableConfig({
         devices,
-        onEdit: updateExistingDevice,
+        onEdit: handleEditDevice,
         onDelete: handleDeleteDevice,
-        onToggleStatus: onToggleDeviceStatus,
+        onToggleStatus: handleToggleStatus,
         isLoading,
-        sortBy,
-        sortOrder,
-        onSort: setSort,
-        pagination: {
-          enabled: true,
-          currentPage: pagination.page,
-          pageSize: pagination.pageSize,
-          totalPages: pagination.totalPages,
-          totalItems: meta?.total ?? 0,
-          onPageChange: pagination.setPage,
-          onPageSizeChange: pagination.setPageSize,
-          hasNext: meta?.has_next,
-          hasPrev: meta?.has_prev,
-          nextPage: meta?.next_page,
-          prevPage: meta?.prev_page,
-        },
       }),
     [
       devices,
+      handleEditDevice,
       handleDeleteDevice,
-      onToggleDeviceStatus,
+      handleToggleStatus,
       isLoading,
-      sortBy,
-      sortOrder,
-      setSort,
-      pagination,
-      meta,
     ]
+  );
+
+  const tableConfig = useMemo(
+    () => buildTableConfig(columns.columns, columns),
+    [buildTableConfig, columns]
   );
 
   const filtersConfig = useMemo(
@@ -234,36 +213,29 @@ export const DevicesListSections: React.FC = () => {
     return isLoadingGrid;
   };
 
-  // al cambio customer: tabella torna a pagina 1; la grid si resetta via key
-  useEffect(() => {
-    if (pagination.page !== 1) pagination.setPage(1);
-  }, [scopedCustomer]); // eslint-disable-line react-hooks/exhaustive-deps
-
   return (
     <div className={styles["devices-list-page"]}>
       <SectionHeaderComponent
         title="Dispositivi"
-        subTitle={`Gestisci i dispositivi`}
-        buttons={createHeaderBtnConfig({
+        subTitle={`Gestisci i dispositivi (${meta?.total ?? 0} totali)`}
+        buttons={devicesListHeaderBtns(
           onRefreshClick,
-          getLoadingState,
-          refetch,
-          refetchMap,
-          reloadGrid,
+          RefreshCw,
+          getLoadingState(),
+          onExportClick,
           toggleCardsTable,
           toggleMap,
           isCards,
           isMap,
-          onExportClick,
-          createNewDevice: async () => {}, // se ti serve, puoi rimettere la tua create
-        })}
+          handleCreateDevice
+        )}
       />
 
       <div className={styles["devices-list-page__filters"]}>
         <SectionFilterComponent
           filters={filtersConfig}
           onResetFilters={handleResetAll}
-          // isLoading={getLoadingState()}
+          isLoading={getLoadingState()}
         />
       </div>
       <Divider />
@@ -290,20 +262,16 @@ export const DevicesListSections: React.FC = () => {
       ) : (
         <>
           <DevicesSummaryBar devices={summaryDevices || []} />
-          <div
-            className={styles.devicesListSection}
-            ref={gridScrollRef} // ← decommenta rootRef nel hook se questo è lo scroll container
-          >
+          <div className={styles.devicesListSection} ref={gridScrollRef}>
             <div className={styles.viewContainer}>
               {isTable ? (
-                <GenericTableWithLogic
-                  config={tableConfig}
-                  // loading={isLoading}
-                />
+                <div className={styles["devices-list-page__table-wrapper"]}>
+                  <GenericTableWithLogic config={tableConfig} />
+                </div>
               ) : (
                 <div className={styles.devicesGrid}>
                   {deviceGrid.map((device, idx) => (
-                    <DeviceCard
+                    <DevicesBox
                       key={`${device.id}-${idx}`}
                       device={device}
                       onAction={() => {}}
@@ -311,7 +279,6 @@ export const DevicesListSections: React.FC = () => {
                     />
                   ))}
 
-                  {/* sentinel mostrato solo se ha senso */}
                   {hasNextGrid && !isLoadingGrid && (
                     <div ref={sentinelRef as any} style={{ height: 1 }} />
                   )}
@@ -328,5 +295,3 @@ export const DevicesListSections: React.FC = () => {
     </div>
   );
 };
-
-export default DevicesListSections;

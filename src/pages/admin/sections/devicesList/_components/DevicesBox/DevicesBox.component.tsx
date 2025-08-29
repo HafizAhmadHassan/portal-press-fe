@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Device } from "@store_admin/devices/devices.types";
-import styles from "../_styles/DeviceCard.module.scss";
+import styles from "./DevicesBox.module.scss";
 import {
   EyeIcon,
   MapPinIcon,
@@ -14,20 +14,21 @@ import { ModalDeviceDetails } from "@sections_admin/devicesList/_modals/ModalDev
 import { ModalRiActiveDevice } from "@sections_admin/devicesList/_modals/ModalRiActivateDevice/ModalRiActiveDevice.component";
 import { useCreateTicketMutation } from "@store_admin/tickets/ticket.api";
 import type { MessageCreate } from "@store_admin/tickets/ticket.types";
-import ModalOpenTicket from "../../ticketsList/_modals/ModalsOpenTicket/ModalOpenTicket.component";
+
 import {
   PopOver,
   type PopOverItem,
 } from "@root/components/shared/pop-over/PopOver.component";
 import { SimpleButton } from "@root/components/shared/simple-btn/SimpleButton.component";
+import ModalOpenTicket from "../../../ticketsList/_modals/ModalsOpenTicket/ModalOpenTicket.component";
 
-interface DeviceCardProps {
+interface DevicesBoxProps {
   device: Device;
   onAction: (actionKey: string, device: Device) => void;
   style?: React.CSSProperties;
 }
 
-export const DeviceCard: React.FC<DeviceCardProps> = ({
+export const DevicesBox: React.FC<DevicesBoxProps> = ({
   device,
   onAction,
   style,

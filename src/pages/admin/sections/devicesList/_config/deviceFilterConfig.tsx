@@ -1,15 +1,5 @@
 import type { FilterConfig } from "@utils/types/filters.types.ts";
-
-export const DeviceFields = {
-  SEARCH: "search",
-  WASTE: "waste",
-  STATUS: "status",
-  CITY: "city",
-  PROVINCE: "province",
-  CUSTOMER: "customer_Name",
-  STATUS_MACHINE_BLOCKED: "status_Machine_Blocked",
-  STATUS_READY: "status_ready_d75_3_7",
-};
+import { DeviceFields } from "@root/utils/constants/deviceFields.constants";
 
 export const createDevicesFilterConfig = ({
   filters,
