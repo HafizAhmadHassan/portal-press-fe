@@ -59,18 +59,18 @@
 
 .badgeTrue {
   background: var(--success-light);
-  color: var(--white);
+  color: var(--text-primary);
   border-color: color-mix(in oklab, var(--success-color) 40%, transparent);
 }
 .badgeFalse {
-  background: var(--danger-light);
-  color: var(--white);
-  border-color: color-mix(in oklab, var(--danger-color) 40%, transparent);
+  background: var(--error-light);
+  color: var(--text-primary);
+  border-color: color-mix(in oklab, var(--error-light) 40%, transparent);
 }
 .badgeNumber {
-  background: var(--success-light);
-  color: var(--success-contrast, #0d3b1e);
-  border-color: color-mix(in oklab, var(--success-color) 25%, transparent);
+  background: var(--purple-light);
+  color: var(--text-primary);
+  border-color: color-mix(in oklab, var(--purple-color) 25%, transparent);
 }
 .badgeInfo {
   background: var(--gray-100, #e5e7eb);

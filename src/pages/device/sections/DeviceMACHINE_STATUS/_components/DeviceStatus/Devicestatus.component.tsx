@@ -1,5 +1,5 @@
 import React from "react";
-import { Gauge, CheckCircle2 } from "lucide-react";
+import { Gauge, CheckCircle2, XCircle } from "lucide-react";
 
 import styles from "./DeviceStatus.module.scss";
 import DeviceCard from "../../../_components/DeviceCard/DeviceCard.component";
@@ -25,15 +25,14 @@ export default function DeviceStatus({ statusList }: DeviceStatusProps) {
         {statusList.map((s) => (
           <div key={s.key} className={styles.statItem}>
             <div className={styles.statLabel}>{s.label}</div>
-
             {s.type === "boolean" ? (
               <div
                 className={[
                   styles.badge,
-                  s.value ? styles.badgeTrue : styles.badgeFalse,
+                  s.value === true ? styles.badgeTrue : styles.badgeFalse,
                 ].join(" ")}
               >
-                <CheckCircle2 size={12} />
+                {s.value ? <CheckCircle2 size={12} /> : <XCircle size={12} />}
                 <span>{s.value ? "True" : "False"}</span>
               </div>
             ) : s.type === "number" ? (

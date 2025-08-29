@@ -1,10 +1,6 @@
+// DevicePLC_IO.tsx
 import React, { useEffect, useMemo, useState, useCallback } from "react";
-import {
-  useLocation,
-  useParams,
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import styles from "../_styles/DevicesPLC.module.scss";
 
 import TableKeyValue, {
@@ -12,81 +8,26 @@ import TableKeyValue, {
 } from "@components/shared/table-key-value/TableKeyValue.component";
 
 import { SimpleButton } from "@root/components/shared/simple-btn/SimpleButton.component";
-import { useGetPlcByIdQuery } from "@store_device/plc/hooks/usePlcApi";
-
-/** Util: da snake_case a label leggibile */
-function humanizeKey(k: string) {
-  return k
-    .replace(/_/g, " ")
-    .replace(/\b([a-z])/g, (m) => m.toUpperCase())
-    .replace(/\b(Plc|Io|Id)\b/gi, (m) => m.toUpperCase());
-}
-
-/** Converte un record plc_io in TableKeyValueRow[] */
-function buildRowsFromPlcIo(
-  plcIo: Record<string, any> | null | undefined
-): TableKeyValueRow[] {
-  if (!plcIo) return [];
-
-  const rows: TableKeyValueRow[] = [];
-  const entries = Object.entries(plcIo);
-
-  // ID per primo (read-only)
-  const idEntry = entries.find(([k]) => k === "id");
-  if (idEntry) {
-    const [, v] = idEntry;
-    rows.push({
-      id: Number(v ?? 0),
-      key: "id",
-      label: "ID Dispositivo",
-      type: "number",
-      value: Number(v ?? 0),
-      readOnly: true,
-    });
-  }
-
-  // resto dei campi (ordinati alfabeticamente per label)
-  const rest = entries.filter(([k]) => k !== "id");
-  rest
-    .map<[string, any, string]>(([k, v]) => [k, v, humanizeKey(k)])
-    .sort((a, b) => a[2].localeCompare(b[2], "it"))
-    .forEach(([k, v, label]) => {
-      let type: TableKeyValueRow["type"];
-      if (typeof v === "boolean") type = "boolean";
-      else if (typeof v === "number") type = "number";
-      else type = "text"; // stringhe tipo "default_"
-
-      rows.push({
-        id: rows.length + 1,
-        key: k,
-        label,
-        type,
-        value: v,
-        ...(type === "number" ? { step: 1 } : {}),
-      });
-    });
-
-  return rows;
-}
+import {
+  useGetPlcByIdQuery,
+  useUpdatePlcMutation,
+} from "@store_device/plc/plc.api";
+import {
+  objectToTableRows,
+  tableRowsToObject,
+} from "@store_device/plc/plc.utils";
 
 export default function DevicePLC_IO() {
   const navigate = useNavigate();
   const { deviceId } = useParams<{ deviceId?: string }>();
-  const location = useLocation();
-  const editable = useMemo(
-    () => location.pathname.endsWith("/edit"),
-    [location.pathname]
-  );
-
-  const [rows, setRows] = useState<TableKeyValueRow[]>([]);
-  const [original, setOriginal] = useState<TableKeyValueRow[]>([]);
-  const [, /* loading */ setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-
   const [searchParams] = useSearchParams();
   const isEdit = searchParams.get("edit") === "1";
 
-  // === FETCH plc/${id} e prendi SOLO plc_io ===
+  const [rows, setRows] = useState<TableKeyValueRow[]>([]);
+  const [original, setOriginal] = useState<TableKeyValueRow[]>([]);
+  const [saving, setSaving] = useState(false);
+
+  // RTK Query hooks
   const currentId = deviceId ? Number(deviceId) : undefined;
   const {
     data: plcDetail,
@@ -94,16 +35,15 @@ export default function DevicePLC_IO() {
     isFetching,
     error,
     refetch,
-  } = useGetPlcByIdQuery(currentId, { skip: !currentId });
+  } = useGetPlcByIdQuery(currentId!, { skip: !currentId });
+
+  const [updatePlc] = useUpdatePlcMutation();
 
   const plcIo = plcDetail?.plc_io ?? null;
 
-  // Inizializza/aggiorna righe quando cambia plc_io
+  // Inizializza righe quando cambiano i dati
   useEffect(() => {
-    const busy = isLoading || isFetching;
-    setLoading(busy);
-
-    if (busy) return;
+    if (isLoading || isFetching) return;
 
     if (error) {
       console.error("[DevicePLC_IO] errore plc/:id →", error);
@@ -112,7 +52,7 @@ export default function DevicePLC_IO() {
       return;
     }
 
-    const built = buildRowsFromPlcIo(plcIo);
+    const built = objectToTableRows(plcIo);
     setRows(built);
     setOriginal(JSON.parse(JSON.stringify(built)));
   }, [plcIo, isLoading, isFetching, error]);
@@ -124,19 +64,27 @@ export default function DevicePLC_IO() {
 
   const saveAll = useCallback(
     async (updated: TableKeyValueRow[]) => {
+      if (!currentId) return;
+
       setSaving(true);
       try {
-        // TODO: collega mutation reale (PUT /plc/:id) mappando rows -> plc_io
-        console.log("[DevicePLC_IO] saveAll payload:", updated);
-        await new Promise((r) => setTimeout(r, 300));
+        const updatedPlcIo = tableRowsToObject(updated);
+
+        await updatePlc({
+          id: currentId,
+          data: { plc_io: updatedPlcIo },
+        }).unwrap();
+
         setOriginal(JSON.parse(JSON.stringify(updated)));
         setRows(updated);
-        refetch(); // ricarica dal backend
+        refetch();
+      } catch (error) {
+        console.error("[DevicePLC_IO] saveAll error:", error);
       } finally {
         setSaving(false);
       }
     },
-    [refetch]
+    [currentId, updatePlc, refetch]
   );
 
   const cancelAll = useCallback(() => {
@@ -145,16 +93,30 @@ export default function DevicePLC_IO() {
 
   const saveRow = useCallback(
     async (row: TableKeyValueRow, index: number) => {
-      // TODO: mutation row-level se disponibile
-      console.log("[DevicePLC_IO] saveRow:", { index, row });
-      await new Promise((r) => setTimeout(r, 150));
-      setOriginal((prev) => {
-        const copy = [...prev];
-        copy[index] = JSON.parse(JSON.stringify(rows[index]));
-        return copy;
-      });
+      if (!currentId) return;
+
+      try {
+        const updatedRows = [...rows];
+        updatedRows[index] = row;
+        const updatedPlcIo = tableRowsToObject(updatedRows);
+
+        await updatePlc({
+          id: currentId,
+          data: { plc_io: updatedPlcIo },
+        }).unwrap();
+
+        setOriginal((prev) => {
+          const copy = [...prev];
+          copy[index] = JSON.parse(JSON.stringify(row));
+          return copy;
+        });
+
+        refetch();
+      } catch (error) {
+        console.error("[DevicePLC_IO] saveRow error:", error);
+      }
     },
-    [rows]
+    [currentId, rows, updatePlc, refetch]
   );
 
   const cancelRow = useCallback(
@@ -168,7 +130,13 @@ export default function DevicePLC_IO() {
     [original]
   );
 
-  /* const notFound = !loading && (!plcIo || (rows.length === 0 && !error)); */
+  if (!deviceId) {
+    return (
+      <div className={styles.page}>
+        <div>Nessun device ID specificato.</div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -179,20 +147,22 @@ export default function DevicePLC_IO() {
           onSave={saveAll}
           onCancel={cancelAll}
           saving={saving}
-          // loading={loading}
+          loading={isLoading || isFetching}
           compact
           editable={isEdit}
           showActionsColumn
           allowHeaderEditToggle={false}
           onRowSave={saveRow}
           onRowCancel={cancelRow}
-          /*  emptyState={
-            notFound
+          emptyState={
+            error
+              ? "Errore nel caricamento dei dati PLC I/O."
+              : !plcIo || rows.length === 0
               ? "Nessun dato PLC (plc_io) trovato per questo device."
               : undefined
-          } */
+          }
           footerActions={{
-            show: editable, // se non vuoi doppioni con l'action bar sotto: metti false
+            show: isEdit,
             cancelLabel: "Annulla",
             saveLabel: "Salva",
             cancelDisabled: !dirty || saving,
@@ -201,7 +171,6 @@ export default function DevicePLC_IO() {
         />
       </div>
 
-      {/* ACTION BAR STICKY (come nella pagina edit) */}
       <div className={styles.actionBar}>
         <SimpleButton
           size="sm"
@@ -218,7 +187,6 @@ export default function DevicePLC_IO() {
           size="sm"
           color="primary"
           onClick={() => saveAll(rows)}
-          // loading={saving}
           disabled={!dirty || saving}
         >
           Salva

@@ -10,12 +10,13 @@ import LogoKgn from "@assets/images/kgn-logo.png";
 import Header from "@shared/header/Header.component.tsx";
 import { UserRoles } from "@root/utils/constants/userRoles";
 import SideNav from "@shared/side-navbar/SideNavbar.component.tsx";
-import { useGetPlcByIdQuery } from "@store_device/plc/hooks/usePlcApi";
+
 import styles from "../_commons/_styles/LayoutStyles_commons.module.scss";
 import { PageHeader } from "./_components/PageHeader/PageHeader.component";
 import { useSession } from "@root/pages/admin/core/store/auth/hooks/useSession";
 import { deviceLayoutSideNavItems } from "@layouts/device/_utils/SideNavItems.tsx";
 import { useGetDeviceByIdQuery } from "@root/pages/admin/core/store/devices/devices.api";
+import { useGetPlcByIdQuery } from "@root/pages/device/store/plc";
 
 export default function DeviceLayout() {
   const navigate = useNavigate();

@@ -1,10 +1,6 @@
+// DevicePLC_DATA.tsx
 import React, { useEffect, useMemo, useState, useCallback } from "react";
-import {
-  useLocation,
-  useParams,
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import styles from "../_styles/DevicesPLC.module.scss";
 
 import TableKeyValue, {
@@ -12,13 +8,15 @@ import TableKeyValue, {
 } from "@components/shared/table-key-value/TableKeyValue.component";
 
 import { SimpleButton } from "@root/components/shared/simple-btn/SimpleButton.component";
-
-// RTK Query: dettaglio PLC /plc/:id
-import { useGetPlcByIdQuery } from "@store_device/plc/hooks/usePlcApi";
+import {
+  useGetPlcByIdQuery,
+  useUpdatePlcMutation,
+} from "@store_device/plc/plc.api";
+import type { PlcData } from "@store_device/plc/plc.types";
 
 /** Util: da snake_case a label leggibile */
-function humanizeKey(k: string) {
-  return k
+function humanizeKey(key: string): string {
+  return key
     .replace(/_/g, " ")
     .replace(/\b([a-z])/g, (m) => m.toUpperCase())
     .replace(/\b(Plc|Io|Id)\b/gi, (m) => m.toUpperCase());
@@ -26,7 +24,7 @@ function humanizeKey(k: string) {
 
 /** Converte un record plc_data in TableKeyValueRow[] */
 function buildRowsFromPlcData(
-  plcData: Record<string, any> | null | undefined
+  plcData: PlcData | null | undefined
 ): TableKeyValueRow[] {
   if (!plcData) return [];
 
@@ -36,36 +34,36 @@ function buildRowsFromPlcData(
   // ID per primo, in sola lettura
   const idEntry = entries.find(([k]) => k === "id");
   if (idEntry) {
-    const [, v] = idEntry;
+    const [, value] = idEntry;
     rows.push({
-      id: Number(v ?? 0),
+      id: Number(value ?? 0),
       key: "id",
       label: "ID Dispositivo",
       type: "number",
-      value: Number(v ?? 0),
+      value: Number(value ?? 0),
       readOnly: true,
     });
   }
 
-  // Tutto il resto in ordine alfabetico per label
-  const rest = entries.filter(([k]) => k !== "id");
-  rest
+  // Resto dei campi ordinati alfabeticamente per label
+  const restEntries = entries.filter(([k]) => k !== "id");
+  restEntries
     .map<[string, any, string]>(([k, v]) => [k, v, humanizeKey(k)])
     .sort((a, b) => a[2].localeCompare(b[2], "it"))
-    .forEach(([k, v, label]) => {
-      const isBool = typeof v === "number" && (v === 0 || v === 1);
+    .forEach(([key, value, label]) => {
+      const isBool = typeof value === "number" && (value === 0 || value === 1);
       const type: TableKeyValueRow["type"] = isBool
         ? "boolean"
-        : typeof v === "number"
+        : typeof value === "number"
         ? "number"
         : "text";
 
       rows.push({
         id: rows.length + 1,
-        key: k,
+        key,
         label,
         type,
-        value: isBool ? Boolean(v) : v,
+        value: isBool ? Boolean(value) : value,
         ...(type === "number" ? { step: 1 } : {}),
       });
     });
@@ -73,24 +71,37 @@ function buildRowsFromPlcData(
   return rows;
 }
 
+/** Converte TableKeyValueRow[] di nuovo in PlcData */
+function rowsToPlcData(rows: TableKeyValueRow[]): PlcData {
+  const result: PlcData = { id: 0 };
+
+  rows.forEach((row) => {
+    if (row.key === "id") {
+      result.id = Number(row.value);
+    } else {
+      // Riconverti boolean in number se necessario (0/1)
+      if (row.type === "boolean") {
+        result[row.key] = row.value ? 1 : 0;
+      } else {
+        result[row.key] = row.value;
+      }
+    }
+  });
+
+  return result;
+}
+
 export default function DevicePLC_DATA() {
   const navigate = useNavigate();
   const { deviceId } = useParams<{ deviceId?: string }>();
-  const location = useLocation();
-  const editable = useMemo(
-    () => location.pathname.endsWith("/edit"),
-    [location.pathname]
-  );
-
-  const [rows, setRows] = useState<TableKeyValueRow[]>([]);
-  const [original, setOriginal] = useState<TableKeyValueRow[]>([]);
-  const [, /* loading */ setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-
   const [searchParams] = useSearchParams();
   const isEdit = searchParams.get("edit") === "1";
 
-  // === FETCH plc/${id} e prendi SOLO plc_data ===
+  const [rows, setRows] = useState<TableKeyValueRow[]>([]);
+  const [original, setOriginal] = useState<TableKeyValueRow[]>([]);
+  const [saving, setSaving] = useState(false);
+
+  // RTK Query hooks
   const currentId = deviceId ? Number(deviceId) : undefined;
   const {
     data: plcDetail,
@@ -98,16 +109,15 @@ export default function DevicePLC_DATA() {
     isFetching,
     error,
     refetch,
-  } = useGetPlcByIdQuery(currentId, { skip: !currentId });
+  } = useGetPlcByIdQuery(currentId!, { skip: !currentId });
+
+  const [updatePlc] = useUpdatePlcMutation();
 
   const plcData = plcDetail?.plc_data ?? null;
 
-  // Inizializza/aggiorna righe quando cambia plc_data
+  // Inizializza/aggiorna righe quando cambiano i dati
   useEffect(() => {
-    const busy = isLoading || isFetching;
-    setLoading(busy);
-
-    if (busy) return;
+    if (isLoading || isFetching) return;
 
     if (error) {
       console.error("[DevicePLC_DATA] errore plc/:id →", error);
@@ -128,19 +138,28 @@ export default function DevicePLC_DATA() {
 
   const saveAll = useCallback(
     async (updated: TableKeyValueRow[]) => {
+      if (!currentId) return;
+
       setSaving(true);
       try {
-        // TODO: collega mutation reale (PUT /plc/:id) con payload mappato da rows -> plc_data
-        console.log("[DevicePLC_DATA] saveAll payload:", updated);
-        await new Promise((r) => setTimeout(r, 300));
+        const updatedPlcData = rowsToPlcData(updated);
+
+        await updatePlc({
+          id: currentId,
+          data: { plc_data: updatedPlcData },
+        }).unwrap();
+
         setOriginal(JSON.parse(JSON.stringify(updated)));
         setRows(updated);
-        refetch(); // ricarica i dati dal backend
+        refetch();
+      } catch (error) {
+        console.error("[DevicePLC_DATA] saveAll error:", error);
+        // Qui potresti mostrare un toast di errore
       } finally {
         setSaving(false);
       }
     },
-    [refetch]
+    [currentId, updatePlc, refetch]
   );
 
   const cancelAll = useCallback(() => {
@@ -149,16 +168,31 @@ export default function DevicePLC_DATA() {
 
   const saveRow = useCallback(
     async (row: TableKeyValueRow, index: number) => {
-      // TODO: mutation row-level se disponibile
-      console.log("[DevicePLC_DATA] saveRow:", { index, row });
-      await new Promise((r) => setTimeout(r, 150));
-      setOriginal((prev) => {
-        const copy = [...prev];
-        copy[index] = JSON.parse(JSON.stringify(rows[index]));
-        return copy;
-      });
+      if (!currentId) return;
+
+      try {
+        // Per il salvataggio singola riga, aggiorna solo quella riga
+        const updatedRows = [...rows];
+        updatedRows[index] = row;
+        const updatedPlcData = rowsToPlcData(updatedRows);
+
+        await updatePlc({
+          id: currentId,
+          data: { plc_data: updatedPlcData },
+        }).unwrap();
+
+        setOriginal((prev) => {
+          const copy = [...prev];
+          copy[index] = JSON.parse(JSON.stringify(row));
+          return copy;
+        });
+
+        refetch();
+      } catch (error) {
+        console.error("[DevicePLC_DATA] saveRow error:", error);
+      }
     },
-    [rows]
+    [currentId, rows, updatePlc, refetch]
   );
 
   const cancelRow = useCallback(
@@ -172,7 +206,13 @@ export default function DevicePLC_DATA() {
     [original]
   );
 
-  /* const notFound = !loading && (!plcData || (rows.length === 0 && !error)); */
+  if (!deviceId) {
+    return (
+      <div className={styles.page}>
+        <div>Nessun device ID specificato.</div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -183,20 +223,22 @@ export default function DevicePLC_DATA() {
           onSave={saveAll}
           onCancel={cancelAll}
           saving={saving}
-          // loading={loading}
+          loading={isLoading || isFetching}
           compact
           editable={isEdit}
           showActionsColumn
           allowHeaderEditToggle={false}
           onRowSave={saveRow}
           onRowCancel={cancelRow}
-          /*  emptyState={
-            notFound
+          emptyState={
+            error
+              ? "Errore nel caricamento dei dati PLC."
+              : !plcData || rows.length === 0
               ? "Nessun dato PLC (plc_data) trovato per questo device."
               : undefined
-          } */
+          }
           footerActions={{
-            show: editable,
+            show: isEdit,
             cancelLabel: "Annulla",
             saveLabel: "Salva",
             cancelDisabled: !dirty || saving,
@@ -222,7 +264,6 @@ export default function DevicePLC_DATA() {
           size="sm"
           color="primary"
           onClick={() => saveAll(rows)}
-          // loading={saving}
           disabled={!dirty || saving}
         >
           Salva
