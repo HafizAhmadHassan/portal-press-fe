@@ -1,6 +1,7 @@
-// @sections_admin/logsList/config/logsTableConfig.tsx
+import type { TableColumn } from "@components/shared/table/types/GenericTable.types";
 import type { LogItem } from "@store_admin/logs/logs.types";
 
+/** Calcolo severità dal nome/codice allarme */
 function computeSeverity(
   name_alarm?: string,
   code_alarm?: string
@@ -12,13 +13,15 @@ function computeSeverity(
     name.includes("mancanza") ||
     name.includes("allarme") ||
     name.includes("bloccante")
-  )
+  ) {
     return "error";
+  }
   if (name.includes("porta") || name.includes("superati")) return "warning";
   return "info";
 }
 
-const fmtDate = (iso?: string) => {
+/** (opzionale) formattatore data/ora */
+/* const fmtDate = (iso?: string) => {
   if (!iso) return "—";
   try {
     const d = new Date(iso);
@@ -27,140 +30,158 @@ const fmtDate = (iso?: string) => {
       timeStyle: "short",
     }).format(d);
   } catch {
-    return iso;
+    return iso || "—";
   }
-};
+}; */
 
-export const createLogsTableConfig = ({
-  logs,
-  isLoading = false,
-  sortBy,
-  sortOrder,
-  onSort,
-}: {
-  logs: LogItem[];
-  isLoading?: boolean;
-  sortBy?: string;
-  sortOrder?: "asc" | "desc";
-  onSort?: (key: string, direction?: "asc" | "desc") => void;
-}) => {
+type LogsColumnKey = keyof LogItem | "alarm"; // chiave virtuale per la colonna “Messaggio”
+
+/**
+ * Colonne per la tabella Logs — da usare con useListController.buildTableConfig()
+ * Esempio:
+ *   const columns = useMemo(() => getLogsColumns(), []);
+ *   const tableConfig = useMemo(() => buildTableConfig(columns), [buildTableConfig, columns]);
+ */
+export const getLogsColumns = (): Array<
+  TableColumn<LogItem, LogsColumnKey>
+> => {
   const tPrimary = "var(--text-primary)";
   const tSecondary = "var(--text-secondary)";
 
-  return {
-    columns: [
-      {
-        key: "date_and_time",
-        header: "Data/Ora",
-        type: "custom" as const,
-        width: "180px",
-        sortable: true,
-
-        render: (_: any, d: LogItem) => {
-          if (!d.date_and_time)
-            return <span style={{ color: tSecondary }}>N/A</span>;
-          const date = new Date(d.date_and_time);
-          return (
-            <div>
-              <div style={{ fontSize: "14px", color: tPrimary }}>
-                {date.toLocaleDateString("it-IT")}
-              </div>
-              <div style={{ fontSize: "12px", color: tSecondary }}>
-                {date.toLocaleTimeString("it-IT", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </div>
+  return [
+    {
+      key: "date_and_time",
+      header: "Data/Ora",
+      type: "custom",
+      width: "180px",
+      sortable: true,
+      render: (_v, row) => {
+        if (!row.date_and_time)
+          return <span style={{ color: tSecondary }}>N/A</span>;
+        const d = new Date(row.date_and_time);
+        if (isNaN(d.getTime()))
+          return <span style={{ color: tSecondary }}>N/D</span>;
+        return (
+          <div>
+            <div style={{ fontSize: 14, color: tPrimary }}>
+              {d.toLocaleDateString("it-IT")}
             </div>
-          );
-        },
-      },
-
-      {
-        key: "alarm",
-        header: "Messaggio",
-        type: "custom" as const,
-        width: "360px",
-        sortable: false,
-        render: (_: any, d: LogItem) => {
-          const sev = computeSeverity(d.name_alarm, d.code_alarm);
-          const color =
-            sev === "error"
-              ? "var(--danger-500)"
-              : sev === "warning"
-              ? "var(--warning-600)"
-              : "var(--info-600)";
-          return (
-            <div>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                {/* <span
-                  style={{
-                    width: 8,
-                    height: 8,
-                    borderRadius: 999,
-                    background: color,
-                    display: "inline-block",
-                  }}
-                /> */}
-                <span style={{ fontWeight: 600, color: tPrimary }}>
-                  {d.name_alarm}
-                </span>
-              </div>
+            <div style={{ fontSize: 12, color: tSecondary }}>
+              {d.toLocaleTimeString("it-IT", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
             </div>
-          );
-        },
+          </div>
+        );
       },
-      {
-        key: "code_alarm",
-        header: "Codice Log",
-        type: "custom" as const,
-        width: "160px",
-        sortable: true,
-        render: (_: any, d: LogItem) => {
-          return (
+    },
+
+    {
+      key: "alarm",
+      header: "Messaggio",
+      type: "custom",
+      width: "360px",
+      sortable: false,
+      render: (_v, row) => {
+        const sev = computeSeverity(row.name_alarm, row.code_alarm);
+        const sevColor =
+          sev === "error"
+            ? "var(--error-color)"
+            : sev === "warning"
+            ? "var(--warning-color)"
+            : "var(--primary-color)";
+
+        return (
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <span
+              aria-hidden
               style={{
-                marginLeft: 6,
-                padding: "2px 6px",
-                borderRadius: 4,
-                fontSize: 12,
-                background: "var(--bg-secondary)",
-                border: "1px solid var(--border-color)",
-                color: tSecondary,
+                width: 8,
+                height: 8,
+                borderRadius: 999,
+                background: sevColor,
+                display: "inline-block",
+              }}
+            />
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 2,
+                minWidth: 0,
               }}
             >
-              {d.code_alarm}
-            </span>
-          );
-        },
+              <span
+                title={row.name_alarm || ""}
+                style={{
+                  fontWeight: 600,
+                  color: tPrimary,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {row.name_alarm || "—"}
+              </span>
+              {row.message ? (
+                <span
+                  title={row.message}
+                  style={{
+                    fontSize: 12,
+                    color: tSecondary,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {row.message}
+                </span>
+              ) : null}
+            </div>
+          </div>
+        );
       },
-      {
-        key: "machine_ip",
-        header: "IP",
-        type: "text" as const,
-        width: "160px",
-        sortable: true,
-      },
-      {
-        key: "customer_Name",
-        header: "Cliente",
-        type: "text" as const,
-        width: "160px",
-        sortable: true,
-      },
-    ],
-    data: logs,
-    loading: isLoading,
-    emptyMessage: "Nessun log trovato. Modifica i filtri.",
-    pagination: { enabled: true, pageSize: 10, currentPage: 1 },
-    sorting: {
-      enabled: true,
-      defaultSort: { key: "date_and_time", direction: "desc" as const },
-      currentSortKey: sortBy,
-      currentSortDirection: sortOrder,
-      onSort,
     },
-    selection: { enabled: false, selectedItems: [], idField: "id" },
-    className: "logs-table",
-  };
+
+    {
+      key: "code_alarm",
+      header: "Codice Log",
+      type: "custom",
+      width: "160px",
+      sortable: true,
+      render: (_v, row) => (
+        <span
+          style={{
+            padding: "2px 6px",
+            borderRadius: 4,
+            fontSize: 12,
+            background: "var(--bg-secondary)",
+            border: "1px solid var(--border-color)",
+            color: tSecondary,
+          }}
+        >
+          {row.code_alarm || "—"}
+        </span>
+      ),
+    },
+
+    {
+      key: "machine_ip",
+      header: "IP",
+      type: "text",
+      width: "160px",
+      sortable: true,
+    },
+
+    {
+      key: "customer_Name",
+      header: "Cliente",
+      type: "text",
+      width: "160px",
+      sortable: true,
+    },
+  ];
 };
+
+export default getLogsColumns;
