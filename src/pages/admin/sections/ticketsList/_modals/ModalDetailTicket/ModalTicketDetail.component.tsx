@@ -11,28 +11,21 @@ import DatesCard from "./_components/DatesCard/DatesCard.component";
 import DescriptionsCard from "./_components/DescriptionsCard/DescriptionsCard.component";
 import GuaranteeCard from "./_components/GuaranteeCard/GuaranteeCard.component";
 
-import type { TicketWithDevice } from "./_types/TicketWithDevice.types";
+import type {
+  CloseTicketData,
+  TicketWithDevice,
+} from "../../_types/TicketWithDevice.types";
 
 type Props = {
-  ticket: TicketWithDevice;
+  ticket: CloseTicketData & TicketWithDevice;
 };
 
 export const ModalTicketDetails: React.FC<Props> = ({ ticket }) => {
-  const openDescription =
-    (ticket as any)?.open_Description ||
-    (ticket as any)?.open_description ||
-    (ticket as any)?.description ||
-    "";
+  const openDescription = ticket?.open_Description;
 
-  const closeDescription =
-    (ticket as any)?.close_Description ||
-    (ticket as any)?.close_description ||
-    "";
+  const closeDescription = ticket?.close_Description;
 
-  const guaranteeList: string[] =
-    (ticket as any)?.guanratee_status ||
-    (ticket as any)?.guarantee_status ||
-    [];
+  const guaranteeList: string[] = ticket?.guanratee_status;
 
   return (
     <Modal

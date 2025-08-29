@@ -14,6 +14,18 @@ export type DeviceLite = {
   country?: string;
 } | null;
 
+export type CloseTicketData = {
+  id: number;
+  status: number;
+  customer_Name: string;
+  open_Description: string;
+  close_Description: string;
+  problema: string[];
+  guanratee_status: string[];
+  date_Time: Date | string;
+  machine: number;
+};
+
 export type TicketWithDevice = TicketRead & {
   device?: DeviceLite;
 };

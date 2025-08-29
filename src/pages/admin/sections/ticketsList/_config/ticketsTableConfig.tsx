@@ -42,7 +42,7 @@ export type CloseTicketData = {
 interface GetTicketsColumnsOptions {
   onEdit: (ticketData: {
     id: number | string;
-    [key: string]: any;
+    [key: string]: string | number;
   }) => Promise<any>;
   onDelete: (ticket: TicketRead) => Promise<void>;
   onClose: (data: CloseTicketData) => Promise<any>;
@@ -99,9 +99,7 @@ export const getTicketsColumns = ({ onClose }: GetTicketsColumnsOptions) => [
     type: "custom",
     sortable: true,
     width: "120px",
-    render: (_, ticket) => (
-      <StatusBadge status={(ticket as TicketWithDevice).status as any} />
-    ),
+    render: (_, ticket) => <StatusBadge status={ticket.status} />,
   },
 
   // Colonna Cliente
@@ -120,7 +118,7 @@ export const getTicketsColumns = ({ onClose }: GetTicketsColumnsOptions) => [
       const t = ticket as TicketWithDevice;
       return (
         t.device?.customer_Name ||
-        (t.device as any)?.customer ||
+        t.device?.customer ||
         ticket.customer_Name ||
         "N/A"
       );
@@ -163,9 +161,9 @@ export const getTicketsColumns = ({ onClose }: GetTicketsColumnsOptions) => [
               {t.device.province ? `, ${t.device.province}` : ""}
             </div>
           )}
-          {(t.device.customer_Name || (t.device as any).customer) && (
+          {(t.device.customer_Name || t.device.customer) && (
             <div style={{ fontSize: "12px", color: "var(--text-secondary)" }}>
-              {t.device.customer_Name || (t.device as any).customer}
+              {t.device.customer_Name || t.device.customer}
             </div>
           )}
         </div>
@@ -218,10 +216,10 @@ export const getTicketsColumns = ({ onClose }: GetTicketsColumnsOptions) => [
       return (
         <div style={{ display: "flex", gap: "8px", justifyContent: "center" }}>
           {isClosed(t) ? (
-            <ModalTicketDetails ticket={t as any} />
+            <ModalTicketDetails ticket={t} />
           ) : (
             <ModalCloseTicket
-              ticket={t as any}
+              ticket={t}
               onSave={onClose}
               triggerButton={
                 <button

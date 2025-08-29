@@ -3,7 +3,7 @@ import { Calendar, Clock } from "lucide-react";
 import DeviceCard from "@root/pages/device/sections/_components/DeviceCard/DeviceCard.component";
 import styles from "./DatesCard.module.scss";
 import { formatDateTime, relativeTime } from "../../_utils/ticketHelpers";
-import type { TicketWithDevice } from "../../_types/TicketWithDevice.types";
+import type { TicketWithDevice } from "../../../../_types/TicketWithDevice.types";
 import { DeviceFormGrid } from "@root/pages/device/sections/_components/DeviceFormGrid/DeviceFormGrid.component";
 
 type Props = { ticket: TicketWithDevice };

@@ -1,21 +1,17 @@
+import { Eye } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import Modal from "@components/shared/modal/Modal";
-import { SimpleButton } from "@shared/simple-btn/SimpleButton.component.tsx";
-import { Eye } from "lucide-react";
-import type { TicketWithDevice } from "@store_admin/tickets/ticket.api";
-
 import styles from "./ModalCloseTicket.module.scss";
-
-// REUSE: header e card dal modal di apertura
-
-import TicketHeader from "../_commons/TicketHeader/TicketHeader.component";
-import DeviceCompactCard from "../_commons/DeviceCompactCard/DeviceCompactCard.component";
 import InfoNote from "../_commons/InfoNote/InfoNote.component";
-import type { CloseTicketData } from "../../Ticket-list.section";
+import type { TicketWithDevice } from "@store_admin/tickets/ticket.api";
+import TicketHeader from "../_commons/TicketHeader/TicketHeader.component";
+import type { CloseTicketData } from "../../_types/TicketWithDevice.types";
+import { SimpleButton } from "@shared/simple-btn/SimpleButton.component.tsx";
 import CloseTicketForm from "./_components/CloseTicketForm/CloseTicketForm.component";
+import DeviceCompactCard from "../_commons/DeviceCompactCard/DeviceCompactCard.component";
 
 type Props = {
-  ticket: TicketWithDevice;
+  ticket: TicketWithDevice & CloseTicketData;
   onSave: (data: CloseTicketData) => Promise<void>;
   triggerButton?: React.ReactNode;
   btnClassName?: string;
@@ -29,50 +25,29 @@ const ModalCloseTicket: React.FC<Props> = ({
 }) => {
   const dev = ticket?.device;
 
-  const fullAddress = useMemo(() => {
-    const parts = [
-      dev?.address,
-      dev?.street,
-      dev?.city,
-      dev?.province,
-      dev?.postal_Code,
-      dev?.country,
-    ].filter(Boolean);
-    return parts.length > 0 ? parts.join(", ") : "Ubicazione non specificata";
-  }, [
-    dev?.address,
-    dev?.street,
-    dev?.city,
-    dev?.province,
-    dev?.postal_Code,
-    dev?.country,
-  ]);
-
   const defaultInfo = useMemo(() => {
-    const customer = dev?.customer || (dev as any)?.customer_Name || "N/D";
+    const customer = dev?.customer || dev?.customer_Name || "N/D";
     const machineName = dev?.machine_Name ? ` – ${dev?.machine_Name}` : "";
-    const waste = (dev as any)?.waste
-      ? `\nTipo rifiuto: ${(dev as any)?.waste}`
-      : "";
+    const waste = dev?.waste ? `\nTipo rifiuto: ${dev?.waste}` : "";
     return `Ticket #${ticket?.id}${machineName}\nCliente: ${customer}${waste}`;
   }, [
     ticket?.id,
     dev?.machine_Name,
     dev?.customer,
-    (dev as any)?.customer_Name,
-    (dev as any)?.waste,
+    dev?.customer_Name,
+    dev?.waste,
   ]);
 
   const [formData, setFormData] = useState<CloseTicketData>({
-    ticketId: ticket?.id,
-    date: new Date(),
+    id: ticket?.id,
+    date_Time: new Date(),
     info: defaultInfo,
-    address: fullAddress,
+    open_Description: ticket?.open_Description || "",
+    close_Description: ticket?.close_Description || "",
     inGaranzia: false,
     fuoriGaranzia: false,
     machine_retrival: false,
     machine_not_repairable: false,
-    note: "",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -89,7 +64,8 @@ const ModalCloseTicket: React.FC<Props> = ({
 
   const validate = () => {
     const e: Record<string, string> = {};
-    if (!formData.note?.trim()) e.note = "La nota di chiusura è obbligatoria";
+    if (!formData.close_Description?.trim())
+      e.close_Description = "La nota di chiusura è obbligatoria";
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -99,10 +75,11 @@ const ModalCloseTicket: React.FC<Props> = ({
     await onSave(formData);
     // reset soft (mantiene il contesto)
     setFormData({
-      ticketId: ticket?.id,
-      date: new Date(),
+      id: ticket?.id,
+      date_Time: new Date(),
       info: defaultInfo,
-      address: fullAddress,
+      open_Description: ticket?.open_Description || "",
+      close_Description: ticket?.close_Description || "",
       inGaranzia: false,
       fuoriGaranzia: false,
       machine_retrival: false,
@@ -137,8 +114,8 @@ const ModalCloseTicket: React.FC<Props> = ({
 
         {/* REUSE device compact */}
         <DeviceCompactCard
-          device={dev as any}
-          customer={dev?.customer || (dev as any)?.customer_Name || "N/D"}
+          device={dev}
+          customer={dev?.customer || dev?.customer_Name || "N/D"}
         />
 
         <CloseTicketForm

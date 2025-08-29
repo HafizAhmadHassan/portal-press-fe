@@ -19,8 +19,8 @@ type Props = {
  *  - 1 => aperto
  *  - 2 => chiuso
  */
-const isOpen = (t: TicketRead) => Number((t as any).status) === 1;
-const isClosed = (t: TicketRead) => Number((t as any).status) === 2;
+const isOpen = (t: TicketRead) => Number(t.status) === 1;
+const isClosed = (t: TicketRead) => Number(t.status) === 2;
 
 export const TicketsSummaryBar: React.FC<Props> = ({
   tickets,

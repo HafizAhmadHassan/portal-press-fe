@@ -22,18 +22,11 @@ import {
   useDeleteTicketMutation,
   useGetTicketsQuery,
 } from "@store_admin/tickets/ticket.api";
-import { TicketsSummaryBar } from "./_components/TicketsSummaryBar";
 import { resolver } from "@root/utils/severityResolver";
+import { TicketsSummaryBar } from "./_components/TicketsSummaryBar";
+import type { CloseTicketData } from "./_types/TicketWithDevice.types";
 
 // Tipi extra
-export type CloseTicketData = {
-  ticketId: number;
-  note?: string;
-  inGaranzia?: boolean;
-  fuoriGaranzia?: boolean;
-  machine_retrival?: boolean;
-  machine_not_repairable?: boolean;
-};
 
 export const TicketsListSections: React.FC = () => {
   // Usa useListController come per Users
@@ -103,20 +96,20 @@ export const TicketsListSections: React.FC = () => {
   const handleClose = useCallback(
     async (data: CloseTicketData) => {
       const res = await execUpdate(updateTicketTrigger, {
-        id: data.ticketId,
+        id: data.id,
         data: {
           status: 2,
-          close_Description: data.note || "",
+          close_Description: data.close_Description || "",
           guarantee_status: [
-            ...(data.inGaranzia ? ["in_garanzia"] : []),
-            ...(data.fuoriGaranzia ? ["fuori_garanzia"] : []),
+            ...(data.guanratee_status ? ["in_garanzia"] : []),
+            ...(data.guanratee_status ? ["fuori_garanzia"] : []),
           ],
-          extra: [
+          /*  extra: [
             ...(data.machine_retrival ? ["Ripristino macchina"] : []),
             ...(data.machine_not_repairable
               ? ["Macchina non riparabile in loco"]
               : []),
-          ],
+          ], */
         },
       });
 
