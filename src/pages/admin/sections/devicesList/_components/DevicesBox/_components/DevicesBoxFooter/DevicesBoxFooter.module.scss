@@ -1,0 +1,17 @@
+.footer {
+  display: flex;
+  gap: 4px;
+  padding: 8px 12px;
+  background: color-mix(in srgb, var(--bg-secondary) 70%, transparent);
+  border-top: 1px solid var(--border-color);
+  position: relative;
+  z-index: 2;
+  justify-content: end;
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 6px 8px;
+    gap: 3px;
+  }
+}

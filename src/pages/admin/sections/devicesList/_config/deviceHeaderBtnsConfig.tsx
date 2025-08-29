@@ -1,7 +1,6 @@
 import { Download, Grid, List, Map, Plus, type LucideIcon } from "lucide-react";
-import { SimpleButton } from "@shared/simple-btn/SimpleButton.component";
-import { ModalCreateDevice } from "@sections_admin/devicesList/_modals/ModalCreateDevice/ModalCreateDevice.component";
 import type { Device } from "@store_admin/devices/devices.types";
+import { ModalCreateUpdateDevice } from "../_modals/ModalCreateUpdateDevice/ModalCreateUpdateDevice.component";
 
 // Import the types from SectionHeader
 type ButtonConfig = {
@@ -43,18 +42,14 @@ const devicesListHeaderBtns = (
   },
   {
     component: (
-      <ModalCreateDevice
+      <ModalCreateUpdateDevice
+        mode="create"
         onSave={async (deviceData) => {
           if (!deviceData) {
             throw new Error("Device data is required");
           }
           await createNewDevice(deviceData);
         }}
-        triggerButton={
-          <SimpleButton variant="outline" color="primary" size="sm" icon={Plus}>
-            Nuovo
-          </SimpleButton>
-        }
       />
     ),
   },

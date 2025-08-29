@@ -1,12 +1,12 @@
 import type { Device } from "@store_admin/devices/devices.types";
 import { WasteBadge } from "@shared/waste-badge/WasteBadge.component";
 import { ModalDeviceDetails } from "@sections_admin/devicesList/_modals/ModalDeviceDetail/ModalDeviceDetail.component";
-import { ModalEditDevice } from "@sections_admin/devicesList/_modals/ModalEditDevice/ModalEditDevice.component";
 import { ModalRiActiveDevice } from "@sections_admin/devicesList/_modals/ModalRiActivateDevice/ModalRiActiveDevice.component";
 import { SimpleButton } from "@shared/simple-btn/SimpleButton.component";
 import { ModalDeleteDevicesConfirm } from "@sections_admin/devicesList/_modals/ModalDeleteDevicesConfirm/ModalDeleteDevicesConfirm.component";
 import type { TableColumn } from "@components/shared/table/types/GenericTable.types";
 import styles from "../_styles/DevicesTableConfig.module.scss";
+import { ModalCreateUpdateDevice } from "../_modals/ModalCreateUpdateDevice/ModalCreateUpdateDevice.component";
 
 interface DevicesColumnsProps {
   onEdit: (deviceId: number, updatedData: Partial<Device>) => Promise<void>;
@@ -176,8 +176,9 @@ export const getDevicesColumns = ({
 
           <ModalDeviceDetails device={device} />
 
-          <ModalEditDevice
-            device={device}
+          <ModalCreateUpdateDevice
+            mode="edit"
+            initialDevice={device}
             onSave={async (updatedData) => {
               if (!updatedData)
                 throw new Error("Updated device data is required");

@@ -1,6 +1,6 @@
-import styles from '../../../../_styles/Sections.module.scss';
-import stylesCoordinates from './CoordinatesInfo.module.scss';
-import { MapPin, Smartphone } from 'lucide-react';
+import styles from "../../../../_styles/Sections.module.scss";
+import stylesCoordinates from "./CoordinatesInfo.module.scss";
+import { MapPin, Smartphone } from "lucide-react";
 
 export default function CoordinatesInfo({
   device,
@@ -10,7 +10,10 @@ export default function CoordinatesInfo({
   formatCoordinates: any;
 }) {
   const hasCoords =
-    device?.gps_x && device?.gps_y && !isNaN(parseFloat(device?.gps_x)) && !isNaN(parseFloat(device?.gps_y));
+    device?.gps_x &&
+    device?.gps_y &&
+    !isNaN(parseFloat(device?.gps_x)) &&
+    !isNaN(parseFloat(device?.gps_y));
 
   return (
     <div className={styles.section}>

@@ -1,0 +1,164 @@
+.content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  flex: 1;
+  position: relative;
+  z-index: 2;
+}
+
+.deviceThumb {
+  position: relative;
+  width: 48px;
+  height: 36px;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--bg-secondary) 85%, var(--bg-primary)) 0%,
+    var(--bg-secondary) 100%
+  );
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.wifiIndicator {
+  position: absolute;
+  top: 0px;
+  right: 2px;
+  width: 14px;
+  height: 14px;
+  background: var(--success-color);
+  color: var(--white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  transition: opacity 0.2s;
+
+  &.isInactive {
+    background: var(--error-color);
+  }
+}
+
+.deviceInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+
+  svg {
+    color: var(--text-secondary);
+    flex-shrink: 0;
+  }
+
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 160px;
+  }
+}
+
+.technical {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.techDetail {
+  font-size: 10px;
+  color: var(--text-secondary);
+  font-family: "Monaco", "Menlo", monospace;
+  background: var(--bg-secondary);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+}
+
+.statusText {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  &.isActive {
+    color: var(--success-color);
+  }
+
+  &.isInactive {
+    color: var(--error-color);
+  }
+}
+
+/* Stato inattivo - modificatori per elementi nested */
+:global(.compactDeviceCard.isInactive) {
+  .deviceThumb {
+    border-color: color-mix(
+      in srgb,
+      var(--error-color) 40%,
+      var(--border-color)
+    );
+  }
+
+  .location {
+    color: var(--text-secondary);
+
+    svg {
+      color: color-mix(in srgb, var(--text-secondary) 70%, var(--text-primary));
+    }
+  }
+
+  .techDetail {
+    background: color-mix(in srgb, var(--error-light) 70%, var(--bg-secondary));
+    border-color: color-mix(
+      in srgb,
+      var(--error-color) 30%,
+      var(--border-color)
+    );
+    color: color-mix(in srgb, var(--error-color) 75%, var(--text-primary));
+  }
+}
+
+@media (max-width: 768px) {
+  .content {
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .deviceThumb {
+    width: 40px;
+    height: 30px;
+  }
+
+  .location span {
+    max-width: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  .technical {
+    display: none; /* nasconde dettagli tecnici su mobile piccolo */
+  }
+}
