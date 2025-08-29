@@ -26,7 +26,7 @@ export const DeviceHelpers = {
 
   isActive: (device: Device) => device.status === 1,
   isBlocked: (device: Device) => device.status_Machine_Blocked === true,
-  isReady: (device: Device) => device.status_ready_d75_3_7 === true,
+  isReady: (device: Device) => device.status_READY_D75_3_7 === true,
 
   getFullAddress: (device: Device) => {
     const parts = [

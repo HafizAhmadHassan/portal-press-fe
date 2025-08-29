@@ -113,7 +113,7 @@ export default function DevicePLC_DATA() {
 
   const [updatePlc] = useUpdatePlcMutation();
 
-  const plcData = plcDetail?.plc_data ?? null;
+  const plcData = (plcDetail as any)?.plc_data ?? null;
 
   // Inizializza/aggiorna righe quando cambiano i dati
   useEffect(() => {

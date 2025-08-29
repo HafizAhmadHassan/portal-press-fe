@@ -36,8 +36,8 @@ export const loadDevices = createAsyncThunk(
         status_Machine_Blocked:
           params.status_Machine_Blocked ??
           currentFilters.status_Machine_Blocked,
-        status_ready_d75_3_7:
-          params.status_ready_d75_3_7 ?? currentFilters.tatus_ready_d75_3_7,
+        status_READY_D75_3_7:
+          params.status_READY_D75_3_7 ?? currentFilters.tatus_ready_d75_3_7,
         sortBy: params.sortBy ?? currentFilters.sortBy,
         sortOrder: params.sortOrder ?? currentFilters.sortOrder,
       };
@@ -135,7 +135,7 @@ export const createNewDevice = createAsyncThunk(
         country: deviceData.country || null,
         municipality: deviceData.municipality || null,
         address: deviceData.address || null,
-        status_ready_d75_3_7: deviceData.status_ready_d75_3_7 ?? false,
+        status_READY_D75_3_7: deviceData.status_READY_D75_3_7 ?? false,
         status_Machine_Blocked: deviceData.status_Machine_Blocked ?? false,
         codice_Gps: deviceData.codice_Gps || null,
         sheet_Name: deviceData.sheet_Name || null,
@@ -401,7 +401,7 @@ export const resetFilters = createAsyncThunk(
           province: "",
           customer: "",
           status_Machine_Blocked: undefined,
-          status_ready_d75_3_7: undefined,
+          status_READY_D75_3_7: undefined,
           sortBy: "createdAt",
           sortOrder: "desc",
         })

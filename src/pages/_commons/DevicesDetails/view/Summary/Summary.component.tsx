@@ -7,7 +7,7 @@ export default function Summary({ device }: { device: any }) {
   const blocked =
     device?.status_Machine_Blocked ?? device?.status_Machine_Blocked ?? false;
   const ready =
-    device?.status_ready_d75_3_7 ?? device?.tatus_ready_d75_3_7 ?? false;
+    device?.status_READY_D75_3_7 ?? device?.tatus_ready_d75_3_7 ?? false;
 
   return (
     <DeviceCard title="Riassunto Stati" icon={<Shield />}>

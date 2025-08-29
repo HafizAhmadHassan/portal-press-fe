@@ -17,7 +17,7 @@ export const DevicesSummaryBar: React.FC<Props> = ({ devices, className }) => {
   const blocked = devices.filter(
     (d) => d.status_Machine_Blocked === true
   ).length;
-  const ready = devices.filter((d) => d.status_ready_d75_3_7 === true).length;
+  const ready = devices.filter((d) => d.status_READY_D75_3_7 === true).length;
 
   const items: SummaryItem[] = [
     { number: active, label: "Attivi", variant: "statCard--active" },

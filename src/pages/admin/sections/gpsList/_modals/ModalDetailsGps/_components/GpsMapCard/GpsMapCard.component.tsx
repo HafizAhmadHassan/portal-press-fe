@@ -29,7 +29,7 @@ export const GpsMapCard: React.FC<Props> = ({ device, hasCoords, center }) => {
       id: device.id,
       machine_Name: "",
       status: 0,
-      status_ready_d75_3_7: false,
+      status_READY_D75_3_7: false,
       status_Machine_Blocked: false,
       created_At: "",
       updated_At: "",

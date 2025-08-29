@@ -38,7 +38,7 @@ export default function DevicePLC_IO() {
 
   const [updatePlc] = useUpdatePlcMutation();
 
-  const plcIo = plcDetail?.plc_io ?? null;
+  const plcIo = (plcDetail as any)?.plc_io ?? null;
 
   // Inizializza righe quando cambiano i dati
   useEffect(() => {

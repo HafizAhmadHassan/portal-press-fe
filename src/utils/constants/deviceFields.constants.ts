@@ -8,7 +8,7 @@ export const DeviceFields = {
   PROVINCE: "province",
   CUSTOMER: "customer_Name",
   STATUS_MACHINE_BLOCKED: "status_Machine_Blocked",
-  STATUS_READY: "status_ready_d75_3_7",
+  STATUS_READY: "status_READY_D75_3_7",
   MACHINE_NAME: "machine_Name",
   CREATED_AT: "created_At",
   UPDATED_AT: "updated_At",

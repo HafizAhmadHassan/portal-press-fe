@@ -3,9 +3,8 @@ import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import styles from "../_styles/DevicesPLC.module.scss";
 
-import TableKeyValue, {
-  type TableKeyValueRow,
-} from "@components/shared/table-key-value/TableKeyValue.component";
+import TableKeyValue from "@components/shared/table-key-value/TableKeyValue.component";
+import type { TableKeyValueRow } from "@store_device/plc/plc.types";
 
 // ✅ usa gli hook re-exportati dal tuo store PLC
 import { useGetPlcByIdQuery, useUpdatePlcMutation } from "@store_device/plc";
@@ -106,7 +105,9 @@ export default function DevicePLC_STATUS() {
 
   const [updatePlc] = useUpdatePlcMutation();
 
-  const plcStatus = plcDetail?.plc_status ?? null;
+  const plcStatus =
+    (plcDetail as { plc_status?: Record<string, any> } | undefined)
+      ?.plc_status ?? null;
 
   // Inizializza righe quando arrivano i dati
   useEffect(() => {
@@ -222,13 +223,13 @@ export default function DevicePLC_STATUS() {
           allowHeaderEditToggle={false}
           onRowSave={saveRow}
           onRowCancel={cancelRow}
-          emptyState={
+          /* emptyState={
             error
               ? "Errore nel caricamento dei dati PLC Status."
               : !plcStatus || rows.length === 0
               ? "Nessun dato PLC (plc_status) trovato per questo device."
               : undefined
-          }
+          } */
           footerActions={{
             show: isEdit,
             cancelLabel: "Annulla",

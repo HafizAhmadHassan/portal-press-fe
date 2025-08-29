@@ -93,7 +93,7 @@ export const useMapDevices = (filters: MapFilters = {}) => {
       inactive: filteredDevices.filter((d) => d.status === 0).length,
       blocked: filteredDevices.filter((d) => d.status_Machine_Blocked === true)
         .length,
-      ready: filteredDevices.filter((d) => d.status_ready_d75_3_7 === true)
+      ready: filteredDevices.filter((d) => d.status_READY_D75_3_7 === true)
         .length,
       byWaste: {} as Record<string, number>,
       byCities: {} as Record<string, number>,
@@ -143,7 +143,7 @@ export const useMapDevices = (filters: MapFilters = {}) => {
       inactive: allDevices.filter((d) => d.status === 0).length,
       blocked: allDevices.filter((d) => d.status_Machine_Blocked === true)
         .length,
-      ready: allDevices.filter((d) => d.status_ready_d75_3_7 === true).length,
+      ready: allDevices.filter((d) => d.status_READY_D75_3_7 === true).length,
       plastic: allDevices.filter((d) => d.waste === "Plastica").length,
       dry: allDevices.filter((d) => d.waste === "Secco").length,
       wet: allDevices.filter((d) => d.waste === "Umido").length,
