@@ -3,13 +3,13 @@ import React, { useCallback, useMemo } from "react";
 import { useCrud } from "@root/hooks/useCrud";
 
 import { toAppError } from "@root/utils/errorHandling";
-import { getGpsColumns } from "./config/gpsTableConfig";
-import gpsListHeaderBtns from "./config/gpsListHeaderBtns";
-import styles from "./styles/Gps-list.sections.module.scss";
+import { getGpsColumns } from "./_config/gpsTableConfig";
+import gpsListHeaderBtns from "./_config/gpsListHeaderBtns";
+import styles from "./_styles/Gps-list.sections.module.scss";
 import { Divider } from "@shared/divider/Divider.component";
 import { useListController } from "@root/hooks/useListController";
 import type { GpsDevice, GpsQueryParams } from "@store_admin/gps/gps.types";
-import { createGpsFilterConfig, GpsFields } from "./config/gpsFilterConfig";
+import { createGpsFilterConfig, GpsFields } from "./_config/gpsFilterConfig";
 import { GenericTableWithLogic } from "@shared/table/components/GenericTableWhitLogic.component";
 import { SectionHeaderComponent } from "@sections_admin/_commons/components/SectionHeader/Section-header.component";
 import { SectionFilterComponent } from "@sections_admin/_commons/components/SectionFilters/Section-filters.component";

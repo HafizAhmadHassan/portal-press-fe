@@ -1,10 +1,10 @@
-import { useMemo } from "react";
 import Map from "@shared/map";
-import { createDevicePopup } from "@sections_admin/devicesList/utils/MapPopupBuilder";
+import { useMemo } from "react";
 import Pin1 from "@assets/images/kgn-pin.svg";
 import Pin2 from "@assets/images/kgn-pin-red.png";
-import { DeviceHelpers } from "@sections_admin/devicesList/utils/DeviceHelpers";
 import type { Device } from "@store_admin/devices/devices.types";
+import { DeviceHelpers } from "@sections_admin/devicesList/utils/DeviceHelpers";
+import { createDevicePopup } from "@sections_admin/devicesList/utils/MapPopupBuilder";
 
 interface Props {
   mapData: Device[];
