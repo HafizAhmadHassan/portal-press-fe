@@ -5,14 +5,13 @@ import styles from "../styles/Pill.module.scss";
 type Option = { value: string; label: string };
 
 type Props = {
-  selected: string; // <-- value selezionato
+  selected: string;
   options: Option[];
   onChange: (value: string) => void;
   ChevronIcon: React.ReactNode;
-  /** ref del contenitore .pill (o .searchGroup) per calcolare left/top/width */
   anchorRef: React.RefObject<HTMLElement>;
-  /** Se true, il dropdown si apre verso l'alto */
   openUpward?: boolean;
+  onSelectionChange?: () => void; // Callback opzionale per force refresh
 };
 
 export default function FilterSelect({
@@ -22,6 +21,7 @@ export default function FilterSelect({
   ChevronIcon,
   anchorRef,
   openUpward = false,
+  onSelectionChange,
 }: Props) {
   const triggerRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -49,16 +49,14 @@ export default function FilterSelect({
     const r = anchor.getBoundingClientRect();
 
     if (openUpward) {
-      // Apre verso l'alto: top = r.top - altezza dropdown - gap
-      const dropdownHeight = Math.min(280, options.length * 60); // stima altezza
+      const dropdownHeight = Math.min(280, options.length * 60);
       setRect({
         left: r.left,
-        top: r.top - dropdownHeight - 4, // gap verso l'alto
+        top: r.top - dropdownHeight - 4,
         width: r.width,
         height: r.height,
       });
     } else {
-      // Apre verso il basso (comportamento normale)
       setRect({
         left: r.left,
         top: r.bottom,
@@ -81,7 +79,6 @@ export default function FilterSelect({
     window.addEventListener("resize", onResize);
     window.addEventListener("keydown", onKey);
 
-    // chiudi click esterno (ma non se clicco trigger o dropdown)
     const onDoc = (e: MouseEvent) => {
       const t = e.target as Node;
       const inTrigger = !!triggerRef.current?.contains(t);
@@ -99,8 +96,19 @@ export default function FilterSelect({
   }, [open, openUpward, options.length]);
 
   const handleSelect = (value: string) => {
+    console.log("FilterSelect: Valore selezionato:", value);
+
+    // Prima chiama onChange per aggiornare il state
     onChange(value);
     setOpen(false);
+
+    // Poi chiama il callback opzionale per force refresh
+    if (onSelectionChange) {
+      console.log("FilterSelect: Triggering selection change callback");
+      setTimeout(() => {
+        onSelectionChange();
+      }, 50); // Piccolo delay per permettere l'aggiornamento del state
+    }
   };
 
   const portalEl = useMemo(() => {
@@ -117,7 +125,6 @@ export default function FilterSelect({
 
   return (
     <>
-      {/* Trigger "finto select" dentro la pill */}
       <button
         ref={triggerRef}
         type="button"
@@ -131,7 +138,6 @@ export default function FilterSelect({
         {ChevronIcon}
       </button>
 
-      {/* Dropdown a larghezza intera (PORTAL) */}
       {open &&
         createPortal(
           <div
@@ -140,7 +146,7 @@ export default function FilterSelect({
             style={{
               position: "fixed",
               left: rect.left,
-              top: rect.top + (openUpward ? 0 : 4), // gap solo se verso il basso
+              top: rect.top + (openUpward ? 0 : 4),
               width: rect.width,
             }}
             role="listbox"

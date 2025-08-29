@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from "react";
+import React, { useCallback, useMemo, useRef, useEffect } from "react";
 import { RefreshCw } from "lucide-react";
 import { useCrud } from "@root/hooks/useCrud";
 import { Divider } from "@shared/divider/Divider.component";
@@ -69,7 +69,7 @@ export const DevicesListSections: React.FC = () => {
   const [deleteDeviceTrigger] = useDeleteDeviceMutation();
   const [createDeviceTrigger] = useCreateDeviceMutation();
 
-  // ⬇️ GRID INFINITA (pagina interna separata)
+  // GRID INFINITA - con key e filtri migliorati
   const infiniteFilters = useMemo(
     () => ({
       ...filters,
@@ -77,6 +77,12 @@ export const DevicesListSections: React.FC = () => {
     }),
     [filters, scopedCustomer]
   );
+
+  const infiniteKey = useMemo(() => {
+    const keyString = `${scopedCustomer ?? "all"}|${JSON.stringify(filters)}`;
+    console.log("Key per infinite scroll:", keyString);
+    return keyString;
+  }, [filters, scopedCustomer]);
 
   const gridScrollRef = useRef<HTMLDivElement | null>(null);
 
@@ -88,11 +94,18 @@ export const DevicesListSections: React.FC = () => {
     sentinelRef,
   } = useInfiniteDevices({
     filters: infiniteFilters,
-    pageSize: queryParams?.page_size,
-    key: `${scopedCustomer ?? "all"}|${JSON.stringify(filters)}`,
+    pageSize: queryParams?.page_size || 20,
+    key: infiniteKey,
   });
 
-  // 🌍 MAPPA
+  // Debug per tracciare i cambiamenti
+  useEffect(() => {
+    console.log("Filtri cambiati:", infiniteFilters);
+    console.log("Device grid aggiornati:", deviceGrid.length, "devices");
+    console.log("Loading state:", isLoadingGrid);
+  }, [infiniteFilters, deviceGrid, isLoadingGrid]);
+
+  // MAPPA
   const mapFilters = useMemo(
     () => ({
       wasteType: filters[DeviceFields.WASTE] || undefined,
@@ -165,19 +178,27 @@ export const DevicesListSections: React.FC = () => {
     reloadGrid();
   }, [refetch, refetchMap, reloadGrid]);
 
-  const handleResetAll = () => {
+  // FIXED: Reset migliorato con force reload
+  const handleResetAll = useCallback(() => {
+    console.log("Reset completo iniziato");
     resetAll();
-    reloadGrid();
-    refetch();
-    refetchMap();
-  };
+
+    // Force reload dell'infinite scroll
+    setTimeout(() => {
+      reloadGrid();
+      refetch();
+      refetchMap();
+    }, 100); // Piccolo delay per permettere il reset dei filtri
+  }, [resetAll, reloadGrid, refetch, refetchMap]);
 
   const onExportClick = () => console.log("Esporta devices");
-  const onRefreshClick = () => {
+
+  const onRefreshClick = useCallback(() => {
+    console.log("Refresh manuale iniziato");
     refetch();
     refetchMap();
     reloadGrid();
-  };
+  }, [refetch, refetchMap, reloadGrid]);
 
   const columns = useMemo(
     () =>
@@ -203,7 +224,14 @@ export const DevicesListSections: React.FC = () => {
   );
 
   const filtersConfig = useMemo(
-    () => createDevicesFilterConfig({ filters, setFilter }),
+    () =>
+      createDevicesFilterConfig({
+        filters,
+        setFilter: (key: string, value: any) => {
+          console.log("Filter change:", key, "=", value);
+          setFilter(key, value);
+        },
+      }),
     [filters, setFilter]
   );
 
@@ -270,14 +298,20 @@ export const DevicesListSections: React.FC = () => {
                 </div>
               ) : (
                 <div className={styles.devicesGrid}>
-                  {deviceGrid.map((device, idx) => (
-                    <DevicesBox
-                      key={`${device.id}-${idx}`}
-                      device={device}
-                      onAction={() => {}}
-                      style={{ animationDelay: `${idx * 0.05}s` }}
-                    />
-                  ))}
+                  {deviceGrid.length === 0 && !isLoadingGrid ? (
+                    <div className={styles.emptyState}>
+                      <span>Nessun dispositivo trovato</span>
+                    </div>
+                  ) : (
+                    deviceGrid.map((device, idx) => (
+                      <DevicesBox
+                        key={`${device.id}-${idx}`}
+                        device={device}
+                        onAction={() => {}}
+                        style={{ animationDelay: `${idx * 0.05}s` }}
+                      />
+                    ))
+                  )}
 
                   {hasNextGrid && !isLoadingGrid && (
                     <div ref={sentinelRef as any} style={{ height: 1 }} />
