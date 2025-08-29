@@ -1,21 +1,20 @@
 // ModalOpenTicket.component.tsx - VERSIONE CON DEBUG
-import React, { useState } from "react";
-import Modal from "@components/shared/modal/Modal";
-import { SimpleButton } from "@shared/simple-btn/SimpleButton.component.tsx";
-import { Eye } from "lucide-react";
 
-import type { Device } from "@store_admin/devices/devices.types";
 import type {
   MessageCreate,
   ProblemCategory,
 } from "@store_admin/tickets/ticket.types";
 
+import { Eye } from "lucide-react";
+import React, { useState } from "react";
+import Modal from "@components/shared/modal/Modal";
 import styles from "./ModalOpenTicket.module.scss";
-
-import TicketHeader from "../_commons/TicketHeader/TicketHeader.component";
-import DeviceCompactCard from "../_commons/DeviceCompactCard/DeviceCompactCard.component";
-import OpenTicketForm from "./_components/OpenTicketForm/OpenTicketForm.component";
 import InfoNote from "../_commons/InfoNote/InfoNote.component";
+import type { Device } from "@store_admin/devices/devices.types";
+import TicketHeader from "../_commons/TicketHeader/TicketHeader.component";
+import { SimpleButton } from "@shared/simple-btn/SimpleButton.component.tsx";
+import OpenTicketForm from "./_components/OpenTicketForm/OpenTicketForm.component";
+import DeviceCompactCard from "../_commons/DeviceCompactCard/DeviceCompactCard.component";
 
 type Props = {
   device: Device;
@@ -52,7 +51,6 @@ export const ModalOpenTicket: React.FC<Props> = ({
     field: K,
     value: MessageCreate[K]
   ) => {
-    console.log(`📝 Campo modificato: ${String(field)} =`, value);
     setFormData((prev) => ({ ...prev, [field]: value }));
     if (errors[field as string]) {
       setErrors((e) => ({ ...e, [field as string]: "" }));
@@ -60,8 +58,6 @@ export const ModalOpenTicket: React.FC<Props> = ({
   };
 
   const validate = () => {
-    console.log("🔍 Validazione dati:", formData);
-
     const e: Record<string, string> = {};
 
     if (!formData.open_Description?.trim()) {
@@ -84,40 +80,24 @@ export const ModalOpenTicket: React.FC<Props> = ({
       e.machine = "ID macchina non valido";
     }
 
-    console.log("❌ Errori di validazione:", e);
     setErrors(e);
     return Object.keys(e).length === 0;
   };
 
   const handleSave = async () => {
-    console.log("🚀 Tentativo salvataggio ticket...");
-    console.log("📊 Dati form correnti:", formData);
-    console.log("🏠 Device:", device);
-
     if (!validate()) {
-      console.log("❌ Validazione fallita, interruzione");
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      console.log("📤 Invio richiesta con dati:", {
-        ...formData,
-        // Assicurati che tutti i campi siano nel formato corretto
-        machine: Number(formData.machine),
-        status: Number(formData.status),
-        problema: Array.isArray(formData.problema) ? formData.problema : [],
-      });
-
       await onSave({
         ...formData,
         machine: Number(formData.machine),
-        status: Number(formData.status),
+        status: formData.status,
         problema: Array.isArray(formData.problema) ? formData.problema : [],
       });
-
-      console.log("✅ Ticket creato con successo!");
 
       // Reset form
       setFormData({
@@ -164,7 +144,7 @@ export const ModalOpenTicket: React.FC<Props> = ({
         <TicketHeader device={device} />
         <DeviceCompactCard
           device={device}
-          customer_name={formData.customer_Name}
+          customer_Name={formData.customer_Name}
           error={errors.customer_Name}
         />
         <OpenTicketForm
@@ -193,14 +173,6 @@ export const ModalOpenTicket: React.FC<Props> = ({
           obbligatoria. Le altre opzioni sono facoltative e aiutano a
           contestualizzare l'apertura.
         </InfoNote>
-
-        {/* DEBUG INFO (rimuovi in produzione) */}
-        {process.env.NODE_ENV === "development" && (
-          <details style={{ marginTop: "12px", fontSize: "12px" }}>
-            <summary>🔧 Debug Info</summary>
-            <pre>{JSON.stringify({ formData, errors, device }, null, 2)}</pre>
-          </details>
-        )}
       </div>
     </Modal>
   );

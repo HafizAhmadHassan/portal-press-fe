@@ -1,7 +1,7 @@
 import React from "react";
 import { EyeIcon, PowerIcon, SpoolIcon } from "lucide-react";
 import { SimpleButton } from "@root/components/shared/simple-btn/SimpleButton.component";
-import { ModalRiActiveDevice } from "@sections_admin/devicesList/_modals/ModalRiActivateDevice/ModalRiActiveDevice.component";
+import { ModalRiActiveDevice } from "@root/pages/admin/sections/devicesList/_modals/ModalRiActivateDevice/ModalRiActivateDevice.component";
 
 import styles from "./DevicesBoxFooter.module.scss";
 import type { Device } from "@store_admin/devices/devices.types";

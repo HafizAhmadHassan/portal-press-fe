@@ -140,8 +140,6 @@
 
 /* Ottimizzazioni card */
 .devicesGrid > * {
-  animation: fadeInStaggered 0.4s ease-out forwards;
-  animation-delay: calc(var(--index, 0) * 0.02s);
   opacity: 0;
   min-width: 0;
   min-height: 120px;

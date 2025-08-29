@@ -3,7 +3,7 @@ import Modal from "@components/shared/modal/Modal";
 import { SimpleButton } from "@shared/simple-btn/SimpleButton.component.tsx";
 import { CheckCircle, RotateCcw } from "lucide-react";
 import type { Device } from "@store_admin/devices/devices.types.ts";
-import "./ModalRiActivateDevice.scss";
+import styles from "./ModalRiActivateDevice.module.scss";
 
 interface Props {
   device: Device;
@@ -21,7 +21,12 @@ export const ModalRiActiveDevice: React.FC<Props> = ({
   };
 
   const defaultTriggerButton = (
-    <SimpleButton variant="outline" color="success" size="sm">
+    <SimpleButton
+      variant="outline"
+      color="success"
+      size="sm"
+      aria-label="Riattiva dispositivo"
+    >
       <RotateCcw size={14} />
       Riattiva
     </SimpleButton>
@@ -38,51 +43,54 @@ export const ModalRiActiveDevice: React.FC<Props> = ({
       confirmText="Riattiva Device"
       cancelText="Annulla"
       onConfirm={handleConfirm}
-      modalClassName="modal-reactivate"
+      modalClassName={styles.modalReactivate}
       defaultActions={{
         variantCancel: undefined,
         variantConfirm: undefined,
-        colorCancel: undefined,
-        colorConfirm: undefined,
+        colorCancel: "error",
+        colorConfirm: "success",
       }}
     >
-      <div className="modal-reactivate-content">
+      <div className={styles.modalReactivateContent}>
         {/* Device Info Card */}
-        <div className="device-info-card">
-          <div className="device-main-info">
-            <div className="device-id-section">
-              <div className="device-id-badge">
-                <span>#{device?.id || "N/A"}</span>
+        <div
+          className={styles.deviceInfoCard}
+          role="group"
+          aria-label="Informazioni dispositivo"
+        >
+          <div className={styles.deviceMainInfo}>
+            <div className={styles.deviceIdSection}>
+              <div className={styles.deviceIdBadge} aria-hidden="true">
+                <span>#{device?.id ?? "N/A"}</span>
               </div>
 
-              <div className="device-primary-info">
-                {/* Se vuoi riattivare il nome, togli il commento */}
-                {/* <h4 className="device-name">{device?.machine_Name || 'Nome non disponibile'}</h4> */}
-                <p className="device-status">
+              <div className={styles.devicePrimaryInfo}>
+                {/* <h4 className={styles.deviceName}>{device?.machine_Name || 'Nome non disponibile'}</h4> */}
+                <p className={styles.deviceStatus}>
                   {device?.address || "Indirizzo non disponibile"}
                 </p>
-                <p className="device-status">
+                <p className={styles.deviceStatus}>
                   {device?.city || "Città non disponibile"}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="device-divider" />
+          <div className={styles.deviceDivider} />
 
-          <div className="device-technical-specs">
-            <h5 className="specs-title">Specifiche Tecniche</h5>
-            <div className="specs-grid">
-              <div className="spec-row">
-                <span className="spec-label">Indirizzo IP</span>
-                <span className="spec-value">
+          <div className={styles.deviceTechnicalSpecs}>
+            <h5 className={styles.specsTitle}>Specifiche Tecniche</h5>
+            <div className={styles.specsGrid}>
+              <div className={styles.specRow}>
+                <span className={styles.specLabel}>Indirizzo IP</span>
+                <span className={styles.specValue}>
                   {device?.ip_Router || "Non disponibile"}
                 </span>
               </div>
 
-              <div className="spec-row">
-                <span className="spec-label">Coordinate GPS</span>
-                <span className="spec-value">
+              <div className={styles.specRow}>
+                <span className={styles.specLabel}>Coordinate GPS</span>
+                <span className={styles.specValue}>
                   {device?.gps_x && device?.gps_y
                     ? `${device.gps_x}, ${device.gps_y}`
                     : "Non disponibili"}
@@ -93,12 +101,16 @@ export const ModalRiActiveDevice: React.FC<Props> = ({
         </div>
 
         {/* Success copy */}
-        <div className="success-message">
-          <div className="success-content">
-            <CheckCircle className="success-icon" size={20} />
-            <div className="success-text">
-              <p className="success-title">Riattivazione Device</p>
-              <p className="success-description">
+        <div className={styles.successMessage} role="note" aria-live="polite">
+          <div className={styles.successContent}>
+            <CheckCircle
+              className={styles.successIcon}
+              size={20}
+              aria-hidden="true"
+            />
+            <div className={styles.successText}>
+              <p className={styles.successTitle}>Riattivazione Device</p>
+              <p className={styles.successDescription}>
                 Il dispositivo tornerà operativo e riprenderà le sue funzioni
                 normali. Tutti i servizi associati verranno riavviati
                 automaticamente.

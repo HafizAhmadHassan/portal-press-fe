@@ -21,7 +21,13 @@ interface ModalProps {
   defaultActions?: {
     variantCancel?: "filled" | "outline" | "ghost";
     variantConfirm?: "filled" | "outline" | "ghost";
-    colorCancel?: "primary" | "secondary" | "danger" | "success" | "warning";
+    colorCancel?:
+      | "primary"
+      | "secondary"
+      | "danger"
+      | "success"
+      | "warning"
+      | "errore";
     colorConfirm?: "primary" | "secondary" | "danger" | "success" | "warning";
   };
 }

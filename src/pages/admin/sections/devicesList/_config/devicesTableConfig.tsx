@@ -1,7 +1,7 @@
 import type { Device } from "@store_admin/devices/devices.types";
 import { WasteBadge } from "@shared/waste-badge/WasteBadge.component";
 import { ModalDeviceDetails } from "@sections_admin/devicesList/_modals/ModalDeviceDetail/ModalDeviceDetail.component";
-import { ModalRiActiveDevice } from "@sections_admin/devicesList/_modals/ModalRiActivateDevice/ModalRiActiveDevice.component";
+import { ModalRiActiveDevice } from "@root/pages/admin/sections/devicesList/_modals/ModalRiActivateDevice/ModalRiActivateDevice.component";
 import { SimpleButton } from "@shared/simple-btn/SimpleButton.component";
 import { ModalDeleteDevicesConfirm } from "@sections_admin/devicesList/_modals/ModalDeleteDevicesConfirm/ModalDeleteDevicesConfirm.component";
 import type { TableColumn } from "@components/shared/table/types/GenericTable.types";
