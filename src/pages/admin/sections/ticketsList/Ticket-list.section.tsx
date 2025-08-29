@@ -1,7 +1,7 @@
 // TicketsListSections.tsx - VERSIONE COMPLETA con creazione ticket
 import { RefreshCw, Plus } from "lucide-react";
 import { useCrud } from "@hooks/useCrud";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { toAppError } from "@root/utils/errorHandling";
 import { Divider } from "@shared/divider/Divider.component";
 import { useListController } from "@hooks/useListController";
@@ -31,6 +31,8 @@ import { resolver } from "@root/utils/severityResolver";
 import { TicketsSummaryBar } from "./_components/TicketsSummaryBar";
 import type { CloseTicketData } from "./_types/TicketWithDevice.types";
 import ModalOpenTicket from "./_modals/ModalsOpenTicket/ModalOpenTicket.component";
+import { useAppSelector } from "../../core/store/store.hooks";
+import { selectScopedCustomer } from "../../core/store/scope/scope.selectors";
 
 export const TicketsListSections: React.FC = () => {
   const [selectedDevice, setSelectedDevice] = useState<Device | null>(null);
@@ -256,6 +258,13 @@ export const TicketsListSections: React.FC = () => {
     ],
     [onRefreshClick, isLoading, handleOpenCreateModal]
   );
+
+  // 🔗 cliente scelto in header
+  const scopedCustomer = useAppSelector(selectScopedCustomer);
+  // 🔁 quando cambia il cliente: reset ricerca e refetch
+  useEffect(() => {
+    refetch();
+  }, [scopedCustomer, refetch]);
 
   return (
     <div className={styles["tickets-list-page"]}>

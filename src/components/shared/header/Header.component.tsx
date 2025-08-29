@@ -47,7 +47,6 @@ export default function KgnHeader() {
 
   const handleCustomerChange = (value: string) => {
     dispatch(setCustomer(value || null));
-    console.log("Customer changed:", value || "(Tutti)");
     if (isMobileOpen) closeMobile();
   };
 

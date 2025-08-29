@@ -1,5 +1,5 @@
 import { RefreshCw } from "lucide-react";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { useCrud } from "@root/hooks/useCrud";
 
 import styles from "./Gps-list.module.scss";
@@ -19,6 +19,8 @@ import {
   useUpdateGpsMutation,
   useDeleteGpsMutation,
 } from "@store_admin/gps/gps.api";
+import { useAppSelector } from "../../core/store/store.hooks";
+import { selectScopedCustomer } from "../../core/store/scope/scope.selectors";
 
 export const GpsListSections: React.FC = () => {
   const {
@@ -122,6 +124,13 @@ export const GpsListSections: React.FC = () => {
       }),
     [filters, setFilter]
   );
+
+  // 🔗 cliente scelto in header
+  const scopedCustomer = useAppSelector(selectScopedCustomer);
+  // 🔁 quando cambia il cliente: reset ricerca e refetch
+  useEffect(() => {
+    refetch();
+  }, [scopedCustomer, refetch]);
 
   return (
     <div className={styles["gps-list-page"]}>

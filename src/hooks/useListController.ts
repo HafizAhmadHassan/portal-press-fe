@@ -1,169 +1,205 @@
-// useListController.ts - VERSIONE CORRETTA SENZA LOOP INFINITO
-import { useCallback, useMemo, useState } from "react";
-import { usePagination } from "@hooks/usePagination";
-import type {
-  TableColumn,
-  TableConfig,
-} from "@components/shared/table/types/GenericTable.types";
-import type { ApiMeta, ApiResponse } from "@store_admin/api.types";
-import { createTableConfig } from "@root/components/shared/table/helper/TableConfigHelper";
+// hooks/useListController.ts - Enhanced version
+import { useCallback, useMemo, useState, useEffect } from "react";
 
-type SortOrder = "asc" | "desc";
-
-/** Firma generica degli hook RTK Query per le liste */
-export type ListHook<P, T> = (
-  params: P,
-  options?: { refetchOnMountOrArgChange?: boolean }
-) => {
-  data?: ApiResponse<T>;
-  isLoading: boolean;
-  isFetching: boolean;
-  error?: unknown;
-  refetch: () => unknown;
-};
-
-export interface UseListControllerOptions<P extends object, T> {
-  listHook: ListHook<P, T>;
-  initialFilters?: Record<string, string | number | boolean | null | undefined>;
-  initialPage?: number;
-  initialPageSize?: number;
-  initialSort?: { sortBy?: string; sortOrder?: SortOrder };
-  staticParams?: Partial<P>;
-  refetchOnMountOrArgChange?: boolean;
+interface ListControllerConfig<TQueryParams, TItem> {
+  listHook: (params: any) => any;
+  initialFilters: Partial<TQueryParams>;
+  initialSort?: { sortBy: string; sortOrder: "asc" | "desc" };
+  additionalParams?: Record<string, any>;
 }
 
-export function useListController<P extends object, T>({
+export function useListController<TQueryParams, TItem>({
   listHook,
-  initialFilters = {},
-  initialPage = 1,
-  initialPageSize = 10,
-  initialSort = { sortBy: "date_joined", sortOrder: "desc" },
-  staticParams = {},
-  refetchOnMountOrArgChange = true,
-}: UseListControllerOptions<P, T>) {
-  const [filters, setFilters] = useState(initialFilters);
-  const [page, setPage] = useState(initialPage);
-  const [pageSize, setPageSize] = useState(initialPageSize);
-  const [sortBy, setSortBy] = useState(initialSort.sortBy ?? "date_joined");
-  const [sortOrder, setSortOrder] = useState<SortOrder>(
-    initialSort.sortOrder ?? "desc"
+  initialFilters,
+  initialSort,
+  additionalParams,
+}: ListControllerConfig<TQueryParams, TItem>) {
+  const [filters, setFiltersState] =
+    useState<Partial<TQueryParams>>(initialFilters);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
+  const [sortBy, setSortBy] = useState(initialSort?.sortBy || "id");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">(
+    initialSort?.sortOrder || "desc"
   );
 
-  const queryParams = useMemo(
-    () =>
-      ({
-        ...staticParams,
-        ...filters,
-        sortBy,
-        sortOrder,
-        page,
-        page_size: pageSize,
-      } as P),
-    [filters, sortBy, sortOrder, page, pageSize, staticParams]
-  );
+  // Costruisci i parametri della query
+  const queryParams = useMemo(() => {
+    const cleanFilters = Object.entries(filters).reduce((acc, [key, value]) => {
+      if (value !== undefined && value !== null && value !== "") {
+        acc[key] = value;
+      }
+      return acc;
+    }, {} as any);
 
-  const { data, isLoading, isFetching, error, refetch } = listHook(
-    queryParams,
-    {
-      refetchOnMountOrArgChange,
-    }
-  );
+    return {
+      ...cleanFilters,
+      ...additionalParams,
+      page,
+      page_size: pageSize,
+      sortBy,
+      sortOrder,
+    };
+  }, [filters, additionalParams, page, pageSize, sortBy, sortOrder]);
 
-  const items = useMemo<T[]>(() => data?.data ?? [], [data]);
-  const meta = useMemo<ApiMeta | null>(() => data?.meta ?? null, [data]);
+  console.log("useListController - Query params:", queryParams);
 
-  const pagination = usePagination({
-    initialPage,
-    initialPageSize,
-    apiMeta: meta ?? undefined,
-    onChange: (newPage, newSize) => {
-      setPage(newPage);
-      setPageSize(newSize);
-    },
+  // Usa l'hook di lista con refetchOnMountOrArgChange per force refresh
+  const {
+    data: response,
+    isLoading,
+    error,
+    refetch,
+    isFetching,
+  } = listHook(queryParams, {
+    refetchOnMountOrArgChange: true, // Force refetch quando cambiano i parametri
+    refetchOnFocus: false, // Non refetch quando si torna alla finestra
+    refetchOnReconnect: true, // Refetch se la connessione si riconnette
   });
 
+  // Estrai items e meta dalla response
+  const items = response?.data || response || [];
+  const meta = response?.meta || {
+    page: 1,
+    page_size: items.length,
+    total: items.length,
+    total_pages: 1,
+    has_next: false,
+    has_prev: false,
+  };
+
+  console.log("useListController - Response:", {
+    itemsCount: items.length,
+    meta,
+    isLoading,
+    isFetching,
+  });
+
+  // Enhanced setFilter con auto-reset page
   const setFilter = useCallback(
-    (key: string, value: string | number | boolean | null | undefined) => {
-      setFilters((prev) => ({ ...prev, [key]: value }));
-      setPage(1);
+    (key: string, value: any) => {
+      console.log("useListController - Setting filter:", key, "=", value);
+
+      setFiltersState((prev) => ({
+        ...prev,
+        [key]: value,
+      }));
+
+      // Reset alla pagina 1 quando cambia un filtro
+      if (page !== 1) {
+        setPage(1);
+      }
+    },
+    [page]
+  );
+
+  // Enhanced reset con callback
+  const resetAll = useCallback(() => {
+    console.log("useListController - Resetting all filters");
+    setFiltersState(initialFilters);
+    setPage(1);
+    setSortBy(initialSort?.sortBy || "id");
+    setSortOrder(initialSort?.sortOrder || "desc");
+  }, [initialFilters, initialSort]);
+
+  // Enhanced refetch
+  const enhancedRefetch = useCallback(() => {
+    console.log("useListController - Force refetching");
+    return refetch();
+  }, [refetch]);
+
+  // Set sort con logging
+  const setSort = useCallback(
+    (newSortBy: string, newSortOrder: "asc" | "desc") => {
+      console.log("useListController - Setting sort:", newSortBy, newSortOrder);
+      setSortBy(newSortBy);
+      setSortOrder(newSortOrder);
     },
     []
   );
 
-  // PROBLEMA RISOLTO: Rimossa dipendenza instabile da pagination
-  const resetAll = useCallback(() => {
-    setFilters(initialFilters);
-    setSortBy(initialSort.sortBy ?? "date_joined");
-    setSortOrder(initialSort.sortOrder ?? "desc");
-    setPage(initialPage); // Usa direttamente initialPage invece di pagination.resetPagination()
-    setPageSize(initialPageSize); // Usa direttamente initialPageSize
-  }, [initialFilters, initialSort, initialPage, initialPageSize]);
-
-  const setSort = useCallback((key: string, order: SortOrder) => {
-    setSortBy(key);
-    setSortOrder(order);
-  }, []);
-
-  // PROBLEMA RISOLTO: Dipendenze stabili per buildTableConfig
+  // Build table config helper
   const buildTableConfig = useCallback(
-    <K extends keyof T | string = keyof T | string>(
-      columns: TableColumn<T, K>[],
-      extra?: Partial<Omit<TableConfig<T, K>, "columns" | "data">>
-    ): TableConfig<T, K> => {
-      return createTableConfig<T, K>({
-        data: items,
+    (columns: any, additionalConfig: any = {}) => {
+      return {
         columns,
-        apiMeta: meta ?? undefined,
+        data: items,
+        pagination: {
+          page,
+          pageSize,
+          total: meta.total,
+          totalPages: meta.total_pages,
+          hasNext: meta.has_next,
+          hasPrev: meta.has_prev,
+          onPageChange: setPage,
+          onPageSizeChange: (newSize: number) => {
+            setPageSize(newSize);
+            setPage(1);
+          },
+        },
+        sorting: {
+          sortBy,
+          sortOrder,
+          onSort: setSort,
+        },
         loading: isLoading || isFetching,
-        onPageChange: setPage, // Usa direttamente setPage invece di pagination.setPage
-        onPageSizeChange: setPageSize, // Usa direttamente setPageSize
-        onSort: (key, direction) =>
-          setSort(String(key), direction as SortOrder),
-        enablePagination: true,
-        enableSorting: true,
-        enableSelection: false,
-        ...(extra ?? {}),
-      });
+        ...additionalConfig,
+      };
     },
     [
       items,
       meta,
+      page,
+      pageSize,
+      sortBy,
+      sortOrder,
       isLoading,
       isFetching,
-      setPage, // Dipendenza stabile
-      setPageSize, // Dipendenza stabile
       setSort,
     ]
   );
 
+  // Log changes per debug
+  useEffect(() => {
+    console.log("useListController - State changed:", {
+      filtersActive: Object.values(filters).filter((v) => v).length,
+      page,
+      pageSize,
+      sortBy,
+      sortOrder,
+    });
+  }, [filters, page, pageSize, sortBy, sortOrder]);
+
   return {
-    // dati
+    // Data
     items,
     meta,
+
+    // Loading states
     isLoading: isLoading || isFetching,
     error,
-    refetch,
 
-    // stato lista
-    page,
-    pageSize,
-    sortBy,
-    sortOrder,
+    // Actions
+    refetch: enhancedRefetch,
+
+    // Filters
     filters,
-
-    // azioni - usa direttamente le funzioni di stato invece di pagination
-    setPage,
-    setPageSize,
-    setSort,
     setFilter,
     resetAll,
 
-    queryParams,
+    // Pagination
+    page,
+    setPage,
+    pageSize,
+    setPageSize,
 
-    // oggetto paginazione per compatibilità (se serve)
-    pagination,
+    // Sorting
+    sortBy,
+    sortOrder,
+    setSort,
 
-    // builder per la table config
+    // Helpers
     buildTableConfig,
-  } as const;
+    queryParams,
+  };
 }

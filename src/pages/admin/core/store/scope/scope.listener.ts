@@ -5,9 +5,24 @@ import { apiSlice } from "@store_admin/apiSlice";
 
 export const scopeListener = createListenerMiddleware();
 
+// Flag per evitare invalidazioni durante operazioni CRUD
+let isUpdatingData = false;
+
+// Export per controllare il flag da altri componenti
+export const setScopeUpdating = (updating: boolean) => {
+  isUpdatingData = updating;
+  console.log("Scope updating flag:", updating);
+};
+
 scopeListener.startListening({
   matcher: isAnyOf(setCustomer, clearCustomer),
   effect: async (action, apiCtx) => {
+    // Non invalidare se stiamo facendo operazioni CRUD
+    if (isUpdatingData) {
+      console.log("Skipping scope invalidation - CRUD operation in progress");
+      return;
+    }
+
     const state = apiCtx.getState() as any;
     const prev = state?.scope?.customer ?? null;
 
@@ -17,6 +32,8 @@ scopeListener.startListening({
 
     if (prev === next) return;
 
+    console.log("Scope customer changed:", { prev, next });
+
     // persisti il valore
     try {
       if (typeof window !== "undefined") {
@@ -25,14 +42,15 @@ scopeListener.startListening({
       }
     } catch {}
 
-    // 🔥 invalida le tag "scoped" → le query attive rifanno la fetch
-    apiCtx.dispatch(
-      apiSlice.util.invalidateTags([
-        { type: "LIST" as const },
-        { type: "STATS" as const },
-
-        // { type: "ENTITY" as const }, // scommenta se vuoi rifare anche i dettagli
-      ])
-    );
+    // Invalida solo i tag LIST e STATS, ma con un delay per evitare race conditions
+    setTimeout(() => {
+      console.log("Invalidating scope-related caches");
+      apiCtx.dispatch(
+        apiSlice.util.invalidateTags([
+          { type: "LIST" as const },
+          { type: "STATS" as const },
+        ])
+      );
+    }, 100);
   },
 });

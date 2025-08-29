@@ -96,15 +96,12 @@ export default function FilterSelect({
   }, [open, openUpward, options.length]);
 
   const handleSelect = (value: string) => {
-    console.log("FilterSelect: Valore selezionato:", value);
-
     // Prima chiama onChange per aggiornare il state
     onChange(value);
     setOpen(false);
 
     // Poi chiama il callback opzionale per force refresh
     if (onSelectionChange) {
-      console.log("FilterSelect: Triggering selection change callback");
       setTimeout(() => {
         onSelectionChange();
       }, 50); // Piccolo delay per permettere l'aggiornamento del state

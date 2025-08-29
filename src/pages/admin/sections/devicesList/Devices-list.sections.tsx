@@ -98,13 +98,6 @@ export const DevicesListSections: React.FC = () => {
     key: infiniteKey,
   });
 
-  // Debug per tracciare i cambiamenti
-  useEffect(() => {
-    console.log("Filtri cambiati:", infiniteFilters);
-    console.log("Device grid aggiornati:", deviceGrid.length, "devices");
-    console.log("Loading state:", isLoadingGrid);
-  }, [infiniteFilters, deviceGrid, isLoadingGrid]);
-
   // MAPPA
   const mapFilters = useMemo(
     () => ({
@@ -240,6 +233,11 @@ export const DevicesListSections: React.FC = () => {
     if (isTable) return isLoading;
     return isLoadingGrid;
   };
+
+  // 🔁 quando cambia il cliente: reset ricerca e refetch
+  useEffect(() => {
+    refetchMap();
+  }, [scopedCustomer, refetchMap]);
 
   return (
     <div className={styles["devices-list-page"]}>
