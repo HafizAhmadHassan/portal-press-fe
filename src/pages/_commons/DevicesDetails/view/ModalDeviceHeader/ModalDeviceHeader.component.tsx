@@ -7,7 +7,7 @@ import {
   XCircle,
 } from "lucide-react";
 import { WasteBadge } from "@shared/waste-badge/WasteBadge.component.tsx";
-import DevicesMap from "../../../../_components/DevicesMap/DevicesMap";
+import DevicesMap from "../../../../admin/sections/devicesList/_components/DevicesMap/DevicesMap";
 
 export default function ModalDeviceHeader({
   device,

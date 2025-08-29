@@ -3,12 +3,12 @@ import styles from "./DeviceDetailsEdit.module.scss";
 import type { FormData } from "../../_forms/deviceEditForm.types";
 
 // edit cards
-import GeneralInfoFormCard from "../../../../../_commons/DevicesDetails/GeneralInfoFormCard/GeneralInfoFormCard.component";
-import LocationInfoFormCard from "../../../../../_commons/DevicesDetails/LocationInfoFormCard/LocationInfoFormCard.component";
-import TechnicalInfoFormCard from "../../../../../_commons/DevicesDetails/TechnicalInfoFormCard/TechnicalInfoFormCard.component";
-import CustomerInfoFormCard from "../../../../../_commons/DevicesDetails/CustomerInfoFormCard/CustomerInfoFormCard.component";
-import FlagsFormCard from "../../../../../_commons/DevicesDetails/FlagsFormCard/FlagsFormCard.component";
-import NotesFormCard from "../../../../../_commons/DevicesDetails/NotesFormCard/NotesFormCard.component";
+import GeneralInfoFormCard from "../../../../../_commons/DevicesDetails/edit/GeneralInfoFormCard/GeneralInfoFormCard.component";
+import LocationInfoFormCard from "../../../../../_commons/DevicesDetails/edit/LocationInfoFormCard/LocationInfoFormCard.component";
+import TechnicalInfoFormCard from "../../../../../_commons/DevicesDetails/edit/TechnicalInfoFormCard/TechnicalInfoFormCard.component";
+import CustomerInfoFormCard from "../../../../../_commons/DevicesDetails/edit/CustomerInfoFormCard/CustomerInfoFormCard.component";
+import FlagsFormCard from "../../../../../_commons/DevicesDetails/edit/FlagsFormCard/FlagsFormCard.component";
+import NotesFormCard from "../../../../../_commons/DevicesDetails/edit/NotesFormCard/NotesFormCard.component";
 
 type Props = {
   formData: FormData;

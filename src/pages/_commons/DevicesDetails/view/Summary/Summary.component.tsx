@@ -1,3 +1,4 @@
+import DeviceCard from "@root/pages/device/sections/_components/DeviceCard/DeviceCard.component";
 import styles from "./Summary.module.scss";
 import { CheckCircle, Shield, XCircle } from "lucide-react";
 
@@ -9,12 +10,7 @@ export default function Summary({ device }: { device: any }) {
     device?.status_ready_d75_3_7 ?? device?.tatus_ready_d75_3_7 ?? false;
 
   return (
-    <div className={styles.statusSection}>
-      <div className={styles.sectionHeader}>
-        <Shield className={styles.sectionIcon} />
-        <h4 className={styles.sectionTitle}>Riassunto Stati</h4>
-      </div>
-
+    <DeviceCard title="Riassunto Stati" icon={<Shield />}>
       <div className={styles.statusList}>
         <div
           className={`${styles.statusItem} ${
@@ -55,6 +51,6 @@ export default function Summary({ device }: { device: any }) {
           <span>Status Ready {ready ? "Abilitato" : "Disabilitato"}</span>
         </div>
       </div>
-    </div>
+    </DeviceCard>
   );
 }

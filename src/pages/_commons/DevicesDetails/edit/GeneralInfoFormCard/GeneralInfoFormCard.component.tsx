@@ -1,8 +1,8 @@
 import { Settings, Monitor } from "lucide-react";
 import styles from "./GeneralInfoFormCard.module.scss";
 import { Input } from "@shared/inputs/Input.component.tsx";
-import DeviceCard from "../../../device/sections/_components/DeviceCard/DeviceCard.component";
-import { DeviceFormGrid } from "../../../device/sections/_components/DeviceFormGrid/DeviceFormGrid.component";
+import DeviceCard from "../../../../device/sections/_components/DeviceCard/DeviceCard.component";
+import { DeviceFormGrid } from "../../../../device/sections/_components/DeviceFormGrid/DeviceFormGrid.component";
 
 type Props = {
   formData: {

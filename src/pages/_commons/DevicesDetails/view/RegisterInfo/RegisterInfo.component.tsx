@@ -1,15 +1,10 @@
-import styles from "../../../../_styles/Sections.module.scss";
+import DeviceCard from "@root/pages/device/sections/_components/DeviceCard/DeviceCard.component";
 import stylesRegister from "./RegisterInfo.module.scss";
 import { Badge } from "lucide-react";
 
 export default function RegisterInfo({ device }: { device: any }) {
   return (
-    <div className={styles.section}>
-      <div className={styles.sectionHeader}>
-        <Badge className={styles.sectionIcon} />
-        <h4 className={styles.sectionTitle}>Codici e Matricole</h4>
-      </div>
-
+    <DeviceCard title="Codici e Matricole" icon={<Badge />}>
       <div className={stylesRegister.matricoleGrid}>
         <div className={stylesRegister.matricoleItem}>
           <div className={stylesRegister.matricoleHeader}>
@@ -31,6 +26,6 @@ export default function RegisterInfo({ device }: { device: any }) {
           </span>
         </div>
       </div>
-    </div>
+    </DeviceCard>
   );
 }

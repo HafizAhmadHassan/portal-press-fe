@@ -1,5 +1,5 @@
-import styles from "../../../../_styles/Sections.module.scss";
-import stylesDateHours from "./DateHours.module.scss";
+import DeviceCard from "@root/pages/device/sections/_components/DeviceCard/DeviceCard.component";
+import stylesDateHours from "./DateHoursInfo.module.scss";
 import { Calendar, Clock } from "lucide-react";
 
 export default function DateHoursInfo({
@@ -12,12 +12,7 @@ export default function DateHoursInfo({
   device: any;
 }) {
   return (
-    <div className={styles.section}>
-      <div className={styles.sectionHeader}>
-        <Calendar className={styles.sectionIcon} />
-        <h4 className={styles.sectionTitle}>Date e Orari</h4>
-      </div>
-
+    <DeviceCard title="Date e Orari" icon={<Calendar />}>
       <div className={stylesDateHours.dateGrid}>
         <div className={stylesDateHours.dateCard}>
           <div className={stylesDateHours.dateCardHeader}>
@@ -70,6 +65,6 @@ export default function DateHoursInfo({
           </span>
         </div>
       </div>
-    </div>
+    </DeviceCard>
   );
 }

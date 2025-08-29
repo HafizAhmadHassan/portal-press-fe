@@ -4,14 +4,14 @@ import { SimpleButton } from "@shared/simple-btn/SimpleButton.component.tsx";
 import { Eye } from "lucide-react";
 import type { Device } from "@store_admin/devices/devices.types.ts";
 import styles from "./ModalDeviceDetail.module.scss";
-import TechnicalInfo from "@sections_admin//devicesList/_modals/ModalDeviceDetail/_components/TechnicalInfo/TechnicalInfo.component";
-import PositionInfo from "@sections_admin//devicesList/_modals/ModalDeviceDetail/_components/PositionInfo/PositionInfo.component";
-import DateHoursInfo from "@sections_admin//devicesList/_modals/ModalDeviceDetail/_components/DateHoursInfo/DateHoursInfo.component";
-import CoordinatesInfo from "@sections_admin//devicesList/_modals/ModalDeviceDetail/_components/CoordinatesInfo/CoordinatesInfo.component";
-import RegisterInfo from "@sections_admin//devicesList/_modals/ModalDeviceDetail/_components/RegisterInfo/RegisterInfo.component";
-import NoteInfo from "@sections_admin//devicesList/_modals/ModalDeviceDetail/_components/NoteInfo/NoteInfo.component";
-import Summary from "@sections_admin//devicesList/_modals/ModalDeviceDetail/_components/Summary/Summary.component";
-import ModalDeviceHeader from "@sections_admin//devicesList/_modals/ModalDeviceDetail/_components/ModalDeviceHeader/ModalDeviceHeader.component";
+import TechnicalInfo from "@root/pages/_commons/DevicesDetails/view/TechnicalInfo/TechnicalInfo.component";
+import PositionInfo from "@root/pages/_commons/DevicesDetails/view/PositionInfo/PositionInfo.component";
+import DateHoursInfo from "@root/pages/_commons/DevicesDetails/view/DateHoursInfo/DateHoursInfo.component";
+import CoordinatesInfo from "@root/pages/_commons/DevicesDetails/view/CoordinatesInfo/CoordinatesInfo.component";
+import RegisterInfo from "@root/pages/_commons/DevicesDetails/view/RegisterInfo/RegisterInfo.component";
+import NoteInfo from "@root/pages/_commons/DevicesDetails/view/NoteInfo/NoteInfo.component";
+import Summary from "@root/pages/_commons/DevicesDetails/view/Summary/Summary.component";
+import ModalDeviceHeader from "@root/pages/_commons/DevicesDetails/view/ModalDeviceHeader/ModalDeviceHeader.component";
 
 interface ModalDeviceDetailsProps {
   device: Device;

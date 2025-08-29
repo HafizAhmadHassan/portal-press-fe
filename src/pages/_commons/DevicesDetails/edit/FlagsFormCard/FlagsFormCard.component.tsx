@@ -1,7 +1,7 @@
 import { Settings } from "lucide-react";
 import { Checkbox } from "@shared/checkbox/CheckBox.component.tsx";
-import DeviceCard from "../../../device/sections/_components/DeviceCard/DeviceCard.component";
-import { DeviceFormGrid } from "../../../device/sections/_components/DeviceFormGrid/DeviceFormGrid.component";
+import DeviceCard from "../../../../device/sections/_components/DeviceCard/DeviceCard.component";
+import { DeviceFormGrid } from "../../../../device/sections/_components/DeviceFormGrid/DeviceFormGrid.component";
 
 type Props = {
   formData: {

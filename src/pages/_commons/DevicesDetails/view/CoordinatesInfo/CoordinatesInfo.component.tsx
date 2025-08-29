@@ -1,4 +1,4 @@
-import styles from "../../../../_styles/Sections.module.scss";
+import DeviceCard from "@root/pages/device/sections/_components/DeviceCard/DeviceCard.component";
 import stylesCoordinates from "./CoordinatesInfo.module.scss";
 import { MapPin, Smartphone } from "lucide-react";
 
@@ -16,12 +16,7 @@ export default function CoordinatesInfo({
     !isNaN(parseFloat(device?.gps_y));
 
   return (
-    <div className={styles.section}>
-      <div className={styles.sectionHeader}>
-        <Smartphone className={styles.sectionIcon} />
-        <h4 className={styles.sectionTitle}>Coordinate GPS</h4>
-      </div>
-
+    <DeviceCard title="Coordinate GPS" icon={<Smartphone />}>
       <div className={stylesCoordinates.gpsWrapper}>
         <div className={stylesCoordinates.gpsDisplay}>
           <span className={stylesCoordinates.gpsLabel}>Coordinate:</span>
@@ -45,6 +40,6 @@ export default function CoordinatesInfo({
           </div>
         )}
       </div>
-    </div>
+    </DeviceCard>
   );
 }

@@ -1,13 +1,13 @@
 import type { Device } from "@store_admin/devices/devices.types.ts";
 
 // sezioni read-only già esistenti
-import Summary from "@root/pages/admin/sections/devicesList/_modals/ModalDeviceDetail/_components/Summary/Summary.component";
-import NoteInfo from "@root/pages/admin/sections/devicesList/_modals/ModalDeviceDetail/_components/NoteInfo/NoteInfo.component";
-import PositionInfoRO from "@root/pages/admin/sections/devicesList/_modals/ModalDeviceDetail/_components/PositionInfo/PositionInfo.component";
-import RegisterInfoRO from "@root/pages/admin/sections/devicesList/_modals/ModalDeviceDetail/_components/RegisterInfo/RegisterInfo.component";
-import TechnicalInfoRO from "@root/pages/admin/sections/devicesList/_modals/ModalDeviceDetail/_components/TechnicalInfo/TechnicalInfo.component";
-import DateHoursInfoRO from "@root/pages/admin/sections/devicesList/_modals/ModalDeviceDetail/_components/DateHoursInfo/DateHoursInfo.component";
-import CoordinatesInfoRO from "@root/pages/admin/sections/devicesList/_modals/ModalDeviceDetail/_components/CoordinatesInfo/CoordinatesInfo.component";
+import Summary from "@root/pages/_commons/DevicesDetails/view/Summary/Summary.component";
+import NoteInfo from "@root/pages/_commons/DevicesDetails/view/NoteInfo/NoteInfo.component";
+import PositionInfoRO from "@root/pages/_commons/DevicesDetails/view/PositionInfo/PositionInfo.component";
+import RegisterInfoRO from "@root/pages/_commons/DevicesDetails/view/RegisterInfo/RegisterInfo.component";
+import TechnicalInfoRO from "@root/pages/_commons/DevicesDetails/view/TechnicalInfo/TechnicalInfo.component";
+import DateHoursInfoRO from "@root/pages/_commons/DevicesDetails/view/DateHoursInfo/DateHoursInfo.component";
+import CoordinatesInfoRO from "@root/pages/_commons/DevicesDetails/view/CoordinatesInfo/CoordinatesInfo.component";
 
 import styles from "./DeviceDetailsRead.module.scss";
 import {

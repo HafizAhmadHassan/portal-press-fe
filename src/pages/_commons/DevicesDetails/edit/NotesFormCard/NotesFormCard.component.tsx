@@ -1,6 +1,6 @@
 import { Settings } from "lucide-react";
 import { Input } from "@shared/inputs/Input.component.tsx";
-import DeviceCard from "../../../device/sections/_components/DeviceCard/DeviceCard.component";
+import DeviceCard from "../../../../device/sections/_components/DeviceCard/DeviceCard.component";
 
 type Props = {
   note: string;

@@ -10,7 +10,7 @@ import {
 } from "@store_admin/devices/devices.api";
 import type { FormData } from "./_forms/deviceEditForm.types";
 
-import ModalDeviceHeader from "@root/pages/admin/sections/devicesList/_modals/ModalDeviceDetail/_components/ModalDeviceHeader/ModalDeviceHeader.component";
+import ModalDeviceHeader from "@root/pages/_commons/DevicesDetails/view/ModalDeviceHeader/ModalDeviceHeader.component";
 
 import {
   deviceToFormData,

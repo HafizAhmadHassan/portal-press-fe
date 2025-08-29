@@ -1,15 +1,10 @@
-import styles from "../../../../_styles/Sections.module.scss";
+import DeviceCard from "@root/pages/device/sections/_components/DeviceCard/DeviceCard.component";
 import stylesTechnical from "./TechnicalInfo.module.scss";
 import { Settings } from "lucide-react";
 
 export default function TechnicalInfo({ device }: any) {
   return (
-    <div className={styles.section}>
-      <div className={styles.sectionHeader}>
-        <Settings className={styles.sectionIcon} />
-        <h4 className={styles.sectionTitle}>Informazioni Tecniche</h4>
-      </div>
-
+    <DeviceCard title="Informazioni Tecniche" icon={<Settings />}>
       <div className={stylesTechnical.infoGrid}>
         <div className={stylesTechnical.infoItem}>
           <span className={stylesTechnical.infoLabel}>ID Dispositivo</span>
@@ -46,6 +41,6 @@ export default function TechnicalInfo({ device }: any) {
           </span>
         </div>
       </div>
-    </div>
+    </DeviceCard>
   );
 }

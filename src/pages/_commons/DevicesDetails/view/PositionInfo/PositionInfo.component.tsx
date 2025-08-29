@@ -1,15 +1,10 @@
-import styles from "../../../../_styles/Sections.module.scss";
+import DeviceCard from "@root/pages/device/sections/_components/DeviceCard/DeviceCard.component";
 import stylesPosition from "./PositionInfo.module.scss";
 import { MapPin } from "lucide-react";
 
 export default function PositionInfo({ device }: any) {
   return (
-    <div className={styles.section}>
-      <div className={styles.sectionHeader}>
-        <MapPin className={styles.sectionIcon} />
-        <h4 className={styles.sectionTitle}>Informazioni di Ubicazione</h4>
-      </div>
-
+    <DeviceCard title="Informazioni di Ubicazione" icon={<MapPin />}>
       <div className={stylesPosition.infoGrid}>
         <div className={stylesPosition.infoItem}>
           <span className={stylesPosition.infoLabel}>Indirizzo</span>
@@ -48,6 +43,6 @@ export default function PositionInfo({ device }: any) {
           </span>
         </div>
       </div>
-    </div>
+    </DeviceCard>
   );
 }
