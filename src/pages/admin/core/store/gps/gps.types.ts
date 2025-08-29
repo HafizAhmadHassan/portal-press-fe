@@ -6,7 +6,7 @@ export interface GpsDevice {
   gps_x: string; // lat
   gps_y: string; // lng
   municipility: string; // (scritto così nel BE)
-  customer: string;
+  customer_Name: string;
   waste: string;
   address: string;
 }
@@ -45,7 +45,7 @@ export interface GpsState {
   filters: {
     codice: string;
     municipility: string;
-    customer: string;
+    customer_Name: string;
     waste: string;
     search: string; // opzionale, solo se il BE lo supporta
     sortBy: string;
@@ -58,7 +58,7 @@ export interface CreateGpsRequest extends Partial<GpsDevice> {
   gps_x: string;
   gps_y: string;
   municipility: string;
-  customer: string;
+  customer_Name: string;
   waste: string;
   address: string;
 }
@@ -73,7 +73,7 @@ export interface GpsQueryParams {
   page_size?: number;
   codice?: string;
   municipility?: string;
-  customer?: string;
+  customer_Name?: string;
   waste?: string;
   search?: string;
   sortBy?: string;

@@ -7,7 +7,6 @@ import AdminLayout from "@layouts/admin/Admin-layout.component.tsx";
 // Sezioni
 import DevicesListSections from "@sections_admin/devicesList/Devices-list.sections.tsx";
 import { UsersListSections } from "@sections_admin/usersList/Users-list.sections.tsx";
-import OverviwSection from "@sections_admin/overview/Overview.sections.tsx";
 import AnalyticsReportsSections from "@sections_admin/analytics/AnalyticsReports.sections.tsx";
 import { TicketsListSections } from "@sections_admin/ticketsList/Ticket-list.section.tsx";
 import { GpsListSections } from "@root/pages/admin/sections/gpsList/Gps-list.sections";
@@ -16,6 +15,7 @@ import { GpsListSections } from "@root/pages/admin/sections/gpsList/Gps-list.sec
 import { UserRoles } from "@root/utils/constants/userRoles";
 import ProtectedRoute from "@root/components/shared/PretectedRoutes";
 import LogsListSections from "@root/pages/admin/sections/logsList/Logs-list.section";
+import AnalyticsOverview from "@root/pages/admin/sections/analytics/AnalyticsOverview.sections";
 // ⚠️ Attenzione al path/typo: assicurati che il file si chiami "ProtectedRoutes"
 
 const AdminRoutes: RouteObject[] = [
@@ -133,7 +133,7 @@ const AdminRoutes: RouteObject[] = [
             path: "overview",
             element: (
               <ProtectedRoute requiredRoles={[UserRoles.SUPER_ADMIN]}>
-                <OverviwSection />
+                <AnalyticsOverview />
               </ProtectedRoute>
             ),
           },

@@ -1,16 +1,18 @@
-// @sections_admin/gpsList/config/gpsFilterConfig.ts
 import type { FilterConfig } from "@utils/types/filters.types";
 
 export const GpsFields = {
   CODICE: "codice",
   MUNICIPILITY: "municipility",
-  CUSTOMER: "customer",
+  CUSTOMER: "customer_Name",
   WASTE: "waste",
 } as const;
 
 export const createGpsFilterConfig = ({
   filters,
   setFilter,
+}: {
+  filters: Record<string, any>;
+  setFilter: (key: string, value: any) => void;
 }): FilterConfig[] => [
   {
     key: GpsFields.CODICE,
@@ -19,7 +21,7 @@ export const createGpsFilterConfig = ({
     name: GpsFields.CODICE,
     placeholder: "es. 1304",
     value: filters[GpsFields.CODICE] || "",
-    onChange: (e: any) => setFilter(GpsFields.CODICE, e.target?.value || e),
+    onChange: (e: any) => setFilter(GpsFields.CODICE, e?.target?.value ?? e),
   },
   {
     key: GpsFields.MUNICIPILITY,
@@ -29,7 +31,7 @@ export const createGpsFilterConfig = ({
     placeholder: "es. RUBANO (PD)",
     value: filters[GpsFields.MUNICIPILITY] || "",
     onChange: (e: any) =>
-      setFilter(GpsFields.MUNICIPILITY, e.target?.value || e),
+      setFilter(GpsFields.MUNICIPILITY, e?.target?.value ?? e),
   },
   {
     key: GpsFields.CUSTOMER,
@@ -38,7 +40,7 @@ export const createGpsFilterConfig = ({
     name: GpsFields.CUSTOMER,
     placeholder: "es. etra",
     value: filters[GpsFields.CUSTOMER] || "",
-    onChange: (e: any) => setFilter(GpsFields.CUSTOMER, e.target?.value || e),
+    onChange: (e: any) => setFilter(GpsFields.CUSTOMER, e?.target?.value ?? e),
   },
   {
     key: GpsFields.WASTE,
@@ -47,6 +49,6 @@ export const createGpsFilterConfig = ({
     name: GpsFields.WASTE,
     placeholder: "es. SECCO",
     value: filters[GpsFields.WASTE] || "",
-    onChange: (e: any) => setFilter(GpsFields.WASTE, e.target?.value || e),
+    onChange: (e: any) => setFilter(GpsFields.WASTE, e?.target?.value ?? e),
   },
 ];

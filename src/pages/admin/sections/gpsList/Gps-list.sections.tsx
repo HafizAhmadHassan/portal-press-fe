@@ -1,144 +1,125 @@
-// @sections_admin/gpsList/Gps-list.sections.tsx
-import React, { useCallback, useEffect, useMemo } from "react";
-import { useGps } from "@store_admin/gps/hooks/useGps";
-import { useListQueryParams } from "@hooks/useListQueryParams";
-import { createGpsTableConfig } from "./config/gpsTableConfig";
-import { createGpsFilterConfig, GpsFields } from "./config/gpsFilterConfig";
-import type { GpsDevice } from "@store_admin/gps/gps.types";
-import styles from "./styles/Gps-list.sections.module.scss";
+import { RefreshCw } from "lucide-react";
+import React, { useCallback, useMemo } from "react";
+import { useCrud } from "@root/hooks/useCrud";
 
+import { toAppError } from "@root/utils/errorHandling";
+import { getGpsColumns } from "./config/gpsTableConfig";
+import gpsListHeaderBtns from "./config/gpsListHeaderBtns";
+import styles from "./styles/Gps-list.sections.module.scss";
+import { Divider } from "@shared/divider/Divider.component";
+import { useListController } from "@root/hooks/useListController";
+import type { GpsDevice, GpsQueryParams } from "@store_admin/gps/gps.types";
+import { createGpsFilterConfig, GpsFields } from "./config/gpsFilterConfig";
+import { GenericTableWithLogic } from "@shared/table/components/GenericTableWhitLogic.component";
 import { SectionHeaderComponent } from "@sections_admin/_commons/components/SectionHeader/Section-header.component";
 import { SectionFilterComponent } from "@sections_admin/_commons/components/SectionFilters/Section-filters.component";
-import { Download, Plus, RefreshCw } from "lucide-react";
-import { GenericTableWithLogic } from "@shared/table/components/GenericTableWhitLogic.component";
-import { usePagination } from "@hooks/usePagination";
-import { SimpleButton } from "@shared/simple-btn/SimpleButton.component";
-import { Divider } from "@shared/divider/Divider.component";
-import { ModalCreateGps } from "./_modals/ModalCreateGps.component";
-import { useAppSelector } from "../../core/store/store.hooks";
-import { selectScopedCustomer } from "../../core/store/scope/scope.selectors";
+import {
+  useGetGpsQuery,
+  useCreateGpsMutation,
+  useUpdateGpsMutation,
+  useDeleteGpsMutation,
+} from "@store_admin/gps/gps.api";
 
 export const GpsListSections: React.FC = () => {
-  // 🔗 customer globale (selezionato nell'header)
-  const scopedCustomer = useAppSelector(selectScopedCustomer);
-
   const {
+    meta,
+    isLoading,
+    refetch,
     filters,
-    sortBy,
-    sortOrder,
-    page,
-    pageSize,
     setFilter,
-    setSort,
-    setPage,
-    setPageSize,
     resetAll,
-  } = useListQueryParams({
+    buildTableConfig,
+  } = useListController<GpsQueryParams, GpsDevice>({
+    listHook: useGetGpsQuery, // <-- come gli Users
     initialFilters: {
       [GpsFields.CODICE]: "",
       [GpsFields.MUNICIPILITY]: "",
       [GpsFields.CUSTOMER]: "",
       [GpsFields.WASTE]: "",
     },
+    // se il tuo endpoint supporta sort: imposta qui le chiavi corrette
+    initialSort: { sortBy: "codice", sortOrder: "asc" },
   });
 
-  const queryParams = {
-    ...filters,
-    sortBy,
-    sortOrder,
-    page,
-    page_size: pageSize,
-  };
+  const { execCreate, execUpdate, execDelete } = useCrud();
+  const [createGpsTrigger] = useCreateGpsMutation();
+  const [updateGpsTrigger] = useUpdateGpsMutation();
+  const [deleteGpsTrigger] = useDeleteGpsMutation();
 
-  const { gps, isLoading, meta, deleteGps, refetch, createGps, updateGps } =
-    useGps(queryParams);
-
-  const pagination = usePagination({
-    initialPage: page,
-    initialPageSize: pageSize,
-    totalItems: meta?.total,
-    totalPages: meta?.total_pages,
-    onChange: (newPage, newSize) => {
-      setPage(newPage);
-      setPageSize(newSize);
-    },
-  });
-
-  const handleResetAll = () => {
-    resetAll();
-    pagination.resetPagination();
-  };
-
-  const handleEdit = useCallback(
-    async (payload: Partial<GpsDevice> & { id: number | number }) => {
-      const { id, ...data } = payload;
-      await updateGps({ id, data }).unwrap();
+  const handleCreate = useCallback(
+    async (payload: Partial<GpsDevice>) => {
+      const res = await execCreate(createGpsTrigger, payload as any);
+      if (!res.success) {
+        const appErr = toAppError(
+          res.error,
+          "Errore durante la creazione del GPS"
+        );
+        console.error(appErr.message);
+        throw new Error(appErr.message);
+      }
       refetch();
     },
-    [updateGps, refetch]
+    [execCreate, createGpsTrigger, refetch]
+  );
+
+  const handleEdit = useCallback(
+    async (payload: Partial<GpsDevice> & { id: number | string }) => {
+      const { id, ...data } = payload;
+      const res = await execUpdate(updateGpsTrigger, { id, data } as any);
+      if (!res.success) {
+        const appErr = toAppError(
+          res.error,
+          "Errore durante la modifica del GPS"
+        );
+        console.error(appErr.message);
+        throw new Error(appErr.message);
+      }
+      refetch();
+    },
+    [execUpdate, updateGpsTrigger, refetch]
   );
 
   const handleDelete = useCallback(
-    async (d: GpsDevice) => {
-      if (window.confirm(`Eliminare il dispositivo codice ${d.codice}?`)) {
-        await deleteGps(Number(d.id)).unwrap();
+    async (row: GpsDevice) => {
+      if (!window.confirm(`Eliminare il dispositivo codice ${row.codice}?`))
+        return;
+      const res = await execDelete(deleteGpsTrigger, Number(row.id));
+      if (!res.success) {
+        const appErr = toAppError(
+          res.error,
+          "Errore durante l'eliminazione del GPS"
+        );
+        console.error(appErr.message);
+        throw new Error(appErr.message);
       }
-    },
-    [deleteGps]
-  );
-
-  const handleCreate = useCallback(
-    async (data: Partial<GpsDevice>) => {
-      await createGps(data as any).unwrap();
       refetch();
     },
-    [createGps, refetch]
+    [execDelete, deleteGpsTrigger, refetch]
   );
 
   const onExportClick = () => console.log("Esporta GPS");
   const onRefreshClick = () => refetch();
 
-  const baseConfig = createGpsTableConfig({
-    gps,
-    onView: () => {},
-    onEdit: handleEdit,
-    onDelete: handleDelete,
-    isLoading,
-  });
+  const columns = useMemo(
+    () =>
+      getGpsColumns({
+        onEdit: handleEdit,
+        onDelete: handleDelete,
+      }),
+    [handleEdit, handleDelete]
+  );
 
-  // 🔁 Quando cambia il cliente scelto in header:
-  // - resetta paginazione
-  // - rifai la fetch degli utenti
-  useEffect(() => {
-    setPage(1);
-    refetch();
-  }, [scopedCustomer]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const tableConfig = {
-    ...baseConfig,
-    pagination: {
-      enabled: true,
-      currentPage: pagination.page,
-      pageSize: pagination.pageSize,
-      totalPages: meta?.total_pages,
-      totalItems: meta?.total ?? 0,
-      onPageChange: pagination.setPage,
-      onPageSizeChange: pagination.setPageSize,
-      hasNext: meta?.has_next,
-      hasPrev: meta?.has_prev,
-      nextPage: meta?.next_page,
-      prevPage: meta?.prev_page,
-    },
-    sorting: {
-      ...baseConfig.sorting,
-      currentSortKey: sortBy,
-      currentSortDirection: sortOrder,
-      onSort: setSort,
-    },
-  };
+  const tableConfig = useMemo(
+    () => buildTableConfig(columns),
+    [buildTableConfig, columns]
+  );
 
   const filtersConfig = useMemo(
-    () => createGpsFilterConfig({ filters, setFilter }),
+    () =>
+      createGpsFilterConfig({
+        filters,
+        setFilter,
+      }),
     [filters, setFilter]
   );
 
@@ -147,56 +128,30 @@ export const GpsListSections: React.FC = () => {
       <SectionHeaderComponent
         title="GPS"
         subTitle={`Gestisci i dispositivi (${meta?.total ?? 0} totali)`}
-        buttons={[
-          {
-            onClick: onRefreshClick,
-            variant: "outline",
-            color: "secondary",
-            size: "sm",
-            icon: RefreshCw,
-            label: "Aggiorna",
-            disabled: isLoading,
-          },
-          {
-            component: (
-              <ModalCreateGps
-                onSave={handleCreate}
-                triggerButton={
-                  <SimpleButton
-                    variant="outline"
-                    color="primary"
-                    size="sm"
-                    icon={Plus}
-                  >
-                    Nuovo
-                  </SimpleButton>
-                }
-              />
-            ),
-          },
-          {
-            onClick: onExportClick,
-            variant: "outline",
-            color: "success",
-            size: "sm",
-            icon: Download,
-            label: "Esporta",
-          },
-        ]}
+        buttons={gpsListHeaderBtns(
+          onRefreshClick,
+          RefreshCw,
+          isLoading,
+          onExportClick,
+          handleCreate
+        )}
       />
 
       <div className={styles["gps-list-page__filters"]}>
         <SectionFilterComponent
+          isLoading={isLoading}
           filters={filtersConfig}
-          onResetFilters={handleResetAll}
-          // isLoading={isLoading}
+          onResetFilters={resetAll}
         />
       </div>
+
       <Divider />
 
       <div className={styles["gps-list-page__table-wrapper"]}>
-        <GenericTableWithLogic config={tableConfig} /* loading={isLoading} */ />
+        <GenericTableWithLogic config={tableConfig} />
       </div>
     </div>
   );
 };
+
+export default GpsListSections;

@@ -1,0 +1,9 @@
+/* @use "@root/pages/admin/styles/globals.scss"; */
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 100%;
+}

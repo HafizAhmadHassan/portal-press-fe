@@ -1,0 +1,17 @@
+.body {
+  padding: 16px;
+  display: grid;
+  gap: 16px;
+}
+
+.reqBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: color-mix(in srgb, var(--warning-color) 14%, var(--bg-secondary));
+  border: 1px solid var(--warning-color);
+  color: var(--warning-color);
+}
