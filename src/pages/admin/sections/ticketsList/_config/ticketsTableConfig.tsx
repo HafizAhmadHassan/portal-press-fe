@@ -12,7 +12,6 @@ type DeviceLite = {
   city?: string;
   province?: string;
   customer_Name?: string;
-  customer?: string;
   ip_Router?: string;
   waste?: string;
   address?: string;
@@ -104,7 +103,7 @@ export const getTicketsColumns = ({ onClose }: GetTicketsColumnsOptions) => [
 
   // Colonna Cliente
   {
-    key: "customer",
+    key: "customer_Name",
     header: "Cliente",
     type: "text",
     sortable: true,
@@ -114,61 +113,15 @@ export const getTicketsColumns = ({ onClose }: GetTicketsColumnsOptions) => [
       maxWidth: "130px",
       showTooltip: true,
     },
-    accessor: (ticket: TicketRead) => {
-      const t = ticket as TicketWithDevice;
-      return (
-        t.device?.customer_Name ||
-        t.device?.customer ||
-        ticket.customer_Name ||
-        "N/A"
-      );
-    },
   },
 
   // Colonna Macchina personalizzata
   {
     key: "machine",
-    header: "Macchina",
+    header: "ID Macchina",
     type: "custom",
     width: "220px",
     sortable: true,
-    render: (_, ticket) => {
-      const t = ticket as TicketWithDevice;
-      if (!t.device) {
-        return (
-          <span style={{ color: "var(--text-secondary)", fontStyle: "italic" }}>
-            Macchina non trovata
-          </span>
-        );
-      }
-
-      return (
-        <div>
-          {t.device.machine_Name && (
-            <div
-              style={{
-                fontSize: "14px",
-                fontWeight: 600,
-                color: "var(--text-primary)",
-              }}
-            >
-              {t.device.machine_Name}
-            </div>
-          )}
-          {(t.device.city || t.device.province) && (
-            <div style={{ fontSize: "12px", color: "var(--text-secondary)" }}>
-              {t.device.city}
-              {t.device.province ? `, ${t.device.province}` : ""}
-            </div>
-          )}
-          {(t.device.customer_Name || t.device.customer) && (
-            <div style={{ fontSize: "12px", color: "var(--text-secondary)" }}>
-              {t.device.customer_Name || t.device.customer}
-            </div>
-          )}
-        </div>
-      );
-    },
   },
 
   // Colonna Data Apertura

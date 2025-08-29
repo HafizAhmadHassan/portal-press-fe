@@ -1,33 +1,27 @@
 import React from "react";
 
 interface StatusBadgeProps {
-  status: "open" | "in_progress" | "closed";
+  status: 1 | 2 | 3;
 }
 
 export const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
-  const getStatusConfig = (status: "open" | "in_progress" | "closed") => {
+  const getStatusConfig = (status: 1 | 2 | 3) => {
     switch (status) {
-      case "open":
+      case 1:
         return {
           label: "Aperto",
           backgroundColor: "#fef2f2",
           color: "#dc2626",
           borderColor: "#fecaca",
         };
-      case "closed":
+      case 2:
         return {
           label: "Chiuso",
           backgroundColor: "#d1fae5",
           color: "#065f46",
           borderColor: "#a7f3d0",
         };
-      case "in_progress":
-        return {
-          label: "In corso",
-          backgroundColor: "#fef9c3",
-          color: "#92400e",
-          borderColor: "#fde68a",
-        };
+
       default:
         return {
           label: status,
