@@ -17,13 +17,13 @@ export type {
 // API hooks
 export {
   plcApi,
-  useGetQuery,
-  useGetByIdQuery,
-  useCreateMutation,
-  useUpdateMutation,
-  useDeleteMutation,
-  useSearchQuery,
-  useGetStatsQuery,
+  useGetPlcQuery,
+  useGetPlcByIdQuery,
+  useCreatePlcMutation,
+  useUpdatePlcMutation,
+  useDeletePlcMutation,
+  useSearchPlcQuery,
+  useGetPlcStatsQuery,
 } from "./plc.api";
 
 // Thunk actions (use cases)

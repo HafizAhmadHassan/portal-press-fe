@@ -9,10 +9,9 @@ import EmptyState from "./_components/DeviceEmptyState/DeviceEmptyState.componen
 import DeviceCommands from "./_components/DeviceCommands/DeviceCommands.component";
 import DeviceStatus from "./_components/DeviceStatus/Devicestatus.component";
 
-// Importa gli hooks PLC puliti
-
-import { useGetByIdQuery } from "@store_device/plc/plc.api";
+import { useGetPlcByIdQuery } from "@store_device/plc/plc.api";
 import { usePlcById } from "../../store/plc";
+import type { PlcItem } from "@store_device/plc/plc.types";
 
 type DeviceStatusType = "online" | "offline" | "unknown";
 
@@ -26,45 +25,42 @@ interface StatusItem {
 
 export default function DeviceOverview() {
   const { deviceId } = useParams<{ deviceId?: string }>();
-  const currentId = deviceId ? Number(deviceId) : undefined;
 
-  // Usa l'hook RTK Query direttamente per i dati real-time
-  const {
-    data: plcDetail,
-    isLoading,
-    error,
-    refetch,
-  } = useGetByIdQuery(currentId!, {
-    skip: !currentId,
-    pollingInterval: 5000, // Polling ogni 5 secondi per dati real-time
+  // Parse ID in modo sicuro
+  const parsedId = useMemo(() => Number(deviceId), [deviceId]);
+  const isValidId = Number.isFinite(parsedId) && parsedId > 0;
+
+  const query = useGetPlcByIdQuery(parsedId as number, {
+    skip: !isValidId,
+    pollingInterval: 5000,
   });
+  const { isLoading, error, refetch } = query;
+  const plcDetail: PlcItem | undefined = query.data as PlcItem | undefined;
 
-  // Hooks per azioni CRUD se necessarie
-  const { update: updatePlc } = usePlcById(currentId!);
+  // Hook azioni (sempre chiamato). Usiamo un id “safe” (0) se non valido.
+  const safeId = isValidId ? parsedId : 0;
+  const { update: updatePlc } = usePlcById(safeId);
 
   const deviceName = useMemo(
     () => (deviceId ? `Dispositivo #${deviceId}` : "Dispositivo"),
     [deviceId]
   );
 
-  // Determina lo status del device in base ai dati PLC
   const deviceStatus: DeviceStatusType = useMemo(() => {
+    if (!isValidId) return "unknown";
     if (isLoading) return "unknown";
     if (error || !plcDetail) return "offline";
 
-    // Logica per determinare se online basata sui dati PLC
-    // Puoi personalizzare questa logica in base ai tuoi requisiti
     const isOnline =
       plcDetail.plc_status?.online === true ||
       plcDetail.plc_status?.connected === 1 ||
-      Object.keys(plcDetail.plc_data || {}).length > 1; // Ha più dati oltre all'ID
+      (plcDetail.plc_data && Object.keys(plcDetail.plc_data).length > 1);
 
     return isOnline ? "online" : "offline";
-  }, [isLoading, error, plcDetail]);
+  }, [isValidId, isLoading, error, plcDetail]);
 
   const imageUrl = undefined as string | undefined;
 
-  // Comandi disponibili per il dispositivo
   const commands: CommandItem[] = useMemo(
     () => [
       { key: "open-list", label: "Apri Lista" },
@@ -113,14 +109,12 @@ export default function DeviceOverview() {
         unit: "kg",
       },
       { key: "seq", label: "Sequenza", type: "number", value: 70 },
-
       {
         key: "bulky-load",
         label: "Carico Ingombrante",
         type: "boolean",
         value: true,
       },
-
       {
         key: "press-forward",
         label: "Pressa Avanti",
@@ -133,7 +127,6 @@ export default function DeviceOverview() {
         type: "boolean",
         value: false,
       },
-
       {
         key: "side-doors",
         label: "Porte Laterali Aperte",
@@ -152,7 +145,6 @@ export default function DeviceOverview() {
         type: "boolean",
         value: true,
       },
-
       {
         key: "security-doors",
         label: "Sicurezza Serranda",
@@ -169,60 +161,47 @@ export default function DeviceOverview() {
     []
   );
 
-  // Costruisce la lista di status dai dati PLC reali
-
-  // Handler per i comandi (implementa la logica specifica per ogni comando)
   const handleCommand = async (commandKey: string) => {
-    if (!currentId || !plcDetail) return;
-
-    console.log(`Executing command: ${commandKey} on device ${currentId}`);
+    if (!isValidId || !plcDetail) return;
 
     try {
-      // Logica specifica per ogni comando
       switch (commandKey) {
         case "open-door":
           await updatePlc({
             plc_data: { ...plcDetail.plc_data, door_open: 1 },
           });
           break;
-
         case "close-door":
           await updatePlc({
             plc_data: { ...plcDetail.plc_data, door_open: 0 },
           });
           break;
-
         case "tare":
           await updatePlc({
             plc_data: { ...plcDetail.plc_data, tare_requested: 1 },
           });
           break;
-
         case "maintenance":
           await updatePlc({
             plc_status: { ...plcDetail.plc_status, maintenance_mode: 1 },
           });
           break;
-
         case "restart":
           await updatePlc({
             plc_status: { ...plcDetail.plc_status, restart_requested: 1 },
           });
           break;
-
         default:
           console.warn(`Unknown command: ${commandKey}`);
       }
-
-      // Refresh dei dati dopo il comando
       refetch();
-    } catch (error) {
-      console.error(`Error executing command ${commandKey}:`, error);
-      // Qui potresti mostrare una notifica di errore
+    } catch (e) {
+      console.error(`Error executing command ${commandKey}:`, e);
     }
   };
 
-  if (!deviceId) {
+  // ✅ Early return DOPO gli hook → regola ESLint rispettata
+  if (!isValidId) {
     return <EmptyState />;
   }
 

@@ -8,13 +8,14 @@ import {
 } from "lucide-react";
 import { WasteBadge } from "@shared/waste-badge/WasteBadge.component.tsx";
 import DevicesMap from "../../../../admin/sections/devicesList/_components/DevicesMap/DevicesMap";
+import type { Device } from "@root/pages/admin/core/store/devices/devices.types";
 
 export default function ModalDeviceHeader({
   device,
   displayName,
   getFullAddress,
 }: {
-  device: any;
+  device: Device;
   displayName: string;
   getFullAddress: any;
 }) {
@@ -60,9 +61,7 @@ export default function ModalDeviceHeader({
       <div className={styles.deviceMainInfo}>
         <h3 className={styles.deviceName}>{displayName}</h3>
         <p className={styles.deviceCustomer}>
-          {device?.customer ||
-            device?.customerName ||
-            "Cliente non specificato"}
+          {device?.customer_Name || "Cliente non specificato"}
         </p>
         <p className={styles.deviceLocation}>{getFullAddress()}</p>
 
@@ -81,7 +80,7 @@ export default function ModalDeviceHeader({
               Bloccato
             </span>
           )}
-          {device?.tatus_ready_d75_3_7 && (
+          {device?.status_READY_D75_3_7 && (
             <span className={styles.readyBadge}>
               <CheckCircle className={styles.badgeIcon} />
               Pronto

@@ -7,7 +7,10 @@ import TableKeyValue, {
   type TableKeyValueRow,
 } from "@components/shared/table-key-value/TableKeyValue.component";
 import { SimpleButton } from "@root/components/shared/simple-btn/SimpleButton.component";
-import { useGetByIdQuery, useUpdateMutation } from "@store_device/plc/plc.api";
+import {
+  useGetPlcByIdQuery,
+  useUpdatePlcMutation,
+} from "@store_device/plc/plc.api";
 import {
   objectToTableRows,
   tableRowsToObject,
@@ -31,9 +34,9 @@ export default function DevicePLC_IO() {
     isFetching,
     error,
     refetch,
-  } = useGetByIdQuery(currentId!, { skip: !currentId });
+  } = useGetPlcByIdQuery(currentId!, { skip: !currentId });
 
-  const [updatePlc] = useUpdateMutation();
+  const [updatePlc] = useUpdatePlcMutation();
 
   const plcIo = plcDetail?.plc_io ?? null;
 

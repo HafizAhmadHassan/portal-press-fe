@@ -8,7 +8,7 @@ import TableKeyValue, {
 } from "@components/shared/table-key-value/TableKeyValue.component";
 
 // ✅ usa gli hook re-exportati dal tuo store PLC
-import { useGetByIdQuery, useUpdateMutation } from "@store_device/plc";
+import { useGetPlcByIdQuery, useUpdatePlcMutation } from "@store_device/plc";
 
 import { tableRowsToObject } from "@store_device/plc/plc.utils";
 import { SimpleButton } from "@root/components/shared/simple-btn/SimpleButton.component";
@@ -100,11 +100,11 @@ export default function DevicePLC_STATUS() {
     isFetching,
     error,
     refetch,
-  } = useGetByIdQuery(deviceIdNum as number, {
+  } = useGetPlcByIdQuery(deviceIdNum as number, {
     skip: !deviceIdNum,
   });
 
-  const [updatePlc] = useUpdateMutation();
+  const [updatePlc] = useUpdatePlcMutation();
 
   const plcStatus = plcDetail?.plc_status ?? null;
 

@@ -9,7 +9,7 @@ import { useMemo, useEffect } from "react";
 import LogoKgn from "@assets/images/kgn-logo.png";
 import Header from "@shared/header/Header.component.tsx";
 import { UserRoles } from "@root/utils/constants/userRoles";
-import { useGetByIdQuery } from "@root/pages/device/store/plc";
+import { useGetPlcByIdQuery } from "@root/pages/device/store/plc";
 import SideNav from "@shared/side-navbar/SideNavbar.component.tsx";
 import styles from "../_commons/_styles/LayoutStyles_commons.module.scss";
 import { PageHeader } from "./_components/PageHeader/PageHeader.component";
@@ -48,7 +48,7 @@ export default function DeviceLayout() {
     isLoading: plcLoading,
     error: plcError,
     refetch: refetchPlc,
-  } = useGetByIdQuery(Number(currentDeviceId), {
+  } = useGetPlcByIdQuery(Number(currentDeviceId), {
     skip: !currentDeviceId,
   });
 

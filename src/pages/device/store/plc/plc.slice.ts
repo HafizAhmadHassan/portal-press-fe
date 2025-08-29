@@ -1,11 +1,12 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { PlcState, PlcItem, PlcPagination, PlcFilters } from "./plc.types";
+import type { PlcState, PlcItem, PlcFilters } from "./plc.types";
 import {
   loadPlc,
   createNewPlc,
   updateExistingPlc,
   deleteExistingPlc,
 } from "./plc.actions";
+import type { ApiMeta } from "@root/utils/genericApi";
 
 const initialState: PlcState = {
   items: [],
@@ -14,9 +15,13 @@ const initialState: PlcState = {
   error: null,
   pagination: {
     page: 1,
-    limit: 10,
+    page_size: 10,
     total: 0,
-    totalPages: 0,
+    total_pages: 0,
+    has_next: false,
+    has_prev: false,
+    next_page: 0,
+    prev_page: 0,
   },
   filters: {
     search: "",
@@ -41,13 +46,10 @@ export const plcSlice = createSlice({
     setSelected: (state, action: PayloadAction<PlcItem | null>) => {
       state.selected = action.payload;
     },
-    setPagination: (state, action: PayloadAction<PlcPagination>) => {
+    setPagination: (state, action: PayloadAction<ApiMeta>) => {
       state.pagination = action.payload;
     },
-    updatePagination: (
-      state,
-      action: PayloadAction<Partial<PlcPagination>>
-    ) => {
+    updatePagination: (state, action: PayloadAction<Partial<ApiMeta>>) => {
       state.pagination = { ...state.pagination, ...action.payload };
     },
     setFilters: (state, action: PayloadAction<Partial<PlcFilters>>) => {

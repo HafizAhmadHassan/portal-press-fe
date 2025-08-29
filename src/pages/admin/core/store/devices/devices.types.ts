@@ -23,7 +23,7 @@ export interface Device {
   country?: string | null;
   municipality?: string | null;
   address?: string | null;
-  status_ready_d75_3_7: boolean;
+  status_READY_D75_3_7: boolean;
   status_Machine_Blocked: boolean;
   codice_Gps?: string | null;
   sheet_Name?: string | null;
@@ -60,7 +60,7 @@ export interface CreateDeviceRequest {
   country?: string;
   municipality?: string;
   address?: string;
-  status_ready_d75_3_7?: boolean;
+  status_READY_D75_3_7?: boolean;
   status_Machine_Blocked?: boolean;
   codice_Gps?: string;
   sheet_Name?: string;
@@ -89,7 +89,7 @@ export interface DevicesQueryParams {
   province?: string;
   customer?: string;
   status_Machine_Blocked?: boolean | string;
-  status_ready_d75_3_7?: boolean | string;
+  status_READY_D75_3_7?: boolean | string;
   sortBy?: string;
   sortOrder?: "asc" | "desc";
 }

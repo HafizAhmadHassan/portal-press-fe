@@ -8,7 +8,10 @@ import TableKeyValue, {
 } from "@components/shared/table-key-value/TableKeyValue.component";
 import type { PlcData } from "@store_device/plc/plc.types";
 
-import { useGetByIdQuery, useUpdateMutation } from "@store_device/plc/plc.api";
+import {
+  useGetPlcByIdQuery,
+  useUpdatePlcMutation,
+} from "@store_device/plc/plc.api";
 import { SimpleButton } from "@root/components/shared/simple-btn/SimpleButton.component";
 
 /** Util: da snake_case a label leggibile */
@@ -106,9 +109,9 @@ export default function DevicePLC_DATA() {
     isFetching,
     error,
     refetch,
-  } = useGetByIdQuery(currentId!, { skip: !currentId });
+  } = useGetPlcByIdQuery(currentId!, { skip: !currentId });
 
-  const [updatePlc] = useUpdateMutation();
+  const [updatePlc] = useUpdatePlcMutation();
 
   const plcData = plcDetail?.plc_data ?? null;
 
