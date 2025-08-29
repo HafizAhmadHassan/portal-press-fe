@@ -6,16 +6,12 @@ import styles from "../_styles/DevicesPLC.module.scss";
 import TableKeyValue, {
   type TableKeyValueRow,
 } from "@components/shared/table-key-value/TableKeyValue.component";
-
 import { SimpleButton } from "@root/components/shared/simple-btn/SimpleButton.component";
-import {
-  useGetPlcByIdQuery,
-  useUpdatePlcMutation,
-} from "@store_device/plc/plc.api";
+import { useGetByIdQuery, useUpdateMutation } from "@store_device/plc/plc.api";
 import {
   objectToTableRows,
   tableRowsToObject,
-} from "@store_device/plc/plc.utils";
+} from "@store_device/plc/plc.utils.ts";
 
 export default function DevicePLC_IO() {
   const navigate = useNavigate();
@@ -35,9 +31,9 @@ export default function DevicePLC_IO() {
     isFetching,
     error,
     refetch,
-  } = useGetPlcByIdQuery(currentId!, { skip: !currentId });
+  } = useGetByIdQuery(currentId!, { skip: !currentId });
 
-  const [updatePlc] = useUpdatePlcMutation();
+  const [updatePlc] = useUpdateMutation();
 
   const plcIo = plcDetail?.plc_io ?? null;
 

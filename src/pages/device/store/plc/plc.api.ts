@@ -1,22 +1,28 @@
-// @store_device/plc/plc.api.ts
 import { apiSlice } from "@store_admin/apiSlice";
 import type { PlcItem, PlcQueryParams, PlcResponse } from "./plc.types";
+import { METHODS_TYPE } from "@root/pages/admin/core/store/api.types";
+
+/**
+ * RTK Query: endpoints atomici, nessuna orchestrazione.
+ * Tag: usiamo categorie LIST/ENTITY/STATS con id "Plc".
+ */
+
+const BASE_URL = "plc/";
+const ID_TAGS = "Plc";
 
 export const plcApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    // Lista PLC con filtri
-    getPlc: builder.query<PlcResponse, PlcQueryParams>({
+    get: builder.query<PlcResponse, PlcQueryParams>({
       query: (params = {}) => {
-        const cleanParams = Object.entries(params).reduce((acc, [k, v]) => {
+        const clean = Object.entries(params).reduce((acc, [k, v]) => {
           if (v !== undefined && v !== null && v !== "") acc[k] = v;
           return acc;
         }, {} as Record<string, any>);
-
-        return { url: "plc/", params: cleanParams };
+        return { url: `${BASE_URL}`, params: clean };
       },
       providesTags: [
-        { type: "LIST", id: "Plc" },
-        { type: "STATS", id: "Plc" },
+        { type: "LIST", id: ID_TAGS },
+        { type: "STATS", id: ID_TAGS },
       ],
       keepUnusedDataFor: 60,
       transformResponse: (res: any): PlcResponse => {
@@ -27,41 +33,30 @@ export const plcApi = apiSlice.injectEndpoints({
       },
     }),
 
-    // Singolo PLC per ID
-    getPlcById: builder.query<PlcItem, number>({
-      query: (id) => `plc/${id}`,
-      providesTags: (_result, _error, id) => [{ type: "ENTITY", id }],
+    getById: builder.query<PlcItem, number>({
+      query: (id) => `${BASE_URL}${id}`,
+      providesTags: (_r, _e, id) => [{ type: "ENTITY", id }],
     }),
 
-    // Creazione PLC
-    createPlc: builder.mutation<PlcItem, Partial<PlcItem>>({
-      query: (body) => ({
-        url: "plc/",
-        method: "POST",
-        body,
-      }),
+    create: builder.mutation<PlcItem, Partial<PlcItem>>({
+      query: (body) => ({ url: BASE_URL, method: METHODS_TYPE.POST, body }),
       invalidatesTags: [
-        { type: "LIST", id: "Plc" },
-        { type: "STATS", id: "Plc" },
+        { type: "LIST", id: ID_TAGS },
+        { type: "STATS", id: ID_TAGS },
       ],
     }),
 
-    // Aggiornamento PLC
-    updatePlc: builder.mutation<
-      PlcItem,
-      { id: number; data: Partial<PlcItem> }
-    >({
+    update: builder.mutation<PlcItem, { id: number; data: Partial<PlcItem> }>({
       query: ({ id, data }) => ({
-        url: `plc/${id}`,
-        method: "PUT",
+        url: `${id}`,
+        method: METHODS_TYPE.PUT,
         body: data,
       }),
-      invalidatesTags: (_result, _error, { id }) => [
+      invalidatesTags: (_r, _e, { id }) => [
         { type: "ENTITY", id },
-        { type: "LIST", id: "Plc" },
-        { type: "STATS", id: "Plc" },
+        { type: "LIST", id: ID_TAGS },
+        { type: "STATS", id: ID_TAGS },
       ],
-      // Optimistic update
       async onQueryStarted({ id, data }, { dispatch, queryFulfilled }) {
         const patch = dispatch(
           plcApi.util.updateQueryData("getPlcById", id, (draft) => {
@@ -76,58 +71,37 @@ export const plcApi = apiSlice.injectEndpoints({
       },
     }),
 
-    // Eliminazione PLC
-    deletePlc: builder.mutation<void, number>({
-      query: (id) => ({
-        url: `plc/${id}`,
-        method: "DELETE",
-      }),
-      invalidatesTags: (_result, _error, id) => [
+    delete: builder.mutation<void, number>({
+      query: (id) => ({ url: `${id}`, method: METHODS_TYPE.DELETE }),
+      invalidatesTags: (_r, _e, id) => [
         { type: "ENTITY", id },
-        { type: "LIST", id: "Plc" },
-        { type: "STATS", id: "Plc" },
+        { type: "LIST", id: ID_TAGS },
+        { type: "STATS", id: ID_TAGS },
       ],
     }),
 
-    // Ricerca PLC
-    searchPlc: builder.query<PlcItem[], { query: string; limit?: number }>({
+    search: builder.query<PlcItem[], { query: string; limit?: number }>({
       query: ({ query, limit = 10 }) => ({
-        url: "plc/search",
+        url: `${BASE_URL}search`,
         params: { q: query, limit },
       }),
-      providesTags: [{ type: "LIST", id: "Plc" }],
+      providesTags: [{ type: "LIST", id: ID_TAGS }],
     }),
 
-    // Operazioni bulk
-    bulkPlc: builder.mutation<any, any>({
-      query: (body) => ({
-        url: "plc/bulk",
-        method: "POST",
-        body,
-      }),
-      invalidatesTags: [
-        { type: "LIST", id: "Plc" },
-        { type: "STATS", id: "Plc" },
-      ],
-    }),
-
-    // Statistiche PLC
-    getPlcStats: builder.query<any, void>({
-      query: () => "plc/stats",
-      providesTags: [{ type: "STATS", id: "Plc" }],
+    getStats: builder.query<any, void>({
+      query: () => `${BASE_URL}stats`,
+      providesTags: [{ type: "STATS", id: ID_TAGS }],
     }),
   }),
   overrideExisting: false,
 });
 
-// Export degli hook generati automaticamente
 export const {
-  useGetPlcQuery,
-  useGetPlcByIdQuery,
-  useCreatePlcMutation,
-  useUpdatePlcMutation,
-  useDeletePlcMutation,
-  useSearchPlcQuery,
-  useBulkPlcMutation,
-  useGetPlcStatsQuery,
+  useGetQuery,
+  useGetByIdQuery,
+  useCreateMutation,
+  useUpdateMutation,
+  useDeleteMutation,
+  useSearchQuery,
+  useGetStatsQuery,
 } = plcApi;

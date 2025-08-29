@@ -1,5 +1,3 @@
-// @store_device/plc/index.ts
-
 // Types
 export type {
   PlcItem,
@@ -9,36 +7,31 @@ export type {
   PlcResponse,
   PlcQueryParams,
   PlcFilters,
-  PlcPagination,
   PlcState,
   CreatePlcPayload,
   UpdatePlcPayload,
   PlcSearchOptions,
   PlcStats,
-  ApiMeta,
-  ApiResponse,
 } from "./plc.types";
 
-// API & RTK Query hooks
+// API hooks
 export {
   plcApi,
-  useGetPlcQuery,
-  useGetPlcByIdQuery,
-  useCreatePlcMutation,
-  useUpdatePlcMutation,
-  useDeletePlcMutation,
-  useSearchPlcQuery,
-  useBulkPlcMutation,
-  useGetPlcStatsQuery,
+  useGetQuery,
+  useGetByIdQuery,
+  useCreateMutation,
+  useUpdateMutation,
+  useDeleteMutation,
+  useSearchQuery,
+  useGetStatsQuery,
 } from "./plc.api";
 
-// Actions
+// Thunk actions (use cases)
 export {
   loadPlc,
   createNewPlc,
   updateExistingPlc,
   deleteExistingPlc,
-  performBulkPlc,
   searchPlc,
   refreshPlcData,
 } from "./plc.actions";
@@ -68,25 +61,14 @@ export {
   selectPlcError,
   selectPlcPagination,
   selectPlcFilters,
-  selectAllPlcData,
-  selectAllPlcIo,
-  selectAllPlcStatus,
   selectPlcItemById,
-  selectPlcDataById,
-  selectPlcIoById,
-  selectPlcStatusById,
   selectPlcCount,
-  selectFilteredPlc,
-  selectPlcStats,
-  selectPlcWithIssues,
   selectOnlinePlc,
   selectOfflinePlc,
-  selectHasPendingChanges,
-  selectHasErrors,
 } from "./plc.selectors";
 
-// Hooks
-export { usePlc, usePlcById, usePlcSearch } from "./hooks/usePlc";
+// Hooks ergonomici
+export { usePlc, usePlcById } from "./plc.hooks";
 
-// Reducer (for store configuration)
+// Reducer (per configureStore)
 export { default as plcReducer } from "./plc.slice";

@@ -1,11 +1,10 @@
-// @store_device/plc/plc.actions.ts
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { plcApi } from "./plc.api";
 import { setItems, setPagination, setLoading, setError } from "./plc.slice";
 import type { PlcQueryParams, PlcItem } from "./plc.types";
 import type { RootState } from "@root/store";
 
-// Action per caricare la lista PLC con filtri e paginazione
+/** Carica lista PLC con filtri/paginazione correnti (o custom) */
 export const loadPlc = createAsyncThunk<
   void,
   PlcQueryParams | void,
@@ -17,45 +16,45 @@ export const loadPlc = createAsyncThunk<
     const state = getState();
     const { filters, pagination } = state.plc;
 
-    // Merge parametri custom con stato corrente
-    const queryParams: PlcQueryParams = {
+    const params: PlcQueryParams = {
       page: pagination.page,
       page_size: pagination.limit,
       search: filters.search,
       sortBy: filters.sortBy,
       sortOrder: filters.sortOrder,
+      // filtri opzionali
+      codice: filters.codice,
+      municipility: filters.municipility,
+      customer: filters.customer,
+      waste: filters.waste,
       ...customParams,
     };
 
-    const response = await dispatch(
-      plcApi.endpoints.getPlc.initiate(queryParams)
-    ).unwrap();
+    const res = await dispatch(plcApi.endpoints.get.initiate(params)).unwrap();
 
-    // Aggiorna items nello stato
-    dispatch(setItems(response.data ?? []));
+    dispatch(setItems(res.data ?? []));
 
-    // Aggiorna paginazione se presente nei meta
-    if (response?.meta) {
-      const meta = response.meta;
+    if (res?.meta) {
+      const m = res.meta;
       dispatch(
         setPagination({
-          page: meta.page,
-          limit: meta.page_size,
-          total: meta.total,
-          totalPages: meta.total_pages,
+          page: m.page,
+          limit: m.page_size,
+          total: m.total,
+          totalPages: m.total_pages,
         })
       );
     }
 
     dispatch(setLoading(false));
   } catch (error: any) {
-    const errorMessage = error?.data?.message || "Errore nel caricamento PLC";
-    dispatch(setError(errorMessage));
-    return rejectWithValue(errorMessage);
+    const message = error?.data?.message || "Errore nel caricamento PLC";
+    dispatch(setError(message));
+    return rejectWithValue(message);
   }
 });
 
-// Action per creare un nuovo PLC
+/** Crea PLC e ricarica lista */
 export const createNewPlc = createAsyncThunk<
   PlcItem,
   Partial<PlcItem>,
@@ -63,20 +62,17 @@ export const createNewPlc = createAsyncThunk<
 >("plc/create", async (data, { dispatch, rejectWithValue }) => {
   try {
     const created = await dispatch(
-      plcApi.endpoints.createPlc.initiate(data)
+      plcApi.endpoints.create.initiate(data)
     ).unwrap();
-
-    // Ricarica la lista dopo la creazione
     await dispatch(loadPlc());
-
     return created;
   } catch (error: any) {
-    const errorMessage = error?.data?.message || "Errore nella creazione PLC";
-    return rejectWithValue(errorMessage);
+    const message = error?.data?.message || "Errore nella creazione PLC";
+    return rejectWithValue(message as string);
   }
 });
 
-// Action per aggiornare un PLC esistente
+/** Update PLC (senza refetch globale per sfruttare invalidation/optimistic) */
 export const updateExistingPlc = createAsyncThunk<
   PlcItem,
   { id: number; data: Partial<PlcItem> },
@@ -84,58 +80,32 @@ export const updateExistingPlc = createAsyncThunk<
 >("plc/update", async (payload, { dispatch, rejectWithValue }) => {
   try {
     const updated = await dispatch(
-      plcApi.endpoints.updatePlc.initiate(payload)
+      plcApi.endpoints.update.initiate(payload)
     ).unwrap();
-
     return updated;
   } catch (error: any) {
-    const errorMessage =
-      error?.data?.message || "Errore nell'aggiornamento PLC";
-    return rejectWithValue(errorMessage);
+    const message = error?.data?.message || "Errore nell'aggiornamento PLC";
+    return rejectWithValue(message as string);
   }
 });
 
-// Action per eliminare un PLC
+/** Delete PLC e ricarica lista */
 export const deleteExistingPlc = createAsyncThunk<
   number,
   number,
   { state: RootState }
 >("plc/delete", async (id, { dispatch, rejectWithValue }) => {
   try {
-    await dispatch(plcApi.endpoints.deletePlc.initiate(id)).unwrap();
-
-    // Ricarica la lista dopo l'eliminazione
+    await dispatch(plcApi.endpoints.delete.initiate(id)).unwrap();
     await dispatch(loadPlc());
-
     return id;
   } catch (error: any) {
-    const errorMessage = error?.data?.message || "Errore nell'eliminazione PLC";
-    return rejectWithValue(errorMessage);
+    const message = error?.data?.message || "Errore nell'eliminazione PLC";
+    return rejectWithValue(message as string);
   }
 });
 
-// Action per operazioni bulk
-export const performBulkPlc = createAsyncThunk<any, any, { state: RootState }>(
-  "plc/bulk",
-  async (request, { dispatch, rejectWithValue }) => {
-    try {
-      const result = await dispatch(
-        plcApi.endpoints.bulkPlc.initiate(request)
-      ).unwrap();
-
-      // Ricarica la lista dopo le operazioni bulk
-      await dispatch(loadPlc());
-
-      return result;
-    } catch (error: any) {
-      const errorMessage =
-        error?.data?.message || "Errore nelle operazioni bulk PLC";
-      return rejectWithValue(errorMessage);
-    }
-  }
-);
-
-// Action per ricerca PLC
+/** Ricerca (endpoint dedicato) */
 export const searchPlc = createAsyncThunk<
   PlcItem[],
   { query: string; limit?: number },
@@ -143,33 +113,34 @@ export const searchPlc = createAsyncThunk<
 >("plc/search", async (params, { dispatch, rejectWithValue }) => {
   try {
     const results = await dispatch(
-      plcApi.endpoints.searchPlc.initiate(params)
+      plcApi.endpoints.search.initiate(params)
     ).unwrap();
-
     return results;
   } catch (error: any) {
-    const errorMessage = error?.data?.message || "Errore nella ricerca PLC";
-    return rejectWithValue(errorMessage);
+    const message = error?.data?.message || "Errore nella ricerca PLC";
+    return rejectWithValue(message as string);
   }
 });
 
-// Action per refresh dei dati
+/** Refresh list con filtri/paginazione correnti */
 export const refreshPlcData = createAsyncThunk<
   void,
   void,
   { state: RootState }
->("plc/refresh", async (_, { dispatch, getState }) => {
+>("plc/refresh", async (_: void, { getState, dispatch }) => {
   const state = getState();
-  const currentFilters = state.plc.filters;
-  const currentPagination = state.plc.pagination;
-
+  const { filters, pagination } = state.plc;
   await dispatch(
     loadPlc({
-      page: currentPagination.page,
-      page_size: currentPagination.limit,
-      search: currentFilters.search,
-      sortBy: currentFilters.sortBy,
-      sortOrder: currentFilters.sortOrder,
+      page: pagination.page,
+      page_size: pagination.limit,
+      search: filters.search,
+      sortBy: filters.sortBy,
+      sortOrder: filters.sortOrder,
+      codice: filters.codice,
+      municipility: filters.municipility,
+      customer: filters.customer,
+      waste: filters.waste,
     })
   );
 });

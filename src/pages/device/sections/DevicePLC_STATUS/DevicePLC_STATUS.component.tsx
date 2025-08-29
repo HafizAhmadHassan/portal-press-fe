@@ -7,17 +7,13 @@ import TableKeyValue, {
   type TableKeyValueRow,
 } from "@components/shared/table-key-value/TableKeyValue.component";
 
-import { SimpleButton } from "@root/components/shared/simple-btn/SimpleButton.component";
-import {
-  useGetPlcByIdQuery,
-  useUpdatePlcMutation,
-} from "@store_device/plc/plc.api";
-import {
-  objectToTableRows,
-  tableRowsToObject,
-} from "@store_device/plc/plc.utils";
+// ✅ usa gli hook re-exportati dal tuo store PLC
+import { useGetByIdQuery, useUpdateMutation } from "@store_device/plc";
 
-/** Rileva stringhe numeriche e le converte in number */
+import { tableRowsToObject } from "@store_device/plc/plc.utils";
+import { SimpleButton } from "@root/components/shared/simple-btn/SimpleButton.component";
+
+/** Converte stringhe numeriche in number (se possibile) */
 function toNumberIfNumericString(value: any): any {
   if (typeof value === "string" && /^\s*-?\d+(\.\d+)?\s*$/.test(value)) {
     const num = Number(value.trim());
@@ -26,55 +22,54 @@ function toNumberIfNumericString(value: any): any {
   return value;
 }
 
-/** Converte un record plc_status in TableKeyValueRow[] con logica specifica per status */
+/** Normalizza label (snake_case → "Snake Case", acronimi comuni in maiuscolo) */
+function humanizeKey(key: string): string {
+  return key
+    .replace(/_/g, " ")
+    .replace(/\b([a-z])/g, (m) => m.toUpperCase())
+    .replace(/\b(Plc|Io|Id|Cpu|Ram|Wifi)\b/gi, (m) => m.toUpperCase());
+}
+
+/** Costruisce le righe per TableKeyValue a partire da plc_status */
 function buildRowsFromPlcStatus(
   plcStatus: Record<string, any> | null | undefined
 ): TableKeyValueRow[] {
   if (!plcStatus) return [];
 
   const rows: TableKeyValueRow[] = [];
-  const entries = Object.entries(plcStatus);
+  let rowId = 1;
 
-  // ID per primo (read-only)
-  const idEntry = entries.find(([k]) => k === "id");
-  if (idEntry) {
-    const [, value] = idEntry;
+  // ID in testa (read-only) se presente
+  if (plcStatus.id !== undefined) {
     rows.push({
-      id: Number(value ?? 0),
+      id: rowId++,
       key: "id",
       label: "ID Dispositivo",
       type: "number",
-      value: Number(value ?? 0),
+      value: Number(plcStatus.id ?? 0),
       readOnly: true,
     });
   }
 
-  // Resto dei campi con normalizzazione numerica
-  const restEntries = entries.filter(([k]) => k !== "id");
-  restEntries
+  // Resto dei campi
+  Object.entries(plcStatus)
+    .filter(([k]) => k !== "id")
     .map<[string, any, string]>(([k, v]) => [
       k,
       toNumberIfNumericString(v),
-      k
-        .replace(/_/g, " ")
-        .replace(/\b([a-z])/g, (m) => m.toUpperCase())
-        .replace(/\b(Plc|Io|Id)\b/gi, (m) => m.toUpperCase()),
+      humanizeKey(k),
     ])
     .sort((a, b) => a[2].localeCompare(b[2], "it"))
     .forEach(([key, value, label]) => {
       let type: TableKeyValueRow["type"];
-      if (typeof value === "boolean") {
-        type = "boolean";
-      } else if (typeof value === "number") {
-        type = "number";
-      } else {
-        type = "text";
-      }
+      if (typeof value === "boolean") type = "boolean";
+      else if (typeof value === "number") type = "number";
+      else type = "text";
 
       const step = type === "number" && !Number.isInteger(value) ? 0.001 : 1;
 
       rows.push({
-        id: rows.length + 1,
+        id: rowId++,
         key,
         label,
         type,
@@ -92,27 +87,30 @@ export default function DevicePLC_STATUS() {
   const [searchParams] = useSearchParams();
   const isEdit = searchParams.get("edit") === "1";
 
+  const deviceIdNum = deviceId ? Number(deviceId) : undefined;
+
   const [rows, setRows] = useState<TableKeyValueRow[]>([]);
   const [original, setOriginal] = useState<TableKeyValueRow[]>([]);
   const [saving, setSaving] = useState(false);
 
-  // RTK Query hooks
-  const currentId = deviceId ? Number(deviceId) : undefined;
+  // ✅ Hook corretti
   const {
     data: plcDetail,
     isLoading,
     isFetching,
     error,
     refetch,
-  } = useGetPlcByIdQuery(currentId!, { skip: !currentId });
+  } = useGetByIdQuery(deviceIdNum as number, {
+    skip: !deviceIdNum,
+  });
 
-  const [updatePlc] = useUpdatePlcMutation();
+  const [updatePlc] = useUpdateMutation();
 
   const plcStatus = plcDetail?.plc_status ?? null;
 
-  // Inizializza righe quando cambiano i dati
+  // Inizializza righe quando arrivano i dati
   useEffect(() => {
-    if (isLoading || isFetching) return;
+    if (!deviceIdNum || isLoading || isFetching) return;
 
     if (error) {
       console.error("[DevicePLC_STATUS] errore plc/:id →", error);
@@ -124,7 +122,7 @@ export default function DevicePLC_STATUS() {
     const built = buildRowsFromPlcStatus(plcStatus);
     setRows(built);
     setOriginal(JSON.parse(JSON.stringify(built)));
-  }, [plcStatus, isLoading, isFetching, error]);
+  }, [deviceIdNum, plcStatus, isLoading, isFetching, error]);
 
   const dirty = useMemo(
     () => JSON.stringify(rows) !== JSON.stringify(original),
@@ -133,27 +131,27 @@ export default function DevicePLC_STATUS() {
 
   const saveAll = useCallback(
     async (updated: TableKeyValueRow[]) => {
-      if (!currentId) return;
+      if (!deviceIdNum) return;
 
       setSaving(true);
       try {
         const updatedPlcStatus = tableRowsToObject(updated);
 
         await updatePlc({
-          id: currentId,
+          id: deviceIdNum,
           data: { plc_status: updatedPlcStatus },
         }).unwrap();
 
         setOriginal(JSON.parse(JSON.stringify(updated)));
         setRows(updated);
         refetch();
-      } catch (error) {
-        console.error("[DevicePLC_STATUS] saveAll error:", error);
+      } catch (err) {
+        console.error("[DevicePLC_STATUS] saveAll error:", err);
       } finally {
         setSaving(false);
       }
     },
-    [currentId, updatePlc, refetch]
+    [deviceIdNum, updatePlc, refetch]
   );
 
   const cancelAll = useCallback(() => {
@@ -162,18 +160,19 @@ export default function DevicePLC_STATUS() {
 
   const saveRow = useCallback(
     async (row: TableKeyValueRow, index: number) => {
-      if (!currentId) return;
-
+      if (!deviceIdNum) return;
       try {
         const updatedRows = [...rows];
         updatedRows[index] = row;
+
         const updatedPlcStatus = tableRowsToObject(updatedRows);
 
         await updatePlc({
-          id: currentId,
+          id: deviceIdNum,
           data: { plc_status: updatedPlcStatus },
         }).unwrap();
 
+        // aggiorna l'originale solo per quella riga
         setOriginal((prev) => {
           const copy = [...prev];
           copy[index] = JSON.parse(JSON.stringify(row));
@@ -181,11 +180,11 @@ export default function DevicePLC_STATUS() {
         });
 
         refetch();
-      } catch (error) {
-        console.error("[DevicePLC_STATUS] saveRow error:", error);
+      } catch (err) {
+        console.error("[DevicePLC_STATUS] saveRow error:", err);
       }
     },
-    [currentId, rows, updatePlc, refetch]
+    [deviceIdNum, rows, updatePlc, refetch]
   );
 
   const cancelRow = useCallback(
@@ -199,7 +198,7 @@ export default function DevicePLC_STATUS() {
     [original]
   );
 
-  if (!deviceId) {
+  if (!deviceIdNum) {
     return (
       <div className={styles.page}>
         <div>Nessun device ID specificato.</div>
@@ -240,27 +239,29 @@ export default function DevicePLC_STATUS() {
         />
       </div>
 
-      <div className={styles.actionBar}>
-        <SimpleButton
-          size="sm"
-          variant="ghost"
-          color="secondary"
-          onClick={() =>
-            deviceId ? navigate(`/device/${deviceId}`) : navigate(-1)
-          }
-          disabled={saving}
-        >
-          Annulla
-        </SimpleButton>
-        <SimpleButton
-          size="sm"
-          color="primary"
-          onClick={() => saveAll(rows)}
-          disabled={!dirty || saving}
-        >
-          Salva
-        </SimpleButton>
-      </div>
+      {isEdit && (
+        <div className={styles.actionBar}>
+          <SimpleButton
+            size="sm"
+            variant="ghost"
+            color="secondary"
+            onClick={() =>
+              deviceIdNum ? navigate(`/device/${deviceIdNum}`) : navigate(-1)
+            }
+            disabled={saving}
+          >
+            Annulla
+          </SimpleButton>
+          <SimpleButton
+            size="sm"
+            color="primary"
+            onClick={() => saveAll(rows)}
+            disabled={!dirty || saving}
+          >
+            Salva
+          </SimpleButton>
+        </div>
+      )}
     </>
   );
 }

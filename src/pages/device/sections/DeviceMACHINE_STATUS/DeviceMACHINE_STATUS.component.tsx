@@ -11,7 +11,7 @@ import DeviceStatus from "./_components/DeviceStatus/Devicestatus.component";
 
 // Importa gli hooks PLC puliti
 
-import { useGetPlcByIdQuery } from "@store_device/plc/plc.api";
+import { useGetByIdQuery } from "@store_device/plc/plc.api";
 import { usePlcById } from "../../store/plc";
 
 type DeviceStatusType = "online" | "offline" | "unknown";
@@ -34,7 +34,7 @@ export default function DeviceOverview() {
     isLoading,
     error,
     refetch,
-  } = useGetPlcByIdQuery(currentId!, {
+  } = useGetByIdQuery(currentId!, {
     skip: !currentId,
     pollingInterval: 5000, // Polling ogni 5 secondi per dati real-time
   });

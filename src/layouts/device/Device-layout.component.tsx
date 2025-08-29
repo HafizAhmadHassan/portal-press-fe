@@ -9,14 +9,13 @@ import { useMemo, useEffect } from "react";
 import LogoKgn from "@assets/images/kgn-logo.png";
 import Header from "@shared/header/Header.component.tsx";
 import { UserRoles } from "@root/utils/constants/userRoles";
+import { useGetByIdQuery } from "@root/pages/device/store/plc";
 import SideNav from "@shared/side-navbar/SideNavbar.component.tsx";
-
 import styles from "../_commons/_styles/LayoutStyles_commons.module.scss";
 import { PageHeader } from "./_components/PageHeader/PageHeader.component";
 import { useSession } from "@root/pages/admin/core/store/auth/hooks/useSession";
 import { deviceLayoutSideNavItems } from "@layouts/device/_utils/SideNavItems.tsx";
 import { useGetDeviceByIdQuery } from "@root/pages/admin/core/store/devices/devices.api";
-import { useGetPlcByIdQuery } from "@root/pages/device/store/plc";
 
 export default function DeviceLayout() {
   const navigate = useNavigate();
@@ -49,7 +48,7 @@ export default function DeviceLayout() {
     isLoading: plcLoading,
     error: plcError,
     refetch: refetchPlc,
-  } = useGetPlcByIdQuery(Number(currentDeviceId), {
+  } = useGetByIdQuery(Number(currentDeviceId), {
     skip: !currentDeviceId,
   });
 
@@ -130,52 +129,6 @@ export default function DeviceLayout() {
             refetch={refetchAll}
             navigateTo={() => navigate("/admin")}
           />
-          {/* <div className={stylesDevice.pageHeader}>
-            <button
-              className={stylesDevice.backBtn}
-              onClick={() => navigate("/admin")}
-            >
-              <ArrowLeft size={18} />
-              <span>Torna alla Dashboard</span>
-            </button>
-
-            <div className={stylesDevice.pageActions}>
-              <SimpleButton
-                size="sm"
-                color="secondary"
-                variant="ghost"
-                icon={RotateCw}
-                onClick={() => {
-                  refetch();
-                  refetchPlc(); // aggiorna anche il dettaglio PLC
-                }}
-              >
-                Aggiorna
-              </SimpleButton>
-
-              {showEditSwitch && (
-                <Switch
-                  size="md"
-                  color="primary"
-                  checked={editMode}
-                  onChange={handleToggleEdit}
-                  label={
-                    <span
-                      style={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: 6,
-                      }}
-                    >
-                      Modifica {editMode ? "attiva" : "disattiva"}
-                    </span>
-                  }
-                  labelPosition="right"
-                  title="Attiva/disattiva la modalità modifica"
-                />
-              )}
-            </div>
-          </div> */}
 
           <Outlet />
         </main>

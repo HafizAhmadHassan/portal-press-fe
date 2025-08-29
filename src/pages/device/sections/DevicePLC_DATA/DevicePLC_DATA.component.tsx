@@ -6,13 +6,10 @@ import styles from "../_styles/DevicesPLC.module.scss";
 import TableKeyValue, {
   type TableKeyValueRow,
 } from "@components/shared/table-key-value/TableKeyValue.component";
-
-import { SimpleButton } from "@root/components/shared/simple-btn/SimpleButton.component";
-import {
-  useGetPlcByIdQuery,
-  useUpdatePlcMutation,
-} from "@store_device/plc/plc.api";
 import type { PlcData } from "@store_device/plc/plc.types";
+
+import { useGetByIdQuery, useUpdateMutation } from "@store_device/plc/plc.api";
+import { SimpleButton } from "@root/components/shared/simple-btn/SimpleButton.component";
 
 /** Util: da snake_case a label leggibile */
 function humanizeKey(key: string): string {
@@ -109,9 +106,9 @@ export default function DevicePLC_DATA() {
     isFetching,
     error,
     refetch,
-  } = useGetPlcByIdQuery(currentId!, { skip: !currentId });
+  } = useGetByIdQuery(currentId!, { skip: !currentId });
 
-  const [updatePlc] = useUpdatePlcMutation();
+  const [updatePlc] = useUpdateMutation();
 
   const plcData = plcDetail?.plc_data ?? null;
 

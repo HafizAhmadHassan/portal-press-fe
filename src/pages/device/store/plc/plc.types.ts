@@ -1,39 +1,21 @@
-// @store_device/plc/plc.types.ts
+import type { ApiMeta, ApiResponse } from "@root/utils/genericApi";
 
-/** Meta informazioni per paginazione API */
-export interface ApiMeta {
-  total: number;
-  page: number;
-  page_size: number;
-  total_pages: number;
-  has_next: boolean;
-  has_prev: boolean;
-  next_page: number | null;
-  prev_page: number | null;
-}
-
-/** Response generica API con meta e data */
-export interface ApiResponse<T> {
-  meta: ApiMeta;
-  data: T[];
-}
-
-/** Dati PLC - mantenendo flessibilità ma con tipi base */
+/** Dati PLC - manteniamo flessibilità ma con tipi base */
 export interface PlcData {
   id: number;
-  [key: string]: any; // Mantiene flessibilità per campi dinamici
+  [key: string]: string | number | boolean | null | undefined;
 }
 
 /** Input/Output PLC */
 export interface PlcIo {
   id: number;
-  [key: string]: any; // Mantiene flessibilità per campi dinamici
+  [key: string]: string | number | boolean | null | undefined;
 }
 
 /** Status PLC */
 export interface PlcStatus {
   id: number;
-  [key: string]: any; // Mantiene flessibilità per campi dinamici
+  [key: string]: string | number | boolean | null | undefined;
 }
 
 /** Item completo PLC con i 3 blocchi */
@@ -55,7 +37,7 @@ export interface PlcQueryParams {
   search?: string;
   sortBy?: string;
   sortOrder?: "asc" | "desc";
-  // Aggiungi altri filtri specifici se necessari
+  // Filtri “di dominio” (se non li usi, lasciali vuoti)
   codice?: string;
   municipility?: string;
   customer?: string;
@@ -73,13 +55,7 @@ export interface PlcFilters {
   waste: string;
 }
 
-/** Informazioni di paginazione */
-export interface PlcPagination {
-  page: number;
-  limit: number;
-  total: number;
-  totalPages: number;
-}
+/** Informazioni di paginazione (UI) */
 
 /** Stato Redux per PLC */
 export interface PlcState {
@@ -87,18 +63,12 @@ export interface PlcState {
   selected: PlcItem | null;
   isLoading: boolean;
   error: string | null;
-  pagination: PlcPagination;
+  pagination: ApiMeta;
   filters: PlcFilters;
 }
 
 /** Payload per creazione PLC */
-export type CreatePlcPayload = Partial<
-  Omit<PlcItem, "plc_data" | "plc_io" | "plc_status">
-> & {
-  plc_data?: Partial<PlcData>;
-  plc_io?: Partial<PlcIo>;
-  plc_status?: Partial<PlcStatus>;
-};
+export type CreatePlcPayload = Partial<PlcItem>;
 
 /** Payload per aggiornamento PLC */
 export type UpdatePlcPayload = {
@@ -123,10 +93,9 @@ export interface PlcSearchOptions {
   limit?: number;
 }
 
-/** Statistiche PLC se disponibili */
+/** Statistiche PLC (se disponibili) */
 export interface PlcStats {
   total: number;
   online: number;
   offline: number;
-  // Aggiungi altre statistiche se necessarie
 }

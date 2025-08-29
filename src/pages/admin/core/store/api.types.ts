@@ -13,3 +13,10 @@ export interface ApiResponse<T> {
   meta: ApiMeta;
   data: T[];
 }
+
+export const METHODS_TYPE = {
+  GET: "GET",
+  POST: "POST",
+  PUT: "PUT",
+  DELETE: "DELETE",
+};
