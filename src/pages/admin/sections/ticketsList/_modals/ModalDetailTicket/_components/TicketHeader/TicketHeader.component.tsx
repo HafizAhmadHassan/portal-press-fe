@@ -7,16 +7,11 @@ import { isClosed } from "../../_utils/ticketHelpers";
 type Props = { ticket: TicketWithDevice };
 
 const TicketHeader: React.FC<Props> = ({ ticket }) => {
-  const dev = ticket?.device || {};
+  const dev = ticket?.device;
   const statusClosed = isClosed(ticket);
-  const customer =
-    (dev as any)?.customer ??
-    (dev as any)?.customer_Name ??
-    (ticket as any)?.customer ??
-    "N/D";
-  const machineId =
-    (ticket as any)?.machine ?? (ticket as any)?.device_id ?? "N/D";
-  const machineName = (dev as any)?.machine_Name;
+  const customer = ticket.customer_Name ?? "N/D";
+  const machineId = ticket.machine ?? "N/D";
+  const machineName = dev?.machine_Name;
 
   return (
     <div className={styles.header}>

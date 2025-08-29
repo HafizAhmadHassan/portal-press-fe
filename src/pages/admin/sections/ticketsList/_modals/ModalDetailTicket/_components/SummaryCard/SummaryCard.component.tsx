@@ -8,18 +8,11 @@ import { DeviceFormGrid } from "@root/pages/device/sections/_components/DeviceFo
 type Props = { ticket: TicketWithDevice };
 
 const SummaryCard: React.FC<Props> = ({ ticket }) => {
-  const dev = ticket?.device || {};
-  const customer =
-    (dev as any)?.customer ??
-    (dev as any)?.customer_Name ??
-    (ticket as any)?.customer ??
-    "N/D";
-  const machineId =
-    (ticket as any)?.machine ?? (ticket as any)?.device_id ?? "N/D";
-  const machineName = (dev as any)?.machine_Name;
-  const place =
-    [(dev as any)?.city, (dev as any)?.province].filter(Boolean).join(", ") ||
-    null;
+  const dev = ticket?.device;
+  const customer = ticket.customer_Name ?? "N/D";
+  const machineId = ticket.machine ?? ticket.device_id ?? "N/D";
+  const machineName = dev?.machine_Name;
+  const place = [dev?.city, dev?.province].filter(Boolean).join(", ") || null;
 
   return (
     <DeviceCard title="Riepilogo" icon={<UserIcon size={18} />}>

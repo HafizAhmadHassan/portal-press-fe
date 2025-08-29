@@ -1,120 +1,140 @@
 // @store/_shared/api.factory.ts
-import type { Api, EndpointBuilder } from "@reduxjs/toolkit/query";
 import type {
   BaseQueryFn,
   FetchArgs,
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query";
+import type {
+  Api as RtkApi,
+  EndpointBuilder,
+} from "@reduxjs/toolkit/query/react";
+import { METHODS_TYPE } from "./api.types";
+
+export type CreateCrudEndpointsConfig<TListRes = any> = {
+  entity: string; // "Ticket"
+  baseUrl: string; // "message/"
+  idTag: string; // "Tickets"
+  keepUnusedDataFor?: number;
+
+  // opzionali
+  enableSearch?: boolean;
+  searchPath?: string;
+  enableStats?: boolean;
+  statsPath?: string;
+
+  transformListResponse?: (res: any) => TListRes;
+
+  /** permette di rinominare gli endpoint generati */
+  endpointNameOverrides?: Partial<{
+    getList: string; // default: get{EntityPlural?} → es. getTicket(s)
+    getById: string; // default: get{Entity}ById
+    create: string; // default: create{Entity}
+    update: string; // default: update{Entity}
+    delete: string; // default: delete{Entity}
+    search: string; // default: search{Entity}
+    getStats: string; // default: get{Entity}Stats
+  }>;
+};
 
 type Builder = EndpointBuilder<
   BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError>,
-  string,
-  string
+  "LIST" | "ENTITY" | "STATS",
+  "api"
 >;
 
-type FactoryConfig<TListResponse> = {
-  entity: string; // solo descrittivo
-  baseUrl: string; // es: "plc/"
-  idTag: string; // es: "Plc"
-  keepUnusedDataFor?: number;
-
-  enableSearch?: boolean;
-  searchPath?: string; // default: "search"
-
-  enableStats?: boolean;
-  statsPath?: string; // default: "stats"
-
-  transformListResponse?: (res: any) => TListResponse;
-
-  /**
-   * Passa la tua apiSlice per abilitare il patch ottimistico su getById
-   * (opzionale: se non lo passi, niente optimistic update).
-   */
-  apiForOptimisticPatch?: Api<BaseQueryFn, any, any>;
-};
-
-/**
- * Crea endpoint RTKQ generici con nomi FISSI:
- *  - getList, getById, create, update, delete, (opz.) search, (opz.) getStats
- * Consumali facendo alias per avere useGetPlcQuery ecc.
- */
-export function createCrudEndpoints<
-  TItem,
-  TQueryParams extends Record<string, any> = Record<string, any>,
-  TListResponse extends { data: TItem[]; meta?: any } = {
-    data: TItem[];
-    meta?: any;
-  }
->(builder: Builder, cfg: FactoryConfig<TListResponse>) {
+export function createCrudEndpoints<TItem, TListParams, TListRes = any>(
+  builder: Builder,
+  cfg: CreateCrudEndpointsConfig<TListRes>,
+  apiSliceForOptimistic?: RtkApi<any, any, any, any>
+) {
   const {
+    entity,
     baseUrl,
     idTag,
     keepUnusedDataFor = 60,
-    enableSearch = false,
+    enableSearch,
     searchPath = "search",
-    enableStats = false,
+    enableStats,
     statsPath = "stats",
     transformListResponse,
-    apiForOptimisticPatch,
+    endpointNameOverrides,
   } = cfg;
 
-  const cleanParams = (params: Record<string, any> = {}) =>
-    Object.fromEntries(
-      Object.entries(params).filter(
-        ([, v]) => v !== undefined && v !== null && v !== ""
-      )
-    );
+  const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+  const ent = cap(entity);
 
-  const endpoints: any = {
-    // LIST
-    getList: builder.query<TListResponse, TQueryParams>({
-      query: (params = {} as TQueryParams) => ({
-        url: baseUrl,
-        params: cleanParams(params),
-      }),
-      providesTags: [
-        { type: "LIST", id: idTag },
-        { type: "STATS", id: idTag },
-      ],
-      keepUnusedDataFor,
-      ...(transformListResponse
-        ? { transformResponse: transformListResponse }
-        : {}),
+  const names = {
+    getList:
+      endpointNameOverrides?.getList ??
+      `get${ent}${ent.endsWith("s") ? "" : "s"}`,
+    getById: endpointNameOverrides?.getById ?? `get${ent}ById`,
+    create: endpointNameOverrides?.create ?? `create${ent}`,
+    update: endpointNameOverrides?.update ?? `update${ent}`,
+    delete: endpointNameOverrides?.delete ?? `delete${ent}`,
+    search: endpointNameOverrides?.search ?? `search${ent}`,
+    getStats: endpointNameOverrides?.getStats ?? `get${ent}Stats`,
+  };
+
+  const endpoints: Record<string, any> = {};
+
+  // LIST
+  endpoints[names.getList] = builder.query<TListRes, TListParams>({
+    query: (params: any = {}) => {
+      const clean = Object.entries(params).reduce((acc, [k, v]) => {
+        if (v !== undefined && v !== null && v !== "") (acc as any)[k] = v;
+        return acc;
+      }, {} as Record<string, any>);
+      return { url: baseUrl, params: clean };
+    },
+    providesTags: [
+      { type: "LIST" as const, id: idTag },
+      { type: "STATS" as const, id: idTag },
+    ],
+    keepUnusedDataFor,
+    ...(transformListResponse
+      ? { transformResponse: transformListResponse }
+      : {}),
+  });
+
+  // BY ID
+  endpoints[names.getById] = builder.query<TItem, number>({
+    query: (id) => `${baseUrl}${id}/`,
+    providesTags: (_r, _e, id) => [{ type: "ENTITY" as const, id }],
+  });
+
+  // CREATE
+  endpoints[names.create] = builder.mutation<TItem, Partial<TItem>>({
+    query: (body) => ({
+      url: baseUrl,
+      method: METHODS_TYPE.POST,
+      body,
     }),
+    invalidatesTags: [
+      { type: "LIST" as const, id: idTag },
+      { type: "STATS" as const, id: idTag },
+    ],
+  });
 
-    // BY ID
-    getById: builder.query<TItem, number>({
-      query: (id) => `${baseUrl}${id}`,
-      providesTags: (_r, _e, id) => [{ type: "ENTITY", id }],
-      keepUnusedDataFor,
+  // UPDATE (con optimistic patch opzionale)
+  endpoints[names.update] = builder.mutation<
+    TItem,
+    { id: number; data: Partial<TItem> }
+  >({
+    query: ({ id, data }) => ({
+      url: `${baseUrl}${id}/`,
+      method: METHODS_TYPE.PUT,
+      body: data,
     }),
-
-    // CREATE
-    create: builder.mutation<TItem, Partial<TItem>>({
-      query: (body) => ({ url: baseUrl, method: "POST", body }),
-      invalidatesTags: [
-        { type: "LIST", id: idTag },
-        { type: "STATS", id: idTag },
-      ],
-    }),
-
-    // UPDATE
-    update: builder.mutation<TItem, { id: number; data: Partial<TItem> }>({
-      query: ({ id, data }) => ({
-        url: `${baseUrl}${id}`,
-        method: "PUT",
-        body: data,
-      }),
-      invalidatesTags: (_r, _e, { id }) => [
-        { type: "ENTITY", id },
-        { type: "LIST", id: idTag },
-        { type: "STATS", id: idTag },
-      ],
+    invalidatesTags: (_r, _e, { id }) => [
+      { type: "ENTITY" as const, id },
+      { type: "LIST" as const, id: idTag },
+      { type: "STATS" as const, id: idTag },
+    ],
+    ...(apiSliceForOptimistic && {
       async onQueryStarted({ id, data }, { dispatch, queryFulfilled }) {
-        if (!apiForOptimisticPatch) return; // ottimistico opzionale
         const patch = dispatch(
-          apiForOptimisticPatch.util.updateQueryData(
-            "getById" as any,
+          (apiSliceForOptimistic as any).util.updateQueryData(
+            names.getById,
             id,
             (draft: any) => {
               Object.assign(draft, data);
@@ -128,20 +148,24 @@ export function createCrudEndpoints<
         }
       },
     }),
+  });
 
-    // DELETE
-    delete: builder.mutation<void, number>({
-      query: (id) => ({ url: `${baseUrl}${id}`, method: "DELETE" }),
-      invalidatesTags: (_r, _e, id) => [
-        { type: "ENTITY", id },
-        { type: "LIST", id: idTag },
-        { type: "STATS", id: idTag },
-      ],
+  // DELETE
+  endpoints[names.delete] = builder.mutation<void, number>({
+    query: (id) => ({
+      url: `${baseUrl}${id}/`,
+      method: METHODS_TYPE.DELETE,
     }),
-  };
+    invalidatesTags: (_r, _e, id) => [
+      { type: "ENTITY" as const, id },
+      { type: "LIST" as const, id: idTag },
+      { type: "STATS" as const, id: idTag },
+    ],
+  });
 
+  // SEARCH (opzionale)
   if (enableSearch) {
-    endpoints.search = builder.query<
+    endpoints[names.search] = builder.query<
       TItem[],
       { query: string; limit?: number }
     >({
@@ -149,26 +173,17 @@ export function createCrudEndpoints<
         url: `${baseUrl}${searchPath}`,
         params: { q: query, limit },
       }),
-      providesTags: [{ type: "LIST", id: idTag }],
-      keepUnusedDataFor,
+      providesTags: [{ type: "LIST" as const, id: idTag }],
     });
   }
 
+  // STATS (opzionale)
   if (enableStats) {
-    endpoints.getStats = builder.query<any, void>({
+    endpoints[names.getStats] = builder.query<any, void>({
       query: () => `${baseUrl}${statsPath}`,
-      providesTags: [{ type: "STATS", id: idTag }],
-      keepUnusedDataFor,
+      providesTags: [{ type: "STATS" as const, id: idTag }],
     });
   }
 
-  return endpoints as {
-    getList: typeof endpoints.getList;
-    getById: typeof endpoints.getById;
-    create: typeof endpoints.create;
-    update: typeof endpoints.update;
-    delete: typeof endpoints.delete;
-    search?: typeof endpoints.search;
-    getStats?: typeof endpoints.getStats;
-  };
+  return endpoints;
 }

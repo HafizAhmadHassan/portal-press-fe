@@ -45,10 +45,24 @@ const ticketsSlice = createSlice({
     setSelectedTicket(state, action: PayloadAction<TicketRead | null>) {
       state.selectedTicket = action.payload;
     },
-    setPagination(state, action: PayloadAction<typeof state.pagination>) {
-      state.pagination = action.payload;
+    setPagination(
+      state,
+      action: PayloadAction<{
+        page: number;
+        page_size: number;
+        total: number;
+        total_pages: number;
+      }>
+    ) {
+      const { page, page_size, total, total_pages } = action.payload;
+      state.pagination = {
+        page,
+        limit: page_size,
+        total,
+        totalPages: total_pages,
+      };
     },
-    setFilters(state, action: PayloadAction<Partial<typeof state.filters>>) {
+    setFilters(state, action: PayloadAction<Partial<TicketsState["filters"]>>) {
       state.filters = { ...state.filters, ...action.payload };
     },
     setLoading(state, action: PayloadAction<boolean>) {

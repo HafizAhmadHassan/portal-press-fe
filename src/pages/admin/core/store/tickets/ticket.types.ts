@@ -1,9 +1,9 @@
-// --- STATUS / PRIORITY / CATEGORY (legacy) ---
+// === STATUS / PRIORITY / CATEGORY (legacy) ===
 export type TicketStatus = 1 | 2;
 export type TicketPriority = "low" | "medium" | "high" | "critical";
 export type TicketCategory = "ELECTRIC" | "DATABASE" | "MECHANIC" | "HYDRAULIC";
 
-// --- UTENTI / DEVICE ---
+// === UTENTI / DEVICE (tipi snelli per lista) ===
 export interface UserInfo {
   id: number;
   fullName?: string | null;
@@ -19,7 +19,7 @@ export interface DeviceInfo {
   status: number;
 }
 
-// --- TICKET BASE/READ (compat con liste già esistenti) ---
+// === TICKET BASE/READ (compat con liste già esistenti) ===
 export interface TicketBase {
   title: string;
   description?: string | null;
@@ -29,37 +29,34 @@ export interface TicketBase {
   due_date?: string | null; // ISO date string
 }
 
-// NB: Questi campi sono legacy per la parte "tickets", non per /messages/
 export interface TicketRead extends TicketBase {
   id: number;
   device_id: number;
   opened_by_user_id: number;
   created_by_user_id: number;
   assigned_to_user_id?: number | null;
-  created_At: string; // ISO datetime
-  updated_At: string; // ISO datetime
+  created_At: string;
+  updated_At: string;
   closed_at?: string | null;
   customer_Name?: string | null;
   open_Description?: string | null;
-  closed_Description?: string | null;
+  close_Description?: string | null;
 
+  // backend "messages": campo per join device
+  machine: number;
+
+  // opzionali/arricchiti
   device?: DeviceInfo;
   opened_by?: UserInfo;
   created_by?: UserInfo;
   assigned_to?: UserInfo | null;
-
-  // campo lato backend "messages" che usiamo per fare il join device
-  machine: number;
 }
 
 export interface TicketReadWithRelations extends TicketRead {
   device: DeviceInfo;
-  opened_by: UserInfo;
-  created_by: UserInfo;
-  assigned_to?: UserInfo | null;
 }
 
-// --- QUERY PARAMS LISTA ---
+// === QUERY PARAMS LISTA ===
 export interface TicketsQueryParams {
   page?: number;
   page_size?: number;
@@ -73,9 +70,7 @@ export interface TicketsQueryParams {
   sortOrder?: "asc" | "desc";
 }
 
-// ===========================
-// 🔹 Nuovi tipi per apertura "messages/"
-// ===========================
+// === Nuovi tipi apertura "messages/" ===
 export type ProblemCategory =
   | "DATA_BASE"
   | "IDRAULICO"
@@ -83,17 +78,15 @@ export type ProblemCategory =
   | "MECCANICO";
 
 export interface MessageCreate {
-  machine: number; // id macchina
-  problema: ProblemCategory[]; // costanti IT richieste
-  status: 1 | 2; // 1 o 2
-  open_Description: string; // descrizione apertura
-  customer: string; // cliente
+  machine: number;
+  problema: ProblemCategory[];
+  status: 1 | 2;
+  open_Description: string;
+  customer_Name: string;
 }
 
-// Alias usato dai thunks per la creazione
 export type CreateTicketRequest = MessageCreate;
 
-// --- UPDATE (ancora per endpoint /tickets/...) ---
 export interface TicketUpdate {
   title?: string;
   description?: string | null;
@@ -108,13 +101,29 @@ export interface TicketUpdate {
   extra?: string[] | null;
 }
 
-// Payload per update
 export interface UpdateTicketRequest {
-  id: number | number;
+  id: number;
   data: TicketUpdate;
 }
 
 export interface BulkActionRequest {
   action: string;
   ticketIds: (string | number)[];
+}
+
+// === Response generica con meta ===
+export interface ApiMeta {
+  total: number;
+  page: number;
+  page_size: number;
+  total_pages: number;
+  has_next?: boolean;
+  has_prev?: boolean;
+  next_page?: number | null;
+  prev_page?: number | null;
+}
+
+export interface ApiResponse<T> {
+  meta: ApiMeta;
+  data: T[];
 }

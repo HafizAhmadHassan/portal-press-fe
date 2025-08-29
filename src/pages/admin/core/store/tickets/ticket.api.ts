@@ -1,168 +1,62 @@
-// @store_admin/tickets/ticket.api.ts
 import { apiSlice } from "@store_admin/apiSlice";
 import type {
   TicketRead,
-  TicketUpdate,
-  BulkActionRequest,
   TicketsQueryParams,
-  MessageCreate,
+  ApiResponse,
+  BulkActionRequest,
 } from "./ticket.types";
-import { devicesApi } from "@store_admin/devices/devices.api";
-import type { Device } from "@store_admin/devices/devices.types";
+import { createCrudEndpoints } from "../api.factory";
 
-// Ridefiniamo TicketWithDevice per evitare conflitti di tipo
-export interface TicketWithDevice extends Omit<TicketRead, "device"> {
-  device?: Device; // Usa il tipo Device invece di DeviceInfo
-}
-
+/**
+ * Endpoint CRUD generati con NOMI specifici:
+ *  - getTickets, getTicketById, createTicket, updateTicket, deleteTicket, getTicketStats
+ * Extra: getAllTickets, bulkTickets
+ *
+ * Nota TS: i nomi generati dinamicamente non vengono tipizzati da RTK Query
+ * quando si usa lo spread (...obj). Exportiamo quindi wrapper hooks tipizzati
+ * "light" che delegano a ticketsApi.endpoints.<name>.* con un cast a any.
+ */
 export const ticketsApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getTickets: builder.query<
-      { data: TicketWithDevice[]; meta: any },
-      TicketsQueryParams
-    >({
-      query: (params = {}) => ({ url: "message/", params }),
-      providesTags: [
-        { type: "LIST" as const, id: "Tickets" },
-        { type: "STATS" as const, id: "Tickets" },
-      ],
-      async onQueryStarted(args, { queryFulfilled, dispatch }) {
-        try {
-          const { data: ticketsResponse } = await queryFulfilled;
-
-          // usa devicesApi per garantire che l'endpoint esista
-          const devicesResult = await dispatch(
-            devicesApi.endpoints.getAllDevices.initiate()
-          ).unwrap();
-
-          if (devicesResult) {
-            const deviceMap = new Map<number, Device>();
-            devicesResult.forEach((d) => deviceMap.set(Number(d.id), d));
-
-            const enriched: TicketWithDevice[] = ticketsResponse.data.map(
-              (t) => ({
-                ...t,
-                device: t.machine ? deviceMap.get(t.machine) : undefined,
-              })
-            );
-
-            dispatch(
-              ticketsApi.util.updateQueryData(
-                "getTickets",
-                args,
-                (draft: any) => {
-                  draft.data = enriched;
-                }
-              )
-            );
+    // CRUD via factory con override dei nomi
+    ...createCrudEndpoints<
+      TicketRead,
+      TicketsQueryParams,
+      ApiResponse<TicketRead>
+    >(
+      builder,
+      {
+        entity: "Ticket",
+        baseUrl: "message/",
+        idTag: "Tickets",
+        keepUnusedDataFor: 60,
+        enableStats: true,
+        statsPath: "stats/",
+        transformListResponse: (res: any): ApiResponse<TicketRead> => {
+          if (!res?.meta || !Array.isArray(res?.data)) {
+            throw new Error("Invalid tickets list response");
           }
-        } catch (error) {
-          console.error("Error enriching tickets with devices:", error);
-        }
+          return res as ApiResponse<TicketRead>;
+        },
+        endpointNameOverrides: {
+          getList: "getTickets",
+          getById: "getTicketById",
+          create: "createTicket",
+          update: "updateTicket",
+          delete: "deleteTicket",
+          getStats: "getTicketStats",
+        },
       },
-    }),
+      apiSlice // per optimistic patch su updateTicket
+    ),
 
-    getAllTickets: builder.query<TicketWithDevice[], void>({
+    // Tutti i ticket (no paginazione)
+    getAllTickets: builder.query<TicketRead[], void>({
       query: () => "message/all/",
       providesTags: [{ type: "LIST" as const, id: "AllTickets" }],
-      async onQueryStarted(args, { queryFulfilled, dispatch }) {
-        try {
-          const ticketsResponse = await queryFulfilled;
-          const devices = await dispatch(
-            devicesApi.endpoints.getAllDevices.initiate()
-          ).unwrap();
-
-          if (devices) {
-            const deviceMap = new Map<number, Device>();
-            devices.forEach((d) => deviceMap.set(d.id, d));
-
-            const enriched: TicketWithDevice[] = ticketsResponse.data.map(
-              (t) => ({
-                ...t,
-                device: t.machine ? deviceMap.get(t.machine) : undefined,
-              })
-            );
-
-            dispatch(
-              ticketsApi.util.updateQueryData(
-                "getAllTickets",
-                args,
-                () => enriched
-              )
-            );
-          }
-        } catch (error) {
-          console.error("Error enriching all tickets with devices:", error);
-        }
-      },
     }),
 
-    getTicketById: builder.query<TicketWithDevice, number>({
-      query: (id) => `message/${id}/`,
-      providesTags: (_r, _e, id) => [{ type: "ENTITY" as const, id }],
-      async onQueryStarted(id, { queryFulfilled, dispatch }) {
-        try {
-          const { data: ticket } = await queryFulfilled;
-
-          if (ticket?.machine) {
-            const device = await dispatch(
-              devicesApi.endpoints.getDeviceById.initiate(ticket.machine)
-            ).unwrap();
-
-            if (device) {
-              dispatch(
-                ticketsApi.util.updateQueryData(
-                  "getTicketById",
-                  id,
-                  (draft: any) => {
-                    draft.device = device;
-                  }
-                )
-              );
-            }
-          }
-        } catch (error) {
-          console.warn(`Error while enriching ticket ${id} with device`, error);
-        }
-      },
-    }),
-
-    createTicket: builder.mutation<TicketRead, MessageCreate>({
-      query: (body) => ({ url: "message/", method: "POST", body }),
-      invalidatesTags: [
-        { type: "LIST" as const, id: "Tickets" },
-        { type: "LIST" as const, id: "AllTickets" },
-        { type: "STATS" as const, id: "Tickets" },
-      ],
-    }),
-
-    updateTicket: builder.mutation<
-      TicketRead,
-      { id: number; data: TicketUpdate }
-    >({
-      query: ({ id, data }) => ({
-        url: `message/${id}/`,
-        method: "PUT",
-        body: data,
-      }),
-      invalidatesTags: (_r, _e, { id }) => [
-        { type: "ENTITY" as const, id },
-        { type: "LIST" as const, id: "Tickets" },
-        { type: "LIST" as const, id: "AllTickets" },
-        { type: "STATS" as const, id: "Tickets" },
-      ],
-    }),
-
-    deleteTicket: builder.mutation<{ success: boolean }, number>({
-      query: (id) => ({ url: `message/${id}/`, method: "DELETE" }),
-      invalidatesTags: (_r, _e, id) => [
-        { type: "ENTITY" as const, id },
-        { type: "LIST" as const, id: "Tickets" },
-        { type: "LIST" as const, id: "AllTickets" },
-        { type: "STATS" as const, id: "Tickets" },
-      ],
-    }),
-
+    // Operazioni bulk
     bulkTickets: builder.mutation<
       { message: string; affectedCount: number },
       BulkActionRequest
@@ -174,22 +68,30 @@ export const ticketsApi = apiSlice.injectEndpoints({
         { type: "STATS" as const, id: "Tickets" },
       ],
     }),
-
-    getTicketStats: builder.query<any, void>({
-      query: () => "message/stats/",
-      providesTags: [{ type: "STATS" as const, id: "Tickets" }],
-    }),
   }),
   overrideExisting: false,
 });
 
-export const {
-  useGetTicketsQuery,
-  useGetAllTicketsQuery,
-  useGetTicketByIdQuery,
-  useCreateTicketMutation,
-  useUpdateTicketMutation,
-  useDeleteTicketMutation,
-  useBulkTicketsMutation,
-  useGetTicketStatsQuery,
-} = ticketsApi;
+// ATTENZIONE: questi wrapper delegano agli endpoint dinamici generati dalla factory.
+// A runtime esistono sempre; il cast a `any` serve solo per “bucare” il limite di inferenza di TS.
+
+export const useGetTicketsQuery = (params?: TicketsQueryParams) =>
+  (ticketsApi.endpoints as any).getTickets.useQuery(params);
+
+export const useGetTicketByIdQuery = (id: number, options?: any) =>
+  (ticketsApi.endpoints as any).getTicketById.useQuery(id, options);
+
+export const useCreateTicketMutation = () =>
+  (ticketsApi.endpoints as any).createTicket.useMutation();
+
+export const useUpdateTicketMutation = () =>
+  (ticketsApi.endpoints as any).updateTicket.useMutation();
+
+export const useDeleteTicketMutation = () =>
+  (ticketsApi.endpoints as any).deleteTicket.useMutation();
+
+export const useGetTicketStatsQuery = (arg?: void) =>
+  (ticketsApi.endpoints as any).getTicketStats.useQuery(arg);
+
+// Questi due sono statici (scritti esplicitamente), quindi li puoi esportare normalmente:
+export const { useGetAllTicketsQuery, useBulkTicketsMutation } = ticketsApi;

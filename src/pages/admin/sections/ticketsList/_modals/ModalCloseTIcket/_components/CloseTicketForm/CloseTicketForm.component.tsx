@@ -5,15 +5,17 @@ import { Input } from "@shared/inputs/Input.component.tsx";
 import { Checkbox } from "@components/shared/checkbox/CheckBox.component";
 
 export type CloseTicketData = {
-  ticketId: number | string | undefined;
-  date?: Date;
-  note?: string;
+  id: number | string;
+  date_Time?: Date;
+  close_Description: string; // ← Campo principale per l'API
   info?: string;
   address?: string;
   inGaranzia?: boolean;
   fuoriGaranzia?: boolean;
   machine_retrival?: boolean;
   machine_not_repairable?: boolean;
+  note?: string; // Backward compatibility
+  open_Description?: string;
 };
 
 type Props = {
@@ -34,17 +36,16 @@ const CloseTicketForm: React.FC<Props> = ({ formData, errors, onChange }) => {
           <Calendar size={14} />
           Data chiusura
         </label>
-        {/* Input nativo date per compatibilità totale */}
         <input
           type="date"
           value={
-            formData.date
-              ? new Date(formData.date).toISOString().slice(0, 10)
+            formData.date_Time
+              ? new Date(formData.date_Time).toISOString().slice(0, 10)
               : ""
           }
           onChange={(e) =>
             onChange(
-              "date",
+              "date_Time",
               e.target.value ? new Date(e.target.value) : undefined
             )
           }
@@ -52,11 +53,11 @@ const CloseTicketForm: React.FC<Props> = ({ formData, errors, onChange }) => {
         />
       </div>
 
-      {/* Opzioni di chiusura */}
+      {/* Stato garanzia */}
       <div className={styles.group}>
         <label className={styles.label}>
           <AlertCircle size={14} />
-          Opzioni di chiusura
+          Stato garanzia
         </label>
 
         <div className={styles.checkboxWrap}>
@@ -73,6 +74,14 @@ const CloseTicketForm: React.FC<Props> = ({ formData, errors, onChange }) => {
             color="primary"
           />
         </div>
+      </div>
+
+      {/* Opzioni extra */}
+      <div className={styles.group}>
+        <label className={styles.label}>
+          <AlertCircle size={14} />
+          Opzioni aggiuntive
+        </label>
 
         <div className={styles.checkboxWrap}>
           <Checkbox
@@ -109,33 +118,44 @@ const CloseTicketForm: React.FC<Props> = ({ formData, errors, onChange }) => {
         />
       </div>
 
-      {/* Nota di chiusura */}
+      {/* Descrizione di chiusura - CAMPO PRINCIPALE */}
       <div className={styles.group}>
         <label className={styles.label}>
           <FileText size={14} />
-          Nota di chiusura <span className={styles.required}>*</span>
+          Descrizione chiusura <span className={styles.required}>*</span>
         </label>
         <Input
           label=" "
           hideLabel
-          name="note"
-          value={formData.note || ""}
-          onChange={(e) => onChange("note", e.target.value)}
-          placeholder="Inserisci la nota di chiusura..."
+          name="close_Description"
+          value={formData.close_Description || ""}
+          onChange={(e) => onChange("close_Description", e.target.value)}
+          placeholder="Descrivi come è stato risolto il problema..."
           multiline
-          error={errors.note}
+          error={errors.close_Description}
           variant="default"
           size="md"
         />
-        {errors.note && (
+        {errors.close_Description && (
           <div className={styles.errorLine}>
             <AlertCircle className={styles.errorIcon} />
-            {errors.note}
+            {errors.close_Description}
           </div>
         )}
       </div>
 
-      {/* Info (riassunto) opzionale / non richiesta, ma utile da visualizzare o copiare */}
+      {/* Mostra descrizione apertura per contesto */}
+      {formData.open_Description && (
+        <div className={styles.group}>
+          <label className={styles.label}>
+            <FileText size={14} />
+            Descrizione apertura (riferimento)
+          </label>
+          <div className={styles.readOnlyText}>{formData.open_Description}</div>
+        </div>
+      )}
+
+      {/* Info riassuntive */}
       {formData.info && (
         <div className={styles.group}>
           <label className={styles.label}>

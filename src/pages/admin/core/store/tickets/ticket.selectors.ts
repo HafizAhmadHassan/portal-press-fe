@@ -27,7 +27,21 @@ export const selectTicketsError = createSelector(
   [selectTicketsState],
   (s) => s.error
 );
+
+/** Pagina per UI (page + limit) */
 export const selectTicketsPagination = createSelector(
   [selectTicketsState],
   (s) => s.pagination
+);
+
+/** 🔹 Filtri (per factory) */
+export const selectTicketsFilters = createSelector(
+  [selectTicketsState],
+  (s) => s.filters
+);
+
+/** 🔹 Paginazione in forma { page, page_size } (per factory) */
+export const selectTicketsPaginationApi = createSelector(
+  [selectTicketsState],
+  (s) => ({ page: s.pagination.page, page_size: s.pagination.limit })
 );

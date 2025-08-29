@@ -1,7 +1,7 @@
 // src/sections/ticketsList/_modals/ModalOpenTicket/_components/OpenTicketForm/OpenTicketForm.component.tsx
 import React from "react";
 import styles from "./OpenTicketForm.module.scss";
-import { Calendar, FileText, Tag } from "lucide-react";
+import { /* Calendar, */ FileText, Tag } from "lucide-react";
 
 import { Input } from "@shared/inputs/Input.component.tsx";
 import { CheckboxGroup } from "@components/shared/checkbox/CheckBox.component";
@@ -27,7 +27,7 @@ const OpenTicketForm: React.FC<Props> = ({
   onChange,
   problemOptions,
 }) => {
-  const handleStatus = (val: 1 | 2) => onChange("status", val);
+  /* const handleStatus = (val: 1 | 2) => onChange("status", val); */
 
   const mapLabel = (p: ProblemCategory) =>
     ((
@@ -42,7 +42,7 @@ const OpenTicketForm: React.FC<Props> = ({
   return (
     <section className={styles.form}>
       {/* Stato */}
-      <div className={styles.group}>
+      {/* <div className={styles.group}>
         <label className={styles.label}>
           <Calendar size={14} />
           Stato <span className={styles.required}>*</span>
@@ -68,7 +68,7 @@ const OpenTicketForm: React.FC<Props> = ({
             {errors.status}
           </div>
         )}
-      </div>
+      </div> */}
 
       {/* Problema */}
       <div className={styles.group}>

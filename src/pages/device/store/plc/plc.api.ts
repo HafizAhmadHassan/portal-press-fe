@@ -27,11 +27,11 @@ export const plcApi = apiSlice.injectEndpoints({
 
 // ✅ Alias con nomi “parlanti” per l’entità, mantenendo i TIPI
 export const {
-  useGetListQuery: useGetPlcQuery,
-  useGetByIdQuery: useGetPlcByIdQuery,
-  useCreateMutation: useCreatePlcMutation,
-  useUpdateMutation: useUpdatePlcMutation,
-  useDeleteMutation: useDeletePlcMutation,
-  useSearchQuery: useSearchPlcQuery, // presente solo se enableSearch=true
-  useGetStatsQuery: useGetPlcStatsQuery, // presente solo se enableStats=true
+  useGetPlcQuery,
+  useGetPlcByIdQuery,
+  useCreatePlcMutation,
+  useUpdatePlcMutation,
+  useDeletePlcMutation,
+  useSearchPlcQuery, // presente solo se enableSearch=true
+  useGetPlcStatsQuery, // presente solo se enableStats=true
 } = plcApi;
