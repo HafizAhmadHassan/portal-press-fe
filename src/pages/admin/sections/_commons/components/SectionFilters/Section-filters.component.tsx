@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import styles from "./Section-filter.module.scss";
+import styles from "./Section-filters.module.scss";
 import { Input } from "@shared/inputs/Input.component.tsx";
 import { Select } from "@shared/select/Select.component.tsx";
 import {

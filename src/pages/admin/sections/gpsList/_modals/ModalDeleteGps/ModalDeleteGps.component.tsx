@@ -10,10 +10,7 @@ interface Props {
   onConfirm: (device: GpsDevice) => void;
 }
 
-export const ModalDeleteGpsConfirm: React.FC<Props> = ({
-  device,
-  onConfirm,
-}) => {
+export const ModalDeleteGps: React.FC<Props> = ({ device, onConfirm }) => {
   return (
     <Modal
       size="bare"

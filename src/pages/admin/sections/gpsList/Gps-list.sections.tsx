@@ -2,10 +2,10 @@ import { RefreshCw } from "lucide-react";
 import React, { useCallback, useMemo } from "react";
 import { useCrud } from "@root/hooks/useCrud";
 
+import styles from "./Gps-list.module.scss";
 import { toAppError } from "@root/utils/errorHandling";
 import { getGpsColumns } from "./_config/gpsTableConfig";
 import gpsListHeaderBtns from "./_config/gpsListHeaderBtns";
-import styles from "./_styles/Gps-list.sections.module.scss";
 import { Divider } from "@shared/divider/Divider.component";
 import { useListController } from "@root/hooks/useListController";
 import type { GpsDevice, GpsQueryParams } from "@store_admin/gps/gps.types";

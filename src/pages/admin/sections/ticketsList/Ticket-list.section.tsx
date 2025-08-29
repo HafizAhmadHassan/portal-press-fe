@@ -5,7 +5,7 @@ import React, { useCallback, useMemo } from "react";
 import { toAppError } from "@root/utils/errorHandling";
 import { Divider } from "@shared/divider/Divider.component";
 import { useListController } from "@hooks/useListController";
-import styles from "./_styles/TicketsListSection.module.scss";
+import styles from "./TicketsListSection.module.scss";
 import ticketListHeaderBtns from "./_config/ticketListHeaderBtns";
 import { getTicketsColumns } from "./_config/ticketsTableConfig";
 import type { TicketRead } from "@store_admin/tickets/ticket.types";
