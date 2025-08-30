@@ -1,5 +1,7 @@
-// hooks/useListController.ts - Enhanced version
+// hooks/useListController.ts - Versione integrata con pagination corretta
 import { useCallback, useMemo, useState, useEffect } from "react";
+import { usePagination } from "@hooks/usePagination";
+import type { ApiMeta } from "@store_admin/api.types";
 
 interface ListControllerConfig<TQueryParams, TItem> {
   listHook: (params: any) => any;
@@ -44,35 +46,35 @@ export function useListController<TQueryParams, TItem>({
 
   console.log("useListController - Query params:", queryParams);
 
-  // Usa l'hook di lista con refetchOnMountOrArgChange per force refresh
+  // Usa l'hook di lista - RTK Query hooks accettano solo queryParams come primo parametro
   const {
     data: response,
     isLoading,
     error,
     refetch,
     isFetching,
-  } = listHook(queryParams, {
-    refetchOnMountOrArgChange: true, // Force refetch quando cambiano i parametri
-    refetchOnFocus: false, // Non refetch quando si torna alla finestra
-    refetchOnReconnect: true, // Refetch se la connessione si riconnette
-  });
+  } = listHook(queryParams);
 
   // Estrai items e meta dalla response
   const items = response?.data || response || [];
-  const meta = response?.meta || {
-    page: 1,
-    page_size: items.length,
-    total: items.length,
-    total_pages: 1,
-    has_next: false,
-    has_prev: false,
-  };
+  const meta: ApiMeta | null = response?.meta || null;
 
   console.log("useListController - Response:", {
     itemsCount: items.length,
     meta,
     isLoading,
     isFetching,
+  });
+
+  // Usa usePagination per gestire la paginazione correttamente
+  const pagination = usePagination({
+    initialPage: 1,
+    initialPageSize: pageSize,
+    apiMeta: meta ?? undefined,
+    onChange: (newPage, newSize) => {
+      setPage(newPage);
+      setPageSize(newSize);
+    },
   });
 
   // Enhanced setFilter con auto-reset page
@@ -88,9 +90,10 @@ export function useListController<TQueryParams, TItem>({
       // Reset alla pagina 1 quando cambia un filtro
       if (page !== 1) {
         setPage(1);
+        pagination.setPage(1);
       }
     },
-    [page]
+    [page, pagination]
   );
 
   // Enhanced reset con callback
@@ -100,7 +103,8 @@ export function useListController<TQueryParams, TItem>({
     setPage(1);
     setSortBy(initialSort?.sortBy || "id");
     setSortOrder(initialSort?.sortOrder || "desc");
-  }, [initialFilters, initialSort]);
+    pagination.resetPagination();
+  }, [initialFilters, initialSort, pagination]);
 
   // Enhanced refetch
   const enhancedRefetch = useCallback(() => {
@@ -118,24 +122,31 @@ export function useListController<TQueryParams, TItem>({
     []
   );
 
-  // Build table config helper
+  // Build table config helper - Usa la struttura corretta per la paginazione
   const buildTableConfig = useCallback(
     (columns: any, additionalConfig: any = {}) => {
+      const paginationConfig = pagination.getTablePaginationConfig();
+
+      console.log("useListController - Building table config:", {
+        itemsCount: items.length,
+        paginationConfig,
+      });
+
       return {
         columns,
         data: items,
         pagination: {
-          page,
-          pageSize,
-          total: meta.total,
-          totalPages: meta.total_pages,
-          hasNext: meta.has_next,
-          hasPrev: meta.has_prev,
-          onPageChange: setPage,
-          onPageSizeChange: (newSize: number) => {
-            setPageSize(newSize);
-            setPage(1);
-          },
+          enabled: true,
+          currentPage: paginationConfig.currentPage,
+          pageSize: paginationConfig.pageSize,
+          totalItems: paginationConfig.totalItems,
+          totalPages: paginationConfig.totalPages,
+          hasNext: paginationConfig.hasNext,
+          hasPrev: paginationConfig.hasPrev,
+          nextPage: paginationConfig.nextPage,
+          prevPage: paginationConfig.prevPage,
+          onPageChange: paginationConfig.onPageChange,
+          onPageSizeChange: paginationConfig.onPageSizeChange,
         },
         sorting: {
           sortBy,
@@ -146,17 +157,7 @@ export function useListController<TQueryParams, TItem>({
         ...additionalConfig,
       };
     },
-    [
-      items,
-      meta,
-      page,
-      pageSize,
-      sortBy,
-      sortOrder,
-      isLoading,
-      isFetching,
-      setSort,
-    ]
+    [items, pagination, sortBy, sortOrder, isLoading, isFetching, setSort]
   );
 
   // Log changes per debug
@@ -167,8 +168,13 @@ export function useListController<TQueryParams, TItem>({
       pageSize,
       sortBy,
       sortOrder,
+      paginationState: {
+        currentPage: pagination.page,
+        totalItems: pagination.totalItems,
+        totalPages: pagination.totalPages,
+      },
     });
-  }, [filters, page, pageSize, sortBy, sortOrder]);
+  }, [filters, page, pageSize, sortBy, sortOrder, pagination]);
 
   return {
     // Data
@@ -187,16 +193,19 @@ export function useListController<TQueryParams, TItem>({
     setFilter,
     resetAll,
 
-    // Pagination
-    page,
-    setPage,
-    pageSize,
-    setPageSize,
+    // Pagination (mantieni compatibilità con la versione precedente)
+    page: pagination.page,
+    setPage: pagination.setPage,
+    pageSize: pagination.pageSize,
+    setPageSize: pagination.setPageSize,
 
     // Sorting
     sortBy,
     sortOrder,
     setSort,
+
+    // Oggetto paginazione completo (come nella versione moderna)
+    pagination,
 
     // Helpers
     buildTableConfig,
