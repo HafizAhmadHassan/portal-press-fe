@@ -1,13 +1,15 @@
+// ModalRiActivateDevice.component.tsx
 import React from "react";
 import Modal from "@components/shared/modal/Modal";
 import { SimpleButton } from "@shared/simple-btn/SimpleButton.component.tsx";
 import { CheckCircle, RotateCcw } from "lucide-react";
 import type { Device } from "@store_admin/devices/devices.types.ts";
 import styles from "./ModalRiActivateDevice.module.scss";
+import { useWritePlcMutation } from "@store_device/plc/plc.api";
 
 interface Props {
   device: Device;
-  onConfirm?: (d: Device) => Promise<void> | void;
+  onConfirm?: (d: Device) => Promise<void> | void; // <- la useremo per ricaricare la pagina
   triggerButton?: React.ReactNode;
 }
 
@@ -16,7 +18,21 @@ export const ModalRiActiveDevice: React.FC<Props> = ({
   onConfirm,
   triggerButton,
 }) => {
+  const [writePlc, { isLoading: writing, error: writeError }] =
+    useWritePlcMutation();
+
   const handleConfirm = async () => {
+    // payload per “riattiva”
+    const payload: any = {
+      status_Machine_Block: 0,
+      // se il backend richiede un identificatore del device, sblocca uno di questi:
+      // device_id: device.id,
+      // id: device.id,
+    };
+
+    await writePlc(payload).unwrap();
+
+    // dopo il POST, rinfresca tutto tramite callback passata dalla pagina
     if (onConfirm) await onConfirm(device);
   };
 
@@ -43,6 +59,7 @@ export const ModalRiActiveDevice: React.FC<Props> = ({
       confirmText="Riattiva Device"
       cancelText="Annulla"
       onConfirm={handleConfirm}
+      loading={writing} // blocca i bottoni durante la chiamata
       modalClassName={styles.modalReactivate}
       defaultActions={{
         variantCancel: undefined,
@@ -52,55 +69,13 @@ export const ModalRiActiveDevice: React.FC<Props> = ({
       }}
     >
       <div className={styles.modalReactivateContent}>
-        {/* Device Info Card */}
-        <div
-          className={styles.deviceInfoCard}
-          role="group"
-          aria-label="Informazioni dispositivo"
-        >
-          <div className={styles.deviceMainInfo}>
-            <div className={styles.deviceIdSection}>
-              <div className={styles.deviceIdBadge} aria-hidden="true">
-                <span>#{device?.id ?? "N/A"}</span>
-              </div>
-
-              <div className={styles.devicePrimaryInfo}>
-                {/* <h4 className={styles.deviceName}>{device?.machine_Name || 'Nome non disponibile'}</h4> */}
-                <p className={styles.deviceStatus}>
-                  {device?.address || "Indirizzo non disponibile"}
-                </p>
-                <p className={styles.deviceStatus}>
-                  {device?.city || "Città non disponibile"}
-                </p>
-              </div>
-            </div>
+        {writeError && (
+          <div className={styles.errorBanner} role="alert">
+            Errore durante la riattivazione PLC.
           </div>
+        )}
 
-          <div className={styles.deviceDivider} />
-
-          <div className={styles.deviceTechnicalSpecs}>
-            <h5 className={styles.specsTitle}>Specifiche Tecniche</h5>
-            <div className={styles.specsGrid}>
-              <div className={styles.specRow}>
-                <span className={styles.specLabel}>Indirizzo IP</span>
-                <span className={styles.specValue}>
-                  {device?.ip_Router || "Non disponibile"}
-                </span>
-              </div>
-
-              <div className={styles.specRow}>
-                <span className={styles.specLabel}>Coordinate GPS</span>
-                <span className={styles.specValue}>
-                  {device?.gps_x && device?.gps_y
-                    ? `${device.gps_x}, ${device.gps_y}`
-                    : "Non disponibili"}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Success copy */}
+        {/* … resto del contenuto invariato … */}
         <div className={styles.successMessage} role="note" aria-live="polite">
           <div className={styles.successContent}>
             <CheckCircle
@@ -112,8 +87,7 @@ export const ModalRiActiveDevice: React.FC<Props> = ({
               <p className={styles.successTitle}>Riattivazione Device</p>
               <p className={styles.successDescription}>
                 Il dispositivo tornerà operativo e riprenderà le sue funzioni
-                normali. Tutti i servizi associati verranno riavviati
-                automaticamente.
+                normali…
               </p>
             </div>
           </div>

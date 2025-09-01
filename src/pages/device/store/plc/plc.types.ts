@@ -37,7 +37,7 @@ export interface PlcQueryParams {
   search?: string;
   sortBy?: string;
   sortOrder?: "asc" | "desc";
-  // Filtri “di dominio” (se non li usi, lasciali vuoti)
+  // Filtri "di dominio" (se non li usi, lasciali vuoti)
   codice?: string;
   municipility?: string;
   customer?: string;
@@ -54,8 +54,6 @@ export interface PlcFilters {
   customer: string;
   waste: string;
 }
-
-/** Informazioni di paginazione (UI) */
 
 /** Stato Redux per PLC */
 export interface PlcState {
@@ -98,4 +96,40 @@ export interface PlcStats {
   total: number;
   online: number;
   offline: number;
+}
+
+// ✅ NUOVI TIPI PER PLC WRITE
+
+/** Request per scrivere su PLC */
+export interface PlcWriteRequest {
+  machine_id: string;
+  varname: string;
+  operation: "0" | "1";
+}
+
+/** Response dalla scrittura PLC */
+export interface PlcWriteResponse {
+  success: boolean;
+  message: string;
+  machine_id: string;
+  varname: string;
+  operation: "0" | "1";
+  timestamp?: string;
+}
+
+/** Mappatura comandi UI → varname PLC */
+export interface PlcCommand {
+  key: string;
+  label: string;
+  varname: string;
+  currentValue?: boolean | number;
+  description?: string;
+}
+
+/** Stato di un comando durante l'esecuzione */
+export interface PlcCommandExecution {
+  commandKey: string;
+  isExecuting: boolean;
+  error: string | null;
+  lastExecuted: Date | null;
 }

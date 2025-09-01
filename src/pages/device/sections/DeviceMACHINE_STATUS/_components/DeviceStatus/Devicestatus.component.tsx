@@ -7,14 +7,58 @@ import { formatNumber } from "@root/utils/formatNumber";
 
 export type StatusItem =
   | { key: string; label: string; type: "boolean"; value: boolean }
-  | { key: string; label: string; type: "number"; value: number; unit?: string }
+  | { key: string; label: string; type: "number"; value: string; unit?: string }
   | { key: string; label: string; type: "text"; value: string };
 
 export interface DeviceStatusProps {
   statusList: StatusItem[];
+  isLoading?: boolean;
 }
 
-export default function DeviceStatus({ statusList }: DeviceStatusProps) {
+export default function DeviceStatus({
+  statusList,
+  isLoading,
+}: DeviceStatusProps) {
+  if (isLoading) {
+    return (
+      <DeviceCard
+        title="Stato"
+        icon={<Gauge size={16} />}
+        bodyClassName={styles.cardBody}
+      >
+        <div className={styles.statGrid}>
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div key={i} className={styles.statItem}>
+              <div className={styles.statLabel}>Caricamento...</div>
+              <div className={[styles.badge, styles.badgeInfo].join(" ")}>
+                <span>---</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </DeviceCard>
+    );
+  }
+
+  if (!statusList.length) {
+    return (
+      <DeviceCard
+        title="Stato"
+        icon={<Gauge size={16} />}
+        bodyClassName={styles.cardBody}
+      >
+        <div className={styles.statGrid}>
+          <div className={styles.statItem}>
+            <div className={styles.statLabel}>Nessun dato disponibile</div>
+            <div className={[styles.badge, styles.badgeInfo].join(" ")}>
+              <span>N/A</span>
+            </div>
+          </div>
+        </div>
+      </DeviceCard>
+    );
+  }
+
   return (
     <DeviceCard
       title="Stato"
@@ -35,10 +79,10 @@ export default function DeviceStatus({ statusList }: DeviceStatusProps) {
                 {s.value ? <CheckCircle2 size={12} /> : <XCircle size={12} />}
                 <span>{s.value ? "True" : "False"}</span>
               </div>
-            ) : s.type === "number" ? (
+            ) : s.type === "text" ? (
               <div className={[styles.badge, styles.badgeNumber].join(" ")}>
                 <span>
-                  {formatNumber(s.value)}
+                  {s.value}
                   {s.unit ? ` ${s.unit}` : ""}
                 </span>
               </div>
