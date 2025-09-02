@@ -21,7 +21,7 @@ export const getGpsColumns = ({
   return [
     {
       key: "codice",
-      header: "Codice",
+      header: "Codice Gps",
       type: "text",
       width: "110px",
       sortable: true,

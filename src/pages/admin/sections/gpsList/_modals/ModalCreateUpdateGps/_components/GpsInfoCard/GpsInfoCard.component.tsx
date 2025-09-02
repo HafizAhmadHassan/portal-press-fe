@@ -36,7 +36,7 @@ const GpsInfoCard: React.FC<Props> = ({
       <DeviceFormGrid>
         <Input
           name="codice"
-          label="Codice"
+          label="Codice Gps"
           value={values.codice}
           onChange={(e) => onChange("codice", e.target.value)}
           icon={ClipboardList}

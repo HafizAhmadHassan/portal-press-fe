@@ -12,7 +12,7 @@ export const GpsDetailsCard: React.FC<{ device: GpsDevice }> = ({ device }) => {
     <DeviceCard title="Dettagli dispositivo" icon={<Satellite size={18} />}>
       <div className={styles.infoGrid}>
         <div className={styles.infoItem}>
-          <span className={styles.infoLabel}>Codice</span>
+          <span className={styles.infoLabel}>Codice GPS</span>
           <span className={styles.infoValue}>{toStr(device.codice)}</span>
         </div>
 

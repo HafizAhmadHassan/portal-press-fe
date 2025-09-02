@@ -30,7 +30,7 @@ const GpsSummaryCard: React.FC<Props> = ({
     >
       <div className={styles.grid}>
         <div className={styles.item}>
-          <span className={styles.label}>Codice</span>
+          <span className={styles.label}>Codice GPS</span>
           <span className={styles.value}>{codice || "—"}</span>
         </div>
         <div className={styles.item}>
