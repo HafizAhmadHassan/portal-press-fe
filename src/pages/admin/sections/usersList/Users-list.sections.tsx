@@ -8,7 +8,7 @@ import styles from "./_styles/User-list.sections.module.scss";
 import usersListHeaderBtns from "./_config/usersListHeaderBtns";
 import { useListController } from "@root/hooks/useListController";
 import { createUsersFilterConfig } from "./_config/userFilterConfig";
-import { UserFields } from "@root/utils/constants/userFields.constants";
+/* import { UserFields } from "@root/utils/constants/userFields.constants"; */
 import type { User, UsersQueryParams } from "@store_admin/users/user.types";
 import { GenericTableWithLogic } from "@shared/table/components/GenericTableWhitLogic.component";
 import { SectionHeaderComponent } from "@sections_admin/_commons/components/SectionHeader/Section-header.component";
@@ -33,10 +33,10 @@ export const UsersListSections: React.FC = () => {
   } = useListController<UsersQueryParams, User>({
     listHook: useGetUsersQuery,
     initialFilters: {
-      [UserFields.EMAIL]: "",
-      [UserFields.USERNAME]: "",
-      [UserFields.IS_ACTIVE]: "",
-      [UserFields.USER_PERMISSIONS]: "",
+      /*   email: "",
+      username: "",
+      is_active: "",
+      user_permissions: "", */
     },
     initialSort: { sortBy: "date_joined", sortOrder: "desc" },
   });

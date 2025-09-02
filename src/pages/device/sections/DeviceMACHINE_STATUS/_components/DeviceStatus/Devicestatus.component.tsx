@@ -16,7 +16,7 @@ export type StatusItem =
     };
 
 export interface DeviceStatusProps {
-  statusList: StatusItem[];
+  statusList: /* StatusItem[] */ any;
   isLoading?: boolean;
 }
 

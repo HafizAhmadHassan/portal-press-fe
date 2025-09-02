@@ -102,10 +102,13 @@ export const TicketsListSections: React.FC = () => {
 
   // Handlers esistenti
   const handleEdit = useCallback(
-    async (ticketData: Partial<TicketRead> & { id: number | string }) => {
+    async (ticketData: {
+      [key: string]: string | number;
+      id: string | number;
+    }) => {
       const { id, ...data } = ticketData;
       const res = await execUpdate(updateTicketTrigger, {
-        id,
+        id: typeof id === "string" ? Number(id) : id,
         data: data as Partial<TicketRead>,
       });
       if (!res.success) {

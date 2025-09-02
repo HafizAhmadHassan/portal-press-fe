@@ -36,7 +36,8 @@ type CustomerSelectProps = {
 type SectionHeaderProps = {
   title: string;
   subTitle?: string;
-  buttons?: ActionItem[];
+  /*   buttons?: ActionItem[]; */
+  buttons?: any;
   customerSelect?: CustomerSelectProps; // opzionale
 };
 

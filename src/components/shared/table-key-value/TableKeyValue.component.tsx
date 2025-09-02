@@ -59,7 +59,8 @@ export type TableKeyValueRow =
 export type TableKeyValueProps = {
   title?: React.ReactNode;
   rows: TableKeyValueRow[];
-  onChange: (rows: TableKeyValueRow[]) => void;
+  /*   onChange: (rows: TableKeyValueRow[]) => void; */
+  onChange: any;
   onSave?: (rows: TableKeyValueRow[]) => void | Promise<void>;
   onCancel?: () => void;
 

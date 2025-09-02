@@ -18,7 +18,8 @@ import DeviceCompactCard from "../_commons/DeviceCompactCard/DeviceCompactCard.c
 
 type Props = {
   device: Device;
-  onSave: (data: MessageCreate) => Promise<void>;
+  /* onSave: (data: MessageCreate) => Promise<void>; */
+  onSave: any;
   onClose?: () => void;
   triggerButton?: React.ReactNode;
 };
@@ -136,9 +137,9 @@ export const ModalOpenTicket: React.FC<Props> = ({
       confirmText={isSubmitting ? "Creazione..." : "Apri Ticket"}
       cancelText="Annulla"
       onConfirm={handleSave}
-      onCancel={onClose}
+      /*   onCancel={onClose} */
       modalClassName={styles.modal}
-      confirmDisabled={isSubmitting}
+      /*  confirmDisabled={isSubmitting} */
     >
       <div className={styles.content}>
         <TicketHeader device={device} />
