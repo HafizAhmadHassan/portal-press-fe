@@ -118,7 +118,11 @@ export function getCommandCurrentValue(
     ...plcItem.plc_data,
   };
 
-  return combinedData[command.varname];
+  const value = combinedData[command.varname];
+  if (typeof value === "number" || typeof value === "boolean") {
+    return value;
+  }
+  return undefined;
 }
 
 /**

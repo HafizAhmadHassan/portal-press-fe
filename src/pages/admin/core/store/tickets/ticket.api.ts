@@ -23,32 +23,28 @@ export const ticketsApi = apiSlice.injectEndpoints({
       TicketRead,
       TicketsQueryParams,
       ApiResponse<TicketRead>
-    >(
-      builder,
-      {
-        entity: "Ticket",
-        baseUrl: "message/",
-        idTag: "Tickets",
-        keepUnusedDataFor: 60,
-        enableStats: true,
-        statsPath: "stats/",
-        transformListResponse: (res: any): ApiResponse<TicketRead> => {
-          if (!res?.meta || !Array.isArray(res?.data)) {
-            throw new Error("Invalid tickets list response");
-          }
-          return res as ApiResponse<TicketRead>;
-        },
-        endpointNameOverrides: {
-          getList: "getTickets",
-          getById: "getTicketById",
-          create: "createTicket",
-          update: "updateTicket",
-          delete: "deleteTicket",
-          getStats: "getTicketStats",
-        },
+    >(builder, {
+      entity: "Ticket",
+      baseUrl: "message/",
+      idTag: "Tickets",
+      keepUnusedDataFor: 60,
+      enableStats: true,
+      statsPath: "stats/",
+      transformListResponse: (res: any): ApiResponse<TicketRead> => {
+        if (!res?.meta || !Array.isArray(res?.data)) {
+          throw new Error("Invalid tickets list response");
+        }
+        return res as ApiResponse<TicketRead>;
       },
-      apiSlice // per optimistic patch su updateTicket
-    ),
+      endpointNameOverrides: {
+        getList: "getTickets",
+        getById: "getTicketById",
+        create: "createTicket",
+        update: "updateTicket",
+        delete: "deleteTicket",
+        getStats: "getTicketStats",
+      },
+    }),
 
     // Tutti i ticket (no paginazione)
     getAllTickets: builder.query<TicketRead[], void>({

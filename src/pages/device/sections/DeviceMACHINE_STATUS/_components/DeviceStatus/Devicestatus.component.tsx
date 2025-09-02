@@ -3,12 +3,17 @@ import { Gauge, CheckCircle2, XCircle } from "lucide-react";
 
 import styles from "./DeviceStatus.module.scss";
 import DeviceCard from "../../../_components/DeviceCard/DeviceCard.component";
-import { formatNumber } from "@root/utils/formatNumber";
 
 export type StatusItem =
   | { key: string; label: string; type: "boolean"; value: boolean }
   | { key: string; label: string; type: "number"; value: string; unit?: string }
-  | { key: string; label: string; type: "text"; value: string };
+  | {
+      unit: any;
+      key: string;
+      label: string;
+      type: "text";
+      value: string;
+    };
 
 export interface DeviceStatusProps {
   statusList: StatusItem[];

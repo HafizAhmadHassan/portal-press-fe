@@ -134,14 +134,10 @@ export default function DeviceOverview() {
         deviceName={deviceName}
         deviceStatus={deviceStatus}
         imageUrl={imageUrl}
-        isLoading={isLoading}
+        /* isLoading={isLoading} */
       />
 
-      <DeviceCommands
-        commands={commands}
-        onCommand={handleCommand}
-        disabled={isLoading || deviceStatus === "offline"}
-      />
+      <DeviceCommands commands={commands} onCommand={handleCommand} />
 
       <DeviceStatus statusList={statusList} isLoading={isLoading} />
     </section>

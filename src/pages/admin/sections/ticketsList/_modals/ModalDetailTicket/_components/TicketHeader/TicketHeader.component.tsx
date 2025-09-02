@@ -1,8 +1,9 @@
 import React from "react";
 import { CheckCircle, XCircle, Monitor, Shield, Badge } from "lucide-react";
 import styles from "./TicketHeader.module.scss";
-import type { TicketWithDevice } from "../../../../_types/TicketWithDevice.types";
+
 import { isClosed } from "../../_utils/ticketHelpers";
+import type { TicketWithDevice } from "@root/pages/admin/core/store/tickets/hooks/useTicketWithDevices";
 
 type Props = { ticket: TicketWithDevice };
 
@@ -10,7 +11,7 @@ const TicketHeader: React.FC<Props> = ({ ticket }) => {
   const dev = ticket?.device;
   const statusClosed = isClosed(ticket);
   const customer = ticket.customer_Name ?? "N/D";
-  const machineId = ticket.machine ?? "N/D";
+
   const machineName = dev?.machine_Name;
 
   return (

@@ -66,9 +66,7 @@ export const SectionFilterComponent: React.FC<SectionFilterProps> = ({
             placeholder={filter.placeholder}
             type={filter.type === "email" ? "email" : "text"}
             value={filter.value ?? ""}
-            onChange={(e) =>
-              filter.onChange(e as React.ChangeEvent<HTMLInputElement>)
-            }
+            onChange={(e) => filter.onChange(e as any)}
             required={filter.required}
             icon={filter.icon}
             iconPosition={filter.iconPosition}

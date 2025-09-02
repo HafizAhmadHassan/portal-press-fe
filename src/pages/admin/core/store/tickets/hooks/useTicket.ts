@@ -1,8 +1,5 @@
 // src/hooks/useTickets.ts
-import {
-  useGetTicketsQuery,
-  type TicketWithDevice,
-} from "@store_admin/tickets/ticket.api";
+import { useGetTicketsQuery } from "@store_admin/tickets/ticket.api";
 import {
   createNewTicket,
   updateExistingTicket,
@@ -10,6 +7,7 @@ import {
   performBulkTicketAction,
 } from "@root/pages/admin/core/store/tickets/ticket.actions";
 import type { TicketsQueryParams } from "@store_admin/tickets/ticket.types";
+import type { TicketWithDevice } from "./useTicketWithDevices";
 
 export const useTickets = (params: TicketsQueryParams) => {
   const {

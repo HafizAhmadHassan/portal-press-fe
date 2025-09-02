@@ -11,7 +11,7 @@ const initialState: GpsState = {
   filters: {
     codice: "",
     municipility: "",
-    customer: "",
+    customer_Name: "",
     waste: "",
     search: "",
     sortBy: "codice",

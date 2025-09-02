@@ -1,7 +1,7 @@
 import { type ReactNode } from "react";
 import type { LucideIcon, TypeIcon } from "lucide-react";
 
-export type FilterType = "email" | "name" | "select" | "text";
+export type FilterType = "email" | "name" | "select" | "text" | "date";
 
 export interface BaseFilter {
   type: FilterType;
@@ -28,8 +28,8 @@ export interface SelectOption {
 }
 
 export interface SelectFilter extends BaseFilter {
-  type: "select";
-  options: SelectOption[];
+  type: "select" | "date";
+  options?: SelectOption[];
   onChange: (value: string | null) => void;
   // Rese opzionali le proprietà icon
   icon?: LucideIcon;

@@ -158,7 +158,7 @@ const Modal = ({
                           onClick={handleClose}
                           disabled={isPending || loading}
                           icon={X}
-                          color={defaultActions?.colorCancel}
+                          color="danger"
                         >
                           {cancelText}
                         </SimpleButton>

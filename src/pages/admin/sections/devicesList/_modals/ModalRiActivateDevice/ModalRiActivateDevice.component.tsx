@@ -64,7 +64,7 @@ export const ModalRiActiveDevice: React.FC<Props> = ({
       defaultActions={{
         variantCancel: undefined,
         variantConfirm: undefined,
-        colorCancel: "error",
+        colorCancel: "danger",
         colorConfirm: "success",
       }}
     >

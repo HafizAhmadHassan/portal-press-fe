@@ -6,37 +6,9 @@ import type { TicketRead } from "@store_admin/tickets/ticket.types";
 import ModalTicketDetails from "../_modals/ModalDetailTicket/ModalTicketDetail.component";
 import ModalCloseTicket from "../_modals/ModalCloseTIcket/ModalCloseTicket.component";
 
-// Info del device collegato al ticket
-type DeviceLite = {
-  machine_Name?: string;
-  city?: string;
-  province?: string;
-  customer_Name?: string;
-  ip_Router?: string;
-  waste?: string;
-  address?: string;
-  street?: string;
-  postal_Code?: string;
-  country?: string;
-};
-
-// Ticket con device opzionale
-type TicketWithDevice = TicketRead & {
-  device?: DeviceLite | null;
-};
-
 // Tipo per i dati di chiusura ticket
-export type CloseTicketData = {
-  ticketId: number | string;
-  date?: Date;
-  note?: string;
-  info?: string;
-  address?: string;
-  inGaranzia?: boolean;
-  fuoriGaranzia?: boolean;
-  machine_retrival?: boolean;
-  machine_not_repairable?: boolean;
-};
+import type { CloseTicketData } from "../_types/TicketWithDevice.types";
+import type { TicketWithDevice } from "@root/pages/admin/core/store/tickets/hooks/useTicketWithDevices";
 
 interface GetTicketsColumnsOptions {
   onEdit: (ticketData: {

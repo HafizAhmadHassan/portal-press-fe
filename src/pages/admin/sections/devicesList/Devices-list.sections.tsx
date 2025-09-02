@@ -8,6 +8,7 @@ import styles from "./Devices-list.sections.module.scss";
 import { useListController } from "@root/hooks/useListController";
 import { createDevicesFilterConfig } from "./_config/deviceFilterConfig";
 import type {
+  CreateDeviceRequest,
   Device,
   DevicesQueryParams,
 } from "@store_admin/devices/devices.types";
@@ -103,7 +104,7 @@ export const DevicesListSections: React.FC = () => {
     () => ({
       wasteType: filters[DeviceFields.WASTE] || undefined,
       status: filters[DeviceFields.STATUS]
-        ? parseInt(filters[DeviceFields.STATUS])
+        ? parseInt(String(filters[DeviceFields.STATUS]))
         : undefined,
       isBlocked:
         filters[DeviceFields.STATUS_MACHINE_BLOCKED] === "true" || undefined,
@@ -125,7 +126,7 @@ export const DevicesListSections: React.FC = () => {
   } = useMapDevices(mapFilters);
 
   const handleCreateDevice = useCallback(
-    async (deviceData: Partial<Device>) => {
+    async (deviceData: CreateDeviceRequest) => {
       const res = await execCreate(createDeviceTrigger, deviceData);
       if (!res.success) throw new Error(res.error);
       refetch();

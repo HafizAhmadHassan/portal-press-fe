@@ -25,7 +25,7 @@ export const loadGps = createAsyncThunk(
         page_size: params.page_size ?? pagination.limit,
         codice: params.codice ?? filters.codice,
         municipility: params.municipility ?? filters.municipility,
-        customer: params.customer ?? filters.customer,
+        customer_Name: params.customer_Name ?? filters.customer_Name,
         waste: params.waste ?? filters.waste,
         search: params.search ?? filters.search,
         sortBy: params.sortBy ?? filters.sortBy,

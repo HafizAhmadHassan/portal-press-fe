@@ -7,8 +7,8 @@ export type CommandItem = {
   key: string;
   label: string;
   icon?: React.ReactNode;
-  disabled?: boolean;
   danger?: boolean;
+  disabled?: boolean;
 };
 
 export interface DeviceCommandsProps {

@@ -47,12 +47,7 @@ export type ListResponse<TItem> = {
   meta?: MetaFromApi;
 };
 
-export type CrudFactoryConfig<
-  State,
-  TItem,
-  TListParams,
-  TSearchParams = any
-> = {
+export type CrudFactoryConfig<State, TItem, TListParams> = {
   /** RTK Query API slice (es. plcApi) */
   api: ApiCaller;
   /** Nomi degli endpoint nel tuo api slice */
@@ -89,7 +84,7 @@ export function createCrudThunks<
   TItem,
   TListParams,
   TSearchParams = any
->(cfg: CrudFactoryConfig<State, TItem, TListParams, TSearchParams>) {
+>(cfg: any /*  CrudFactoryConfig<State, TItem, TListParams, TSearchParams> */) {
   const {
     api,
     endpointKeys,
@@ -124,7 +119,7 @@ export function createCrudThunks<
         const params: TListParams = mapStateToListParams(
           filters,
           pag,
-          customParams
+          customParams as any
         );
 
         const res = await dispatch(

@@ -22,7 +22,7 @@ const DevicesTable: React.FC<DevicesTableProps> = ({
     }
   };
 
-  const handleDelete = (device: Device) => {
+  const handleDelete = async (device: Device): Promise<void> => {
     onDeviceAction?.("delete", device);
   };
 

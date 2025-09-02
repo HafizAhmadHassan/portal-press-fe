@@ -230,13 +230,6 @@ export default function DevicePLC_DATA() {
           allowHeaderEditToggle={false}
           onRowSave={saveRow}
           onRowCancel={cancelRow}
-          emptyState={
-            error
-              ? "Errore nel caricamento dei dati PLC."
-              : !plcData || rows.length === 0
-              ? "Nessun dato PLC (plc_data) trovato per questo device."
-              : undefined
-          }
           footerActions={{
             show: isEdit,
             cancelLabel: "Annulla",

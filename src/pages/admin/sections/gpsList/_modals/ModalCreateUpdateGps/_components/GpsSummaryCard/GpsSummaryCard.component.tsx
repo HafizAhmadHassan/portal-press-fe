@@ -5,7 +5,7 @@ import styles from "./GpsSummaryCard.module.scss";
 
 type Props = {
   codice: string;
-  customer: string;
+  customer_Name: string;
   waste: string;
   gps_x: string | number;
   gps_y: string | number;
@@ -15,7 +15,7 @@ type Props = {
 
 const GpsSummaryCard: React.FC<Props> = ({
   codice,
-  customer,
+  customer_Name,
   waste,
   gps_x,
   gps_y,
@@ -35,7 +35,7 @@ const GpsSummaryCard: React.FC<Props> = ({
         </div>
         <div className={styles.item}>
           <span className={styles.label}>Cliente</span>
-          <span className={styles.value}>{customer || "—"}</span>
+          <span className={styles.value}>{customer_Name || "—"}</span>
         </div>
         <div className={styles.item}>
           <span className={styles.label}>Rifiuto</span>

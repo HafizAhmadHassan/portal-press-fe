@@ -134,7 +134,7 @@ const ModalCloseTicket: React.FC<Props> = ({
       confirmText={isSubmitting ? "Chiusura..." : "Chiudi Ticket"}
       cancelText="Annulla"
       onConfirm={handleSave}
-      confirmDisabled={isSubmitting}
+      /* confirmDisabled={isSubmitting} */
       modalClassName={styles.modal}
     >
       <div className={styles.content}>

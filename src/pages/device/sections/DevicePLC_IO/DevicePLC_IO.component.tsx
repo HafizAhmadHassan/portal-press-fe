@@ -3,9 +3,8 @@ import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import styles from "../_styles/DevicesPLC.module.scss";
 
-import TableKeyValue, {
-  type TableKeyValueRow,
-} from "@components/shared/table-key-value/TableKeyValue.component";
+import TableKeyValue from "@components/shared/table-key-value/TableKeyValue.component";
+import type { TableKeyValueRow } from "@store_device/plc/plc.types";
 import { SimpleButton } from "@root/components/shared/simple-btn/SimpleButton.component";
 import {
   useGetPlcByIdQuery,
@@ -153,13 +152,6 @@ export default function DevicePLC_IO() {
           allowHeaderEditToggle={false}
           onRowSave={saveRow}
           onRowCancel={cancelRow}
-          emptyState={
-            error
-              ? "Errore nel caricamento dei dati PLC I/O."
-              : !plcIo || rows.length === 0
-              ? "Nessun dato PLC (plc_io) trovato per questo device."
-              : undefined
-          }
           footerActions={{
             show: isEdit,
             cancelLabel: "Annulla",

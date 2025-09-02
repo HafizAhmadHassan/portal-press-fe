@@ -26,7 +26,6 @@ export const plcApi = apiSlice.injectEndpoints({
         }
         return res as PlcResponse;
       },
-      apiForOptimisticPatch: apiSlice, // abilita patch ottimistico su getById
     }),
   overrideExisting: false,
 });
@@ -40,9 +39,9 @@ export const plcWriteApi = apiSlice.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: [{ type: "Plc" as const, id: "LIST" }],
+      invalidatesTags: [{ type: "LIST" as const, id: "LIST" }],
       // Ottimistic update opzionale
-      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+      async onQueryStarted(args, { queryFulfilled }) {
         console.log("PLC Write command sent:", args);
 
         try {
