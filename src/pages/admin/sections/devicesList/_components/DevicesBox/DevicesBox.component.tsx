@@ -24,6 +24,7 @@ export const DevicesBox: React.FC<DevicesBoxProps> = ({
   const navigate = useNavigate();
 
   const isActive = device.status === 1;
+  const isBlocked = device.status_Machine_Blocked;
   const [createTicket, { isLoading: isCreating }] = useCreateTicketMutation();
 
   // Helper functions
@@ -99,6 +100,7 @@ export const DevicesBox: React.FC<DevicesBoxProps> = ({
       <DevicesBoxContent
         device={device}
         isActive={isActive}
+        isBlocked={isBlocked}
         imageUrl={import.meta.env.VITE_IMAGE_DEFAULT}
         onImageError={handleImageError}
         getFullAddress={getFullAddress}

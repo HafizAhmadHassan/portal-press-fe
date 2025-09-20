@@ -1,4 +1,4 @@
-// store/auth/auth.api.ts
+// store/auth/auth.api.ts - FIXED VERSION
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { RootState } from "@root/store";
 import type {
@@ -15,44 +15,56 @@ export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
     baseUrl: `${apiHassanUrl}api/auth`,
-    prepareHeaders: (headers, { getState }) => {
+    prepareHeaders: (headers, { getState, endpoint }) => {
+      // ✅ Non aggiungere Authorization per login, register e refresh
+      if (["login", "register", "refresh"].includes(endpoint)) {
+        return headers;
+      }
+
       const state = getState() as RootState;
 
-      // Leggi prima dal tuo slice, altrimenti da localStorage (fallback)
+      // Prioritizza il token dallo store Redux
       const token =
-        (state as any)?.auth?.token ??
+        state.auth?.token ??
         (typeof localStorage !== "undefined"
           ? localStorage.getItem("access_token")
           : null);
 
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
+        console.log(`🔐 Adding auth header for ${endpoint}`);
+      } else {
+        console.warn(`⚠️ No token available for ${endpoint}`);
       }
 
       return headers;
     },
-    credentials: "include", // include cookies if using session cookies
+    credentials: "include",
   }),
   tagTypes: ["Auth", "User"],
   endpoints: (builder) => ({
-    // Login (Password Grant / SimpleJWT compat)
+    // === LOGIN ===
     login: builder.mutation<AuthResponse, LoginCredentials>({
-      query: ({ username, password, rememberMe }) => ({
-        url: "/login/",
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({
-          username,
-          password,
-          ...(rememberMe ? { remember_me: "true" } : {}),
-        }),
-      }),
-      transformResponse: (response: any): AuthResponse => {
-        // Log utile in dev
+      query: ({ username, password, rememberMe }) => {
+        // ✅ prima di loggarsi puliamo eventuali token scaduti
+        if (typeof localStorage !== "undefined") {
+          localStorage.removeItem("access_token");
+          localStorage.removeItem("refresh_token");
+        }
 
-        // 1) Django SimpleJWT (access/refresh)
+        return {
+          url: "/login/",
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams({
+            username,
+            password,
+            ...(rememberMe ? { remember_me: "true" } : {}),
+          }),
+        };
+      },
+      transformResponse: (response: any): AuthResponse => {
         if (response?.access && response?.refresh) {
-          console.log("API: Raw login response:", response);
           return {
             token: response.access,
             refresh: response.refresh,
@@ -69,11 +81,10 @@ export const authApi = createApi({
           };
         }
 
-        // 2) OAuth2 tipico (access_token/refresh_token)
         if (response?.access_token) {
           return {
             token: response.access_token,
-            refresh: response.refresh,
+            refresh: response.refresh_token,
             user:
               response.user ??
               ({
@@ -87,10 +98,8 @@ export const authApi = createApi({
           };
         }
 
-        // 3) Già nel formato giusto
         return response;
       },
-      // Salva token in localStorage così prepareHeaders li trova subito
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
@@ -99,8 +108,6 @@ export const authApi = createApi({
             if ((data as any)?.refresh)
               localStorage.setItem("refresh_token", (data as any).refresh);
           }
-          // Se hai un slice auth:
-          // dispatch(setTokens({ token: data.token, refresh: data.refresh, user: data.user }))
         } catch {
           // noop
         }
@@ -108,10 +115,10 @@ export const authApi = createApi({
       invalidatesTags: ["Auth"],
     }),
 
-    // Register (JSON)
+    // === REGISTER ===
     register: builder.mutation<AuthResponse, RegisterCredentials>({
       query: (credentials) => ({
-        url: "/register",
+        url: "/register/",
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: credentials,
@@ -119,9 +126,9 @@ export const authApi = createApi({
       invalidatesTags: ["Auth"],
     }),
 
-    // Logout
+    // === LOGOUT ===
     logout: builder.mutation<{ message: string }, void>({
-      query: () => ({ url: "/logout", method: "POST" }),
+      query: () => ({ url: "/logout/", method: "POST" }),
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
           await queryFulfilled;
@@ -135,110 +142,102 @@ export const authApi = createApi({
       invalidatesTags: ["Auth"],
     }),
 
-    // Refresh Token (form-data o SimpleJWT)
+    // === REFRESH TOKEN - FIXED ===
     refresh: builder.mutation<
       { token: string; refresh: string },
       { refresh: string }
     >({
       query: ({ refresh }) => ({
-        url: "/refresh",
+        url: "/refresh/",
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        // Per SimpleJWT il campo si chiama "refresh"
-        body: new URLSearchParams({
-          refresh: refresh,
-          // grant_type: "refresh_token", // non necessario per SimpleJWT
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: { refresh },
       }),
       transformResponse: (response: any) => {
-        // SimpleJWT di solito ritorna solo un nuovo `access`
+        console.log("🔄 Refresh response:", response);
+
+        // ✅ Risposta corretta con access token
         if (response?.access) {
+          console.log("✅ Token refresh successful!");
           return {
             token: response.access,
-            refresh:
-              response.refresh ??
-              (typeof localStorage !== "undefined"
-                ? localStorage.getItem("refresh_token") ?? ""
-                : ""),
+            refresh: response.refresh,
           };
         }
+
+        // Formato alternativo (access_token invece di access)
         if (response?.access_token) {
           return {
             token: response.access_token,
             refresh: response.refresh_token,
           };
         }
-        return response;
+
+        console.error(
+          "❌ Formato risposta refresh non riconosciuto:",
+          response
+        );
+        throw new Error("Formato risposta refresh non valido");
       },
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
           if (typeof localStorage !== "undefined") {
             if (data?.token) localStorage.setItem("access_token", data.token);
-            if ((data as any)?.refresh)
-              localStorage.setItem("refresh_token", (data as any).refresh);
+            if (data?.refresh)
+              localStorage.setItem("refresh_token", data.refresh);
           }
-        } catch {
-          // noop
+        } catch (error) {
+          console.error("❌ Errore durante il refresh:", error);
         }
       },
       invalidatesTags: ["Auth"],
     }),
 
-    // Get Current User (verify + fetch profile)
+    // === GET CURRENT USER ===
     getCurrentUser: builder.query<User, void>({
-      query: () => ({ url: "/me", method: "GET" }),
+      query: () => ({ url: "/me/", method: "GET" }),
       providesTags: ["User"],
     }),
 
-    // Forgot Password (JSON)
+    // === PASSWORD ===
     forgotPassword: builder.mutation<{ message: string }, { email: string }>({
       query: ({ email }) => ({
-        url: "/forgot-password",
+        url: "/forgot-password/",
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: { email },
       }),
     }),
 
-    // Reset Password (JSON)
     resetPassword: builder.mutation<
       { message: string },
-      {
-        token: string;
-        password: string;
-        confirmPassword: string;
-      }
+      { token: string; password: string; confirmPassword: string }
     >({
       query: ({ token, password, confirmPassword }) => ({
-        url: "/reset-password",
+        url: "/reset-password/",
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: { token, password, confirmPassword },
       }),
     }),
 
-    // Change Password (JSON)
     changePassword: builder.mutation<
       { message: string },
-      {
-        currentPassword: string;
-        newPassword: string;
-        confirmPassword: string;
-      }
+      { currentPassword: string; newPassword: string; confirmPassword: string }
     >({
       query: (passwords) => ({
-        url: "/change-password",
+        url: "/change-password/",
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: passwords,
       }),
     }),
 
-    // Update Profile (JSON)
+    // === UPDATE PROFILE ===
     updateProfile: builder.mutation<User, Partial<User>>({
       query: (updates) => ({
-        url: "/profile",
+        url: "/profile/",
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: updates,

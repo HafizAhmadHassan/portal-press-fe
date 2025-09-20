@@ -175,6 +175,26 @@ export const getLogsColumns = (): Array<
     },
 
     {
+      key: "machine_detail",
+      header: "Matricola Macchina",
+      type: "custom",
+      width: "220px",
+      sortable: true,
+      render: (_, logs) => {
+        return (
+          <div>
+            <div style={{ fontSize: "14px", color: "var(--text-primary)" }}>
+              bte: {logs.machine_detail.matricola_Bte || "N/A"}
+            </div>
+            <div style={{ fontSize: "14px", color: "var(--text-primary)" }}>
+              kgn: {logs.machine_detail.matricola_Kgn || "N/A"}
+            </div>
+          </div>
+        );
+      },
+    },
+
+    {
       key: "customer_Name",
       header: "Cliente",
       type: "text",

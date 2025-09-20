@@ -47,7 +47,7 @@ export const buildAdminLayoutSideNavItems = (
 
   return [
     {
-      label: "Machines",
+      label: "Macchine",
       route: "/admin",
       icon: WashingMachine,
       badge: toBadge(badges.machines),

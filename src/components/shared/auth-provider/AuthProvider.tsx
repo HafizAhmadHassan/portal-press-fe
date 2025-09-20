@@ -1,5 +1,5 @@
 // src/_components/shared/auth-provider/AuthProvider.tsx
-import React, { type ReactNode, useEffect } from "react";
+import React, { type ReactNode, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { initializeAuthAsync as initializeAuth } from "@store_admin/auth/auth.thunks";
 import { setInitialized } from "@store_admin/auth/auth.slice";
@@ -17,18 +17,46 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
   fallback = <div>Caricamento autenticazione…</div>,
 }) => {
   const dispatch = useAppDispatch();
+  const initStarted = useRef(false);
 
   const { isInitialized } = useAuth();
   const token = useSelector((state: RootState) => state.auth.token);
 
   useEffect(() => {
+    // Previeni inizializzazioni multiple
+    if (initStarted.current) return;
+
+    initStarted.current = true;
+
     if (token) {
+      console.log("🔐 Token found, initializing auth...");
       dispatch(initializeAuth());
     } else {
-      // Non c'è token → salta subito l'init
+      console.log("❌ No token found, skipping auth init");
       dispatch(setInitialized());
     }
-  }, [dispatch, token]);
+  }, []); // <- Rimosso `token` dalle dipendenze
+
+  // Effetto separato per gestire i cambi di token DOPO l'inizializzazione
+  useEffect(() => {
+    if (!isInitialized) return;
+
+    if (token) {
+      console.log("🔄 Token updated after initialization");
+      // Qui potresti fare altre azioni se necessario
+    } else {
+      console.log("🚪 Token removed, user might be logged out");
+      // Reset se necessario
+      initStarted.current = false;
+    }
+  }, [token, isInitialized]);
+
+  console.log(
+    "🏗️ AuthProvider render - isInitialized:",
+    isInitialized,
+    "hasToken:",
+    !!token
+  );
 
   if (!isInitialized) {
     return <>{fallback}</>;

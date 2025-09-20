@@ -1,4 +1,4 @@
-// @store_admin/apiSlice.ts
+// @store_admin/apiSlice.ts - VERSIONE CON AUTO-REFRESH
 import {
   createApi,
   fetchBaseQuery,
@@ -6,20 +6,18 @@ import {
 } from "@reduxjs/toolkit/query/react";
 import type { FetchArgs, FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import type { RootState } from "@root/store";
+import { refreshTokenAsync, logoutAsync } from "./auth/auth.thunks";
 
 const apiHassanUrl = import.meta.env.VITE_API_HASSAN_URL;
 
-/** ✅ SOLO questi path riceveranno automaticamente il filtro global */
-// @store_admin/apiSlice.ts
 const SCOPE_ALLOWLIST: RegExp[] = [
   /^joined-machines-gps(\/|$)/,
-  /^user(\/|$)/, // users
-  /^gps(\/|$)/, // gps
-  /^message(\/|$)/, // tickets/messages
-  /^log(\/|$)/, // ✅ logs  <-- AGGIUNTO
+  /^user(\/|$)/,
+  /^gps(\/|$)/,
+  /^message(\/|$)/,
+  /^log(\/|$)/,
 ];
 
-/** (opzionale) helper per disattivare lo scope su una singola request */
 export function noScope<T extends string | FetchArgs>(args: T): T {
   if (typeof args === "string") {
     return { url: args, __skipScope: true } as any;
@@ -33,15 +31,16 @@ const rawBaseQuery = fetchBaseQuery({
   prepareHeaders: (headers, { getState }) => {
     const state = getState() as RootState;
     const token = state.auth.token;
-    /* const customer = state.scope.customer; */
 
-    if (token) headers.set("Authorization", `Bearer ${token}`);
+    if (token) {
+      headers.set("Authorization", `Bearer ${token}`);
+    }
 
     return headers;
   },
 });
 
-/** Inietta ?customer_Name=<val> solo se l'URL è allowlistato e non c'è noScope */
+/** Base query con scope e auto-refresh */
 const baseQueryWithScope: BaseQueryFn<
   string | FetchArgs,
   unknown,
@@ -50,7 +49,7 @@ const baseQueryWithScope: BaseQueryFn<
   const state = api.getState() as RootState;
   const customer = state.scope.customer;
 
-  // normalizza args e leggi il flag __skipScope se presente
+  // Normalizza args e leggi il flag __skipScope
   let req: FetchArgs;
   let skip = false;
   if (typeof args === "string") {
@@ -61,23 +60,61 @@ const baseQueryWithScope: BaseQueryFn<
     req = rest as FetchArgs;
   }
 
-  // se non ho customer o lo scope è disattivato, non inietto
-  if (!customer || skip) {
-    return rawBaseQuery(req, api, extra);
+  // Applica scope se necessario
+  if (customer && !skip) {
+    const url = (req.url || "").replace(/^\//, "");
+    const isAllowed = SCOPE_ALLOWLIST.some((rx) => rx.test(url));
+    if (isAllowed) {
+      req = {
+        ...req,
+        params: { ...(req.params || {}), customer_Name: customer },
+      };
+    }
   }
 
-  const url = (req.url || "").replace(/^\//, "");
-  const isAllowed = SCOPE_ALLOWLIST.some((rx) => rx.test(url));
-  if (!isAllowed) {
-    return rawBaseQuery(req, api, extra);
+  // Prima chiamata
+  let result = await rawBaseQuery(req, api, extra);
+
+  // Se riceviamo 401/403, prova refresh automatico
+  if (
+    result.error &&
+    (result.error.status === 401 || result.error.status === 403)
+  ) {
+    const currentState = api.getState() as RootState;
+    const { refresh: refreshToken, isAuthenticated } = currentState.auth;
+
+    // Solo se siamo autenticati e abbiamo refresh token
+    // E NON stiamo già facendo refresh/login/logout
+    if (
+      refreshToken &&
+      isAuthenticated &&
+      !req.url?.includes("/auth/refresh") &&
+      !req.url?.includes("/auth/login") &&
+      !req.url?.includes("/auth/logout")
+    ) {
+      console.log("🔄 Auto-refreshing token for failed request:", req.url);
+
+      try {
+        // Prova il refresh
+        const refreshResult = await api.dispatch(refreshTokenAsync());
+
+        if (refreshTokenAsync.fulfilled.match(refreshResult)) {
+          console.log("✅ Token refreshed, retrying original request");
+
+          // Riprova la chiamata originale con nuovo token
+          result = await rawBaseQuery(req, api, extra);
+        } else {
+          console.log("❌ Token refresh failed, logging out");
+          await api.dispatch(logoutAsync());
+        }
+      } catch (error) {
+        console.error("❌ Auto-refresh error:", error);
+        await api.dispatch(logoutAsync());
+      }
+    }
   }
 
-  // inietto customer_Name nei params
-  const next: FetchArgs = {
-    ...req,
-    params: { ...(req.params || {}), customer_Name: customer },
-  };
-  return rawBaseQuery(next, api, extra);
+  return result;
 };
 
 export const apiSlice = createApi({

@@ -29,8 +29,8 @@ export const DevicesSummaryBar: React.FC<Props> = ({ devices, className }) => {
   return (
     <SummaryBar
       className={className}
-      title="Dashboard Dispositivi"
-      totalLabel="dispositivi totali"
+      title="Dashboard Macchine"
+      totalLabel="macchine totali"
       totalNumber={total}
       items={items}
     />

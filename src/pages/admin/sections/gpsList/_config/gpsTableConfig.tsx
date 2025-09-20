@@ -3,6 +3,7 @@ import type { TableColumn } from "@components/shared/table/types/GenericTable.ty
 import type { GpsDevice } from "@store_admin/gps/gps.types";
 import { ModalDetailsGps } from "@root/pages/admin/sections/gpsList/_modals/ModalDetailsGps/ModalDetailsGps.component";
 import ModalCreateUpdateGps from "../_modals/ModalCreateUpdateGps/ModalCreateUpdateGps.component";
+import { ModalDeleteGps } from "../_modals/ModalDeleteGps/ModalDeleteGps.component";
 
 type GpsColumnKey = keyof GpsDevice | "coords" | "actions";
 
@@ -83,20 +84,7 @@ export const getGpsColumns = ({
             initialDevice={row}
             onSave={onEdit}
           />
-          <button
-            onClick={() => onDelete(row)}
-            style={{
-              background: "transparent",
-              color: "var(--error-color)",
-              border: "1px solid var(--border-color)",
-              borderRadius: 6,
-              padding: "4px 8px",
-              cursor: "pointer",
-            }}
-            title="Elimina"
-          >
-            Elimina
-          </button>
+          <ModalDeleteGps device={row} onConfirm={onDelete} />
         </div>
       ),
     },

@@ -18,7 +18,7 @@ export const DevicesMapStats: React.FC<Props> = ({ mapStats, wasteColors }) => {
     <div className={styles.mapStatsBar}>
       <div className={styles.mapStats}>
         <span>
-          Dispositivi con GPS: <strong>{mapStats.total}</strong>
+          Macchine con GPS: <strong>{mapStats.total}</strong>
         </span>
         <span>
           Attivi: <strong>{mapStats.active}</strong>

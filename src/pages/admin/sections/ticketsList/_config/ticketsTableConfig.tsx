@@ -89,11 +89,23 @@ export const getTicketsColumns = ({ onClose }: GetTicketsColumnsOptions) => [
 
   // Colonna Macchina personalizzata
   {
-    key: "machine",
-    header: "ID Macchina",
+    key: "machine_detail",
+    header: "Matricola Macchina",
     type: "custom",
     width: "220px",
     sortable: true,
+    render: (_, ticket) => {
+      return (
+        <div>
+          <div style={{ fontSize: "14px", color: "var(--text-primary)" }}>
+            bte: {ticket.machine_detail.matricola_Bte || "N/A"}
+          </div>
+          <div style={{ fontSize: "14px", color: "var(--text-primary)" }}>
+            kgn: {ticket.machine_detail.matricola_Kgn || "N/A"}
+          </div>
+        </div>
+      );
+    },
   },
 
   // Colonna Data Apertura

@@ -10,7 +10,14 @@
   z-index: 2;
 }
 
-.statusDot {
+.status {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* .statusDot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
@@ -26,6 +33,22 @@
   &.isInactive {
     background: var(--error-color);
     box-shadow: 0 0 12px color-mix(in srgb, var(--error-color) 60%, transparent);
+  }
+} */
+.statusText {
+  width: 100%;
+  display: flex;
+  .statusTextActive {
+    text-align: center;
+    width: 100%;
+    color: var(--text-primary);
+    background: var(--success-color);
+  }
+  .statusTextInactive {
+    text-align: center;
+    width: 100%;
+    color: var(--text-primary);
+    background: var(--error-color);
   }
 }
 

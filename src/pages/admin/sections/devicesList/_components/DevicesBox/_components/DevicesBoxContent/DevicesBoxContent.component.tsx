@@ -6,6 +6,7 @@ import type { Device } from "@store_admin/devices/devices.types";
 interface DevicesBoxContentProps {
   device: Device;
   isActive: boolean;
+  isBlocked: boolean;
   imageUrl: string;
   onImageError: (e: React.SyntheticEvent<HTMLImageElement>) => void;
   getFullAddress: () => string;
@@ -14,6 +15,7 @@ interface DevicesBoxContentProps {
 export const DevicesBoxContent: React.FC<DevicesBoxContentProps> = ({
   device,
   isActive,
+  isBlocked,
   imageUrl,
   onImageError,
   getFullAddress,
@@ -48,17 +50,17 @@ export const DevicesBoxContent: React.FC<DevicesBoxContentProps> = ({
           {device.ip_Router && (
             <span className={styles.techDetail}>IP: {device.ip_Router}</span>
           )}
-          {device.codice_Gps && (
-            <span className={styles.techDetail}>GPS: {device.codice_Gps}</span>
+          {device.codice_GPS && (
+            <span className={styles.techDetail}>GPS: {device.codice_GPS}</span>
           )}
         </div>
 
         <div
           className={`${styles.statusText} ${
-            isActive ? styles.isActive : styles.isInactive
+            isBlocked ? styles.isInactive : styles.isActive
           }`}
         >
-          {isActive ? "Operativo" : "Non Operativo"}
+          {isBlocked ? "Macchina non in servizio" : "Macchina in servizio"}
         </div>
       </div>
     </div>

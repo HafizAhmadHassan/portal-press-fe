@@ -52,11 +52,11 @@ export const ModalRiActiveDevice: React.FC<Props> = ({
     <Modal
       size="md"
       triggerButton={triggerButton || defaultTriggerButton}
-      title="Riattivazione Device"
-      description={`Sei sicuro di voler riattivare il device "${
+      title="Riattivazione Macchina"
+      description={`Sei sicuro di voler riattivare la macchina "${
         device?.machine_Name || "Sconosciuto"
       }"?`}
-      confirmText="Riattiva Device"
+      confirmText="Riattiva Macchina"
       cancelText="Annulla"
       onConfirm={handleConfirm}
       loading={writing} // blocca i bottoni durante la chiamata

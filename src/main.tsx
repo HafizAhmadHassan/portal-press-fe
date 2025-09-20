@@ -9,6 +9,7 @@ import { Provider } from "react-redux";
 import { store } from "./store.ts";
 import { ToastProvider } from "@shared/toast/Toast.context.tsx";
 import "./pages/admin/styles/globals.scss";
+/* import { TestAuth } from "./TestAuth.tsx"; */
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -16,6 +17,7 @@ createRoot(document.getElementById("root")!).render(
       <ToastProvider>
         <App />
       </ToastProvider>
+      {/* <TestAuth /> */}
     </Provider>
   </StrictMode>
 );

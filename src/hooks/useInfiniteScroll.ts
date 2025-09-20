@@ -89,7 +89,7 @@ export function useInfiniteDevices({
     meta,
   });
 
-  // append/sostituisci risultati - FIXED VERSION
+  // append/sostituisci risultati
   useEffect(() => {
     console.log("🔄 Processing page devices:", {
       hasPageDevices: !!pageDevices,
@@ -107,12 +107,21 @@ export function useInfiniteDevices({
       }
 
       if (page === 1) {
+        // evita reset inutile se i dati non sono cambiati
+        if (
+          prev.length === (pageDevices?.length || 0) &&
+          prev.every((d, i) => d.id === pageDevices?.[i]?.id)
+        ) {
+          console.log("⏭️ No changes for page 1, skipping reset");
+          return prev;
+        }
+
         console.log(
           "🆕 Setting new devices for page 1:",
           pageDevices?.length || 0
         );
-        justResetRef.current = false; // sblocca sentinel quando la nuova page=1 è arrivata
-        return pageDevices || []; // FIXED: assicura array invece di undefined
+        justResetRef.current = false;
+        return pageDevices || [];
       }
 
       // Per pagine > 1, appendi solo se ci sono nuovi device
@@ -123,6 +132,11 @@ export function useInfiniteDevices({
 
       const existing = new Set(prev.map((d) => d.id));
       const newOnes = pageDevices.filter((d) => !existing.has(d.id));
+      if (newOnes.length === 0) {
+        console.log("⏭️ No new devices to append");
+        return prev;
+      }
+
       console.log(
         "➕ Appending",
         newOnes.length,
@@ -131,13 +145,18 @@ export function useInfiniteDevices({
       );
       return [...prev, ...newOnes];
     });
-  }, [pageDevices, page]); // FIXED: rimuovi early return su pageDevices
+  }, [pageDevices, page]);
 
-  // calcolo hasNext robusto: usa meta.has_next se presente, altrimenti fallback su pageSize
-  const hasNext = Boolean(
-    (meta && (meta as any).has_next) ??
-      (pageDevices && pageDevices.length === pageSize)
-  );
+  // calcolo hasNext robusto
+  const hasNext = useMemo(() => {
+    if (meta && typeof (meta as any).has_next !== "undefined") {
+      return Boolean((meta as any).has_next);
+    }
+    if (meta && (meta as any).total_pages) {
+      return page < (meta as any).total_pages;
+    }
+    return Boolean(pageDevices && pageDevices.length === pageSize);
+  }, [meta, page, pageDevices, pageSize]);
 
   console.log("🔮 Has next:", hasNext, "Meta:", meta);
 
@@ -145,12 +164,11 @@ export function useInfiniteDevices({
   const { ref: sentinelRef, inView } = useInView({
     threshold: 0.1,
     root: rootRef?.current ?? null,
-    // piccolo prefetch
     rootMargin: "200px",
     triggerOnce: false,
   });
 
-  // Avanza SOLO di +1 (ignora meta.next_page che può essere "sporcato" da altre viste)
+  // Avanza SOLO di +1
   useEffect(() => {
     if (justResetRef.current) {
       console.log("🚫 Sentinel blocked by justReset");

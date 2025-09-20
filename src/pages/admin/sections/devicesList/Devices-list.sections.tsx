@@ -243,8 +243,8 @@ export const DevicesListSections: React.FC = () => {
   return (
     <div className={styles["devices-list-page"]}>
       <SectionHeaderComponent
-        title="Dispositivi"
-        subTitle={`Gestisci i dispositivi (${meta?.total ?? 0} totali)`}
+        title="Macchine"
+        subTitle={`Gestisci le macchine (${meta?.total ?? 0} totali)`}
         buttons={devicesListHeaderBtns(
           onRefreshClick,
           RefreshCw,

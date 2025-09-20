@@ -25,7 +25,7 @@ export interface Device {
   address?: string | null;
   status_READY_D75_3_7: boolean;
   status_Machine_Blocked: boolean;
-  codice_Gps?: string | null;
+  codice_GPS?: string | null;
   sheet_Name?: string | null;
   customer_Name?: string | null;
   matricola_Bte?: string | null;
@@ -62,7 +62,7 @@ export interface CreateDeviceRequest {
   address?: string;
   status_READY_D75_3_7?: boolean;
   status_Machine_Blocked?: boolean;
-  codice_Gps?: string;
+  codice_GPS?: string;
   sheet_Name?: string;
   customer_Name?: string;
   matricola_Bte?: string;

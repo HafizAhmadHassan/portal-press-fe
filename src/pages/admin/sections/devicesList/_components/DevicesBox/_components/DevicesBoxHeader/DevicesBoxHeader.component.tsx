@@ -17,43 +17,53 @@ export const DevicesBoxHeader: React.FC<DevicesBoxHeaderProps> = ({
   getWasteColorVar,
 }) => {
   return (
-    <div className={styles.header}>
-      <div
-        className={`${styles.statusDot} ${
-          isActive ? styles.isActive : styles.isInactive
-        }`}
-      />
+    <>
+      <div className={styles.header}>
+        <div
+          className={styles.wasteBadge}
+          style={{
+            backgroundColor: "var(--primary-color)",
+            color: "var(--white)",
+          }}
+        >
+          {device.customer_Name || "N/A"}
+        </div>
 
-      <div
-        className={styles.wasteBadge}
-        style={{
-          backgroundColor: getWasteColorVar(device.waste),
-          color: "var(--white)",
-        }}
-      >
-        {device.customer_Name || "N/A"}
-      </div>
+        <div
+          className={styles.wasteBadge}
+          style={{
+            backgroundColor: getWasteColorVar(device.waste),
+            color: "var(--white)",
+          }}
+        >
+          {device.waste || "N/A"}
+        </div>
 
-      <div
-        className={styles.wasteBadge}
-        style={{
-          backgroundColor: getWasteColorVar(device.waste),
-          color: "var(--white)",
-        }}
-      >
-        {device.waste || "N/A"}
+        <div className={styles.actions}>
+          <ModalDeviceDetails
+            device={device}
+            triggerButton={
+              <SimpleButton variant="ghost" size="sm" color="warning">
+                <ZapIcon size={12} />
+              </SimpleButton>
+            }
+          />
+        </div>
       </div>
-
-      <div className={styles.actions}>
-        <ModalDeviceDetails
-          device={device}
-          triggerButton={
-            <SimpleButton variant="ghost" size="sm" color="warning">
-              <ZapIcon size={12} />
-            </SimpleButton>
-          }
-        />
+      <div className={styles.status}>
+        {/*   <div
+          className={`${styles.statusDot} ${
+            isActive ? styles.isActive : styles.isInactive
+          }`}
+        /> */}
+        <div className={styles.statusText}>
+          {isActive ? (
+            <span className={styles.statusTextActive}>Online</span>
+          ) : (
+            <span className={styles.statusTextInactive}>Offline</span>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
