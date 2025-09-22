@@ -62,7 +62,7 @@ export const devicesApi = apiSlice.injectEndpoints({
     }),
 
     getDeviceById: builder.query<Device, number>({
-      query: (id) => `joined-machines-gps/${id}`,
+      query: (id) => `joined-machines-gps/${id}/`,
       providesTags: (_r, _e, id) => [{ type: "ENTITY" as const, id }],
     }),
 
