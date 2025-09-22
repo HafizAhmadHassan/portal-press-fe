@@ -50,8 +50,13 @@ export const DevicesBoxContent: React.FC<DevicesBoxContentProps> = ({
           {device.ip_Router && (
             <span className={styles.techDetail}>IP: {device.ip_Router}</span>
           )}
-          {device.codice_GPS && (
+          {/*  {device.codice_GPS && (
             <span className={styles.techDetail}>GPS: {device.codice_GPS}</span>
+          )} */}
+          {device.matricola_Kgn && (
+            <span className={styles.techDetail}>
+              GPS: {device.matricola_Kgn}
+            </span>
           )}
         </div>
 

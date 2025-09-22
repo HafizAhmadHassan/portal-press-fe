@@ -48,10 +48,11 @@ type Props = {
 const formatTime = (ts: string | number | Date) => {
   try {
     const d = new Date(ts);
-    const fmt = new Intl.DateTimeFormat(
-      typeof navigator !== "undefined" ? navigator.language : "it-IT",
-      { dateStyle: "medium", timeStyle: "short" }
-    );
+    const fmt = new Intl.DateTimeFormat("it-IT", {
+      dateStyle: "medium",
+      timeStyle: "short",
+      timeZone: "UTC",
+    });
     return fmt.format(d);
   } catch {
     return String(ts);
