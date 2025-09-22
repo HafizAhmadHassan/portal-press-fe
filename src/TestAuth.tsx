@@ -34,7 +34,6 @@ export const TestAuth: React.FC = () => {
   );
 
   const username = user?.username;
-  const hasToken = !!token;
   const hasRefresh = !!refresh;
 
   // Helper per aggiungere risultati
@@ -142,15 +141,15 @@ export const TestAuth: React.FC = () => {
         try {
           const result = await dispatch(refreshTokenAsync()).unwrap();
           console.log("✅ Refresh successful, new tokens received:", {
-            hasNewAccess: !!result.access,
+            hasNewToken: !!result.token,
             hasNewRefresh: !!result.refresh,
           });
 
           addResult("success", "Refresh completato - nuovi token ricevuti");
 
           // Confronta token vecchi vs nuovi
-          if (result.access && oldTokenPayload) {
-            const newPayload = JSON.parse(atob(result.access.split(".")[1]));
+          if (result.token && oldTokenPayload) {
+            const newPayload = JSON.parse(atob(result.token.split(".")[1]));
             const timeDiff = newPayload.exp - oldTokenPayload.exp;
             addResult(
               "info",
@@ -164,7 +163,6 @@ export const TestAuth: React.FC = () => {
             `Refresh fallito: ${error?.message || error?.status || "Unknown"}`
           );
 
-          // Se refresh fallisce, potrebbe essere che il refresh token è scaduto
           if (error?.status === 401 || error?.status === 403) {
             addResult(
               "warning",

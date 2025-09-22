@@ -137,7 +137,7 @@ export const createNewDevice = createAsyncThunk(
         address: deviceData.address || null,
         status_READY_D75_3_7: deviceData.status_READY_D75_3_7 ?? false,
         status_Machine_Blocked: deviceData.status_Machine_Blocked ?? false,
-        codice_Gps: deviceData.codice_Gps || null,
+        codice_GPS: deviceData.codice_GPS || null,
         sheet_Name: deviceData.sheet_Name || null,
         customer_Name: deviceData.customer_Name || null,
         matricola_Bte: deviceData.matricola_Bte || null,

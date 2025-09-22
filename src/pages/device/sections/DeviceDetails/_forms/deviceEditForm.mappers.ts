@@ -17,7 +17,7 @@ export const deviceToFormData = (d: Device): FormData => ({
   address: d.address || "",
   tatus_ready_d75_3_7: d.status_READY_D75_3_7 || false,
   status_Machine_Blocked: d.status_Machine_Blocked || false,
-  codiceGps: d.codice_Gps || "",
+  codiceGps: d.codice_GPS || "",
   sheetName: d.sheet_Name || "",
   customerName: d.customer_Name || "",
   matricolaBte: d.matricola_Bte || "",

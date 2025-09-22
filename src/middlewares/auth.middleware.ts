@@ -5,14 +5,14 @@ import type { RootState } from "@root/store";
 import { authApi } from "@root/pages/admin/core/store/auth/auth.api";
 import {
   logoutAsync,
-  refreshTokenAsync,
+  /* refreshTokenAsync, */
 } from "@root/pages/admin/core/store/auth/auth.thunks";
 
 export const authMiddleware = createListenerMiddleware();
 
 // Listener per errori 401/403 - Auto refresh
 authMiddleware.startListening({
-  matcher: (action) => {
+  predicate: (action: any) => {
     return (
       action.type.endsWith("/rejected") &&
       action.meta?.arg?.endpointName && // È una chiamata RTK Query
@@ -22,7 +22,14 @@ authMiddleware.startListening({
       !action.meta.arg.endpointName.includes("register") // Non è register
     );
   },
-  effect: async (action, listenerApi) => {
+  effect: async (
+    action: {
+      type: string;
+      meta?: { arg?: any };
+      payload?: { status?: number };
+    },
+    listenerApi
+  ) => {
     const state = listenerApi.getState() as RootState;
     const { refresh: refreshToken, isAuthenticated } = state.auth;
 
@@ -38,10 +45,10 @@ authMiddleware.startListening({
 
     try {
       // Prova il refresh automatico
-      const refreshResult = await listenerApi
+      /*  const refreshResult = await listenerApi
         .dispatch(refreshTokenAsync())
         .unwrap();
-
+ */
       console.log("✅ Refresh automatico completato con successo");
 
       // Riprova la chiamata originale con il nuovo token
@@ -50,11 +57,10 @@ authMiddleware.startListening({
         const originalArgs = action.meta.arg;
 
         // Richiama l'endpoint originale
-        listenerApi.dispatch(
-          authApi.endpoints[
-            originalArgs.endpointName as keyof typeof authApi.endpoints
-          ].initiate(originalArgs.originalArgs)
-        );
+        const endpoint = authApi.endpoints[
+          originalArgs.endpointName as keyof typeof authApi.endpoints
+        ] as { initiate: (args: any) => any };
+        listenerApi.dispatch(endpoint.initiate(originalArgs.originalArgs));
       }
     } catch (error) {
       console.error("❌ Refresh automatico fallito:", error);

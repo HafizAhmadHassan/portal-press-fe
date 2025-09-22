@@ -387,7 +387,7 @@ const authSlice = createSlice({
           (action.payload?.status === 401 || action.payload?.status === 403)
         );
       },
-      (state) => {
+      (state, action) => {
         // Token probabilmente scaduto o non valido
         if (state.isAuthenticated && !action.type.includes("refresh")) {
           // Non fare logout automatico per errori di refresh
