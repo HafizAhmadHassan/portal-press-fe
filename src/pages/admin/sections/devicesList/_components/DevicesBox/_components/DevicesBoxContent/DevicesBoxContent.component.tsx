@@ -55,7 +55,7 @@ export const DevicesBoxContent: React.FC<DevicesBoxContentProps> = ({
           )} */}
           {device.matricola_Kgn && (
             <span className={styles.techDetail}>
-              GPS: {device.matricola_Kgn}
+              MATRICOLA: {device.matricola_Kgn}
             </span>
           )}
         </div>
