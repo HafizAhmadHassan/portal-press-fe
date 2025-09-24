@@ -25,11 +25,11 @@ export default function DeviceDetailsRead({ device }: Props) {
     <div className={styles.readStack}>
       <TechnicalInfoRO device={device} />
       <PositionInfoRO device={device} />
-      <DateHoursInfoRO
+      {/*  <DateHoursInfoRO
         device={device}
         formatDate={formatDate}
         getRelativeTime={getRelativeTime}
-      />
+      /> */}
       <CoordinatesInfoRO
         device={device}
         formatCoordinates={formatCoordinates}

@@ -152,13 +152,13 @@ export const ModalCreateUpdateDevice: React.FC<Props> = ({
       <SimpleButton variant="ghost" color="warning" size="bare" icon={Edit} />
     ) : (
       <SimpleButton variant="outline" color="primary" size="sm" icon={Plus}>
-        Nuovo Device
+        Nuova Macchina
       </SimpleButton>
     );
   }, [isEdit, triggerButton]);
 
-  const modalTitle = isEdit ? "Modifica Device" : "Crea Nuovo Device";
-  const confirmText = isEdit ? "Salva Modifiche" : "Crea Device";
+  const modalTitle = isEdit ? "Modifica Device" : "Crea Nuova Macchina";
+  const confirmText = isEdit ? "Salva Modifiche" : "Crea Macchina";
 
   return (
     <Modal

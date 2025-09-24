@@ -160,7 +160,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
           </div>
         </div>
 
-        <div className={styles.formOptions}>
+        {/*  <div className={styles.formOptions}>
           <label className={styles.checkboxLabel}>
             <input
               type="checkbox"
@@ -175,7 +175,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
           <a href="#forgot" className={styles.forgotLink}>
             Password dimenticata?
           </a>
-        </div>
+        </div> */}
 
         <SimpleButton
           type="submit"
@@ -193,14 +193,14 @@ const LoginForm: React.FC<LoginFormProps> = ({
         </SimpleButton>
       </form>
 
-      <div className={styles.loginFooter}>
+      {/* <div className={styles.loginFooter}>
         <p>
           Non hai un account?{" "}
           <a href="#signup" className={styles.signupLink}>
             Registrati qui
           </a>
         </p>
-      </div>
+      </div> */}
     </div>
   );
 };

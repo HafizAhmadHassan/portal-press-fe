@@ -20,28 +20,6 @@ function computeSeverity(
   return "info";
 }
 
-/** (opzionale) formattatore data/ora */
-/* const fmtDate = (iso?: string) => {
-  if (!iso) return "—";
-  try {
-    const d = new Date(iso);
-    return new Intl.DateTimeFormat("it-IT", {
-      dateStyle: "medium",
-      timeStyle: "short",
-    }).format(d);
-  } catch {
-    return iso || "—";
-  }
-}; */
-
-/* type LogsColumnKey = keyof LogItem | "alarm"; */ // chiave virtuale per la colonna “Messaggio”
-
-/**
- * Colonne per la tabella Logs — da usare con useListController.buildTableConfig()
- * Esempio:
- *   const columns = useMemo(() => getLogsColumns(), []);
- *   const tableConfig = useMemo(() => buildTableConfig(columns), [buildTableConfig, columns]);
- */
 export const getLogsColumns =
   (): Array</*  TableColumn<LogItem, LogsColumnKey> */ any> => {
     const tPrimary = "var(--text-primary)";
@@ -183,10 +161,10 @@ export const getLogsColumns =
           return (
             <div>
               <div style={{ fontSize: "14px", color: "var(--text-primary)" }}>
-                bte: {logs.machine_detail.matricola_Bte || "N/A"}
+                KGN: {logs.machine_detail.matricola_Kgn || "N/A"}
               </div>
               <div style={{ fontSize: "14px", color: "var(--text-primary)" }}>
-                kgn: {logs.machine_detail.matricola_Kgn || "N/A"}
+                BTE: {logs.machine_detail.matricola_Bte || "N/A"}
               </div>
             </div>
           );

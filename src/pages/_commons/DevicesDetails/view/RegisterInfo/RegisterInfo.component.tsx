@@ -9,20 +9,19 @@ export default function RegisterInfo({ device }: { device: any }) {
         <div className={stylesRegister.matricoleItem}>
           <div className={stylesRegister.matricoleHeader}>
             <Badge className={stylesRegister.matricoleIcon} />
-            <span className={stylesRegister.matricoleTitle}>Matricola BTE</span>
-          </div>
-          <span className={stylesRegister.matricoleValue}>
-            {device?.matricola_Bte || "N/A"}
-          </span>
-        </div>
-
-        <div className={stylesRegister.matricoleItem}>
-          <div className={stylesRegister.matricoleHeader}>
-            <Badge className={stylesRegister.matricoleIcon} />
             <span className={stylesRegister.matricoleTitle}>Matricola KGN</span>
           </div>
           <span className={stylesRegister.matricoleValue}>
             {device?.matricola_Kgn || "N/A"}
+          </span>
+        </div>
+        <div className={stylesRegister.matricoleItem}>
+          <div className={stylesRegister.matricoleHeader}>
+            <Badge className={stylesRegister.matricoleIcon} />
+            <span className={stylesRegister.matricoleTitle}>Matricola BTE</span>
+          </div>
+          <span className={stylesRegister.matricoleValue}>
+            {device?.matricola_Bte || "N/A"}
           </span>
         </div>
       </div>

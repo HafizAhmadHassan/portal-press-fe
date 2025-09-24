@@ -77,7 +77,7 @@ const LoginLayout: React.FC = () => {
         <LoginHeader />
 
         <div className={styles.loginContent}>
-          <SidePanel />
+          {/* <SidePanel /> */}
           <LoginCard
             onSubmit={handleFormSubmit}
             isLoading={isLoading}

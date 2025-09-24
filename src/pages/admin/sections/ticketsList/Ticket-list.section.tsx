@@ -277,13 +277,13 @@ export const TicketsListSections: React.FC = () => {
         buttons={headerButtons} // ← USATO headerButtons invece di ticketListHeaderBtns
       />
 
-      <div className={styles["tickets-list-page__filters"]}>
+      {/* <div className={styles["tickets-list-page__filters"]}>
         <SectionFilterComponent
           isLoading={isLoading}
           filters={filtersConfig}
           onResetFilters={resetAll}
         />
-      </div>
+      </div> */}
 
       <TicketsSummaryBar tickets={tickets} severityResolver={resolver} />
 

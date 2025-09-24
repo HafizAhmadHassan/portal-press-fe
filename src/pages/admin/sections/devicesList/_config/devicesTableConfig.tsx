@@ -124,33 +124,6 @@ export const getDevicesColumns = ({
       ),
     },
 
-    // Colonna Data Creazione
-    {
-      key: "created_At",
-      header: "Data Creazione",
-      type: "custom",
-      width: "150px",
-      sortable: true,
-      render: (_value, device) => {
-        if (!device.created_At)
-          return <span style={{ color: tSecondary }}>N/A</span>;
-        const date = new Date(device.created_At);
-        return (
-          <div className={styles.dateCell}>
-            <div style={{ fontSize: "14px", color: tPrimary }}>
-              {date.toLocaleDateString("it-IT")}
-            </div>
-            <div style={{ fontSize: "12px", color: tSecondary }}>
-              {date.toLocaleTimeString("it-IT", {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-            </div>
-          </div>
-        );
-      },
-    },
-
     // Colonna Azioni
     {
       key: "actions",

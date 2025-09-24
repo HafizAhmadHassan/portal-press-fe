@@ -56,7 +56,7 @@ export const buildAdminLayoutSideNavItems = (
       allowedRoles: [UserRoles.ADMIN, UserRoles.SUPER_ADMIN, UserRoles.USER],
     },
     {
-      label: "Users",
+      label: "Utenti",
       route: "/admin/users",
       icon: Users,
       badge: toBadge(badges.users),
@@ -91,7 +91,7 @@ export const buildAdminLayoutSideNavItems = (
       iconActiveColor: "var(--orange-dark)",
       allowedRoles: [UserRoles.ADMIN, UserRoles.SUPER_ADMIN, UserRoles.USER],
     },
-    {
+    /* {
       label: "Analytics",
       icon: BarChart3,
       badge: analyticsParentBadge,
@@ -118,6 +118,6 @@ export const buildAdminLayoutSideNavItems = (
           allowedRoles: [UserRoles.ADMIN, UserRoles.SUPER_ADMIN],
         },
       ],
-    },
+    }, */
   ];
 };

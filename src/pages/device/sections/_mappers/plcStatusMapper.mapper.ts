@@ -17,7 +17,6 @@ export const PLC_STATUS_MAPPING = {
   status_ATTUALE_PRESSIONE_D301_52: "Pressione",
   status_ATTUALE_PESO_D201_46: "Peso",
   status_SEQUENZA_D_5_20: "Sequenza",
-  status_VERSIONE_PLC_D5_14: "Versione PLC",
   status_HMI_EMERGENZA: "Attiva Emergenza",
   plant2_Carico_Ingombrante: "Carico Ingombrante 2",
   status_CARICO_INGOMBRANTE: "Carico Ingombrante",
@@ -30,6 +29,7 @@ export const PLC_STATUS_MAPPING = {
   status_SERRANDA_CHIUSA_D_101_5_7: "Serranda Chiusa",
   status_SERRANDA_SICUREZZA_CHIUSA: "Sicurezza Serranda",
   status_CESTA_SICUREZZA_IN_CARICO: "Sicurezza Cesto",
+  status_VERSIONE_PLC_D5_14: "Versione PLC",
 } as const;
 
 // Campi che rappresentano valori numerici con unità di misura
@@ -141,6 +141,7 @@ export function getCriticalStatusItems(
     "status_SERRANDA_CHIUSA_D_101_5_7",
     "status_SERRANDA_SICUREZZA_CHIUSA",
     "status_CESTA_SICUREZZA_IN_CARICO",
+    "status_VERSIONE_PLC_D5_14",
   ];
 
   return allItems.filter((item) => criticalKeys.includes(item.key));

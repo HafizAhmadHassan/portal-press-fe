@@ -120,13 +120,13 @@ export const UsersListSections: React.FC = () => {
         )}
       />
 
-      <div className={styles["users-list-page__filters"]}>
+      {/* <div className={styles["users-list-page__filters"]}>
         <SectionFilterComponent
           isLoading={isLoading}
           filters={filtersConfig}
           onResetFilters={resetAll}
         />
-      </div>
+      </div> */}
       <Divider />
 
       <div className={styles["users-list-page__table-wrapper"]}>

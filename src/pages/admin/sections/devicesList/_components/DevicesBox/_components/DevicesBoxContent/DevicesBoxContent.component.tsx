@@ -23,7 +23,7 @@ export const DevicesBoxContent: React.FC<DevicesBoxContentProps> = ({
   return (
     <div className={styles.content}>
       {/* Thumbnail del dispositivo */}
-      <div className={styles.deviceThumb}>
+      {/*  <div className={styles.deviceThumb}>
         <img
           src={imageUrl}
           alt="Device"
@@ -37,7 +37,7 @@ export const DevicesBoxContent: React.FC<DevicesBoxContentProps> = ({
         >
           <WifiIcon size={10} />
         </div>
-      </div>
+      </div> */}
 
       {/* Informazioni del dispositivo */}
       <div className={styles.deviceInfo}>

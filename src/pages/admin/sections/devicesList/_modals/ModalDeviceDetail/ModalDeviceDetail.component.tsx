@@ -89,6 +89,7 @@ export const ModalDeviceDetails: React.FC<ModalDeviceDetailsProps> = ({
           device={device}
           displayName={displayName}
           getFullAddress={getFullAddress}
+          isActive={device.status === 1}
         />
 
         {/* Informazioni Tecniche */}
@@ -98,11 +99,11 @@ export const ModalDeviceDetails: React.FC<ModalDeviceDetailsProps> = ({
         <PositionInfo device={device} />
 
         {/* Date e Orari */}
-        <DateHoursInfo
+        {/*  <DateHoursInfo
           formatDate={formatDate}
           getRelativeTime={getRelativeTime}
           device={device}
-        />
+        /> */}
 
         {/* Coordinate GPS */}
         <CoordinatesInfo

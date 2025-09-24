@@ -146,13 +146,13 @@ export const GpsListSections: React.FC = () => {
         )}
       />
 
-      <div className={styles["gps-list-page__filters"]}>
+      {/*  <div className={styles["gps-list-page__filters"]}>
         <SectionFilterComponent
           isLoading={isLoading}
           filters={filtersConfig}
           onResetFilters={resetAll}
         />
-      </div>
+      </div> */}
 
       <Divider />
 

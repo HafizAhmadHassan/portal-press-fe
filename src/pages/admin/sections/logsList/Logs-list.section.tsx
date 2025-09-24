@@ -67,13 +67,13 @@ export const LogsListSections: React.FC = () => {
         )}
       />
 
-      <div className={styles["logs-list-page__filters"]}>
+      {/* <div className={styles["logs-list-page__filters"]}>
         <SectionFilterComponent
           isLoading={isLoading}
           filters={filtersConfig}
           onResetFilters={resetAll}
         />
-      </div>
+      </div> */}
 
       <Divider />
 

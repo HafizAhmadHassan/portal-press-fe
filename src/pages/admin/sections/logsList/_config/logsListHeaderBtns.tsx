@@ -33,14 +33,14 @@ const logsListHeaderBtns = (
     label: "Aggiorna",
     disabled: isLoading,
   },
-  {
+  /* {
     onClick: onExportClick,
     variant: "outline" as const,
     color: "success" as const,
     size: "sm" as const,
     icon: ExportIcon,
     label: "Esporta",
-  },
+  }, */
 ];
 
 export default logsListHeaderBtns;

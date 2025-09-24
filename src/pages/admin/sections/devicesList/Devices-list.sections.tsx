@@ -258,13 +258,13 @@ export const DevicesListSections: React.FC = () => {
         )}
       />
 
-      <div className={styles["devices-list-page__filters"]}>
+      {/* <div className={styles["devices-list-page__filters"]}>
         <SectionFilterComponent
           filters={filtersConfig}
           onResetFilters={handleResetAll}
           isLoading={getLoadingState()}
         />
-      </div>
+      </div> */}
       <Divider />
 
       {isMap ? (

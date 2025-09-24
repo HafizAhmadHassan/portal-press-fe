@@ -113,6 +113,7 @@ export default function DeviceDetailsPage() {
   }
 
   const displayName = device?.machine_Name || `Dispositivo ${device?.id}`;
+  const isActive = device?.status == 1;
 
   return (
     <>
@@ -123,6 +124,7 @@ export default function DeviceDetailsPage() {
             device={device}
             displayName={displayName}
             getFullAddress={() => getFullAddress(device as Device)}
+            isActive={isActive}
           />
 
           {/* View switch */}

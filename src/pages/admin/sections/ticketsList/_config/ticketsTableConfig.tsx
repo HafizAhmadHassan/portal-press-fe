@@ -47,6 +47,8 @@ export const getTicketsColumns = ({ onClose }: GetTicketsColumnsOptions) => [
     },
   },
 
+  /* TODO: inserire coordinate + via della macchina e apertura google maps */
+
   // Colonna Descrizione
   {
     key: "open_Description",
@@ -74,18 +76,6 @@ export const getTicketsColumns = ({ onClose }: GetTicketsColumnsOptions) => [
   },
 
   // Colonna Cliente
-  {
-    key: "customer_Name",
-    header: "Cliente",
-    type: "text",
-    sortable: true,
-    width: "150px",
-    textConfig: {
-      overflow: "ellipsis",
-      maxWidth: "130px",
-      showTooltip: true,
-    },
-  },
 
   // Colonna Macchina personalizzata
   {
@@ -98,10 +88,10 @@ export const getTicketsColumns = ({ onClose }: GetTicketsColumnsOptions) => [
       return (
         <div>
           <div style={{ fontSize: "14px", color: "var(--text-primary)" }}>
-            bte: {ticket.machine_detail.matricola_Bte || "N/A"}
+            BTE: {ticket.machine_detail.matricola_Bte || "N/A"}
           </div>
           <div style={{ fontSize: "14px", color: "var(--text-primary)" }}>
-            kgn: {ticket.machine_detail.matricola_Kgn || "N/A"}
+            KGN: {ticket.machine_detail.matricola_Kgn || "N/A"}
           </div>
         </div>
       );
@@ -139,6 +129,19 @@ export const getTicketsColumns = ({ onClose }: GetTicketsColumnsOptions) => [
           </div>
         </div>
       );
+    },
+  },
+
+  {
+    key: "customer_Name",
+    header: "Cliente",
+    type: "text",
+    sortable: true,
+    width: "150px",
+    textConfig: {
+      overflow: "ellipsis",
+      maxWidth: "130px",
+      showTooltip: true,
     },
   },
 

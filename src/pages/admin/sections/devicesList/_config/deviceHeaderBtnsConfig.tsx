@@ -53,14 +53,14 @@ const devicesListHeaderBtns = (
       />
     ),
   },
-  {
+  /* {
     onClick: onExportClick,
     variant: "outline" as const,
     color: "success" as const,
     size: "sm" as const,
     icon: Download,
     label: "Esporta",
-  },
+  }, */
   {
     onClick: toggleCardsTable,
     variant: "outline" as const,

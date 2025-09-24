@@ -53,8 +53,8 @@
 }
 
 .deviceIcon {
-  width: 80px;
-  height: 80px;
+  height: 100%;
+  width: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -293,7 +293,7 @@
 }
 .noMapWrapper {
   height: 100%;
-  /* width: 200px; */
+  width: 200px;
 }
 
 /* Stato mancanza coordinate */

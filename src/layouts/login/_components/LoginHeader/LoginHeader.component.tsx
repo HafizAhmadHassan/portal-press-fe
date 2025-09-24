@@ -1,13 +1,16 @@
 // components/LoginHeader/LoginHeader.tsx
 import React from "react";
 import styles from "./LoginHeader.module.scss";
+import KGNLOGO from "@root/../public/assets/images/kgn-logo.png";
 
 const LoginHeader: React.FC = () => {
   return (
     <div className={styles.loginHeader}>
       <div className={styles.brand}>
         <div className={styles.brandIcon}>
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+          <img src={KGNLOGO} alt="KGN Logo" />
+
+          {/* <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
             <path
               d="M12 2L3.09 8.26L4 9L12 4L20 9L20.91 8.26L12 2Z"
               fill="url(#gradient1)"
@@ -35,7 +38,7 @@ const LoginHeader: React.FC = () => {
                 <stop offset="100%" stopColor="#00f2fe" />
               </linearGradient>
             </defs>
-          </svg>
+          </svg> */}
         </div>
         <div className={styles.brandText}>
           <h1>Portale Press</h1>

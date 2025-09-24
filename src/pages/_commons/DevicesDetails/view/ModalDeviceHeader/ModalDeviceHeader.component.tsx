@@ -4,6 +4,7 @@ import {
   CheckCircle,
   Monitor,
   Shield,
+  WifiIcon,
   XCircle,
 } from "lucide-react";
 import { WasteBadge } from "@shared/waste-badge/WasteBadge.component.tsx";
@@ -14,10 +15,12 @@ export default function ModalDeviceHeader({
   device,
   displayName,
   getFullAddress,
+  isActive,
 }: {
   device: Device;
   displayName: string;
   getFullAddress: any;
+  isActive: boolean;
 }) {
   // Verifica se le coordinate GPS sono disponibili e valide
   const hasValidCoordinates =
@@ -47,13 +50,18 @@ export default function ModalDeviceHeader({
     <div className={styles.deviceHeader}>
       <div className={styles.iconSection}>
         <div className={styles.deviceIcon}>
-          <Monitor size={48} />
+          <img
+            src={import.meta.env.VITE_IMAGE_DEFAULT}
+            alt="Device"
+            loading="lazy"
+          />
         </div>
+
         <div className={styles.statusIndicator}>
           {device?.status === 1 ? (
-            <CheckCircle className={styles.statusIconActive} />
+            <WifiIcon className={styles.statusIconActive} />
           ) : (
-            <XCircle className={styles.statusIconInactive} />
+            <WifiIcon className={styles.statusIconInactive} />
           )}
         </div>
       </div>

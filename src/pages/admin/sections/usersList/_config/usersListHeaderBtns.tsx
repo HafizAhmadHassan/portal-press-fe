@@ -47,14 +47,14 @@ const usersListHeaderBtns = (
       />
     ),
   },
-  {
+  /*  {
     onClick: onExportClick,
     variant: "outline" as const,
     color: "success" as const,
     size: "sm" as const,
     icon: Download,
     label: "Esporta",
-  },
+  }, */
 ];
 
 export default usersListHeaderBtns;

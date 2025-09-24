@@ -49,14 +49,14 @@ const gpsListHeaderBtns = (
       />
     ),
   },
-  {
+  /* {
     onClick: onExportClick,
     variant: "outline",
     color: "success",
     size: "sm",
     icon: Download,
     label: "Esporta",
-  },
+  }, */
 ];
 
 export default gpsListHeaderBtns;
