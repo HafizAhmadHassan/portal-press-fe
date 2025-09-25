@@ -7,6 +7,7 @@ import { ModalDeleteDevicesConfirm } from "@sections_admin/devicesList/_modals/M
 import type { TableColumn } from "@components/shared/table/types/GenericTable.types";
 import styles from "../_styles/DevicesTableConfig.module.scss";
 import { ModalCreateUpdateDevice } from "../_modals/ModalCreateUpdateDevice/ModalCreateUpdateDevice.component";
+import { ExternalLink } from "lucide-react";
 
 interface DevicesColumnsProps {
   onEdit: (deviceId: number, updatedData: Partial<Device>) => Promise<void>;
@@ -124,6 +125,65 @@ export const getDevicesColumns = ({
       ),
     },
 
+    {
+      key: "codice_GPS",
+      header: "GPS",
+      type: "custom",
+      width: "160px",
+      sortable: true,
+      render: (_v, device) => {
+        if (!device.codice_GPS)
+          return <span style={{ color: tSecondary }}>N/A</span>;
+
+        return (
+          <div
+            style={{
+              position: "relative",
+              display: "flex",
+              flexDirection: "column",
+              textAlign: "left",
+              gap: "4px",
+            }}
+          >
+            <SimpleButton
+              style={{
+                display: "flex",
+                width: "100%",
+                justifyContent: "flex-start",
+                padding: "5px",
+              }}
+              color="primary"
+              size="sm"
+              href={`https://www.google.com/maps/search/?api=1&query=${device.gps_x},${device.gps_y}`}
+              target="_blank"
+              className="relative"
+            >
+              <div style={{ fontSize: "12px", color: tSecondary }}>
+                <div>Lat: {device.gps_x || "N/A"}</div>
+                <div>Lon: {device.gps_y || "N/A"}</div>
+              </div>
+              <div
+                style={{ fontSize: "14px", color: tPrimary, marginTop: "5px" }}
+              >
+                Matricola: {device.matricola_Kgn}
+              </div>
+
+              {/* icona in alto a destra */}
+            </SimpleButton>
+            <ExternalLink
+              size={14}
+              style={{
+                position: "absolute",
+                top: "4px",
+                right: "5px",
+                opacity: 0.75,
+              }}
+            />
+          </div>
+        );
+      },
+    },
+
     // Colonna Azioni
     {
       key: "actions",
@@ -169,7 +229,6 @@ export const getDevicesColumns = ({
   ];
 };
 
-// Funzione di configurazione per compatibilità con il vecchio sistema
 export const createDevicesTableConfig = ({
   devices,
   onEdit,
