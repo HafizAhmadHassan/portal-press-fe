@@ -51,6 +51,7 @@ export default function ModalDeviceHeader({
       <div className={styles.iconSection}>
         <div className={styles.deviceIcon}>
           <img
+            style={{ height: "100%" }}
             src={import.meta.env.VITE_IMAGE_DEFAULT}
             alt="Device"
             loading="lazy"

@@ -10,7 +10,7 @@
   border-bottom: 1px solid var(--border-color);
   width: 100%;
   color: var(--text-primary);
-  position: relative;
+  position: fixed;
   z-index: 1300; /* Higher than sidebar z-index */
 }
 
