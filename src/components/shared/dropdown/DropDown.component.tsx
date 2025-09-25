@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import styles from "./Dropdown.module.scss";
+import styles from "./DropDown.module.scss";
 
 export type DropdownPlacement = "top" | "bottom" | "left" | "right";
 export type DropdownAlign = "start" | "center" | "end";
