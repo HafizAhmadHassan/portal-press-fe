@@ -83,7 +83,7 @@ export const buildAdminLayoutSideNavItems = (
       allowedRoles: [UserRoles.ADMIN, UserRoles.SUPER_ADMIN],
     },
     {
-      label: "Logs",
+      label: "Notifiche",
       route: "/admin/logs",
       icon: MessageCircle,
       badge: toBadge(badges.logs),

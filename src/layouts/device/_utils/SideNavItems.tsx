@@ -13,7 +13,7 @@ export const deviceLayoutSideNavItems = (deviceId?: number): MenuItem[] => {
 
   return [
     {
-      label: "Overview",
+      label: "Panoramica",
       route: `${base}`,
       icon: WashingMachine,
       iconColor: "var(--success-color)",
