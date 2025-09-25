@@ -126,6 +126,14 @@ export const getDevicesColumns = ({
     },
 
     {
+      key: "ip_Router",
+      header: "IP Router",
+      type: "custom",
+      width: "150px",
+      sortable: true,
+      render: (_value, device) => device.ip_Router || "N/A",
+    },
+    {
       key: "codice_GPS",
       header: "GPS",
       type: "custom",
@@ -152,18 +160,18 @@ export const getDevicesColumns = ({
                 justifyContent: "flex-start",
                 padding: "5px",
               }}
-              color="primary"
+              color="warning"
               size="sm"
               href={`https://www.google.com/maps/search/?api=1&query=${device.gps_x},${device.gps_y}`}
               target="_blank"
               className="relative"
             >
-              <div style={{ fontSize: "12px", color: tSecondary }}>
+              <div style={{ fontSize: "12px", color: "#333", fontWeight: 900 }}>
                 <div>Lat: {device.gps_x || "N/A"}</div>
                 <div>Lon: {device.gps_y || "N/A"}</div>
               </div>
               <div
-                style={{ fontSize: "14px", color: tPrimary, marginTop: "5px" }}
+                style={{ fontSize: "14px", color: "#333", marginTop: "5px" }}
               >
                 Matricola: {device.matricola_Kgn}
               </div>
