@@ -3,15 +3,9 @@ import { createDevicePopup } from "@sections_admin//devicesList/utils/MapPopupBu
 
 export const DeviceHelpers = {
   getCoordinates: (device: Device) => {
-    // log per debug
-    /* console.log(`Parsing lat/long per device ${device.id}:`, device.gps_y, device.gps_x); */
-
-    // gps_y e gps_x arrivano come stringhe: le parsifichiamo
     const latitude = parseFloat(device.gps_y || "0");
     const longitude = parseFloat(device.gps_x || "0");
-    /* console.log(` → parsed to`, { latitude, longitude }); */
 
-    // accettiamo solo valori non-NaN e diversi da zero
     if (
       !isNaN(latitude) &&
       !isNaN(longitude) &&
@@ -20,7 +14,6 @@ export const DeviceHelpers = {
     ) {
       return { gps_y: latitude, gps_x: longitude };
     }
-    /* console.log(` → coordinate non valide o zero, scarto`); */
     return null;
   },
 
@@ -50,18 +43,12 @@ export const DeviceHelpers = {
   },
 
   transformDevicesToMapData: (devices: Device[]) => {
-    /* console.log('=== transformDevicesToMapData START ==='); */
-    /* console.log('Input devices array:', devices); */
-
     const mapped = devices.map((device) => {
       const coords = DeviceHelpers.getCoordinates(device);
       return { id: device.id, coords };
     });
-    /* console.log('Preliminare (id + coords):', mapped); */
 
-    // Conserva solo quelli con coords valide
     const filtered = mapped.filter((entry) => entry.coords);
-    /* console.log('Dopo filter:', filtered); */
 
     return filtered.map(({ id, coords }) => {
       const device = devices.find((d) => d.id === id)!;
@@ -71,7 +58,7 @@ export const DeviceHelpers = {
         gps_y: coords!.gps_y,
         gps_x: coords!.gps_x,
         activeStatus: DeviceHelpers.isActive(device),
-        popupContent: createDevicePopup(device),
+        popupContent: createDevicePopup(device), // Rimossa la callback
         additionalData: device,
       };
     });

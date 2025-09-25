@@ -1,8 +1,5 @@
 // @shared/side-navbar/config/adminSideNav.ts
 import {
-  BarChart3,
-  ChevronRight,
-  FileText,
   LocateFixed,
   MessageCircle,
   Ticket,

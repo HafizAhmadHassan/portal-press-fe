@@ -1,10 +1,10 @@
 /* Override del contenitore Leaflet */
-:global(.leaflet-popup-content) {
+.leaflet-popup-content {
   margin: 0 !important;
   padding: 0 !important;
 }
 
-:global(.leaflet-popup-content-wrapper) {
+.leaflet-popup-content-wrapper {
   border-radius: 14px !important;
   overflow: hidden;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
@@ -12,8 +12,8 @@
 }
 
 /* Card principale */
-:global(.device-popup) {
-  font-family: 'Inter', sans-serif;
+.device-popup {
+  font-family: "Inter", sans-serif;
   font-size: 13px;
   background: #fff;
   color: #1f2937;
@@ -26,7 +26,7 @@
 }
 
 /* HEADER */
-:global(.popup-header) {
+.popup-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -35,13 +35,13 @@
   padding: 10px 14px;
 }
 
-:global(.popup-title) {
+.popup-title {
   font-weight: 600;
   font-size: 14px;
   flex: 1;
 }
 
-:global(.status-badge) {
+.status-badge {
   padding: 3px 10px;
   font-size: 11px;
   border-radius: 9999px;
@@ -49,38 +49,47 @@
   text-transform: uppercase;
 }
 
-:global(.status-green) { background: #dcfce7; color: #15803d; }
-:global(.status-red) { background: #fee2e2; color: #b91c1c; }
-:global(.status-yellow) { background: #fef3c7; color: #b45309; }
+.status-green {
+  background: #dcfce7;
+  color: #15803d;
+}
+.status-red {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+.status-yellow {
+  background: #fef3c7;
+  color: #b45309;
+}
 
 /* BODY */
-:global(.popup-body) {
+.popup-body {
   padding: 10px 14px;
   display: grid;
   grid-template-columns: 1fr;
   gap: 8px;
 }
 
-:global(.popup-row) {
+.popup-row {
   display: flex;
   flex-direction: column;
 }
 
-:global(.popup-label) {
+.popup-label {
   font-weight: 500;
   font-size: 12px;
   color: #6b7280;
   margin-bottom: 2px;
 }
 
-:global(.popup-value) {
+.popup-value {
   font-size: 13px;
   color: #111827;
   word-break: break-word;
 }
 
 /* FOOTER BASE */
-:global(.popup-footer) {
+.popup-footer {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
@@ -90,13 +99,13 @@
   backdrop-filter: blur(4px);
 }
 
-:global(.popup.inactive) .popup-footer {
+.popup.inactive .popup-footer {
   background: rgba(254, 242, 242, 0.85);
   border-top-color: #fecaca;
 }
 
 /* BOTTONI */
-:global(.popup-btn) {
+.popup-btn {
   min-width: 80px;
   height: 32px;
   padding: 0 12px;
@@ -112,56 +121,57 @@
   user-select: none;
 }
 
-:global(.popup-btn:hover:not(:disabled)) {
+.popup-btn:hover:not(:disabled) {
   transform: translateY(-1px);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
-:global(.popup-btn:disabled) {
+.popup-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
 /* VARIANTI BOTTONI */
-:global(.popup-btn.primary) {
+.popup-btn.primary {
   background: linear-gradient(135deg, #3b82f6, #1d4ed8);
   color: white;
 }
 
-:global(.popup-btn.success) {
+.popup-btn.success {
   background: linear-gradient(135deg, #10b981, #059669);
   color: white;
 }
 
-:global(.popup-btn.error) {
+.popup-btn.error {
   background: linear-gradient(135deg, #ef4444, #b91c1c);
   color: white;
 }
 
-:global(.popup.inactive) .popup-btn.error {
+.popup.inactive .popup-btn.error {
   animation: activate-pulse 1.5s ease-in-out infinite;
   border: 2px solid #b91c1c;
 }
 
-:global(.popup-btn.secondary) {
+.popup-btn.secondary {
   background: #f8fafc;
   color: #64748b;
   border: 1px solid #e2e8f0;
 }
 
-:global(.popup-btn.secondary:hover:not(:disabled)) {
+.popup-btn.secondary:hover:not(:disabled) {
   background: #f1f5f9;
   color: #374151;
 }
 
-:global(.popup-btn.warning) {
+.popup-btn.warning {
   background: linear-gradient(135deg, #f59e0b, #d97706);
   color: white;
 }
 
 /* Pulsazione attiva per errori o attiva/disattiva */
 @keyframes activate-pulse {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5);
     transform: scale(1);
   }
@@ -172,7 +182,7 @@
 }
 
 /* ALERT */
-:global(.popup-alert) {
+.popup-alert {
   padding: 6px 8px;
   border-radius: 8px;
   font-size: 12px;
@@ -181,6 +191,15 @@
   gap: 6px;
 }
 
-:global(.popup-blocked) { background: #fee2e2; color: #b91c1c; }
-:global(.popup-ready) { background: #dcfce7; color: #15803d; }
-:global(.popup-warning) { background: #fef3c7; color: #b45309; }
+.popup-blocked {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+.popup-ready {
+  background: #dcfce7;
+  color: #15803d;
+}
+.popup-warning {
+  background: #fef3c7;
+  color: #b45309;
+}

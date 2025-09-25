@@ -5,6 +5,7 @@ import * as path from "path";
 export default defineConfig(() => {
   return {
     plugins: [react()],
+
     resolve: {
       alias: {
         // alias esistenti

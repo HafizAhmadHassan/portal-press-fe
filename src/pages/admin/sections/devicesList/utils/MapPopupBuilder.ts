@@ -1,6 +1,6 @@
-import type { Device } from "@store_admin/devices/devices.types.ts";
-import { DeviceHelpers } from "@sections_admin//devicesList/utils/DeviceHelpers";
-import "@shared/map/styles/DevicePopup.module.scss";
+import type { Device } from "@store_admin/devices/devices.types";
+import { DeviceHelpers } from "@sections_admin/devicesList/utils/DeviceHelpers";
+import "@shared/map/styles/DevicePopup.scss";
 
 export const createDevicePopup = (device: Device): string => {
   const address = DeviceHelpers.getFullAddress(device);
@@ -10,13 +10,15 @@ export const createDevicePopup = (device: Device): string => {
   const isReady = DeviceHelpers.isReady(device);
 
   return `
-    <div class="device-popup ${isBlocked ? "inactive" : ""}">
+    <div class="device-popup popup ${
+      isBlocked ? "inactive" : ""
+    }" data-device-id="${device.id}">
       
       <!-- HEADER -->
       <div class="popup-header">
-        <div class="popup-title">${
-          device.machine_Name || `Dispositivo ${device.id}`
-        }</div>
+        <div class="popup-title">
+          ${device.machine_Name || `Dispositivo ${device.id}`}
+        </div>
         <span class="status-badge status-${statusColor}">${status}</span>
       </div>
 
@@ -63,24 +65,17 @@ export const createDevicePopup = (device: Device): string => {
           device.gps_x !== undefined &&
           device.gps_y !== undefined &&
           (isNaN(parseFloat(device.gps_x)) || isNaN(parseFloat(device.gps_y)))
-            ? '<div class="popup-alert popup-warning">⚠️ Coordinate GPS non valide</div>'
+            ? `<div class="popup-alert popup-warning">⚠️ Coordinate GPS non valide</div>`
             : ""
         }
 
         <!-- BOTTONI -->
-        <div style="display:flex;gap:6px;margin-top:6px;">
-          <button class="popup-btn primary">Dettagli</button>
-          ${
-            isBlocked
-              ? `<button class="popup-btn success">Sblocca</button>`
-              : `<button class="popup-btn error">Blocca</button>`
-          }
-        </div>
-        
-        
-        
+        <button class="popup-btn primary device-details-btn" data-device-id="${
+          device.id
+        }">
+          Dettagli
+        </button>
       </div>
-
     </div>
   `;
 };
