@@ -52,6 +52,7 @@ export default function KgnHeader() {
 
   const getToggleIcon = () =>
     isMobileOpen ? <X size={20} /> : <Menu size={20} />;
+
   const handleToggleClick = () => {
     const isMobile = window.innerWidth <= 768;
     if (isMobile) toggleMobile();

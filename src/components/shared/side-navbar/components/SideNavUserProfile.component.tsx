@@ -10,9 +10,14 @@ import type { User } from "@root/pages/admin/core/store/users/user.types";
 
 export function SideNavUserProfile({ user }: { user: User }) {
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const { isSidebarCollapsed } = useSideBar();
+  const { isSidebarCollapsed, toggleMobile } = useSideBar();
 
   const { logout } = useAuth();
+
+  const onLogout = () => {
+    logout();
+    toggleMobile();
+  };
 
   return (
     <div className={styles.userProfile}>
@@ -34,7 +39,7 @@ export function SideNavUserProfile({ user }: { user: User }) {
 
       {showUserMenu && !isSidebarCollapsed && (
         <SideNavUserMenu
-          onLogout={logout}
+          onLogout={onLogout}
           onClose={() => setShowUserMenu(false)}
         />
       )}

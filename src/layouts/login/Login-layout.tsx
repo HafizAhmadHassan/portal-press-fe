@@ -6,7 +6,6 @@ import { useAuth } from "@store_admin/auth/hooks/useAuth";
 import styles from "./Login-layout.module.scss";
 import BackgroundDecorations from "./_components/BackgroundDecorations/BackgroundDecorations.component";
 import LoginHeader from "./_components/LoginHeader/LoginHeader.component";
-import SidePanel from "./_components/SidePanel/SidePanel.component";
 import LoginCard from "./_components/LoginCard/LoginCard.component";
 
 interface LoginFormData {
@@ -29,7 +28,7 @@ const LoginLayout: React.FC = () => {
       isInitialized: true,
     });
     if (isAuthenticated) {
-      const from = (location.state as any)?.from?.pathname || "/admin";
+      const from = /*  (location.state as any)?.from?.pathname || */ "/admin";
       console.log("User authenticated, redirecting to:", from);
       navigate(from, { replace: true });
     }
@@ -48,24 +47,10 @@ const LoginLayout: React.FC = () => {
         password: formData.password,
         rememberMe: formData.rememberMe,
       };
-
-      console.log("Attempting login with identifier:", {
-        username: loginData.username,
-        isEmail: loginData.username.includes("@"),
-      });
-
-      const result = await login(loginData);
-
-      console.log("Login result:", result);
-
-      if ((result as any)?.type === "auth/loginAsync/fulfilled") {
-        console.log("Login successful, user will be redirected by useEffect");
-      } else if ((result as any)?.type === "auth/loginAsync/rejected") {
-        console.log("Login failed:", (result as any)?.payload);
-      }
+      await login(loginData);
     } catch (err) {
       console.error("Login error:", err);
-      throw err; // Re-throw to let LoginForm handle it
+      throw err;
     }
   };
 
