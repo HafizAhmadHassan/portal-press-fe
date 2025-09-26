@@ -131,7 +131,20 @@ export const getDevicesColumns = ({
       type: "custom",
       width: "150px",
       sortable: true,
-      render: (_value, device) => device.ip_Router || "N/A",
+      render: (_value, device) => {
+        return (
+          <div>
+            <div style={{ fontSize: "12px" }}>
+              <span style={{ color: tPrimary }}>IP: </span>
+              {device.ip_Router || (
+                <span style={{ color: tSecondary }}>N/A</span>
+              )}
+            </div>
+            <div style={{ fontSize: "12px" }}>KGN: {device.matricola_Kgn}</div>
+            <div style={{ fontSize: "12px" }}>BTE: {device.matricola_Bte}</div>
+          </div>
+        );
+      },
     },
     {
       key: "codice_GPS",
@@ -170,21 +183,21 @@ export const getDevicesColumns = ({
                 <div>Lat: {device.gps_x || "N/A"}</div>
                 <div>Lon: {device.gps_y || "N/A"}</div>
               </div>
-              <div
-                style={{ fontSize: "14px", color: "#333", marginTop: "5px" }}
-              >
-                Matricola: {device.matricola_Kgn}
-              </div>
 
               {/* icona in alto a destra */}
             </SimpleButton>
             <ExternalLink
-              size={14}
+              size={24}
               style={{
                 position: "absolute",
-                top: "4px",
-                right: "5px",
-                opacity: 0.75,
+                border: "3px solid transparent",
+                backgroundColor: "#fff",
+                borderRadius: "50%",
+                top: "-10px",
+                right: "-10px",
+
+                color: "var(--warning-color)",
+                padding: "3px",
               }}
             />
           </div>
