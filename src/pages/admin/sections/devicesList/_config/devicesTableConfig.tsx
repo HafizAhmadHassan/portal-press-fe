@@ -29,9 +29,9 @@ export const getDevicesColumns = ({
     // Colonna Nome Macchina
     {
       key: "machine_Name",
-      header: "Nome Macchina",
+      header: "Id",
       type: "custom",
-      width: "200px",
+      width: "100px",
       sortable: true,
       render: (_value, device) => (
         <div className={styles.nameCell}>
@@ -57,7 +57,7 @@ export const getDevicesColumns = ({
       key: "status",
       header: "Stato",
       type: "custom",
-      width: "110px",
+      width: "120px",
       sortable: true,
       render: (_value, device) => (
         <span
@@ -110,7 +110,7 @@ export const getDevicesColumns = ({
       key: "status_Machine_Blocked",
       header: "Blocco",
       type: "custom",
-      width: "110px",
+      width: "120px",
       sortable: true,
       render: (_value, device) => (
         <span
@@ -190,12 +190,11 @@ export const getDevicesColumns = ({
               size={24}
               style={{
                 position: "absolute",
-                border: "3px solid transparent",
+                border: "2px solid var(--warning-color)",
                 backgroundColor: "#fff",
                 borderRadius: "50%",
                 top: "-10px",
                 right: "-10px",
-
                 color: "var(--warning-color)",
                 padding: "3px",
               }}
