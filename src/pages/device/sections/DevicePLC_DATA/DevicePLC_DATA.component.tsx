@@ -218,14 +218,14 @@ export default function DevicePLC_DATA() {
     <>
       <div className={styles.page}>
         <TableKeyValue
-          rows={rows}
+          rows={rows.filter((r) => r.key !== "id")} // Nascondi ID
           onChange={setRows}
           onSave={saveAll}
           onCancel={cancelAll}
           saving={saving}
           loading={isLoading || isFetching}
           compact
-          editable={isEdit}
+          editable={false}
           showActionsColumn
           allowHeaderEditToggle={false}
           onRowSave={saveRow}

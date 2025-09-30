@@ -21,7 +21,7 @@ export const deviceLayoutSideNavItems = (deviceId?: number): MenuItem[] => {
       allowedRoles: [UserRoles.ADMIN, UserRoles.SUPER_ADMIN, UserRoles.USER],
     },
     {
-      label: "PLC IO",
+      label: "Parametri",
       route: `${base}/plc-io`,
       icon: Users,
       badge: "12",

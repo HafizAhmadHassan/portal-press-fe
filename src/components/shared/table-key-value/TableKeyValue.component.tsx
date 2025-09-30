@@ -115,7 +115,7 @@ export default function TableKeyValue({
   const [editingRows, setEditingRows] = useState<Set<string>>(new Set());
   const originalsRef = useRef<Record<string, TableKeyValueRow | undefined>>({});
 
-  const hasActions = showActionsColumn || allowHeaderEditToggle;
+  const hasActions = editable && (showActionsColumn || allowHeaderEditToggle);
 
   const isRowEditableNow = (row: TableKeyValueRow) =>
     !row.readOnly && (editable || forceAll || editingRows.has(String(row.id)));
