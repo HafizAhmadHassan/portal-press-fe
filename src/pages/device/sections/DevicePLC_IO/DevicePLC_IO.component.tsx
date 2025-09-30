@@ -1,19 +1,14 @@
-// DevicePLC_IO.tsx
 import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import styles from "../_styles/DevicesPLC.module.scss";
 
-import TableKeyValue from "@components/shared/table-key-value/TableKeyValue.component";
-import type { TableKeyValueRow } from "@store_device/plc/plc.types";
 import { SimpleButton } from "@root/components/shared/simple-btn/SimpleButton.component";
 import {
   useGetPlcByIdQuery,
   useUpdatePlcMutation,
 } from "@store_device/plc/plc.api";
-import {
-  objectToTableRows,
-  tableRowsToObject,
-} from "@store_device/plc/plc.utils.ts";
+import type { TableKeyValueObject } from "@root/components/shared/table-key-value/TableKeyValue2.component";
+import TableKeyValue2 from "@root/components/shared/table-key-value/TableKeyValue2.component";
 
 export default function DevicePLC_IO() {
   const navigate = useNavigate();
@@ -21,11 +16,11 @@ export default function DevicePLC_IO() {
   const [searchParams] = useSearchParams();
   const isEdit = searchParams.get("edit") === "1";
 
-  const [rows, setRows] = useState<TableKeyValueRow[]>([]);
-  const [original, setOriginal] = useState<TableKeyValueRow[]>([]);
+  const [rows, setRows] = useState<TableKeyValueObject>({});
+  const [original, setOriginal] = useState<TableKeyValueObject>({});
   const [saving, setSaving] = useState(false);
 
-  // RTK Query hooks
+  // RTK Query
   const currentId = deviceId ? Number(deviceId) : undefined;
   const {
     data: plcDetail,
@@ -39,20 +34,21 @@ export default function DevicePLC_IO() {
 
   const plcIo = (plcDetail as any)?.plc_io ?? null;
 
-  // Inizializza righe quando cambiano i dati
+  // inizializza righe quando cambia il dato
   useEffect(() => {
     if (isLoading || isFetching) return;
 
     if (error) {
       console.error("[DevicePLC_IO] errore plc/:id →", error);
-      setRows([]);
-      setOriginal([]);
+      setRows({});
+      setOriginal({});
       return;
     }
 
-    const built = objectToTableRows(plcIo);
-    setRows(built);
-    setOriginal(JSON.parse(JSON.stringify(built)));
+    if (plcIo) {
+      setRows(plcIo);
+      setOriginal(JSON.parse(JSON.stringify(plcIo)));
+    }
   }, [plcIo, isLoading, isFetching, error]);
 
   const dirty = useMemo(
@@ -61,16 +57,14 @@ export default function DevicePLC_IO() {
   );
 
   const saveAll = useCallback(
-    async (updated: TableKeyValueRow[]) => {
+    async (updated: TableKeyValueObject) => {
       if (!currentId) return;
-
       setSaving(true);
-      try {
-        const updatedPlcIo = tableRowsToObject(updated);
 
+      try {
         await updatePlc({
           id: currentId,
-          data: { plc_io: updatedPlcIo },
+          data: { plc_io: updated },
         }).unwrap();
 
         setOriginal(JSON.parse(JSON.stringify(updated)));
@@ -90,24 +84,21 @@ export default function DevicePLC_IO() {
   }, [original]);
 
   const saveRow = useCallback(
-    async (row: TableKeyValueRow, index: number) => {
+    async (rowKey: string, rowData: TableKeyValueObject[string]) => {
       if (!currentId) return;
 
       try {
-        const updatedRows = [...rows];
-        updatedRows[index] = row;
-        const updatedPlcIo = tableRowsToObject(updatedRows);
+        const updated = { ...rows, [rowKey]: rowData };
 
         await updatePlc({
           id: currentId,
-          data: { plc_io: updatedPlcIo },
+          data: { plc_io: updated },
         }).unwrap();
 
-        setOriginal((prev) => {
-          const copy = [...prev];
-          copy[index] = JSON.parse(JSON.stringify(row));
-          return copy;
-        });
+        setOriginal((prev) => ({
+          ...prev,
+          [rowKey]: JSON.parse(JSON.stringify(rowData)),
+        }));
 
         refetch();
       } catch (error) {
@@ -118,12 +109,11 @@ export default function DevicePLC_IO() {
   );
 
   const cancelRow = useCallback(
-    (_row: TableKeyValueRow, index: number) => {
-      setRows((prev) => {
-        const copy = [...prev];
-        copy[index] = JSON.parse(JSON.stringify(original[index]));
-        return copy;
-      });
+    (rowKey: string, _row: TableKeyValueObject[string]) => {
+      setRows((prev) => ({
+        ...prev,
+        [rowKey]: JSON.parse(JSON.stringify(original[rowKey])),
+      }));
     },
     [original]
   );
@@ -139,7 +129,7 @@ export default function DevicePLC_IO() {
   return (
     <>
       <div className={styles.page}>
-        <TableKeyValue
+        <TableKeyValue2
           rows={rows}
           onChange={setRows}
           onSave={saveAll}

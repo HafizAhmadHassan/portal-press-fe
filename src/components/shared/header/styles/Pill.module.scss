@@ -15,6 +15,7 @@
 .pill {
   position: relative; /* non necessario per il portal, ma utile */
   display: flex;
+  justify-content: center;
   align-items: center;
   height: 40px;
 
@@ -22,7 +23,8 @@
   border-radius: 9999px;
   overflow: hidden;
   max-width: 600px;
-  width: 100%;
+  min-width: 200px;
+  /*  width: 100%; */
   background: var(--bg-secondary);
 }
 

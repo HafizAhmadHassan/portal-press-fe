@@ -74,7 +74,7 @@ export const getLogsColumns =
               <span
                 aria-hidden
                 style={{
-                  width: 8,
+                  minWidth: 8,
                   height: 8,
                   borderRadius: 999,
                   background: sevColor,

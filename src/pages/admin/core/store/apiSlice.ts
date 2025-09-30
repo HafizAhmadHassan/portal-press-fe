@@ -8,7 +8,10 @@ import type { FetchArgs, FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import type { RootState } from "@root/store";
 import { refreshTokenAsync, logoutAsync } from "./auth/auth.thunks";
 
-const apiHassanUrl = import.meta.env.VITE_API_HASSAN_URL;
+console.log("API URL:", import.meta.env.VITE_API_URL);
+
+const apiHassanUrl =
+  import.meta.env.VITE_API_URL || "http://localhost:8000/myapi/";
 
 const SCOPE_ALLOWLIST: RegExp[] = [
   /^joined-machines-gps(\/|$)/,

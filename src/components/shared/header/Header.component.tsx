@@ -30,12 +30,14 @@ export default function KgnHeader() {
   const { customers: customerNames } = useCustomers();
   const customerOptions = useMemo(
     () => [
-      { value: "", label: "Tutti" },
+      {
+        value: "",
+        label: scopedCustomer ? "Tutti" : "Filtra per cliente",
+      },
       ...customerNames.map((n) => ({ value: n, label: n })),
     ],
-    [customerNames]
+    [customerNames, scopedCustomer]
   );
-
   const pillRef = useRef<HTMLDivElement>(null);
   const mobilePillRef = useRef<HTMLDivElement>(null);
 
@@ -89,12 +91,12 @@ export default function KgnHeader() {
               anchorRef={pillRef}
               openUpward={false}
             />
-            <SearchInput
+            {/*  <SearchInput
               value={searchText}
               onChange={setSearchText}
               onSearch={handleSearch}
               SearchIcon={<Search size={16} />}
-            />
+            /> */}
           </div>
         </div>
 

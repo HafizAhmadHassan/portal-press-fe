@@ -9,7 +9,8 @@ import type {
 import type { User } from "../users/user.types";
 import { UserRoles } from "@root/utils/constants/userRoles";
 
-const apiHassanUrl = import.meta.env.VITE_API_HASSAN_URL;
+const apiHassanUrl =
+  import.meta.env.VITE_API_URL || "http://localhost:8000/myapi/";
 
 export const authApi = createApi({
   reducerPath: "authApi",
