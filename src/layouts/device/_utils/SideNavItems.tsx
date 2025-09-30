@@ -36,7 +36,7 @@ export const deviceLayoutSideNavItems = (deviceId?: number): MenuItem[] => {
       badge: "12",
       iconColor: "var(--warning-color)",
       iconActiveColor: "var(--warning-dark)",
-      allowedRoles: [UserRoles.ADMIN, UserRoles.SUPER_ADMIN, UserRoles.USER],
+      allowedRoles: [UserRoles.SUPER_ADMIN],
     },
     {
       label: "Stato PLC",
@@ -45,7 +45,7 @@ export const deviceLayoutSideNavItems = (deviceId?: number): MenuItem[] => {
       badge: "12",
       iconColor: "var(--info-color)",
       iconActiveColor: "var(--info-dark)",
-      allowedRoles: [UserRoles.ADMIN, UserRoles.SUPER_ADMIN, UserRoles.USER],
+      allowedRoles: [UserRoles.SUPER_ADMIN],
     },
     {
       label: "Stato Macchine",

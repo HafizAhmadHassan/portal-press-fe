@@ -9,6 +9,7 @@ import ModalCloseTicket from "../_modals/ModalCloseTIcket/ModalCloseTicket.compo
 // Tipo per i dati di chiusura ticket
 import type { CloseTicketData } from "../_types/TicketWithDevice.types";
 import type { TicketWithDevice } from "@root/pages/admin/core/store/tickets/hooks/useTicketWithDevices";
+import { divIcon } from "leaflet";
 
 interface GetTicketsColumnsOptions {
   onEdit: (ticketData: {
@@ -48,6 +49,70 @@ export const getTicketsColumns = ({ onClose }: GetTicketsColumnsOptions) => [
   },
 
   /* TODO: inserire coordinate + via della macchina e apertura google maps */
+  // Colonna Posizione (coordinate + link Google Maps)
+  {
+    key: "gps",
+    header: "Posizione",
+    type: "custom",
+    width: "220px",
+    sortable: false,
+    render: (_, ticket) => {
+      console.log("Ticket GPS data:", ticket.gps);
+      const { gps_x, gps_y, address, municipality } = ticket.gps || {};
+
+      const mapsUrl = `https://www.google.com/maps?q=${gps_x},${gps_y}`;
+
+      return (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "4px",
+            fontSize: "13px",
+          }}
+        >
+          {/* Indirizzo se disponibile */}
+          {address !== "" && (
+            <span style={{ color: "var(--text-primary)" }}>
+              {address} {municipality}
+            </span>
+          )}
+
+          {/* Coordinate */}
+          {ticket.gps ? (
+            <>
+              <span
+                style={{ fontSize: "12px", color: "var(--text-secondary)" }}
+              >
+                {gps_x}, {gps_y}
+              </span>
+
+              <a
+                href={mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  marginTop: "4px",
+                  padding: "4px 8px",
+                  fontSize: "12px",
+                  borderRadius: "6px",
+                  border: "1px solid var(--border-color)",
+                  background: "var(--surface-1)",
+                  color: "var(--text-primary)",
+                  textDecoration: "none",
+                  textAlign: "center",
+                }}
+              >
+                Apri in Maps
+              </a>
+            </>
+          ) : (
+            <div>No Coordinate</div>
+          )}
+        </div>
+      );
+    },
+  },
 
   // Colonna Descrizione
   {

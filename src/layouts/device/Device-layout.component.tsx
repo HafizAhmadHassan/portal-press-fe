@@ -124,7 +124,7 @@ export default function DeviceLayout() {
         <main className={styles.content}>
           <PageHeader
             editMode={editMode}
-            showEditSwitch={showEditSwitch}
+            showEditSwitch={showEditSwitch && isSuperAdmin}
             onToggleEdit={handleToggleEdit}
             refetch={refetchAll}
             navigateTo={() => navigate("/admin")}

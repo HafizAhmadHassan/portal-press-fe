@@ -174,7 +174,9 @@ export default function TableKeyValue2({
               </div>
             )}
           </div>
-          {hasActions && <div className={styles.colActions}>Azioni</div>}
+          {hasActions && editable && (
+            <div className={styles.colActions}>Azioni</div>
+          )}
         </div>
 
         {/* loading */}
@@ -327,7 +329,7 @@ export default function TableKeyValue2({
                 </div>
 
                 {/* ACTIONS */}
-                {hasActions && (
+                {hasActions && editable && (
                   <div className={styles.colActions}>
                     {r.readOnly ? (
                       <span className={styles.actionHint}>—</span>
@@ -369,7 +371,7 @@ export default function TableKeyValue2({
           })}
 
         {/* footer actions */}
-        {footerActions?.show && (
+        {footerActions?.show && editable && (
           <div
             className={[styles.footer, saving ? styles.saving : ""].join(" ")}
           >

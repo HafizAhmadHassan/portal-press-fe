@@ -23,6 +23,14 @@ export default function DeviceDetailsEdit({
 }: Props) {
   return (
     <div className={styles.editStack}>
+      <FlagsFormCard
+        formData={{
+          tatus_ready_d75_3_7: formData.tatus_ready_d75_3_7,
+          status_Machine_Blocked: formData.status_Machine_Blocked,
+        }}
+        isSaving={isSaving}
+        onChange={onChange}
+      />
       <GeneralInfoFormCard
         formData={{
           machine_Name: formData.machine_Name,
@@ -68,15 +76,6 @@ export default function DeviceDetailsEdit({
         formData={{
           customerName: formData.customerName,
           customer: formData.customer,
-        }}
-        isSaving={isSaving}
-        onChange={onChange}
-      />
-
-      <FlagsFormCard
-        formData={{
-          tatus_ready_d75_3_7: formData.tatus_ready_d75_3_7,
-          status_Machine_Blocked: formData.status_Machine_Blocked,
         }}
         isSaving={isSaving}
         onChange={onChange}

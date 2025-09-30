@@ -92,6 +92,9 @@ export const ModalDeviceDetails: React.FC<ModalDeviceDetailsProps> = ({
           isActive={device.status === 1}
         />
 
+        {/* Matricole */}
+        <RegisterInfo device={device} />
+
         {/* Informazioni Tecniche */}
         <TechnicalInfo device={device} />
 
@@ -110,9 +113,6 @@ export const ModalDeviceDetails: React.FC<ModalDeviceDetailsProps> = ({
           device={device}
           formatCoordinates={formatCoordinates}
         />
-
-        {/* Matricole */}
-        <RegisterInfo device={device} />
 
         {/* Note */}
         {device?.note && <NoteInfo device={device} />}

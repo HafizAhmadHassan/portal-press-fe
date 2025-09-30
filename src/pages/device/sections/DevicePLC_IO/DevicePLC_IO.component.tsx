@@ -9,16 +9,22 @@ import {
 } from "@store_device/plc/plc.api";
 import type { TableKeyValueObject } from "@root/components/shared/table-key-value/TableKeyValue2.component";
 import TableKeyValue2 from "@root/components/shared/table-key-value/TableKeyValue2.component";
+import { useSession } from "@root/pages/admin/core/store/auth/hooks/useSession";
+import { UserRoles } from "@root/utils/constants/userRoles";
 
 export default function DevicePLC_IO() {
   const navigate = useNavigate();
   const { deviceId } = useParams<{ deviceId?: string }>();
   const [searchParams] = useSearchParams();
-  const isEdit = searchParams.get("edit") === "1";
-
+  const { user } = useSession();
   const [rows, setRows] = useState<TableKeyValueObject>({});
   const [original, setOriginal] = useState<TableKeyValueObject>({});
   const [saving, setSaving] = useState(false);
+
+  const isSuperAdmin = user?.role === UserRoles.SUPER_ADMIN;
+  console.log("User role:", user?.role, "isSuperAdmin:", isSuperAdmin);
+  const isEdit = searchParams.get("edit") === "1" && isSuperAdmin;
+  console.log("isEdit:", isEdit);
 
   // RTK Query
   const currentId = deviceId ? Number(deviceId) : undefined;

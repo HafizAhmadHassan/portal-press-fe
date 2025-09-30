@@ -6,15 +6,10 @@ import NoteInfo from "@root/pages/_commons/DevicesDetails/view/NoteInfo/NoteInfo
 import PositionInfoRO from "@root/pages/_commons/DevicesDetails/view/PositionInfo/PositionInfo.component";
 import RegisterInfoRO from "@root/pages/_commons/DevicesDetails/view/RegisterInfo/RegisterInfo.component";
 import TechnicalInfoRO from "@root/pages/_commons/DevicesDetails/view/TechnicalInfo/TechnicalInfo.component";
-import DateHoursInfoRO from "@root/pages/_commons/DevicesDetails/view/DateHoursInfo/DateHoursInfo.component";
 import CoordinatesInfoRO from "@root/pages/_commons/DevicesDetails/view/CoordinatesInfo/CoordinatesInfo.component";
 
 import styles from "./DeviceDetailsRead.module.scss";
-import {
-  formatCoordinates,
-  formatDate,
-  getRelativeTime,
-} from "../../_utils/details.utils";
+import { formatCoordinates } from "../../_utils/details.utils";
 
 type Props = { device?: Device | null };
 
@@ -23,6 +18,7 @@ export default function DeviceDetailsRead({ device }: Props) {
 
   return (
     <div className={styles.readStack}>
+      <RegisterInfoRO device={device} />
       <TechnicalInfoRO device={device} />
       <PositionInfoRO device={device} />
       {/*  <DateHoursInfoRO
@@ -34,7 +30,7 @@ export default function DeviceDetailsRead({ device }: Props) {
         device={device}
         formatCoordinates={formatCoordinates}
       />
-      <RegisterInfoRO device={device} />
+
       {device?.note && <NoteInfo device={device} />}
       <Summary device={device} />
     </div>
