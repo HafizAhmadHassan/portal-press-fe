@@ -1,7 +1,38 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { Device } from "@store_admin/devices/devices.types.ts";
 
-const initialState: any = {
+interface DevicesFilters {
+  search: string;
+  waste: string;
+  status: number | null | string;
+  city: string;
+  province: string;
+  customer: string;
+  status_Machine_Blocked: boolean | null | string;
+  tatus_ready_d75_3_7: boolean | null | string; // mantiene naming esistente (refuso?)
+  sortBy: string;
+  sortOrder: "asc" | "desc" | string;
+}
+
+interface PaginationState {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}
+
+interface DevicesState {
+  devices: Device[];
+  allDevices: Device[];
+  selectedDevice: Device | null;
+  isLoading: boolean;
+  isLoadingAll: boolean;
+  error: string | null;
+  pagination: PaginationState;
+  filters: DevicesFilters;
+}
+
+const initialState: DevicesState = {
   devices: [], // Devices paginati
   allDevices: [], // TUTTI i devices (per la mappa)
   selectedDevice: null,
@@ -139,8 +170,11 @@ const devicesSlice = createSlice({
     },
 
     // Imposta filtri
-    setFilters: (state, action: PayloadAction<Partial<any["filters"]>>) => {
+    setFilters: (state, action: PayloadAction<Partial<DevicesFilters>>) => {
       state.filters = { ...state.filters, ...action.payload };
+    },
+    setSearch: (state, action: PayloadAction<string>) => {
+      state.filters.search = action.payload;
     },
 
     // Reset filtri
@@ -285,6 +319,7 @@ export const {
   setSelectedDevice,
   setPagination,
   setFilters,
+  setSearch,
   resetFilters,
   setLoading,
   setLoadingAll, // NUOVO

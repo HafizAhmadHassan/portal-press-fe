@@ -5,22 +5,20 @@ import { Divider } from "@shared/divider/Divider.component";
 import { createDevicesTableConfig } from "./_config/devicesTableConfig";
 import styles from "./Devices-list.sections.module.scss";
 
-import { useListController } from "@root/hooks/useListController";
-import { createDevicesFilterConfig } from "./_config/deviceFilterConfig";
+// import { useListController } from "@root/hooks/useListController"; // Deprecated for devices domain
+// import { createDevicesFilterConfig } from "./_config/deviceFilterConfig"; // filters UI currently disabled
 import type {
   CreateDeviceRequest,
   Device,
-  DevicesQueryParams,
 } from "@store_admin/devices/devices.types";
 import { GenericTableWithLogic } from "@shared/table/components/GenericTableWhitLogic.component";
 import { SectionHeaderComponent } from "@sections_admin/_commons/components/SectionHeader/Section-header.component";
-import { SectionFilterComponent } from "@sections_admin/_commons/components/SectionFilters/Section-filters.component";
+// import { SectionFilterComponent } from "@sections_admin/_commons/components/SectionFilters/Section-filters.component"; // Not used currently
 import {
   useUpdateDeviceMutation,
   useDeleteDeviceMutation,
   useCreateDeviceMutation,
-  useGetDevicesQuery,
-} from "@store_admin/devices/devices.api";
+} from "@store_admin/devices/devices.api"; // RTK Query still used for mutations
 import { useInfiniteDevices } from "@hooks/useInfiniteScroll.ts";
 import { useMapDevices } from "./_hooks/useMapDevices";
 import { useDevicesListView } from "./_hooks/useDevicesListView";
@@ -28,11 +26,19 @@ import { useDevicesListView } from "./_hooks/useDevicesListView";
 import { DevicesSummaryBar } from "@root/pages/admin/sections/devicesList/_components/DevicesSummaryBar/DevicesSummaryBar.component";
 import { DevicesBox } from "@sections_admin/devicesList/_components/DevicesBox/DevicesBox.component";
 import { DevicesMapStats } from "@root/pages/admin/sections/devicesList/_components/DevicesMapStats/DevicesMapStats.component";
-import { useAppSelector } from "@root/pages/admin/core/store/store.hooks";
+import {
+  useAppSelector,
+  useAppDispatch,
+} from "@root/pages/admin/core/store/store.hooks";
 import { selectScopedCustomer } from "@store_admin/scope/scope.selectors";
-import { DeviceFields } from "@root/utils/constants/deviceFields.constants";
+// import { DeviceFields } from "@root/utils/constants/deviceFields.constants"; // Filters now driven by slice
 import devicesListHeaderBtns from "./_config/deviceHeaderBtnsConfig";
+import {
+  loadDevices,
+  loadAllDevices,
+} from "@store_admin/devices/devices.thunks";
 import DevicesMap from "./_components/DevicesMap/DevicesMap";
+import { selectDevicesAnyLoading } from "@store_admin/devices/devices.selectors";
 
 export const DevicesListSections: React.FC = () => {
   const { isCards, isTable, isMap, toggleCardsTable, toggleMap } =
@@ -40,30 +46,44 @@ export const DevicesListSections: React.FC = () => {
 
   const scopedCustomer = useAppSelector(selectScopedCustomer);
 
-  const {
-    items: devices,
-    meta,
-    isLoading,
-    refetch,
-    filters,
-    setFilter,
-    resetAll,
-    buildTableConfig,
-    queryParams,
-  } = useListController<DevicesQueryParams, Device>({
-    listHook: useGetDevicesQuery,
-    initialFilters: {
-      [DeviceFields.SEARCH]: "",
-      [DeviceFields.WASTE]: "",
-      [DeviceFields.STATUS]: "",
-      [DeviceFields.CITY]: "",
-      [DeviceFields.PROVINCE]: "",
-      [DeviceFields.STATUS_MACHINE_BLOCKED]: "",
-    },
-    additionalParams: {
-      customer_Name: scopedCustomer || undefined,
-    },
-  });
+  const dispatch = useAppDispatch();
+  const devices = useAppSelector((s) => s.devices.devices);
+  // const allDevices = useAppSelector((s) => s.devices.allDevices); // Not directly used (map uses hook)
+  const pagination = useAppSelector((s) => s.devices.pagination);
+  const isLoading = useAppSelector((s) => s.devices.isLoading);
+  const filters = useAppSelector((s) => s.devices.filters);
+  const globalSearch = useAppSelector((s) => s.globalSearch.query);
+  const unifiedLoading = useAppSelector(selectDevicesAnyLoading);
+
+  // Effetto: quando cambia customer o globalSearch -> reload pagina 1
+  useEffect(() => {
+    dispatch(
+      loadDevices({
+        page: 1,
+        search: globalSearch,
+        customer: scopedCustomer || undefined,
+      })
+    );
+    dispatch(
+      loadAllDevices({
+        search: globalSearch,
+        customer: scopedCustomer || undefined,
+      })
+    );
+  }, [dispatch, globalSearch, scopedCustomer]);
+
+  // setFilter kept for future filter panel reactivation (currently unused)
+  // const setFilter = useCallback((key: string, value: unknown) => {
+  //   dispatch(setFilters({ [key]: value } as Record<string, unknown>));
+  //   dispatch(loadDevices({ page: 1 }));
+  //   dispatch(loadAllDevices({}));
+  // }, [dispatch]);
+
+  // resetAll placeholder removed (filters panel disabled)
+
+  const refetch = useCallback(() => {
+    dispatch(loadDevices({ page: pagination.page }));
+  }, [dispatch, pagination.page]);
 
   const { execUpdate, execDelete, execCreate } = useCrud();
   const [updateDeviceTrigger] = useUpdateDeviceMutation();
@@ -79,11 +99,10 @@ export const DevicesListSections: React.FC = () => {
     [filters, scopedCustomer]
   );
 
-  const infiniteKey = useMemo(() => {
-    const keyString = `${scopedCustomer ?? "all"}|${JSON.stringify(filters)}`;
-    console.log("Key per infinite scroll:", keyString);
-    return keyString;
-  }, [filters, scopedCustomer]);
+  const infiniteKey = useMemo(
+    () => `${scopedCustomer ?? "all"}|${JSON.stringify(filters)}`,
+    [filters, scopedCustomer]
+  );
 
   const gridScrollRef = useRef<HTMLDivElement | null>(null);
 
@@ -95,20 +114,17 @@ export const DevicesListSections: React.FC = () => {
     sentinelRef,
   } = useInfiniteDevices({
     filters: infiniteFilters,
-    pageSize: queryParams?.page_size || 20,
+    pageSize: pagination.limit || 20,
     key: infiniteKey,
   });
 
   // MAPPA
   const mapFilters = useMemo(
     () => ({
-      wasteType: filters[DeviceFields.WASTE] || undefined,
-      status: filters[DeviceFields.STATUS]
-        ? parseInt(String(filters[DeviceFields.STATUS]))
-        : undefined,
-      isBlocked:
-        filters[DeviceFields.STATUS_MACHINE_BLOCKED] === "true" || undefined,
-      city: filters[DeviceFields.CITY] || undefined,
+      wasteType: (filters as unknown as { waste?: string }).waste || undefined,
+      status: filters.status ? Number(filters.status) : undefined,
+      isBlocked: filters.status_Machine_Blocked === true || undefined,
+      city: (filters as unknown as { city?: string }).city || undefined,
       customer_Name: scopedCustomer || undefined,
     }),
     [filters, scopedCustomer]
@@ -173,22 +189,18 @@ export const DevicesListSections: React.FC = () => {
   }, [refetch, refetchMap, reloadGrid]);
 
   // FIXED: Reset migliorato con force reload
-  const handleResetAll = useCallback(() => {
-    console.log("Reset completo iniziato");
-    resetAll();
-
-    // Force reload dell'infinite scroll
-    setTimeout(() => {
-      reloadGrid();
-      refetch();
-      refetchMap();
-    }, 100); // Piccolo delay per permettere il reset dei filtri
-  }, [resetAll, reloadGrid, refetch, refetchMap]);
+  // const handleResetAll = useCallback(() => {
+  //   resetAll();
+  //   setTimeout(() => {
+  //     reloadGrid();
+  //     refetch();
+  //     refetchMap();
+  //   }, 50);
+  // }, [resetAll, reloadGrid, refetch, refetchMap]);
 
   const onExportClick = () => console.log("Esporta devices");
 
   const onRefreshClick = useCallback(() => {
-    console.log("Refresh manuale iniziato");
     refetch();
     refetchMap();
     reloadGrid();
@@ -212,28 +224,17 @@ export const DevicesListSections: React.FC = () => {
     ]
   );
 
-  const tableConfig = useMemo(
-    () => buildTableConfig(columns.columns, columns),
-    [buildTableConfig, columns]
-  );
+  const tableConfig = useMemo(() => {
+    // buildTableConfig non più disponibile; assumo GenericTableWithLogic accetta direttamente config generato
+    return columns; // columns contiene già la definizione
+  }, [columns]);
 
-  const filtersConfig = useMemo(
-    () =>
-      createDevicesFilterConfig({
-        filters,
-        setFilter: (key: string, value: any) => {
-          console.log("Filter change:", key, "=", value);
-          setFilter(key, value);
-        },
-      }),
-    [filters, setFilter]
-  );
+  // const filtersConfig = useMemo(() => createDevicesFilterConfig({
+  //   filters: filters as Record<string, unknown>,
+  //   setFilter: (key: string, value: unknown) => setFilter(key, value),
+  // }), [filters, setFilter]);
 
-  const getLoadingState = () => {
-    if (isMap) return isLoadingMap;
-    if (isTable) return isLoading;
-    return isLoadingGrid;
-  };
+  // unifiedLoading from selector replaces previous getLoadingState
 
   // 🔁 quando cambia il cliente: reset ricerca e refetch
   useEffect(() => {
@@ -244,11 +245,11 @@ export const DevicesListSections: React.FC = () => {
     <div className={styles["devices-list-page"]}>
       <SectionHeaderComponent
         title="Macchine"
-        subTitle={`Gestisci le macchine (${meta?.total ?? 0} totali)`}
+        subTitle={`Gestisci le macchine (${pagination.total ?? 0} totali)`}
         buttons={devicesListHeaderBtns(
           onRefreshClick,
           RefreshCw,
-          getLoadingState(),
+          unifiedLoading,
           onExportClick,
           toggleCardsTable,
           toggleMap,
@@ -313,7 +314,7 @@ export const DevicesListSections: React.FC = () => {
                   )}
 
                   {hasNextGrid && !isLoadingGrid && (
-                    <div ref={sentinelRef as any} style={{ height: 1 }} />
+                    <div ref={sentinelRef} style={{ height: 1 }} />
                   )}
 
                   {isLoadingGrid && (

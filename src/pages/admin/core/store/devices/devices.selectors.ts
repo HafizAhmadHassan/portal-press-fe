@@ -1,25 +1,26 @@
-// devices.selectors.ts - Selectors aggiornati con supporto per tutti i devices
-
 import { createSelector } from "@reduxjs/toolkit";
 import type { Device } from "@store_admin/devices/devices.types.ts";
 import type { RootState } from "@root/store.ts";
 
-// Selettori base
+// Base selectors
 export const selectDevicesState = (state: RootState) => state.devices;
 export const selectDevices = (state: RootState) => state.devices.devices;
 export const selectAllDevices = (state: RootState) => state.devices.allDevices;
-export const selectSelectedDevice = (state: RootState) =>
-  state.devices.selectedDevice;
+export const selectDevicesPagination = (state: RootState) =>
+  state.devices.pagination;
+export const selectDevicesFilters = (state: RootState) => state.devices.filters;
 export const selectDevicesLoading = (state: RootState) =>
   state.devices.isLoading;
 export const selectAllDevicesLoading = (state: RootState) =>
   state.devices.isLoadingAll;
-export const selectAllDevicesError = (state: RootState) =>
-  state.devices.allDevicesError;
+export const selectDevicesAnyLoading = (state: RootState) =>
+  state.devices.isLoading || state.devices.isLoadingAll;
+export const selectDevicesGlobalSearchLoading = (state: RootState) =>
+  (state.devices.isLoading || state.devices.isLoadingAll) &&
+  !!state.globalSearch.query;
 export const selectDevicesError = (state: RootState) => state.devices.error;
-export const selectDevicesPagination = (state: RootState) =>
-  state.devices.pagination;
-export const selectDevicesFilters = (state: RootState) => state.devices.filters;
+export const selectSelectedDevice = (state: RootState) =>
+  state.devices.selectedDevice;
 
 // Selettori per devices filtrati per tipo di waste (usando devices paginati)
 export const selectPlasticDevices = createSelector([selectDevices], (devices) =>
@@ -161,7 +162,7 @@ export const selectDevicesCount = createSelector([selectDevices], (devices) => {
     active: devices.filter((d) => d.status === 1).length,
     inactive: devices.filter((d) => d.status === 0).length,
     blocked: devices.filter((d) => d.status_Machine_Blocked === true).length,
-    ready: devices.filter((d) => d.tatus_ready_d75_3_7 === true).length,
+    ready: devices.filter((d) => d.status_READY_D75_3_7 === true).length,
     plastic: devices.filter((d) => d.waste === "Plastica").length,
     dry: devices.filter((d) => d.waste === "Secco").length,
     wet: devices.filter((d) => d.waste === "Umido").length,
@@ -200,7 +201,7 @@ export const selectAllDevicesCount = createSelector(
       inactive: allDevices.filter((d) => d.status === 0).length,
       blocked: allDevices.filter((d) => d.status_Machine_Blocked === true)
         .length,
-      ready: allDevices.filter((d) => d.tatus_ready_d75_3_7 === true).length,
+      ready: allDevices.filter((d) => d.status_READY_D75_3_7 === true).length,
       plastic: allDevices.filter((d) => d.waste === "Plastica").length,
       dry: allDevices.filter((d) => d.waste === "Secco").length,
       wet: allDevices.filter((d) => d.waste === "Umido").length,

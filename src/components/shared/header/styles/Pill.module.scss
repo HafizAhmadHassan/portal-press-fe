@@ -76,6 +76,8 @@
 .bareContainer {
   margin: 0;
   width: 100%;
+  display: flex;
+  align-items: center;
 }
 .bareField {
   border: none !important;
@@ -84,12 +86,71 @@
   min-height: 40px;
   padding-top: 0 !important;
   padding-bottom: 0 !important;
+  padding-right: 2rem !important; /* spazio per clear */
 }
 .bareContainer :global(.inputIcon) {
   left: 0.75rem;
 }
 .bareField::placeholder {
   color: var(--text-secondary);
+}
+
+/* Clear button dentro la pill */
+.clearBtn {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+  border-radius: 6px;
+  opacity: 0;
+  pointer-events: none;
+  transform-origin: center;
+  transition: opacity 0.18s ease, background 0.15s ease, color 0.15s ease,
+    transform 0.18s ease;
+
+  &:hover {
+    background: var(--gray-100);
+    color: var(--text-primary);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+  }
+
+  svg {
+    width: 14px;
+    height: 14px;
+    pointer-events: none;
+  }
+}
+
+.clearVisible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(-50%) scale(1);
+}
+
+.spinnerIcon {
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* =========== DROPDOWN FULL-WIDTH (PORTAL) =========== */

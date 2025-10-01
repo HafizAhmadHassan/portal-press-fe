@@ -12,6 +12,7 @@ import gpsReducer from "@store_admin/gps/gps.slice";
 import logsReducer from "@store_admin/logs/logs.slice";
 import scopeReducer from "@store_admin/scope/scope.slice";
 import plcReducer from "@store_device/plc/plc.slice";
+import globalSearchReducer from "./store/globalSearch.slice";
 
 // APIs
 import { authApi } from "@store_admin/auth/auth.api";
@@ -40,6 +41,7 @@ export const store = configureStore({
     gps: gpsReducer,
     logs: logsReducer,
     plc: plcReducer,
+    globalSearch: globalSearchReducer,
 
     // API slices
     [authApi.reducerPath]: authApi.reducer,
@@ -156,7 +158,7 @@ export const selectUIState = (state: RootState) => state.ui;
 // Helper per debugging (solo development)
 if (process.env.NODE_ENV === "development") {
   // Esponi store nel window per debugging
-  (window as any).__store__ = store;
+  (window as unknown as { __store__?: typeof store }).__store__ = store;
 
   // Log della configurazione
   console.log("🏪 Store configured with:", {

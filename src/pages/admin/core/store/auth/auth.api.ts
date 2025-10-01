@@ -10,12 +10,12 @@ import type { User } from "../users/user.types";
 import { UserRoles } from "@root/utils/constants/userRoles";
 
 const apiHassanUrl =
-  import.meta.env.VITE_API_URL || "http://localhost:8000/myapi/";
+  import.meta.env.VITE_API_URL || "http://localhost:8000/api/";
 
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${apiHassanUrl}api/auth`,
+    baseUrl: `${apiHassanUrl}/auth`,
     prepareHeaders: (headers, { getState, endpoint }) => {
       // ✅ Non aggiungere Authorization per login, register e refresh
       if (["login", "register", "refresh"].includes(endpoint)) {

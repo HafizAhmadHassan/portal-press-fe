@@ -8,56 +8,109 @@ import type {
   UpdateDeviceRequest,
 } from "./devices.types";
 
+// Helper per normalizzare i record provenienti dal BE (es. rinomina municipility -> municipality)
+type RawDevice = Device & { municipility?: string; municipality?: string };
+interface DevicesMeta {
+  total: number;
+  page: number;
+  page_size: number;
+  total_pages: number;
+  has_next: boolean;
+  has_prev: boolean;
+  next_page: number | null;
+  prev_page: number | null;
+}
+
+const normalizeDevice = (raw: RawDevice): Device => {
+  if (!raw || typeof raw !== "object") return raw as Device;
+  if (raw.municipility !== undefined && raw.municipality === undefined) {
+    const { municipility, ...rest } = raw as { municipility: string } & Omit<
+      RawDevice,
+      "municipility"
+    >;
+    return { ...(rest as Device), municipality: municipility };
+  }
+  return raw as Device;
+};
+
+// Type guard per risposta con meta & data
+const isListResponse = (
+  resp: unknown
+): resp is { meta: DevicesMeta; data: RawDevice[] } => {
+  if (typeof resp !== "object" || resp === null) return false;
+  const maybe = resp as { meta?: unknown; data?: unknown };
+  return (
+    Array.isArray(maybe.data) &&
+    typeof maybe.meta === "object" &&
+    maybe.meta !== null
+  );
+};
+
 export const devicesApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getDevices: builder.query<any, DevicesQueryParams>({
+    /**
+     * getDevices
+     * Integra i filtri REST del BE:
+     * - search: testo libero applicato a machine_Name, ip_Router, matricola (Bte/Kgn/Customer), address, municipility
+     * - customer (FE) viene tradotto in customer_Name (BE)
+     * - municipility (BE) viene normalizzato in municipality nel modello FE
+     */
+    getDevices: builder.query<
+      { meta: DevicesMeta; data: Device[] },
+      DevicesQueryParams
+    >({
       query: (params = {}) => {
-        const cleanParams = Object.entries(params).reduce(
-          (acc, [key, value]) => {
-            if (value !== undefined && value !== null && value !== "") {
-              (acc as any)[key] = value;
+        const cleanParams: Record<string, string | number | boolean> = {};
+        Object.entries(params).forEach(([key, value]) => {
+          if (value !== undefined && value !== null && value !== "") {
+            if (key === "customer") {
+              cleanParams["customer_Name"] = value as string | number | boolean;
+            } else {
+              cleanParams[key] = value as string | number | boolean;
             }
-            return acc;
-          },
-          {} as Record<string, any>
-        );
-        return {
-          url: "joined-machines-gps/",
-          params: cleanParams,
-        };
+          }
+        });
+        return { url: "joined-machines-gps/", params: cleanParams };
       },
       providesTags: [
         { type: "LIST" as const, id: "Devices" },
         { type: "STATS" as const, id: "Devices" },
       ],
-      transformResponse: (response: any) => {
-        if (!response?.meta || !Array.isArray(response?.data)) {
+      transformResponse: (response: unknown) => {
+        if (!isListResponse(response)) {
           throw new Error("Invalid API response structure");
         }
-        return response;
+        return {
+          meta: response.meta,
+          data: response.data.map((d) => normalizeDevice(d)),
+        };
       },
     }),
 
-    getAllDevices: builder.query<Device[], { filters?: any } | void>({
+    getAllDevices: builder.query<
+      Device[],
+      { filters?: Partial<DevicesQueryParams> } | void
+    >({
       query: (args) => {
         const filters = args && args.filters ? args.filters : {};
-        const cleanParams = Object.entries(filters).reduce(
-          (acc, [key, value]) => {
-            if (value !== undefined && value !== null && value !== "") {
-              (acc as any)[key] = value;
+        const cleanParams: Record<string, string | number | boolean> = {};
+        Object.entries(filters).forEach(([key, value]) => {
+          if (value !== undefined && value !== null && value !== "") {
+            if (key === "customer") {
+              cleanParams["customer_Name"] = value as string | number | boolean;
+            } else {
+              cleanParams[key] = value as string | number | boolean;
             }
-            return acc;
-          },
-          {} as Record<string, any>
-        );
+          }
+        });
         return { url: "joined-machines-gps/?all=true", params: cleanParams };
       },
       providesTags: [{ type: "LIST" as const, id: "AllDevices" }],
-      transformResponse: (response: { data: Device[] }) => {
+      transformResponse: (response: { data: RawDevice[] }) => {
         if (!Array.isArray(response?.data)) {
           throw new Error("Invalid API response structure");
         }
-        return response.data || [];
+        return (response.data || []).map((d) => normalizeDevice(d));
       },
     }),
 
@@ -97,7 +150,7 @@ export const devicesApi = apiSlice.injectEndpoints({
       ],
       async onQueryStarted({ id, data }, { dispatch, queryFulfilled }) {
         const patch = dispatch(
-          devicesApi.util.updateQueryData("getDeviceById", id, (draft: any) => {
+          devicesApi.util.updateQueryData("getDeviceById", id, (draft) => {
             Object.assign(draft, data);
           })
         );
@@ -122,7 +175,7 @@ export const devicesApi = apiSlice.injectEndpoints({
       ],
       async onQueryStarted(id, { dispatch, queryFulfilled }) {
         const patch1 = dispatch(
-          devicesApi.util.updateQueryData("getDevices", {}, (draft: any) => {
+          devicesApi.util.updateQueryData("getDevices", {}, (draft) => {
             if (draft?.data) {
               const i = draft.data.findIndex((d: Device) => d.id === id);
               if (i !== -1) {
@@ -212,11 +265,30 @@ export const devicesApi = apiSlice.injectEndpoints({
       ],
     }),
 
-    searchDevices: builder.query<Device[], { query: string; limit?: number }>({
-      query: ({ query, limit = 10 }) => ({
-        url: "joined-machines-gps/search/",
-        params: { q: query, limit },
+    // Search: riusa l'endpoint principale con parametro 'search'. Non esiste endpoint separato lato BE.
+    searchDevices: builder.query<
+      Device[],
+      { query: string; page_size?: number }
+    >({
+      query: ({ query, page_size = 10 }) => ({
+        url: "joined-machines-gps/",
+        params: { search: query, page: 1, page_size },
       }),
+      transformResponse: (response: { data?: RawDevice[] } | RawDevice[]) => {
+        if (Array.isArray(response)) {
+          return response.map((d) => normalizeDevice(d));
+        }
+        if (
+          response &&
+          typeof response === "object" &&
+          Array.isArray((response as { data?: RawDevice[] }).data)
+        ) {
+          return (response as { data: RawDevice[] }).data.map((d) =>
+            normalizeDevice(d)
+          );
+        }
+        return [];
+      },
       providesTags: [{ type: "LIST" as const, id: "Devices" }],
     }),
 
@@ -236,7 +308,7 @@ export const devicesApi = apiSlice.injectEndpoints({
       ],
     }),
 
-    getDeviceStats: builder.query<any, void>({
+    getDeviceStats: builder.query<Record<string, unknown>, void>({
       query: () => "joined-machines-gps/stats/summary/",
       providesTags: [{ type: "STATS" as const, id: "Devices" }],
     }),

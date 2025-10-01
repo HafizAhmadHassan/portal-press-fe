@@ -6,12 +6,27 @@ import type {
   DevicesQueryParams,
   UpdateDeviceRequest,
 } from "@store_admin/devices/devices.types.ts";
+import type { Device } from "@store_admin/devices/devices.types.ts";
 import { devicesApi } from "@store_admin/devices/devices.api.ts";
 import {
   setAllDevices,
   setDevices,
   setPagination,
+  setLoading,
+  setError,
+  setFilters,
 } from "@store_admin/devices/devices.slice.ts";
+
+// Reazione alla global search: aggiorna filtri devices e rilancia caricamenti
+export const reactToGlobalSearch = createAsyncThunk(
+  "devices/reactToGlobalSearch",
+  async (query: string, { dispatch }) => {
+    dispatch(setFilters({ search: query }));
+    await dispatch(loadDevices({ page: 1, search: query }));
+    await dispatch(loadAllDevices({ search: query }));
+    return query;
+  }
+);
 
 export const loadDevices = createAsyncThunk(
   "devices/load",
@@ -39,24 +54,62 @@ export const loadDevices = createAsyncThunk(
         status_READY_D75_3_7:
           params.status_READY_D75_3_7 ?? currentFilters.tatus_ready_d75_3_7,
         sortBy: params.sortBy ?? currentFilters.sortBy,
-        sortOrder: params.sortOrder ?? currentFilters.sortOrder,
+        sortOrder: (params.sortOrder ?? currentFilters.sortOrder) as
+          | "asc"
+          | "desc",
       };
 
+      dispatch(setLoading(true));
       const response = await dispatch(
         devicesApi.endpoints.getDevices.initiate(queryParams)
       ).unwrap();
 
-      dispatch(setDevices(response.data ?? response));
+      type ListResp = { meta: unknown; data: Device[] };
+      let devicesData: Device[] = [];
+      if (Array.isArray(response)) {
+        devicesData = response as Device[];
+      } else if (
+        response &&
+        typeof response === "object" &&
+        Array.isArray((response as ListResp).data)
+      ) {
+        devicesData = (response as ListResp).data;
+      }
+      dispatch(setDevices(devicesData));
+      dispatch(setDevices(devicesData));
 
-      if (response.pagination) {
-        dispatch(setPagination(response.pagination));
+      if (response.meta) {
+        const meta = response.meta;
+        dispatch(
+          setPagination({
+            page: meta.page,
+            limit: meta.page_size,
+            total: meta.total,
+            totalPages: meta.total_pages,
+          })
+        );
       }
 
+      // Allineo filtri locali (solo quelli passati) se differiscono
+      interface FiltersToSync {
+        search?: string;
+      }
+      const filtersToSync: FiltersToSync = {};
+      if (queryParams.search !== undefined)
+        filtersToSync.search = queryParams.search;
+      if (Object.keys(filtersToSync).length)
+        dispatch(setFilters(filtersToSync));
+
       return response;
-    } catch (error: any) {
-      return rejectWithValue(
-        error.data?.message || "Errore nel caricamento devices"
-      );
+    } catch (error: unknown) {
+      const message =
+        (error as { data?: { message?: string } }).data?.message ||
+        (error as Error).message ||
+        "Errore nel caricamento devices";
+      dispatch(setError(message));
+      return rejectWithValue(message);
+    } finally {
+      dispatch(setLoading(false));
     }
   }
 );
@@ -64,18 +117,46 @@ export const loadDevices = createAsyncThunk(
 // NUOVO: Thunk per caricare tutti i devices (per la mappa)
 export const loadAllDevices = createAsyncThunk(
   "devices/loadAll",
-  async (_, { dispatch, rejectWithValue }) => {
+  async (
+    params: Partial<DevicesQueryParams> | undefined,
+    { getState, dispatch, rejectWithValue }
+  ) => {
     try {
+      const state = getState() as RootState;
+      const { filters: currentFilters } = state.devices;
+      const search = params?.search ?? currentFilters.search;
+      const customer = params?.customer ?? currentFilters.customer;
+      const waste = params?.waste ?? currentFilters.waste;
+      const status = params?.status ?? currentFilters.status;
+      const city = params?.city ?? currentFilters.city;
+      const province = params?.province ?? currentFilters.province;
+      const status_Machine_Blocked =
+        params?.status_Machine_Blocked ?? currentFilters.status_Machine_Blocked;
+      const status_READY_D75_3_7 =
+        params?.status_READY_D75_3_7 ?? currentFilters.tatus_ready_d75_3_7;
+
+      const filters: Partial<DevicesQueryParams> = {
+        search,
+        customer,
+        waste,
+        status,
+        city,
+        province,
+        status_Machine_Blocked,
+        status_READY_D75_3_7,
+      };
+
       const allDevices = await dispatch(
-        devicesApi.endpoints.getAllDevices.initiate()
+        devicesApi.endpoints.getAllDevices.initiate({ filters })
       ).unwrap();
 
       dispatch(setAllDevices(allDevices));
-
       return allDevices;
-    } catch (error: any) {
+    } catch (error: unknown) {
       return rejectWithValue(
-        error.data?.message || "Errore nel caricamento di tutti i devices"
+        (error as { data?: { message?: string } }).data?.message ||
+          (error as Error).message ||
+          "Errore nel caricamento di tutti i devices"
       );
     }
   }
@@ -93,8 +174,12 @@ export const searchDevices = createAsyncThunk(
       ).unwrap();
 
       return response;
-    } catch (error: any) {
-      return rejectWithValue(error.data?.message || "Errore nella ricerca");
+    } catch (error: unknown) {
+      const message =
+        (error as { data?: { message?: string } }).data?.message ||
+        (error as Error).message ||
+        "Errore nella ricerca";
+      return rejectWithValue(message);
     }
   }
 );
@@ -163,14 +248,16 @@ export const createNewDevice = createAsyncThunk(
 
       // Ricarica sia i devices paginati che tutti i devices
       await dispatch(loadDevices({}));
-      await dispatch(loadAllDevices());
+      await dispatch(loadAllDevices(undefined));
 
       return newDevice;
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("THUNK - Error creating device:", error);
       console.error("THUNK - Error details:", JSON.stringify(error, null, 2));
       return rejectWithValue(
-        error.data?.message || error.message || "Errore nella creazione device"
+        (error as { data?: { message?: string } }).data?.message ||
+          (error as Error).message ||
+          "Errore nella creazione device"
       );
     }
   }
@@ -194,7 +281,7 @@ export const updateExistingDevice = createAsyncThunk(
           }
           return acc;
         },
-        {} as any
+        {} as Record<string, unknown>
       );
 
       const payload = {
@@ -210,13 +297,15 @@ export const updateExistingDevice = createAsyncThunk(
 
       // Ricarica sia i devices paginati che tutti i devices
       await dispatch(loadDevices({}));
-      await dispatch(loadAllDevices());
+      await dispatch(loadAllDevices(undefined));
 
       return updatedDevice;
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error updating device:", error); // Debug log
       return rejectWithValue(
-        error.data?.message || "Errore nell'aggiornamento device"
+        (error as { data?: { message?: string } }).data?.message ||
+          (error as Error).message ||
+          "Errore nell'aggiornamento device"
       );
     }
   }
@@ -232,12 +321,14 @@ export const deleteExistingDevice = createAsyncThunk(
 
       // Ricarica sia i devices paginati che tutti i devices
       await dispatch(loadDevices({}));
-      await dispatch(loadAllDevices());
+      await dispatch(loadAllDevices(undefined));
 
       return deviceid;
-    } catch (error: any) {
+    } catch (error: unknown) {
       return rejectWithValue(
-        error.data?.message || "Errore nell'eliminazione device"
+        (error as { data?: { message?: string } }).data?.message ||
+          (error as Error).message ||
+          "Errore nell'eliminazione device"
       );
     }
   }
@@ -258,9 +349,11 @@ export const toggleDeviceStatus = createAsyncThunk(
       ).unwrap();
 
       return updatedDevice;
-    } catch (error: any) {
+    } catch (error: unknown) {
       return rejectWithValue(
-        error.data?.message || "Errore nel cambio stato device"
+        (error as { data?: { message?: string } }).data?.message ||
+          (error as Error).message ||
+          "Errore nel cambio stato device"
       );
     }
   }
@@ -281,9 +374,11 @@ export const toggleDeviceBlock = createAsyncThunk(
       ).unwrap();
 
       return updatedDevice;
-    } catch (error: any) {
+    } catch (error: unknown) {
       return rejectWithValue(
-        error.data?.message || "Errore nel blocco/sblocco device"
+        (error as { data?: { message?: string } }).data?.message ||
+          (error as Error).message ||
+          "Errore nel blocco/sblocco device"
       );
     }
   }
@@ -301,9 +396,11 @@ export const updateDeviceWasteType = createAsyncThunk(
       ).unwrap();
 
       return updatedDevice;
-    } catch (error: any) {
+    } catch (error: unknown) {
       return rejectWithValue(
-        error.data?.message || "Errore nell'aggiornamento tipo rifiuto"
+        (error as { data?: { message?: string } }).data?.message ||
+          (error as Error).message ||
+          "Errore nell'aggiornamento tipo rifiuto"
       );
     }
   }
@@ -319,16 +416,18 @@ export const performBulkAction = createAsyncThunk(
 
       // Ricarica sia i devices paginati che tutti i devices
       await dispatch(loadDevices({}));
-      await dispatch(loadAllDevices());
+      await dispatch(loadAllDevices(undefined));
 
       return {
         ...response,
         action: request.action,
         affectedDeviceIds: request.deviceIds,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       return rejectWithValue(
-        error.data?.message || "Errore nell'operazione bulk"
+        (error as { data?: { message?: string } }).data?.message ||
+          (error as Error).message ||
+          "Errore nell'operazione bulk"
       );
     }
   }
@@ -340,8 +439,12 @@ export const changePage = createAsyncThunk(
     try {
       const response = await dispatch(loadDevices({ page })).unwrap();
       return response;
-    } catch (error: any) {
-      return rejectWithValue(error.data?.message || "Errore nel cambio pagina");
+    } catch (error: unknown) {
+      const message =
+        (error as { data?: { message?: string } }).data?.message ||
+        (error as Error).message ||
+        "Errore nel cambio pagina";
+      return rejectWithValue(message);
     }
   }
 );
@@ -357,9 +460,11 @@ export const changePageSize = createAsyncThunk(
         })
       ).unwrap();
       return response;
-    } catch (error: any) {
+    } catch (error: unknown) {
       return rejectWithValue(
-        error.data?.message || "Errore nel cambio dimensione pagina"
+        (error as { data?: { message?: string } }).data?.message ||
+          (error as Error).message ||
+          "Errore nel cambio dimensione pagina"
       );
     }
   }
@@ -379,9 +484,11 @@ export const applyFilters = createAsyncThunk(
         })
       ).unwrap();
       return response;
-    } catch (error: any) {
+    } catch (error: unknown) {
       return rejectWithValue(
-        error.data?.message || "Errore nell'applicazione filtri"
+        (error as { data?: { message?: string } }).data?.message ||
+          (error as Error).message ||
+          "Errore nell'applicazione filtri"
       );
     }
   }
@@ -407,8 +514,12 @@ export const resetFilters = createAsyncThunk(
         })
       ).unwrap();
       return response;
-    } catch (error: any) {
-      return rejectWithValue(error.data?.message || "Errore nel reset filtri");
+    } catch (error: unknown) {
+      const message =
+        (error as { data?: { message?: string } }).data?.message ||
+        (error as Error).message ||
+        "Errore nel reset filtri";
+      return rejectWithValue(message);
     }
   }
 );
@@ -424,9 +535,11 @@ export const filterByWasteType = createAsyncThunk(
         })
       ).unwrap();
       return response;
-    } catch (error: any) {
+    } catch (error: unknown) {
       return rejectWithValue(
-        error.data?.message || "Errore nel filtro per tipo rifiuto"
+        (error as { data?: { message?: string } }).data?.message ||
+          (error as Error).message ||
+          "Errore nel filtro per tipo rifiuto"
       );
     }
   }
@@ -443,9 +556,11 @@ export const filterByCity = createAsyncThunk(
         })
       ).unwrap();
       return response;
-    } catch (error: any) {
+    } catch (error: unknown) {
       return rejectWithValue(
-        error.data?.message || "Errore nel filtro per città"
+        (error as { data?: { message?: string } }).data?.message ||
+          (error as Error).message ||
+          "Errore nel filtro per città"
       );
     }
   }
@@ -462,9 +577,11 @@ export const filterByCustomer = createAsyncThunk(
         })
       ).unwrap();
       return response;
-    } catch (error: any) {
+    } catch (error: unknown) {
       return rejectWithValue(
-        error.data?.message || "Errore nel filtro per cliente"
+        (error as { data?: { message?: string } }).data?.message ||
+          (error as Error).message ||
+          "Errore nel filtro per cliente"
       );
     }
   }
@@ -481,9 +598,11 @@ export const filterByStatus = createAsyncThunk(
         })
       ).unwrap();
       return response;
-    } catch (error: any) {
+    } catch (error: unknown) {
       return rejectWithValue(
-        error.data?.message || "Errore nel filtro per stato"
+        (error as { data?: { message?: string } }).data?.message ||
+          (error as Error).message ||
+          "Errore nel filtro per stato"
       );
     }
   }
@@ -500,9 +619,11 @@ export const filterByBlockStatus = createAsyncThunk(
         })
       ).unwrap();
       return response;
-    } catch (error: any) {
+    } catch (error: unknown) {
       return rejectWithValue(
-        error.data?.message || "Errore nel filtro per stato blocco"
+        (error as { data?: { message?: string } }).data?.message ||
+          (error as Error).message ||
+          "Errore nel filtro per stato blocco"
       );
     }
   }
