@@ -179,6 +179,9 @@ const devicesSlice = createSlice({
     setStatusFilter: (state, action: PayloadAction<number | string | null>) => {
       state.filters.status = action.payload === null ? null : action.payload;
     },
+    setWasteFilter: (state, action: PayloadAction<string | null>) => {
+      state.filters.waste = action.payload || "";
+    },
     setBlockedFilter: (
       state,
       action: PayloadAction<boolean | string | null>
@@ -339,6 +342,7 @@ export const {
   setFilters,
   setSearch,
   setStatusFilter,
+  setWasteFilter, // NUOVO
   setBlockedFilter,
   setReadyFilter,
   resetFilters,

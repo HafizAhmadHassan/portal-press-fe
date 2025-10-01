@@ -1,4 +1,16 @@
-import React, { useCallback, useMemo, useRef, useEffect } from "react";
+import React, {
+  useCallback,
+  useMemo,
+  useRef,
+  useEffect,
+  useState,
+} from "react";
+// Debug flag type augmentation
+declare global {
+  interface Window {
+    __DEV_SHOW_DEVICE_COUNTS?: boolean;
+  }
+}
 import { RefreshCw } from "lucide-react";
 import { useCrud } from "@root/hooks/useCrud";
 import { Divider } from "@shared/divider/Divider.component";
@@ -45,6 +57,7 @@ import {
   setReadyFilter,
   resetFilters,
 } from "@store_admin/devices/devices.slice";
+import { setWasteFilter } from "@store_admin/devices/devices.slice";
 
 export const DevicesListSections: React.FC = () => {
   const { isCards, isTable, isMap, toggleCardsTable, toggleMap } =
@@ -176,11 +189,57 @@ export const DevicesListSections: React.FC = () => {
     refetch: refetchMap,
     wasteColors,
     totalDevicesCount,
+    allWasteByType,
   } = useMapDevices(mapFilters);
+
+  // Waste distribution freeze (anche per customer scope):
+  // - Baseline catturata (per scope corrente) quando applico per la prima volta un filtro waste
+  // - Se rimuovo il filtro waste, baseline aggiornata ai dati correnti dello scope
+  // - Se cambia scopedCustomer, reset baseline e waste filter (nuovo contesto)
+  const [wasteBaseline, setWasteBaseline] = useState<{
+    scopeKey: string | null;
+    data: Record<string, number> | null;
+  }>({ scopeKey: null, data: null });
+
+  // Reset baseline e filtro waste quando cambia il customer (nuovo contesto)
+  useEffect(() => {
+    setWasteBaseline({ scopeKey: scopedCustomer || null, data: null });
+    // Non forziamo subito setWasteFilter(null) perché potresti voler mantenere l'intento UI,
+    // ma se il waste selezionato non esiste nel nuovo scope semplicemente non apparirà evidenziato.
+  }, [scopedCustomer]);
+
+  useEffect(() => {
+    const scopeKey = scopedCustomer || null; // null rappresenta la vista globale
+    const baselineMatchesScope = wasteBaseline.scopeKey === scopeKey;
+
+    if (!filters.waste) {
+      // Filtro waste rimosso -> aggiorna baseline ai dati attuali dello scope
+      setWasteBaseline({ scopeKey, data: allWasteByType || null });
+      return;
+    }
+    // Filtro waste attivo: se non abbiamo baseline per questo scope la catturiamo
+    if ((!baselineMatchesScope || !wasteBaseline.data) && allWasteByType) {
+      setWasteBaseline({ scopeKey, data: allWasteByType });
+    }
+  }, [
+    filters.waste,
+    allWasteByType,
+    scopedCustomer,
+    wasteBaseline.scopeKey,
+    wasteBaseline.data,
+  ]);
+
+  const displayedWasteDistribution = useMemo(() => {
+    // Usa baseline.data se presente per lo scope corrente, altrimenti live distribution
+    if (wasteBaseline.data) return wasteBaseline.data;
+    return allWasteByType || {};
+  }, [wasteBaseline.data, allWasteByType]);
+  const totalWasteBaseline = useMemo(() => {
+    return Object.values(displayedWasteDistribution).reduce((a, b) => a + b, 0);
+  }, [displayedWasteDistribution]);
 
   // DEBUG opzionale: riconcilia conteggi (attivare da console: window.__DEV_SHOW_DEVICE_COUNTS = true)
   useEffect(() => {
-    // @ts-expect-error runtime flag custom
     if (
       typeof window !== "undefined" &&
       window.__DEV_SHOW_DEVICE_COUNTS &&
@@ -399,6 +458,61 @@ export const DevicesListSections: React.FC = () => {
           handleCreateDevice
         )}
       />
+      {displayedWasteDistribution &&
+        Object.keys(displayedWasteDistribution).length > 0 && (
+          <div className={styles.totalWasteBar}>
+            <div className={styles.totalWasteLabel}>
+              Distribuzione totale rifiuti:
+            </div>
+            <div className={styles.totalWasteChips}>
+              {Object.entries(displayedWasteDistribution).map(
+                ([waste, count]) => {
+                  const isActive = filters.waste === waste;
+                  const perc =
+                    totalWasteBaseline > 0
+                      ? Math.round((count / totalWasteBaseline) * 100)
+                      : 0;
+                  return (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const next = isActive ? null : waste;
+                        dispatch(setWasteFilter(next));
+                        // reload data when waste changes
+                        dispatch(loadDevices({ page: 1 }));
+                        dispatch(loadAllDevices({}));
+                        refetchMap();
+                      }}
+                      key={`global-waste-${waste}`}
+                      className={
+                        styles.totalWasteChip +
+                        (isActive ? " " + styles.activeWasteChip : "")
+                      }
+                      style={{
+                        borderColor:
+                          wasteColors[waste] || "var(--border-color)",
+                        background: isActive
+                          ? wasteColors[waste] || "var(--accent-color)"
+                          : "color-mix(in srgb, var(--bg-secondary) 85%, var(--bg-primary))",
+                        color: isActive
+                          ? "#fff"
+                          : wasteColors[waste] || "var(--text-secondary)",
+                      }}
+                      title={`Filtra per ${waste} – totale baseline: ${count} (${perc}%)`}
+                    >
+                      <strong>{waste}</strong>{" "}
+                      <span className={styles.count}>{count}</span>
+                      <span style={{ fontSize: 9, opacity: 0.7 }}>
+                        {" "}
+                        {perc}%
+                      </span>
+                    </button>
+                  );
+                }
+              )}
+            </div>
+          </div>
+        )}
 
       {/* <div className={styles["devices-list-page__filters"]}>
         <SectionFilterComponent
@@ -424,7 +538,21 @@ export const DevicesListSections: React.FC = () => {
           </div>
         ) : (
           <>
-            <DevicesMapStats mapStats={mapStats} wasteColors={wasteColors} />
+            {/*   <DevicesMapStats
+              mapStats={mapStats}
+              wasteColors={wasteColors}
+              allWasteByType={allWasteByType}
+            /> */}
+            <DevicesSummaryBar
+              devices={summaryDevices || []}
+              onMetricClick={handleSummaryFilter}
+              onResetFilters={handleSummaryReset}
+              activeFilter={activeSummaryFilter}
+              baselineCounts={baselineCountsRef.current || undefined}
+              fixedTotalNumber={
+                baselineTotalRef.current ?? (summaryDevices?.length || 0)
+              }
+            />
             <DevicesMap mapData={mapDevices} isCollapsed={false} showActions />
           </>
         )

@@ -155,6 +155,17 @@ export const useMapDevices = (filters: MapFilters = {}) => {
     };
   }, [allDevices]);
 
+  // Distribuzione waste totale (indipendente dai filtri della mappa) per richiesta UI
+  const allWasteByType = useMemo(() => {
+    const acc: Record<string, number> = {};
+    if (!Array.isArray(allDevices)) return acc;
+    allDevices.forEach((d) => {
+      const w = d.waste || "Unknown";
+      acc[w] = (acc[w] || 0) + 1;
+    });
+    return acc;
+  }, [allDevices]);
+
   return {
     // Dati
     allDevices,
@@ -163,6 +174,7 @@ export const useMapDevices = (filters: MapFilters = {}) => {
     // Statistiche
     totalDevicesCount,
     mapStats,
+    allWasteByType,
 
     // Stato
     isLoading,

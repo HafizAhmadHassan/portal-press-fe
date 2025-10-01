@@ -79,11 +79,13 @@ export const getGpsColumns = ({
       render: (_v, row) => (
         <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
           <ModalDetailsGps device={row} />
-          <ModalCreateUpdateGps
+          {/*  <ModalCreateUpdateGps
             mode="edit"
             initialDevice={row}
             onSave={onEdit}
-          />
+          /> */}
+
+          {/* TODO: ATTIVARE SOLO QUANDO DECIDEREMO DI POTER MODIFICARE UN GPS */}
           <ModalDeleteGps device={row} onConfirm={onDelete} />
         </div>
       ),

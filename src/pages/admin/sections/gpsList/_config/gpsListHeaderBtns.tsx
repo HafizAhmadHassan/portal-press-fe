@@ -23,9 +23,9 @@ type ActionItem = ButtonConfig | ComponentConfig;
 const gpsListHeaderBtns = (
   onRefreshClick: () => void,
   RefreshIcon: LucideIcon,
-  isLoading: boolean,
-  onExportClick: () => void,
-  handleCreate: (data: Partial<GpsDevice>) => Promise<void> | void
+  isLoading: boolean
+  /* onExportClick: () => void,
+  handleCreate: (data: Partial<GpsDevice>) => Promise<void> | void */
 ): ActionItem[] => [
   {
     onClick: onRefreshClick,
@@ -36,7 +36,7 @@ const gpsListHeaderBtns = (
     label: "Aggiorna",
     disabled: isLoading,
   },
-  {
+  /* {
     component: (
       <ModalCreateUpdateGps
         mode="create"
@@ -48,7 +48,8 @@ const gpsListHeaderBtns = (
         }
       />
     ),
-  },
+    TODO: ATTIVARE SOLO QUANDO DECIDEREMO DI POTER CREARE UN GPS
+  }, */
   /* {
     onClick: onExportClick,
     variant: "outline",

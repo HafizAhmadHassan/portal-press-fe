@@ -12,7 +12,6 @@ import type { GpsDevice, GpsQueryParams } from "@store_admin/gps/gps.types";
 import { createGpsFilterConfig, GpsFields } from "./_config/gpsFilterConfig";
 import { GenericTableWithLogic } from "@shared/table/components/GenericTableWhitLogic.component";
 import { SectionHeaderComponent } from "@sections_admin/_commons/components/SectionHeader/Section-header.component";
-import { SectionFilterComponent } from "@sections_admin/_commons/components/SectionFilters/Section-filters.component";
 import {
   useGetGpsQuery,
   useCreateGpsMutation,
@@ -23,25 +22,18 @@ import { useAppSelector } from "../../core/store/store.hooks";
 import { selectScopedCustomer } from "../../core/store/scope/scope.selectors";
 
 export const GpsListSections: React.FC = () => {
-  const {
-    meta,
-    isLoading,
-    refetch,
-    filters,
-    setFilter,
-    resetAll,
-    buildTableConfig,
-  } = useListController<GpsQueryParams, GpsDevice>({
-    listHook: useGetGpsQuery, // <-- come gli Users
-    initialFilters: {
-      [GpsFields.CODICE]: "",
-      [GpsFields.MUNICIPILITY]: "",
-      [GpsFields.CUSTOMER]: "",
-      [GpsFields.WASTE]: "",
-    },
-    // se il tuo endpoint supporta sort: imposta qui le chiavi corrette
-    initialSort: { sortBy: "codice", sortOrder: "asc" },
-  });
+  const { meta, isLoading, refetch, filters, setFilter, buildTableConfig } =
+    useListController<GpsQueryParams, GpsDevice>({
+      listHook: useGetGpsQuery, // <-- come gli Users
+      initialFilters: {
+        [GpsFields.CODICE]: "",
+        [GpsFields.MUNICIPILITY]: "",
+        [GpsFields.CUSTOMER]: "",
+        [GpsFields.WASTE]: "",
+      },
+      // se il tuo endpoint supporta sort: imposta qui le chiavi corrette
+      initialSort: { sortBy: "codice", sortOrder: "asc" },
+    });
 
   const { execCreate, execUpdate, execDelete } = useCrud();
   const [createGpsTrigger] = useCreateGpsMutation();
