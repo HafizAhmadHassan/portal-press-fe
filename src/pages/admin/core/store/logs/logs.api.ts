@@ -14,7 +14,7 @@ export const logsApi = apiSlice.injectEndpoints({
           },
           {} as Record<string, any>
         );
-        return { url: "log/", params: clean };
+        return { url: "grouped_by_machine/", params: clean };
       },
       providesTags: [{ type: "LIST" as const, id: "Logs" }],
       transformResponse: (res: LogsResponse) => {
