@@ -174,6 +174,24 @@ export interface TableConfig<T, K extends keyof T | string = keyof T | string> {
   pagination?: TablePagination;
   sorting?: TableSorting<T, K>;
   selection?: TableSelection<T>;
+  /**
+   * Configurazione opzionale per righe collassabili (espandibili).
+   * Se abilitata aggiunge una prima colonna (icona) per togglare l'espansione.
+   */
+  collapsible?: {
+    enabled: boolean; // attiva/disattiva comportamento
+    /** Chiave/ID unica per la riga; se non fornita prova idField della selection o index */
+    getRowKey?: (item: T, index: number) => string | number;
+    /** Righe inizialmente collassate (array di chiavi). Se fornito e include la key => parte collassata. */
+    initialCollapsedKeys?: Array<string | number>;
+    /** Se true collassa tutte le altre quando una viene espansa (accordion) */
+    exclusive?: boolean;
+    /** Render del contenuto espanso (seconda riga) */
+    renderExpanded?: (item: T) => ReactNode;
+    /** Etichetta tooltip custom per pulsante espansione */
+    expandLabel?: string;
+    collapseLabel?: string;
+  };
 }
 
 export interface GenericTableProps<

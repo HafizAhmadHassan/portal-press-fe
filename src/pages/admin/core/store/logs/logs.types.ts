@@ -30,6 +30,47 @@ export interface LogsResponse extends ApiResponse<LogItem> {
   data: LogItem[];
 }
 
+// -----------------------------
+// Raggruppamento per macchina (grouped_by_machine)
+// -----------------------------
+export interface MachineInfo {
+  machine_ip: string;
+  customer_Name: string;
+}
+
+export interface GroupedMachineLogsEntry {
+  info: MachineInfo;
+  logs: ApiResponse<
+    Pick<
+      LogItem,
+      "id" | "name_alarm" | "code_alarm" | "date_and_time" | "message"
+    >
+  >;
+}
+
+export interface GroupedMachinesLogsResponse
+  extends ApiResponse<GroupedMachineLogsEntry> {
+  data: GroupedMachineLogsEntry[];
+}
+
+// -----------------------------
+// Dettaglio paginato logs per singola macchina (endpoint dedicato)
+// -----------------------------
+export interface MachineLogsDetailResponse
+  extends ApiResponse<
+    Pick<
+      LogItem,
+      "id" | "name_alarm" | "code_alarm" | "date_and_time" | "message"
+    >
+  > {
+  data: Array<
+    Pick<
+      LogItem,
+      "id" | "name_alarm" | "code_alarm" | "date_and_time" | "message"
+    >
+  >;
+}
+
 export interface LogsState {
   items: LogItem[];
   selected: LogItem | null;
@@ -63,6 +104,14 @@ export interface LogsQueryParams {
   date_from?: string;
   date_to?: string;
   search?: string;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+}
+
+export interface MachineLogsQueryParams {
+  machine_ip: string;
+  page?: number;
+  page_size?: number;
   sortBy?: string;
   sortOrder?: "asc" | "desc";
 }

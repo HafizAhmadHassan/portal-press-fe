@@ -46,13 +46,8 @@ export function useInfiniteDevices({
   const prevKeyRef = useRef<string>("");
   useEffect(() => {
     const currentKey = key ?? JSON.stringify(filters);
-    console.log("🔑 Key change check:", {
-      current: currentKey,
-      prev: prevKeyRef.current,
-    });
 
     if (currentKey !== prevKeyRef.current) {
-      console.log("📊 Resetting infinite devices due to key change");
       prevKeyRef.current = currentKey;
       justResetRef.current = true;
       requestKeyRef.current += 1;
@@ -73,8 +68,6 @@ export function useInfiniteDevices({
     [filters, sortBy, sortOrder, page, pageSize]
   );
 
-  console.log("🎯 Query params:", queryParams);
-
   const {
     devices: pageDevices,
     isLoading,
@@ -82,27 +75,12 @@ export function useInfiniteDevices({
     refetch,
   } = useDevices(queryParams);
 
-  console.log("📦 Page devices received:", {
-    pageDevices: pageDevices?.length || 0,
-    page,
-    isLoading,
-    meta,
-  });
-
   // append/sostituisci risultati
   useEffect(() => {
-    console.log("🔄 Processing page devices:", {
-      hasPageDevices: !!pageDevices,
-      pageDevicesLength: pageDevices?.length || 0,
-      page,
-      requestKey: requestKeyRef.current,
-    });
-
     const myReq = requestKeyRef.current;
     setAllDevices((prev) => {
       // drop risposte stale
       if (myReq !== requestKeyRef.current) {
-        console.log("❌ Dropping stale response");
         return prev;
       }
 
@@ -112,37 +90,24 @@ export function useInfiniteDevices({
           prev.length === (pageDevices?.length || 0) &&
           prev.every((d, i) => d.id === pageDevices?.[i]?.id)
         ) {
-          console.log("⏭️ No changes for page 1, skipping reset");
           return prev;
         }
 
-        console.log(
-          "🆕 Setting new devices for page 1:",
-          pageDevices?.length || 0
-        );
         justResetRef.current = false;
         return pageDevices || [];
       }
 
       // Per pagine > 1, appendi solo se ci sono nuovi device
       if (!pageDevices || pageDevices.length === 0) {
-        console.log("⚠️ No page devices to append for page", page);
         return prev;
       }
 
       const existing = new Set(prev.map((d) => d.id));
       const newOnes = pageDevices.filter((d) => !existing.has(d.id));
       if (newOnes.length === 0) {
-        console.log("⏭️ No new devices to append");
         return prev;
       }
 
-      console.log(
-        "➕ Appending",
-        newOnes.length,
-        "new devices to existing",
-        prev.length
-      );
       return [...prev, ...newOnes];
     });
   }, [pageDevices, page]);
@@ -158,8 +123,6 @@ export function useInfiniteDevices({
     return Boolean(pageDevices && pageDevices.length === pageSize);
   }, [meta, page, pageDevices, pageSize]);
 
-  console.log("🔮 Has next:", hasNext, "Meta:", meta);
-
   // IntersectionObserver (view-port o rootRef custom)
   const { ref: sentinelRef, inView } = useInView({
     threshold: 0.1,
@@ -171,40 +134,27 @@ export function useInfiniteDevices({
   // Avanza SOLO di +1
   useEffect(() => {
     if (justResetRef.current) {
-      console.log("🚫 Sentinel blocked by justReset");
       return;
     }
     if (!inView) return;
     if (isLoading) {
-      console.log("⏳ Sentinel blocked by loading");
       return;
     }
     if (!hasNext) {
-      console.log("🏁 No more pages available");
       return;
     }
 
-    console.log("📈 Advancing to next page:", page + 1);
     setPage((p) => p + 1);
   }, [inView, isLoading, hasNext]);
 
   // Reload manuale (riparti da 1)
   const reload = useCallback(() => {
-    console.log("🔄 Manual reload triggered");
     justResetRef.current = true;
     requestKeyRef.current += 1;
     setAllDevices([]);
     setPage(1);
     refetch();
   }, [refetch]);
-
-  console.log("📊 Final state:", {
-    devicesCount: allDevices.length,
-    currentPage: page,
-    isLoading,
-    hasNext,
-    justReset: justResetRef.current,
-  });
 
   return {
     devices: allDevices,

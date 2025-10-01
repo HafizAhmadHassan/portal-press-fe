@@ -4,7 +4,7 @@ import { TableCell } from "./components/TableCell.component";
 import { TablePagination } from "./components/TablePagination.component";
 import styles from "./styles/GenericTable.module.scss";
 
-import type { TableColumn } from "./types/GenericTable.types";
+import type { TableColumn, TableConfig } from "./types/GenericTable.types";
 
 // Estensione opzionale per proprietà extra di paginazione usate nel componente
 type ExtendedPagination = {
@@ -41,6 +41,33 @@ function getCellValueGeneric<T, K extends keyof T | string>(
   return getValueFromKey(item, column.key);
 }
 
+interface GenericTableInnerProps<
+  T,
+  K extends keyof T | string,
+  Id extends PropertyKey
+> {
+  config: TableConfig<T, K> & {
+    collapsible?: {
+      enabled: boolean;
+      getRowKey?: (item: T, index: number) => string | number;
+      initialCollapsedKeys?: Array<string | number>;
+      exclusive?: boolean;
+      renderExpanded?: (item: T) => React.ReactNode;
+      expandLabel?: string;
+      collapseLabel?: string;
+    };
+  };
+  paginatedData: T[];
+  currentPage: number;
+  totalPages: number;
+  selectedItems: Id[];
+  sortConfig: { key: K; direction: string } | null;
+  onSort: (key: K) => void;
+  onPageChange: (page: number) => void;
+  onSelectAll: (checked: boolean) => void;
+  onSelectItem: (item: T, checked: boolean) => void;
+}
+
 const GenericTable = <
   T,
   K extends keyof T | string = keyof T | string,
@@ -56,13 +83,26 @@ const GenericTable = <
   onPageChange,
   onSelectAll,
   onSelectItem,
-}: any): React.JSX.Element => {
+}: GenericTableInnerProps<T, K, Id>): React.JSX.Element => {
   const getCellValue = useCallback(
     (item: T, column: TableColumn<T, K>) => getCellValueGeneric(item, column),
     []
   );
 
-  // Loading state
+  // Stato locale per tracciare quali righe sono collassate/espanso
+  // (DEVE stare prima di qualsiasi return condizionale per non cambiare l'ordine degli hooks!)
+  const [collapsedKeys, setCollapsedKeys] = React.useState<
+    Set<string | number>
+  >(
+    () =>
+      new Set(
+        config.collapsible?.enabled
+          ? config.collapsible.initialCollapsedKeys || []
+          : []
+      )
+  );
+
+  // Loading state (dopo gli hooks, così l'ordine è stabile)
   if (config.loading) {
     return (
       <div className={styles.loadingContainer}>
@@ -83,6 +123,29 @@ const GenericTable = <
   const calculatedTotalPages =
     pgExtra.totalPages ?? totalPages ?? computeTotalPages(totalItems, pageSize);
 
+  const toggleRow = (key: string | number) => {
+    setCollapsedKeys((prev) => {
+      const next = new Set(prev);
+      const isCollapsed = next.has(key);
+      if (isCollapsed) {
+        next.delete(key); // espando (rimuovo da collassati)
+      } else {
+        if (config.collapsible?.exclusive) {
+          // se esclusivo, collasso tutti gli altri (quindi set vuoto prima)
+          next.clear();
+        }
+        next.add(key); // aggiungo ai collassati => riga principale resta visibile, seconda nascosta, invertiamo logica?
+      }
+      return next;
+    });
+  };
+
+  const isExpanded = (key: string | number) => {
+    // Convenzione: se nella Set dei collassati => CHIUSA, altrimenti APERTA.
+    // Più intuitivo invertire? Manteniamo così: Set=collapsed
+    return !collapsedKeys.has(key);
+  };
+
   return (
     <div className={`${styles.tableContainer} ${config.className || ""}`}>
       <div className={styles.tableWrapper}>
@@ -90,6 +153,11 @@ const GenericTable = <
           {/* Table Header */}
           <thead className={styles.tableHeader}>
             <tr className={styles.headerRow}>
+              {config.collapsible?.enabled && (
+                <th
+                  className={`${styles.headerCell} ${styles.collapseCell}`}
+                ></th>
+              )}
               {/* Selection column */}
               {config.selection?.enabled && (
                 <th className={`${styles.headerCell} ${styles.selectionCell}`}>
@@ -146,38 +214,78 @@ const GenericTable = <
                 idField as unknown as PropertyKey
               ] as Id;
               const isSelected = selectedItems.includes(itemId);
+              const rowKey = config.collapsible?.getRowKey
+                ? config.collapsible.getRowKey(item, index)
+                : (itemId as unknown as string | number) ?? index;
+              const expanded = config.collapsible?.enabled
+                ? isExpanded(rowKey)
+                : true;
 
               return (
-                <tr
-                  key={(itemId as unknown as string) ?? String(index)}
-                  className={`${styles.bodyRow} ${
-                    isSelected ? styles.selected : ""
-                  }`}
-                >
-                  {/* Selection cell */}
-                  {config.selection?.enabled && (
-                    <td className={`${styles.selectionCell}`}>
-                      <input
-                        type="checkbox"
-                        checked={isSelected}
-                        onChange={(e) =>
-                          onSelectItem(item, e.currentTarget.checked)
-                        }
-                        className={styles.checkbox}
+                <React.Fragment key={String(rowKey)}>
+                  <tr
+                    className={`${styles.bodyRow} ${
+                      isSelected ? styles.selected : ""
+                    }`}
+                  >
+                    {config.collapsible?.enabled && (
+                      <td className={`${styles.collapseCell}`}>
+                        {config.collapsible.renderExpanded ? (
+                          <button
+                            type="button"
+                            className={styles.collapseBtn}
+                            aria-label={
+                              expanded
+                                ? config.collapsible.collapseLabel || "Comprimi"
+                                : config.collapsible.expandLabel || "Espandi"
+                            }
+                            onClick={() => toggleRow(rowKey)}
+                          >
+                            {expanded ? "−" : "+"}
+                          </button>
+                        ) : null}
+                      </td>
+                    )}
+                    {/* Selection cell */}
+                    {config.selection?.enabled && (
+                      <td className={`${styles.selectionCell}`}>
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={(e) =>
+                            onSelectItem(item, e.currentTarget.checked)
+                          }
+                          className={styles.checkbox}
+                        />
+                      </td>
+                    )}
+                    {/* Data cells */}
+                    {config.columns.map((column) => (
+                      <TableCell
+                        key={String(column.key)}
+                        column={column}
+                        item={item}
+                        value={getCellValue(item, column)}
                       />
-                    </td>
-                  )}
-
-                  {/* Data cells */}
-                  {config.columns.map((column) => (
-                    <TableCell
-                      key={String(column.key)}
-                      column={column}
-                      item={item}
-                      value={getCellValue(item, column)}
-                    />
-                  ))}
-                </tr>
+                    ))}
+                  </tr>
+                  {config.collapsible?.enabled &&
+                    config.collapsible.renderExpanded &&
+                    expanded && (
+                      <tr className={styles.expandedRow}>
+                        <td
+                          className={styles.expandedContentCell}
+                          colSpan={
+                            config.columns.length +
+                            (config.selection?.enabled ? 1 : 0) +
+                            (config.collapsible?.enabled ? 1 : 0)
+                          }
+                        >
+                          {config.collapsible.renderExpanded(item)}
+                        </td>
+                      </tr>
+                    )}
+                </React.Fragment>
               );
             })}
           </tbody>

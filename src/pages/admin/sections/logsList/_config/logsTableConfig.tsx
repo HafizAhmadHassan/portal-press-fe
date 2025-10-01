@@ -1,4 +1,4 @@
-/* import type { TableColumn } from "@components/shared/table/types/GenericTable.types"; */
+import type { TableColumn } from "@components/shared/table/types/GenericTable.types";
 import type { LogItem } from "@store_admin/logs/logs.types";
 
 /** Calcolo severità dal nome/codice allarme */
@@ -20,166 +20,183 @@ function computeSeverity(
   return "info";
 }
 
-export const getLogsColumns =
-  (): Array</*  TableColumn<LogItem, LogsColumnKey> */ any> => {
-    const tPrimary = "var(--text-primary)";
-    const tSecondary = "var(--text-secondary)";
+interface FlatLogRow extends Partial<LogItem> {
+  id: number | string;
+  machine_detail?: {
+    matricola_Kgn?: string;
+    matricola_kgn?: string;
+    matricola_Bte?: string;
+    matricola_bte?: string;
+  } | null;
+}
+export const getLogsColumns = (options?: {
+  includeMachineDetail?: boolean;
+}): Array<TableColumn<FlatLogRow>> => {
+  const tPrimary = "var(--text-primary)";
+  const tSecondary = "var(--text-secondary)";
 
-    return [
-      {
-        key: "date_and_time",
-        header: "Data/Ora",
-        type: "custom",
-        width: "180px",
-        sortable: true,
-        render: (_v, row) => {
-          if (!row.date_and_time)
-            return <span style={{ color: tSecondary }}>N/A</span>;
-          const d = new Date(row.date_and_time);
-          if (isNaN(d.getTime()))
-            return <span style={{ color: tSecondary }}>N/D</span>;
-          return (
-            <div>
-              <div style={{ fontSize: 14, color: tPrimary }}>
-                {d.toLocaleDateString("it-IT")}
-              </div>
-              <div style={{ fontSize: 12, color: tSecondary }}>
-                {d.toLocaleTimeString("it-IT", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  second: "2-digit",
-                })}
-              </div>
+  const cols: Array<TableColumn<FlatLogRow>> = [
+    {
+      key: "date_and_time",
+      header: "Data/Ora",
+      type: "custom",
+      width: "180px",
+      sortable: true,
+      render: (_v, row) => {
+        if (!row.date_and_time)
+          return <span style={{ color: tSecondary }}>N/A</span>;
+        const d = new Date(row.date_and_time);
+        if (isNaN(d.getTime()))
+          return <span style={{ color: tSecondary }}>N/D</span>;
+        return (
+          <div>
+            <div style={{ fontSize: 14, color: tPrimary }}>
+              {d.toLocaleDateString("it-IT")}
             </div>
-          );
-        },
+            <div style={{ fontSize: 12, color: tSecondary }}>
+              {d.toLocaleTimeString("it-IT", {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+              })}
+            </div>
+          </div>
+        );
       },
-
-      {
-        key: "alarm",
-        header: "Messaggio",
-        type: "custom",
-        width: "360px",
-        sortable: false,
-        render: (_v, row) => {
-          const sev = computeSeverity(row.name_alarm, row.code_alarm);
-          const sevColor =
-            sev === "error"
-              ? "var(--error-color)"
-              : sev === "warning"
-              ? "var(--warning-color)"
-              : "var(--primary-color)";
-
-          return (
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+    },
+    {
+      key: "alarm",
+      header: "Messaggio",
+      type: "custom",
+      width: "360px",
+      sortable: false,
+      render: (_v, row) => {
+        const sev = computeSeverity(row.name_alarm, row.code_alarm);
+        const sevColor =
+          sev === "error"
+            ? "var(--error-color)"
+            : sev === "warning"
+            ? "var(--warning-color)"
+            : "var(--primary-color)";
+        return (
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span
+              aria-hidden
+              style={{
+                minWidth: 8,
+                height: 8,
+                borderRadius: 999,
+                background: sevColor,
+                display: "inline-block",
+              }}
+            />
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 2,
+                minWidth: 0,
+              }}
+            >
               <span
-                aria-hidden
+                title={row.name_alarm || ""}
                 style={{
-                  minWidth: 8,
-                  height: 8,
-                  borderRadius: 999,
-                  background: sevColor,
-                  display: "inline-block",
-                }}
-              />
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 2,
-                  minWidth: 0,
+                  fontWeight: 600,
+                  color: tPrimary,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
                 }}
               >
+                {row.name_alarm || "—"}
+              </span>
+              {row.message && (
                 <span
-                  title={row.name_alarm || ""}
+                  title={row.message}
                   style={{
-                    fontWeight: 600,
-                    color: tPrimary,
+                    fontSize: 12,
+                    color: tSecondary,
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                     whiteSpace: "nowrap",
                   }}
                 >
-                  {row.name_alarm || "—"}
+                  {row.message}
                 </span>
-                {row.message ? (
-                  <span
-                    title={row.message}
-                    style={{
-                      fontSize: 12,
-                      color: tSecondary,
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {row.message}
-                  </span>
-                ) : null}
-              </div>
+              )}
             </div>
-          );
-        },
+          </div>
+        );
       },
+    },
+    {
+      key: "code_alarm",
+      header: "Codice Log",
+      type: "custom",
+      width: "160px",
+      sortable: true,
+      render: (_v, row) => (
+        <span
+          style={{
+            padding: "2px 6px",
+            borderRadius: 4,
+            fontSize: 12,
+            background: "var(--bg-secondary)",
+            border: "1px solid var(--border-color)",
+            color: tSecondary,
+          }}
+        >
+          {row.code_alarm || "—"}
+        </span>
+      ),
+    },
+    {
+      key: "machine_ip",
+      header: "IP",
+      type: "custom",
+      width: "160px",
+      sortable: true,
+      render: (_v, row) => <span>{row.machine_ip || "—"}</span>,
+    },
+    {
+      key: "customer_Name",
+      header: "Cliente",
+      type: "custom",
+      width: "160px",
+      sortable: true,
+      render: (_v, row) => <span>{row.customer_Name || "—"}</span>,
+    },
+  ];
 
-      {
-        key: "code_alarm",
-        header: "Codice Log",
-        type: "custom",
-        width: "160px",
-        sortable: true,
-        render: (_v, row) => (
-          <span
-            style={{
-              padding: "2px 6px",
-              borderRadius: 4,
-              fontSize: 12,
-              background: "var(--bg-secondary)",
-              border: "1px solid var(--border-color)",
-              color: tSecondary,
-            }}
-          >
-            {row.code_alarm || "—"}
-          </span>
-        ),
-      },
-
-      {
-        key: "machine_ip",
-        header: "IP",
-        type: "text",
-        width: "160px",
-        sortable: true,
-      },
-
-      {
-        key: "machine_detail",
-        header: "Matricola Macchina",
-        type: "custom",
-        width: "220px",
-        sortable: true,
-        render: (_, logs) => {
+  if (options?.includeMachineDetail) {
+    cols.splice(4, 0, {
+      key: "machine_detail",
+      header: "Matricola Macchina",
+      type: "custom",
+      width: "220px",
+      sortable: false,
+      render: (_val, row: FlatLogRow) => {
+        const detail = row?.machine_detail;
+        if (!detail) {
           return (
-            <div>
-              <div style={{ fontSize: "14px", color: "var(--text-primary)" }}>
-                KGN: {logs.machine_detail.matricola_Kgn || "N/A"}
-              </div>
-              <div style={{ fontSize: "14px", color: "var(--text-primary)" }}>
-                BTE: {logs.machine_detail.matricola_Bte || "N/A"}
-              </div>
-            </div>
+            <span style={{ fontSize: 12, color: "var(--text-secondary)" }}>
+              N/D
+            </span>
           );
-        },
+        }
+        const kgn = detail?.matricola_Kgn || detail?.matricola_kgn || "—";
+        const bte = detail?.matricola_Bte || detail?.matricola_bte || "—";
+        return (
+          <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <span style={{ fontSize: 12 }}>KGN: {kgn}</span>
+            <span style={{ fontSize: 12 }}>BTE: {bte}</span>
+          </div>
+        );
       },
+    });
+  }
 
-      {
-        key: "customer_Name",
-        header: "Cliente",
-        type: "text",
-        width: "160px",
-        sortable: true,
-      },
-    ];
-  };
+  return cols;
+};
 
 export default getLogsColumns;

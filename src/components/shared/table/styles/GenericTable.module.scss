@@ -69,11 +69,6 @@
   background: var(--gray-50);
 }
 
-.tableHeader {
-}
-.headerRow {
-}
-
 .headerCell {
   padding: 1rem 1.5rem;
   font-size: 0.75rem;
@@ -117,15 +112,53 @@
   opacity: 0.6;
 }
 
-.tableBody {
-}
-
 .bodyRow {
   transition: background-color 0.15s ease-in-out;
 }
 
 .selected {
   background: var(--primary-light) !important;
+}
+
+/* Collapsible rows */
+.collapseCell {
+  width: 42px;
+  text-align: center;
+  padding: 0.75rem 0.5rem !important;
+}
+
+.collapseBtn {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  width: 26px;
+  height: 26px;
+  line-height: 1;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease, transform 0.15s ease;
+  color: var(--text-secondary);
+}
+.collapseBtn:hover {
+  background: var(--bg-primary);
+  transform: translateY(-2px);
+}
+.collapseBtn:active {
+  transform: translateY(0);
+}
+
+.expandedRow {
+  background: color-mix(in srgb, var(--bg-secondary) 92%, transparent);
+}
+
+.expandedContentCell {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
 }
 
 .table td {
