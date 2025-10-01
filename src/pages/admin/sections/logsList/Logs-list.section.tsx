@@ -2,7 +2,8 @@ import React, { useMemo, useState, useEffect } from "react";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { RefreshCw, Download } from "lucide-react";
 import styles from "./_styles/Logs-list.module.scss";
-// NOTE: Original flat logs columns replaced here by grouped (per macchina) view with nested expandable logs
+import { getGroupedLogsOuterColumns } from "./_config/groupedLogsTableConfig";
+import type { MachineLogsGroup } from "./_config/groupedLogsTableConfig";
 import { getLogsColumns } from "./_config/logsTableConfig";
 import { Divider } from "@shared/divider/Divider.component";
 import logsListHeaderBtns from "./_config/logsListHeaderBtns";
@@ -18,38 +19,7 @@ import { GenericTableWithLogic } from "@shared/table/components/GenericTableWhit
 import { SectionHeaderComponent } from "@sections_admin/_commons/components/SectionHeader/Section-header.component";
 // import { SectionFilterComponent } from "@sections_admin/_commons/components/SectionFilters/Section-filters.component"; // filters UI temporarily disabilitato
 
-// ------------------------------
-// Tipi locali per risposta API raggruppata
-// ------------------------------
-interface NestedLogItem {
-  id: number;
-  name_alarm?: string;
-  code_alarm?: string;
-  date_and_time?: string;
-  message?: string;
-}
-
-interface NestedLogsMeta {
-  total: number;
-  page: number;
-  page_size: number;
-  total_pages: number;
-  has_next: boolean;
-  has_prev: boolean;
-  next_page: number | null;
-  prev_page: number | null;
-}
-
-interface MachineLogsGroup {
-  info: {
-    machine_ip: string;
-    customer_Name: string;
-  };
-  logs: {
-    meta: NestedLogsMeta;
-    data: NestedLogItem[];
-  };
-}
+// Tipi spostati in groupedLogsTableConfig.tsx
 
 type LogsViewMode = "grouped" | "flat";
 
@@ -84,75 +54,7 @@ export const LogsListSections: React.FC = () => {
    * }
    */
 
-  const outerColumns = useMemo(
-    () => [
-      {
-        key: "machine_ip",
-        header: "Macchina (IP)",
-        type: "custom" as const,
-        sortable: true,
-        width: "180px",
-        render: (_: unknown, row: MachineLogsGroup) => (
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <span style={{ fontWeight: 600 }}>
-              {row?.info?.machine_ip || "N/D"}
-            </span>
-            <span style={{ fontSize: 12, color: "var(--text-secondary)" }}>
-              Cliente: {row?.info?.customer_Name || "—"}
-            </span>
-          </div>
-        ),
-      },
-      {
-        key: "total_logs",
-        header: "# Logs", // total logs (tutti, meta.total)
-        type: "custom" as const,
-        sortable: true,
-        width: "100px",
-        render: (_: unknown, row: MachineLogsGroup) => (
-          <span style={{ fontWeight: 500 }}>{row?.logs?.meta?.total ?? 0}</span>
-        ),
-      },
-      {
-        key: "page_logs",
-        header: "Logs pagina", // quanti logs inclusi in questo batch (data.length)
-        type: "custom" as const,
-        width: "120px",
-        render: (_: unknown, row: MachineLogsGroup) => (
-          <span>{row?.logs?.data?.length ?? 0}</span>
-        ),
-      },
-      {
-        key: "last_event",
-        header: "Ultimo evento",
-        type: "custom" as const,
-        sortable: false,
-        width: "200px",
-        render: (_: unknown, row: MachineLogsGroup) => {
-          const latest = row?.logs?.data?.[0]; // assumiamo ordinati desc lato API
-          if (!latest)
-            return <span style={{ color: "var(--text-secondary)" }}>—</span>;
-          const d = new Date(latest.date_and_time);
-          if (isNaN(d.getTime())) return <span>—</span>;
-          return (
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <span style={{ fontSize: 12, color: "var(--text-primary)" }}>
-                {d.toLocaleDateString("it-IT")}
-              </span>
-              <span style={{ fontSize: 11, color: "var(--text-secondary)" }}>
-                {d.toLocaleTimeString("it-IT", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  second: "2-digit",
-                })}
-              </span>
-            </div>
-          );
-        },
-      },
-    ],
-    []
-  );
+  const outerColumns = useMemo(() => getGroupedLogsOuterColumns(), []);
 
   // Build outer table config + collapsible nested logs
   const tableConfig = useMemo(() => {
@@ -462,12 +364,13 @@ const NestedMachineLogs: React.FC<NestedMachineLogsProps> = ({
           alignItems: "center",
         }}
       >
-        <strong>
+        <div></div>
+        {/*   <strong>
           Logs macchina {machineIp}
           {meta
             ? ` (pagina ${meta.page}/${meta.total_pages}, tot: ${meta.total})`
             : ` (${rows.length})`}
-        </strong>
+        </strong> */}
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <button
             type="button"

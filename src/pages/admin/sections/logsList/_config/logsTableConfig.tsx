@@ -65,6 +65,42 @@ export const getLogsColumns = (options?: {
       },
     },
     {
+      key: "machine_detail",
+      header: "Matricola Macchina",
+      type: "custom",
+      width: "220px",
+      sortable: true,
+      render: (_, logs) => {
+        return (
+          <div>
+            <div style={{ fontSize: "14px", color: "var(--text-primary)" }}>
+              BTE: {logs.machine_detail.matricola_Bte || "N/A"}
+            </div>
+            <div style={{ fontSize: "14px", color: "var(--text-primary)" }}>
+              KGN: {logs.machine_detail.matricola_Kgn || "N/A"}
+            </div>
+          </div>
+        );
+      },
+    },
+    {
+      key: "address",
+      header: "Indirizzo",
+      type: "custom",
+      width: "200px",
+      sortable: true,
+      render: (_v, row) => (
+        <div>
+          <div style={{ fontWeight: 600, fontSize: 14, color: tPrimary }}>
+            {row.gps.address || "—"}
+          </div>
+          <div style={{ fontSize: 12, color: tSecondary }}>
+            {row.gps.municipility || "—"}
+          </div>
+        </div>
+      ),
+    },
+    {
       key: "alarm",
       header: "Messaggio",
       type: "custom",
