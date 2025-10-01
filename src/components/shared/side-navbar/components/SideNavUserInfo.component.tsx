@@ -23,7 +23,9 @@ export function SideNavUserInfo({ user, showMenu }: Props) {
     <div className={styles.container}>
       <div className={styles.userDetails}>
         <span className={styles.userName}>{user.username}</span>
-        {hasRoles && <RoleBadge user={user} />}
+        {hasRoles && (
+          <RoleBadge customStyle={{ width: "fit-content" }} user={user} />
+        )}
       </div>
 
       <div className={styles.menuToggle}>

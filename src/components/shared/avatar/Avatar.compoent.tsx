@@ -31,6 +31,7 @@ export function Avatar({ user }: { user: User }) {
           height: "40px",
           borderRadius: "50%",
           color: "#fff",
+
           background: getColorFromLetter(
             (user.full_name || user.username || "U").charAt(0).toUpperCase()
           ),

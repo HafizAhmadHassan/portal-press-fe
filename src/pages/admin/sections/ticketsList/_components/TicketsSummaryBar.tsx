@@ -32,23 +32,15 @@ export const TicketsSummaryBar: React.FC<Props> = ({
   const openCount = tickets.filter(isOpen).length;
   const closedCount = tickets.filter(isClosed).length;
 
-  // Severità: se non passi un resolver, restano a 0
-  let warningCount = 0;
-  let errorCount = 0;
-
   if (typeof severityResolver === "function") {
     for (const t of tickets) {
       const sev = severityResolver(t);
-      if (sev === "warning") warningCount++;
-      if (sev === "error") errorCount++;
     }
   }
 
   const items: SummaryItem[] = [
     { number: openCount, label: "Aperti", variant: "statCard--open" },
     { number: closedCount, label: "Chiusi", variant: "statCard--closed" },
-    { number: warningCount, label: "Warning", variant: "statCard--warning" },
-    { number: errorCount, label: "Error", variant: "statCard--error" },
   ];
 
   return (

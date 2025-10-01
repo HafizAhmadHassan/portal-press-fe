@@ -15,18 +15,18 @@ const DatesCard: React.FC<Props> = ({ ticket }) => {
     (ticket as any)?.date_time ||
     (ticket as any)?.created_At;
 
-  const updatedAt = (ticket as any)?.updated_At;
+  const closeDate = (ticket as any)?.close_date;
 
   return (
     <DeviceCard title="Date" icon={<Calendar size={18} />}>
       <DeviceFormGrid>
         <DeviceCard title="Apertura" icon={<Calendar size={12} />}>
-          <span className={styles.value}>{formatDateTime(openedAt)}</span>
+          <span className={styles.value}>{formatDateTime(openedAt)} </span>
           <span className={styles.relative}>{relativeTime(openedAt)}</span>
         </DeviceCard>
         <DeviceCard title="Chiusura" icon={<Clock size={12} />}>
-          <span className={styles.value}>{formatDateTime(updatedAt)}</span>
-          <span className={styles.relative}>{relativeTime(updatedAt)}</span>
+          <span className={styles.value}>{formatDateTime(closeDate)} </span>
+          <span className={styles.relative}>{relativeTime(closeDate)}</span>
         </DeviceCard>
       </DeviceFormGrid>
     </DeviceCard>

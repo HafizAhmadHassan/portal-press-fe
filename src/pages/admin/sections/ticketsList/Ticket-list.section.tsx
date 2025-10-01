@@ -251,15 +251,16 @@ export const TicketsListSections: React.FC = () => {
   const headerButtons = useMemo(
     () => [
       ...ticketListHeaderBtns(onRefreshClick, RefreshCw, isLoading),
-      {
+      /*  {
         label: "Nuovo Ticket",
         icon: Plus,
         onClick: handleOpenCreateModal,
         variant: "primary",
         size: "md",
-      },
+      }, */
+      /* TODO: attivare solo se si può crere un ticket senza dispositivo */
     ],
-    [onRefreshClick, isLoading, handleOpenCreateModal]
+    [onRefreshClick, isLoading /* handleOpenCreateModal */]
   );
 
   // 🔗 cliente scelto in header

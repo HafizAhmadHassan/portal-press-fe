@@ -1,58 +1,54 @@
 import type { User } from "@root/pages/admin/core/store/users/user.types";
-import { UserRoleGroupsLabels } from "@utils/constants/userRoles.ts";
+import {
+  UserRoleLabels,
+  UserRoleStyles,
+  UserRoles,
+} from "@utils/constants/userRoles.ts";
 
-export const RoleBadge = ({ user }: { user: User }) => {
-  const hardcodedStyles = {
-    1: {
-      backgroundColor: "#dbeafe",
-      color: "#1e40af",
-      borderColor: "#60a5fa",
-    },
-    2: {
-      backgroundColor: "#fee2e2",
-      color: "#991b1b",
-      borderColor: "#fca5a5",
-    },
-    3: {
-      backgroundColor: "#fef3c7",
-      color: "#92400e",
-      borderColor: "#fcd34d",
-    },
-    ADVANCED_USER: {
-      backgroundColor: "#d1fae5",
-      color: "#065f46",
-      borderColor: "#a7f3d0",
-    },
-  };
+// Fallback style per ruoli non mappati
+const fallbackStyle = {
+  backgroundColor: "#f3f4f6",
+  color: "#374151",
+  borderColor: "#d1d5db",
+};
+
+export const RoleBadge = ({
+  user,
+  customStyle,
+}: {
+  user: User;
+  customStyle?: React.CSSProperties;
+}) => {
+  const roleKey = (user.role || "").toUpperCase().trim();
+  const isKnownRole = (roleKey as keyof typeof UserRoles) in UserRoles;
+  const style = isKnownRole
+    ? UserRoleStyles[roleKey as keyof typeof UserRoleStyles] || fallbackStyle
+    : fallbackStyle;
+  const label = isKnownRole
+    ? UserRoleLabels[roleKey as keyof typeof UserRoleLabels]
+    : user.role || "Unknown";
 
   return (
-    <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
-      {user?.groups?.map((role, index) => {
-        const style =
-          hardcodedStyles[role as keyof typeof hardcodedStyles] ||
-          hardcodedStyles[1];
-
-        // Ensure role is a string and matches the keys of UserRoleGroupsLabels
-        const roleKey = String(role) as keyof typeof UserRoleGroupsLabels;
-
-        return (
-          <span
-            key={`${role}-${index}`}
-            style={{
-              padding: "4px 8px",
-              borderRadius: 6,
-              fontSize: 12,
-              fontWeight: 500,
-              border: `1px solid ${style.borderColor}`,
-              display: "inline-block",
-              backgroundColor: style.backgroundColor,
-              color: style.color,
-            }}
-          >
-            {UserRoleGroupsLabels[roleKey]}
-          </span>
-        );
-      })}
-    </div>
+    <span
+      style={{
+        padding: "4px 10px",
+        borderRadius: 8,
+        fontSize: 12,
+        fontWeight: 600,
+        border: `1px solid ${style.borderColor}`,
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 6,
+        backgroundColor: style.backgroundColor,
+        color: style.color,
+        letterSpacing: 0.3,
+        lineHeight: 1.1,
+        textTransform: "none",
+        ...customStyle,
+      }}
+      title={label}
+    >
+      {label}
+    </span>
   );
 };

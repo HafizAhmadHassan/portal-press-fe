@@ -176,11 +176,12 @@ export const getUsersColumns = ({
       render: (_v, user) => (
         <div style={{ display: "flex", gap: "8px", justifyContent: "center" }}>
           <ModalDetails user={user} />
-          <ModalCreateUpdateUser
+          {/* TODO: riattivate quando vogliamo editeare un utente */}
+          {/* <ModalCreateUpdateUser
             mode="edit"
             initialUser={user}
             onSave={(partial) => onEdit({ ...partial, id: user.id })}
-          />
+          /> */}
           <ModalDeleteConfirm user={user} onConfirm={() => onDelete(user)} />
         </div>
       ),

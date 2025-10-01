@@ -127,6 +127,36 @@ export const getTicketsColumns = ({ onClose }: GetTicketsColumnsOptions) => [
             {date.toLocaleTimeString("it-IT", {
               hour: "2-digit",
               minute: "2-digit",
+              second: "2-digit",
+            })}
+          </div>
+        </div>
+      );
+    },
+  },
+  {
+    key: "close_date",
+    header: "Data Chiusura",
+    type: "custom",
+    width: "200px",
+    sortable: true,
+    render: (_, ticket) => {
+      const raw = ticket.close_date;
+
+      if (!raw)
+        return <span style={{ color: "var(--text-secondary)" }}>N/A</span>;
+
+      const date = new Date(raw);
+      return (
+        <div>
+          <div style={{ fontSize: "14px", color: "var(--text-primary)" }}>
+            {date.toLocaleDateString("it-IT")}
+          </div>
+          <div style={{ fontSize: "12px", color: "var(--text-secondary)" }}>
+            {date.toLocaleTimeString("it-IT", {
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
             })}
           </div>
         </div>
