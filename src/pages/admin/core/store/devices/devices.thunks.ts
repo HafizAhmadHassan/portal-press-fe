@@ -52,7 +52,7 @@ export const loadDevices = createAsyncThunk(
           params.status_Machine_Blocked ??
           currentFilters.status_Machine_Blocked,
         status_READY_D75_3_7:
-          params.status_READY_D75_3_7 ?? currentFilters.tatus_ready_d75_3_7,
+          params.status_READY_D75_3_7 ?? currentFilters.status_READY_D75_3_7,
         sortBy: params.sortBy ?? currentFilters.sortBy,
         sortOrder: (params.sortOrder ?? currentFilters.sortOrder) as
           | "asc"
@@ -133,7 +133,7 @@ export const loadAllDevices = createAsyncThunk(
       const status_Machine_Blocked =
         params?.status_Machine_Blocked ?? currentFilters.status_Machine_Blocked;
       const status_READY_D75_3_7 =
-        params?.status_READY_D75_3_7 ?? currentFilters.tatus_ready_d75_3_7;
+        params?.status_READY_D75_3_7 ?? currentFilters.status_READY_D75_3_7;
 
       const filters: Partial<DevicesQueryParams> = {
         search,

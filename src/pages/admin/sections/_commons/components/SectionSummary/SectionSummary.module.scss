@@ -345,6 +345,51 @@
   }
 }
 
+/* Stato attivo (filtro selezionato) */
+.active {
+  outline: 2px solid color-mix(in srgb, var(--primary-color) 70%, transparent);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--primary-color) 25%, transparent);
+}
+
+/* Stato congelato (asse baseline) */
+.frozen {
+  opacity: 0.72;
+  position: relative;
+}
+.frozen::after {
+  content: "baseline";
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  font-size: 7px;
+  letter-spacing: 0.5px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--bg-secondary) 60%, var(--bg-primary));
+  color: var(--text-secondary);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.totalBadge {
+  background: color-mix(in srgb, var(--primary-color) 35%, var(--bg-secondary));
+  color: var(--primary-dark);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 999px;
+  margin-left: 8px;
+  align-self: center;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 1px solid color-mix(in srgb, var(--primary-color) 40%, transparent);
+}
+
 .statNumber {
   color: var(--card-number);
   font-size: 20px;
@@ -356,6 +401,28 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.statNumberWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  position: relative;
+}
+
+.statSecondaryNumber {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  line-height: 1;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--bg-secondary) 70%, var(--bg-primary));
+  color: var(--text-secondary);
+  border: 1px solid color-mix(in srgb, var(--border-color) 60%, transparent);
+  min-width: 32px;
+  text-align: center;
 }
 
 .statLabel {

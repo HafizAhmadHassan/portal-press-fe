@@ -9,7 +9,7 @@ interface DevicesFilters {
   province: string;
   customer: string;
   status_Machine_Blocked: boolean | null | string;
-  tatus_ready_d75_3_7: boolean | null | string; // mantiene naming esistente (refuso?)
+  status_READY_D75_3_7: boolean | null | string; // corretto naming ready flag
   sortBy: string;
   sortOrder: "asc" | "desc" | string;
 }
@@ -53,7 +53,7 @@ const initialState: DevicesState = {
     province: "",
     customer: "",
     status_Machine_Blocked: null,
-    tatus_ready_d75_3_7: null,
+    status_READY_D75_3_7: null,
     sortBy: "createdAt",
     sortOrder: "desc",
   },
@@ -175,6 +175,24 @@ const devicesSlice = createSlice({
     },
     setSearch: (state, action: PayloadAction<string>) => {
       state.filters.search = action.payload;
+    },
+    setStatusFilter: (state, action: PayloadAction<number | string | null>) => {
+      state.filters.status = action.payload === null ? null : action.payload;
+    },
+    setBlockedFilter: (
+      state,
+      action: PayloadAction<boolean | string | null>
+    ) => {
+      state.filters.status_Machine_Blocked =
+        action.payload === null || action.payload === ""
+          ? null
+          : action.payload;
+    },
+    setReadyFilter: (state, action: PayloadAction<boolean | string | null>) => {
+      state.filters.status_READY_D75_3_7 =
+        action.payload === null || action.payload === ""
+          ? null
+          : action.payload;
     },
 
     // Reset filtri
@@ -320,6 +338,9 @@ export const {
   setPagination,
   setFilters,
   setSearch,
+  setStatusFilter,
+  setBlockedFilter,
+  setReadyFilter,
   resetFilters,
   setLoading,
   setLoadingAll, // NUOVO

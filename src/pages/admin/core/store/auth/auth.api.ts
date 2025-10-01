@@ -15,7 +15,7 @@ const apiHassanUrl =
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${apiHassanUrl}/auth`,
+    baseUrl: `${apiHassanUrl}/api/auth`,
     prepareHeaders: (headers, { getState, endpoint }) => {
       // ✅ Non aggiungere Authorization per login, register e refresh
       if (["login", "register", "refresh"].includes(endpoint)) {
