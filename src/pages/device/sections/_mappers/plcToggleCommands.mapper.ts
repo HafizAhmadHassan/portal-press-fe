@@ -69,7 +69,11 @@ export const TOGGLE_GROUPS: PlcToggleGroup[] = [
     onKey: "basket-download",
     offKey: "basket-download",
     statusMapper: (a) =>
-      a === undefined ? "Stato scarico sconosciuto" : a ? "Scarico attivo" : "Scarico inattivo",
+      a === undefined
+        ? "Stato scarico sconosciuto"
+        : a
+        ? "Scarico attivo"
+        : "Scarico inattivo",
   },
   {
     id: "basket-rotate",
@@ -77,7 +81,11 @@ export const TOGGLE_GROUPS: PlcToggleGroup[] = [
     onKey: "basket-rotate",
     offKey: "basket-rotate",
     statusMapper: (a) =>
-      a === undefined ? "Stato rotazione sconosciuto" : a ? "Rotazione attiva" : "Rotazione inattiva",
+      a === undefined
+        ? "Stato rotazione sconosciuto"
+        : a
+        ? "Rotazione attiva"
+        : "Rotazione inattiva",
   },
   {
     id: "reset-weight",
@@ -85,7 +93,11 @@ export const TOGGLE_GROUPS: PlcToggleGroup[] = [
     onKey: "reset-weight",
     offKey: "reset-weight",
     statusMapper: (a) =>
-      a === undefined ? "Stato azzeramento sconosciuto" : a ? "Peso azzerato" : "Peso non azzerato",
+      a === undefined
+        ? "Stato azzeramento sconosciuto"
+        : a
+        ? "Peso azzerato"
+        : "Peso non azzerato",
   },
   {
     id: "tare",
@@ -93,7 +105,11 @@ export const TOGGLE_GROUPS: PlcToggleGroup[] = [
     onKey: "tare",
     offKey: "tare",
     statusMapper: (a) =>
-      a === undefined ? "Stato tara sconosciuto" : a ? "Tara eseguita" : "Tara non eseguita",
+      a === undefined
+        ? "Stato tara sconosciuto"
+        : a
+        ? "Tara eseguita"
+        : "Tara non eseguita",
   },
   {
     id: "send-data",
@@ -101,7 +117,11 @@ export const TOGGLE_GROUPS: PlcToggleGroup[] = [
     onKey: "send-data",
     offKey: "send-data",
     statusMapper: (a) =>
-      a === undefined ? "Stato invio sconosciuto" : a ? "Dati inviati" : "Pronto invio dati",
+      a === undefined
+        ? "Stato invio sconosciuto"
+        : a
+        ? "Dati inviati"
+        : "Pronto invio dati",
   },
   {
     id: "maintenance",
@@ -109,7 +129,11 @@ export const TOGGLE_GROUPS: PlcToggleGroup[] = [
     onKey: "maintenance",
     offKey: "maintenance",
     statusMapper: (a) =>
-      a === undefined ? "Stato manutenzione sconosciuto" : a ? "In manutenzione" : "Operativo",
+      a === undefined
+        ? "Stato manutenzione sconosciuto"
+        : a
+        ? "In manutenzione"
+        : "Operativo",
   },
   {
     id: "restart",
@@ -117,7 +141,11 @@ export const TOGGLE_GROUPS: PlcToggleGroup[] = [
     onKey: "restart",
     offKey: "restart",
     statusMapper: (a) =>
-      a === undefined ? "Stato riavvio sconosciuto" : a ? "Riavvio effettuato" : "Pronto al riavvio",
+      a === undefined
+        ? "Stato riavvio sconosciuto"
+        : a
+        ? "Riavvio effettuato"
+        : "Pronto al riavvio",
   },
 ];
 
@@ -134,10 +162,13 @@ export interface ToggleComputedState {
  * Compute toggle descriptors from PlcItem. It inspects only the "on" command current value.
  * If that value is truthy we consider toggle active.
  */
-export function getToggleGroupsState(plcItem: PlcItem | undefined): ToggleComputedState[] {
+export function getToggleGroupsState(
+  plcItem: PlcItem | undefined
+): ToggleComputedState[] {
   return TOGGLE_GROUPS.map((g) => {
     const currentOnValue = getCommandCurrentValue(plcItem, g.onKey);
-    const isActive = currentOnValue === undefined ? undefined : Boolean(currentOnValue);
+    const isActive =
+      currentOnValue === undefined ? undefined : Boolean(currentOnValue);
     const statusDescription = g.statusMapper
       ? g.statusMapper(isActive)
       : getCommandStatusDescription(plcItem, g.onKey);

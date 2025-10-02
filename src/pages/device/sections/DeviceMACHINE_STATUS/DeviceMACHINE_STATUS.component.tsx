@@ -36,9 +36,9 @@ export default function DeviceOverview() {
 
   // Hook per gestire i comandi PLC
   const {
-  executeCommand,
-  isCommandExecuting,
-  stats: commandStats,
+    executeCommand,
+    isCommandExecuting,
+    stats: commandStats,
     machineId,
   } = usePlcCommands({
     plcItem: plcDetail,
@@ -81,7 +81,10 @@ export default function DeviceOverview() {
 
   // Converte i comandi PLC in formato CommandItem per il componente UI
   // Compute toggle groups state (tutti i comandi ora espressi come toggle)
-  const toggleGroups = useMemo(() => getToggleGroupsState(plcDetail), [plcDetail]);
+  const toggleGroups = useMemo(
+    () => getToggleGroupsState(plcDetail),
+    [plcDetail]
+  );
 
   // Handler per l'esecuzione dei comandi
   const handleCommand = async (commandKey: string) => {
@@ -133,7 +136,9 @@ export default function DeviceOverview() {
 
       <div className={layoutStyles.twoCol}>
         {toggleGroups.length > 0 && (
-          <div className={[cmdStyles.card, layoutStyles.commandsCard].join(" ")}>            
+          <div
+            className={[cmdStyles.card, layoutStyles.commandsCard].join(" ")}
+          >
             <div className={cmdStyles.cardHeader}>
               <div className={cmdStyles.cardTitle}>
                 <RefreshCw size={16} />
@@ -144,7 +149,9 @@ export default function DeviceOverview() {
                 <span>Attenzione: l’esecuzione è immediata.</span>
               </div>
             </div>
-            <div className={[cmdStyles.cmdGrid, layoutStyles.scrollArea].join(" ")}>              
+            <div
+              className={[cmdStyles.cmdGrid, layoutStyles.scrollArea].join(" ")}
+            >
               {toggleGroups.map((tg) => {
                 const isExecuting =
                   isCommandExecuting(tg.onCommandKey) ||

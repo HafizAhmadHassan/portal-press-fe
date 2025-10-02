@@ -39,7 +39,14 @@ export const ToggleCommandCard: React.FC<ToggleCommandCardProps> = ({
   disabled,
   compact,
 }) => {
-  const { label, isActive, isExecuting, onCommandKey, offCommandKey, statusDescription } = descriptor;
+  const {
+    label,
+    isActive,
+    isExecuting,
+    onCommandKey,
+    offCommandKey,
+    statusDescription,
+  } = descriptor;
 
   const nextActionIsOn = !isActive; // if currently not active we will send the ON command
   const targetCommandKey = nextActionIsOn ? onCommandKey : offCommandKey;
@@ -81,7 +88,11 @@ export const ToggleCommandCard: React.FC<ToggleCommandCardProps> = ({
         disabled={disabled || isExecuting}
         aria-label={nextActionIsOn ? `Attiva ${label}` : `Disattiva ${label}`}
       >
-        {isExecuting ? <Loader2 size={18} className={styles.spin} /> : <Power size={18} />}
+        {isExecuting ? (
+          <Loader2 size={18} className={styles.spin} />
+        ) : (
+          <Power size={18} />
+        )}
       </button>
       <div className={styles.meta}>
         <div className={styles.title}>{label}</div>
@@ -96,7 +107,10 @@ export const ToggleCommandCard: React.FC<ToggleCommandCardProps> = ({
           )}
         </div>
       </div>
-      <div className={styles.actionChip} data-on={nextActionIsOn ? "true" : "false"}>
+      <div
+        className={styles.actionChip}
+        data-on={nextActionIsOn ? "true" : "false"}
+      >
         {isExecuting ? "..." : nextActionIsOn ? "ON" : "OFF"}
       </div>
     </div>

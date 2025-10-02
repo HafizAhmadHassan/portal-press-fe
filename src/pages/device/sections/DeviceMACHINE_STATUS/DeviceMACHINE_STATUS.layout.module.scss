@@ -8,10 +8,18 @@
 }
 
 @media (max-width: 1100px) {
-  .twoCol { grid-template-columns: 1fr; }
+  .twoCol {
+    grid-template-columns: 1fr;
+  }
 }
 
-.commandsCard { height:100%; }
+.commandsCard {
+  height: 100%;
+}
 
 /* allow command grid to scroll if very tall while keeping status visible */
-.scrollArea { max-height: 680px; overflow-y: auto; padding-right: .35rem; }
+.scrollArea {
+  max-height: 680px;
+  overflow-y: auto;
+  padding-right: 0.35rem;
+}
