@@ -4,13 +4,15 @@ import { useParams } from "react-router-dom";
 
 import DeviceHeader from "./_components/DeviceHeader/DeviceHeader.component";
 import styles from "./DeviceMACHINE_STATUS.module.scss";
-import type { CommandItem } from "./_components/DeviceCommands/DeviceCommands.component";
 import EmptyState from "./_components/DeviceEmptyState/DeviceEmptyState.component";
-import DeviceCommands from "./_components/DeviceCommands/DeviceCommands.component";
 import DeviceStatus from "./_components/DeviceStatus/Devicestatus.component";
 import { useGetPlcByIdQuery } from "@store_device/plc/plc.api";
 import type { PlcItem } from "@store_device/plc/plc.types";
-import { getAllPlcCommands } from "../_mappers/plcCommandsMapper.mapper";
+import { getToggleGroupsState } from "../_mappers/plcToggleCommands.mapper";
+import { ToggleCommandCard } from "./_components/DeviceCommands/_components/ToggleCommandCard/ToggleCommandCard.component";
+import cmdStyles from "./_components/DeviceCommands/DeviceCommands.module.scss";
+import { RefreshCw, AlertTriangle } from "lucide-react";
+import layoutStyles from "./DeviceMACHINE_STATUS.layout.module.scss";
 import { getCriticalStatusItems } from "../_mappers/plcStatusMapper.mapper";
 import { usePlcCommands } from "../_hooks/usePlcCommands";
 
@@ -34,10 +36,9 @@ export default function DeviceOverview() {
 
   // Hook per gestire i comandi PLC
   const {
-    executeCommand,
-    isCommandExecuting,
-    commandsState,
-    stats: commandStats,
+  executeCommand,
+  isCommandExecuting,
+  stats: commandStats,
     machineId,
   } = usePlcCommands({
     plcItem: plcDetail,
@@ -79,15 +80,8 @@ export default function DeviceOverview() {
   }, [plcDetail]);
 
   // Converte i comandi PLC in formato CommandItem per il componente UI
-  const commands: CommandItem[] = useMemo(() => {
-    return getAllPlcCommands().map((command) => ({
-      key: command.key,
-      label: command.label,
-      // Aggiungi indicatori di stato
-      disabled: !commandsState.find((c) => c.key === command.key)?.isAvailable,
-      loading: isCommandExecuting(command.key),
-    }));
-  }, [commandsState, isCommandExecuting]);
+  // Compute toggle groups state (tutti i comandi ora espressi come toggle)
+  const toggleGroups = useMemo(() => getToggleGroupsState(plcDetail), [plcDetail]);
 
   // Handler per l'esecuzione dei comandi
   const handleCommand = async (commandKey: string) => {
@@ -137,9 +131,51 @@ export default function DeviceOverview() {
         /* isLoading={isLoading} */
       />
 
-      <DeviceCommands commands={commands} onCommand={handleCommand} />
+      <div className={layoutStyles.twoCol}>
+        {toggleGroups.length > 0 && (
+          <div className={[cmdStyles.card, layoutStyles.commandsCard].join(" ")}>            
+            <div className={cmdStyles.cardHeader}>
+              <div className={cmdStyles.cardTitle}>
+                <RefreshCw size={16} />
+                <span>Comandi</span>
+              </div>
+              <div className={cmdStyles.cardInfo}>
+                <AlertTriangle size={14} />
+                <span>Attenzione: l’esecuzione è immediata.</span>
+              </div>
+            </div>
+            <div className={[cmdStyles.cmdGrid, layoutStyles.scrollArea].join(" ")}>              
+              {toggleGroups.map((tg) => {
+                const isExecuting =
+                  isCommandExecuting(tg.onCommandKey) ||
+                  (tg.offCommandKey !== tg.onCommandKey &&
+                    isCommandExecuting(tg.offCommandKey));
+                return (
+                  <ToggleCommandCard
+                    compact
+                    key={tg.id}
+                    descriptor={{
+                      id: tg.id,
+                      label: tg.label,
+                      isActive: tg.isActive,
+                      isExecuting,
+                      onCommandKey: tg.onCommandKey,
+                      offCommandKey: tg.offCommandKey,
+                      statusDescription: tg.statusDescription,
+                    }}
+                    execute={async (k) => {
+                      await handleCommand(k);
+                      return true;
+                    }}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        )}
 
-      <DeviceStatus statusList={statusList} isLoading={isLoading} />
+        <DeviceStatus statusList={statusList} isLoading={isLoading} />
+      </div>
     </section>
   );
 }

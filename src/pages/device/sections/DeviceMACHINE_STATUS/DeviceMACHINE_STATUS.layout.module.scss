@@ -1,0 +1,17 @@
+.twoCol {
+  display: grid;
+  grid-template-columns: minmax(420px, 520px) 1fr;
+  align-items: start;
+  gap: 1.25rem;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+@media (max-width: 1100px) {
+  .twoCol { grid-template-columns: 1fr; }
+}
+
+.commandsCard { height:100%; }
+
+/* allow command grid to scroll if very tall while keeping status visible */
+.scrollArea { max-height: 680px; overflow-y: auto; padding-right: .35rem; }

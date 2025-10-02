@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "../styles/Actions.module.scss";
 import { Moon, Sun } from "lucide-react";
 import { useUi } from "@store_admin/ui/useUi";
@@ -143,6 +144,16 @@ export default function UserActions({
     onClickLog?.(log);
   };
 
+  const navigate = useNavigate();
+  const handleOpenInbox = () => {
+    // Naviga alla sezione logs amministrazione
+    navigate("/admin/logs");
+    // Chiude il dropdown
+    setOpen(false);
+    // Callback esterna opzionale
+    onOpenInbox?.();
+  };
+
   return (
     <div className={styles.actions}>
       <button
@@ -177,7 +188,7 @@ export default function UserActions({
         logs={dataset}
         // loading={loadingLogs || isFetchingLogs}
         onMarkAllRead={handleMarkAllRead}
-        onOpenInbox={onOpenInbox}
+        onOpenInbox={handleOpenInbox}
         onClickItem={handleClickLog}
         title="Log di sistema"
         placement="bottom"

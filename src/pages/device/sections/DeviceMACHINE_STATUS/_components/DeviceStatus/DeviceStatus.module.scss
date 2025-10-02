@@ -1,27 +1,15 @@
 /* Solo specifici di Status. La struttura card è nel componente Card. */
 
-.cardBody {
-  /* opzionale: padding personalizzato */
-}
+/* .cardBody removed empty block - add custom padding here if needed */
 
 .statGrid {
-  --col: 4;
   display: grid;
   gap: 0.75rem;
   padding: 0.9rem;
-  grid-template-columns: repeat(var(--col), minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 
-  @media (max-width: 1280px) {
-    --col: 4;
-  }
-  @media (max-width: 1024px) {
-    --col: 3;
-  }
-  @media (max-width: 768px) {
-    --col: 2;
-  }
-  @media (max-width: 520px) {
-    --col: 1;
+  @media (max-width: 560px) {
+    grid-template-columns: 1fr; /* mobile strettissimo */
   }
 }
 
