@@ -186,3 +186,30 @@ export default function DeviceOverview() {
     </section>
   );
 }
+
+/**
+
+
+#!/bin/bash
+
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+BACKUP_DIR="/tmp/backups"
+DB_NAME="production_db"
+CLOUD_BUCKET="s3://company-backups/production"
+
+# Backup database
+pg_dump $DB_NAME | gzip > $BACKUP_DIR/db_$TIMESTAMP.sql.gz
+
+# Crittografia
+gpg --encrypt --recipient backup@company.com $BACKUP_DIR/db_$TIMESTAMP.sql.gz
+
+# Upload su cloud
+aws s3 cp $BACKUP_DIR/db_$TIMESTAMP.sql.gz.gpg $CLOUD_BUCKET/
+
+# Pulizia locale
+find $BACKUP_DIR -name "*.sql.gz*" -mtime +7 -delete
+
+
+
+
+*/
