@@ -31,7 +31,7 @@ const devicesListHeaderBtns = (
   isMap: boolean,
   createNewDevice: (deviceData: Partial<Device>) => Promise<void>
 ): ActionItem[] => [
-  {
+  /* {
     onClick: onRefreshClick,
     variant: "outline" as const,
     color: "secondary" as const,
@@ -39,7 +39,7 @@ const devicesListHeaderBtns = (
     icon: RefreshIcon,
     label: "Aggiorna",
     disabled: isLoading,
-  },
+  }, */
   {
     component: (
       <ModalCreateUpdateDevice

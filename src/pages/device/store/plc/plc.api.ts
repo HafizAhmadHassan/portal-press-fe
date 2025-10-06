@@ -40,7 +40,6 @@ export const plcWriteApi = apiSlice.injectEndpoints({
         body,
       }),
       invalidatesTags: [{ type: "LIST" as const, id: "LIST" }],
-      // Ottimistic update opzionale
       async onQueryStarted(args, { queryFulfilled }) {
         console.log("PLC Write command sent:", args);
 
