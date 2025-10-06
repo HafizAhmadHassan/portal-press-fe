@@ -92,10 +92,10 @@ export const getLogsColumns = (options?: {
       render: (_v, row) => (
         <div>
           <div style={{ fontWeight: 600, fontSize: 14, color: tPrimary }}>
-            {row.gps.address || "—"}
+            {(row as any).gps.address || "—"}
           </div>
           <div style={{ fontSize: 12, color: tSecondary }}>
-            {row.gps.municipility || "—"}
+            {(row as any).gps.municipility || "—"}
           </div>
         </div>
       ),

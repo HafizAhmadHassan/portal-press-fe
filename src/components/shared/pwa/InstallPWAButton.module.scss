@@ -1,0 +1,24 @@
+.installBtn {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  background: linear-gradient(135deg, #0a182e, #143256);
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.4);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.3s;
+  z-index: 9999;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px -4px rgba(0, 0, 0, 0.5);
+  }
+  &:active {
+    transform: translateY(0);
+  }
+}

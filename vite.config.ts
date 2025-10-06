@@ -1,10 +1,22 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { VitePWA } from "vite-plugin-pwa";
 import * as path from "path";
 
 export default defineConfig(() => {
   return {
-    plugins: [react()],
+    plugins: [
+      react(),
+      VitePWA({
+        registerType: "autoUpdate",
+        devOptions: { enabled: true },
+        manifest: false, // Usa il manifest in public/manifest.webmanifest
+        workbox: {
+          navigateFallback: "/index.html",
+          globPatterns: ["**/*.{js,css,html,ico,png,svg,json}"],
+        },
+      }),
+    ],
 
     resolve: {
       alias: {

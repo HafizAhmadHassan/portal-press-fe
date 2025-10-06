@@ -32,7 +32,6 @@ export const ModalRiActiveDevice: React.FC<Props> = ({
 
     await writePlc(payload).unwrap();
 
-    // dopo il POST, rinfresca tutto tramite callback passata dalla pagina
     if (onConfirm) await onConfirm(device);
   };
 
