@@ -17,6 +17,8 @@ import ProtectedRoute from "@root/components/shared/PretectedRoutes";
 import LogsListSections from "@root/pages/admin/sections/logsList/Logs-list.section";
 import AnalyticsOverview from "@root/pages/admin/sections/analytics/AnalyticsOverview.sections";
 // ⚠️ Attenzione al path/typo: assicurati che il file si chiami "ProtectedRoutes"
+// Dev debug page
+import NotificationDebug from "@root/pages/_debug/NotificationDebug.page";
 
 const AdminRoutes: RouteObject[] = [
   {
@@ -27,6 +29,17 @@ const AdminRoutes: RouteObject[] = [
       </ProtectedRoute>
     ),
     children: [
+      {
+        // /admin/debug/notifications (dev)
+        path: "debug/notifications",
+        element: import.meta.env.DEV ? (
+          <NotificationDebug />
+        ) : (
+          <ProtectedRoute>
+            <NotificationDebug />
+          </ProtectedRoute>
+        ),
+      },
       {
         // /admin
         index: true,

@@ -43,7 +43,8 @@
       "@store_device/*": ["src/pages/device/store/*"],
       "@sections_device/*": ["src/pages/device/sections/*"],
       "@utils/*": ["src/utils/*"],
-      "@hooks/*": ["src/hooks/*"]
+      "@hooks/*": ["src/hooks/*"],
+      "@/lib/*": ["src/lib/*"]
     }
   },
   "include": ["src", "environment.ts"]

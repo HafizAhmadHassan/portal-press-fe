@@ -8,7 +8,8 @@ import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import { Provider } from "react-redux";
 import { store } from "./store.ts";
 import { registerSW } from "virtual:pwa-register";
-import { ToastProvider } from "@shared/toast/Toast.context.tsx";
+import { ToastProvider, ToastContainer } from "@/lib/toast";
+import "@/lib/toast/toast.scss";
 import "./pages/admin/styles/globals.scss";
 /* import { TestAuth } from "./TestAuth.tsx"; */
 
@@ -31,6 +32,7 @@ createRoot(document.getElementById("root")!).render(
     <Provider store={store}>
       <ToastProvider>
         <App />
+        <ToastContainer />
       </ToastProvider>
       {/* <TestAuth /> */}
     </Provider>

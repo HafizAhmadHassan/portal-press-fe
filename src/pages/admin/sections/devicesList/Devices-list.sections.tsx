@@ -476,7 +476,7 @@ export const DevicesListSections: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => {
-                        const next = isActive ? null : waste;
+                        const next = isActive ? null : waste.toLowerCase();
                         dispatch(setWasteFilter(next));
                         // reload data when waste changes
                         dispatch(loadDevices({ page: 1 }));
