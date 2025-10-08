@@ -1,0 +1,52 @@
+.totalWasteBar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: color-mix(in srgb, var(--bg-secondary) 50%, var(--bg-primary));
+  border-radius: var(--radius-md);
+  margin-bottom: 1rem;
+}
+
+.totalWasteLabel {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.totalWasteChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.totalWasteChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--radius-sm);
+  border: 2px solid;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  strong {
+    font-weight: 600;
+  }
+
+  .count {
+    font-weight: 700;
+    font-size: 0.9375rem;
+  }
+}
+
+.activeWasteChip {
+  font-weight: 700;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+}
