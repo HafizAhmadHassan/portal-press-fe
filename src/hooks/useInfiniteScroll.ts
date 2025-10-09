@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
-import type { Device, FiltersType } from "@store_admin/devices/devices.types";
+import type { Device } from "@store_admin/devices/devices.types";
 import { useDevices } from "@store_admin/devices/hooks/useDevices.ts";
 
 type RootRef = React.RefObject<Element> | null;
@@ -61,7 +61,7 @@ export function useInfiniteDevices({
   }, [key, stringifiedFilters]);
 
   // query params per la pagina corrente
-  const queryParams: Partial<FiltersType> = useMemo(
+  const queryParams: Partial<any> = useMemo(
     () => ({
       ...memoizedFilters,
       sortBy,
