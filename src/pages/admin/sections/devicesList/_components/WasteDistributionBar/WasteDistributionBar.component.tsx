@@ -24,6 +24,12 @@ export const WasteDistributionBar: React.FC<Props> = ({
     return null;
   }
 
+  const removeWasteFromURL = () => {
+    const url = new URL(window.location.href);
+    url.searchParams.delete("waste");
+    window.history.replaceState({}, "", url.toString());
+  };
+
   return (
     <div className={styles.totalWasteBar}>
       <div className={styles.totalWasteLabel}>
@@ -61,6 +67,21 @@ export const WasteDistributionBar: React.FC<Props> = ({
           );
         })}
       </div>
+      {activeWasteFilter && (
+        <div className={styles.resetButtonContainer}>
+          <button
+            type="button"
+            onClick={() => {
+              console.log("reset waste filter");
+              removeWasteFromURL();
+              onWasteClick(null, false);
+            }}
+            className={styles.resetButton}
+          >
+            Reset Filtri
+          </button>
+        </div>
+      )}
     </div>
   );
 };

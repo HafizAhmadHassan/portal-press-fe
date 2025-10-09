@@ -66,8 +66,8 @@ export function useDevicesWasteFilter(
     return Object.values(displayedWasteDistribution).reduce((a, b) => a + b, 0);
   }, [displayedWasteDistribution]);
 
-  const handleWasteFilterToggle = (waste: string, isActive: boolean) => {
-    const next = isActive ? null : waste.toLowerCase();
+  const handleWasteFilterToggle = (waste: string | null, isActive: boolean) => {
+    const next = isActive || !waste ? null : waste.toLowerCase();
     dispatch(setWasteFilter(next));
     // reload data when waste changes
     dispatch(loadDevices({ page: 1 }));

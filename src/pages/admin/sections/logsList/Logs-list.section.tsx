@@ -190,7 +190,7 @@ export const LogsListSections: React.FC = () => {
             onExportClick,
             Download
           ),
-          toggleBtn,
+          /* toggleBtn, */
         ]}
       />
 
