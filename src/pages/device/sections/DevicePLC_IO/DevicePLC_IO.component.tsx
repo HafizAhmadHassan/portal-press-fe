@@ -53,9 +53,18 @@ export default function DevicePLC_IO() {
           typeof value === "object" &&
           "label" in value &&
           "value" in value &&
-          "unit" in value
+          "unit" in value &&
+          typeof (value as any).label === "string"
         ) {
-          tableRows[key] = value;
+          tableRows[key] = value as {
+            label: string;
+            value: string | number | boolean;
+            type?: "number" | "boolean" | "text" | "multiline" | "select";
+            unit?: string;
+            placeholder?: string;
+            options?: { label: string; value: string }[];
+            validate?: (v: number) => string;
+          };
         }
       });
       setRows(tableRows);

@@ -77,7 +77,7 @@ export const {
   useSearchPlcQuery, // presente solo se enableSearch=true
   useGetPlcStatsQuery, // presente solo se enableStats=true
   useGetPlcIoQuery,
-} = plcApi;
+} = plcApi as any;
 
 // ✅ Hook per PLC Write dal secondo API slice
 export const { useWritePlcMutation } = plcWriteApi;
