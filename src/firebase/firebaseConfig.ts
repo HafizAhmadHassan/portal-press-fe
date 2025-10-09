@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getMessaging, getToken, onMessage } from "firebase/messaging";
+// import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBW0WrwAEX3jHGr3qvnGyUJtFsmVJa2dmg",
@@ -11,7 +11,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-export const messaging = getMessaging(app);
+// const messaging = getMessaging(app);
 
 export const requestNotificationPermission = async () => {
   try {
@@ -44,13 +44,13 @@ export const requestNotificationPermission = async () => {
         }
       }
 
-      const token = await getToken(messaging, {
-        vapidKey:
-          "BMBPYrjI6YS0t4rtvCVhph_u4h3KE_f2YRChRYHQ-73-pmni6JZK4YgLfKRy_F4I04CyfBvzRhgrxwncmFqeDcs",
-        serviceWorkerRegistration: registration,
-      });
-      console.log("🔑 Token FCM:", token);
-      return token;
+      // const token = await getToken(messaging, {
+      //   vapidKey:
+      //     "BMBPYrjI6YS0t4rtvCVhph_u4h3KE_f2YRChRYHQ-73-pmni6JZK4YgLfKRy_F4I04CyfBvzRhgrxwncmFqeDcs",
+      //   serviceWorkerRegistration: registration,
+      // });
+      // console.log("🔑 Token FCM:", token);
+      return null;
     } else {
       console.warn("⚠️ Notifiche non autorizzate");
       return null;
@@ -79,9 +79,9 @@ export const registerFcmServiceWorker =
     return null;
   };
 
-export const onMessageListener = () =>
-  new Promise((resolve) => {
-    onMessage(messaging, (payload) => {
-      resolve(payload);
-    });
-  });
+// export const onMessageListener = () =>
+//   new Promise((resolve) => {
+//     onMessage(messaging, (payload) => {
+//       resolve(payload);
+//     });
+//   });

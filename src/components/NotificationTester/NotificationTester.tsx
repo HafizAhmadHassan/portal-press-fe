@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import {
   requestNotificationPermission,
-  onMessageListener,
+  // onMessageListener,
 } from "../../firebase/firebaseConfig";
 import "./NotificationTester.module.scss";
 
@@ -13,7 +13,7 @@ export const NotificationTester: React.FC<NotificationTesterProps> = () => {
   const [token, setToken] = useState<string>("");
   const [permission, setPermission] =
     useState<NotificationPermission>("default");
-  const [lastMessage, setLastMessage] = useState<unknown>(null);
+  // const [lastMessage, setLastMessage] = useState<unknown>(null);
   const [isSupported, setIsSupported] = useState<boolean>(false);
 
   useEffect(() => {
@@ -22,30 +22,30 @@ export const NotificationTester: React.FC<NotificationTesterProps> = () => {
     setPermission(Notification.permission);
 
     // Ascolta i messaggi in arrivo
-    onMessageListener()
-      .then((payload) => {
-        console.log("📱 Messaggio ricevuto:", payload);
-        setLastMessage(payload);
+    // onMessageListener()
+    //   .then((payload) => {
+    //     console.log("📱 Messaggio ricevuto:", payload);
+    //     setLastMessage(payload);
 
-        // Mostra notifica se l'app è in primo piano
-        if (
-          Notification.permission === "granted" &&
-          typeof payload === "object" &&
-          payload !== null
-        ) {
-          const message = payload as {
-            notification?: { title?: string; body?: string };
-          };
-          const baseUrl = window.location.origin;
+    //     // Mostra notifica se l'app è in primo piano
+    //     if (
+    //       Notification.permission === "granted" &&
+    //       typeof payload === "object" &&
+    //       payload !== null
+    //     ) {
+    //       const message = payload as {
+    //         notification?: { title?: string; body?: string };
+    //       };
+    //       const baseUrl = window.location.origin;
 
-          new Notification(message.notification?.title || "Nuova notifica", {
-            body: message.notification?.body,
-            icon: `${baseUrl}/assets/icons/icon-192.png`,
-            badge: `${baseUrl}/assets/icons/icon-96.png`,
-          });
-        }
-      })
-      .catch((err) => console.log("❌ Errore listener messaggi:", err));
+    //       new Notification(message.notification?.title || "Nuova notifica", {
+    //         body: message.notification?.body,
+    //         icon: `${baseUrl}/assets/icons/icon-192.png`,
+    //         badge: `${baseUrl}/assets/icons/icon-96.png`,
+    //       });
+    //     }
+    //   })
+    //   .catch((err) => console.log("❌ Errore listener messaggi:", err));
   }, []);
 
   const handleRequestPermission = async () => {
@@ -186,14 +186,14 @@ export const NotificationTester: React.FC<NotificationTesterProps> = () => {
         </div>
       )}
 
-      {lastMessage && (
+      {/* {lastMessage && (
         <div className="notification-tester__last-message">
           <h3>📱 Ultimo Messaggio Ricevuto</h3>
           <pre className="message-display">
             {JSON.stringify(lastMessage, null, 2)}
           </pre>
         </div>
-      )}
+      )} */}
 
       <div className="notification-tester__info">
         <h3>ℹ️ Informazioni</h3>

@@ -5,52 +5,52 @@
 
 // Import Firebase scripts for messaging
 // Note: We use compat importScripts inside the SW context.
-importScripts('https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js');
-importScripts('https://www.gstatic.com/firebasejs/10.7.0/firebase-messaging-compat.js');
+// importScripts('https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js');
+// importScripts('https://www.gstatic.com/firebasejs/10.7.0/firebase-messaging-compat.js');
 
 // Firebase config must match the app's config
-const firebaseConfig = {
-  apiKey: "AIzaSyBW0WrwAEX3jHGr3qvnGyUJtFsmVJa2dmg",
-  authDomain: "testpress-f73d9.firebaseapp.com",
-  projectId: "testpress-f73d9",
-  storageBucket: "testpress-f73d9.firebasestorage.app",
-  messagingSenderId: "9991499805",
-  appId: "1:9991499805:web:68a68fa946c3e4648556f4",
-};
+// const firebaseConfig = {
+//   apiKey: "AIzaSyBW0WrwAEX3jHGr3qvnGyUJtFsmVJa2dmg",
+//   authDomain: "testpress-f73d9.firebaseapp.com",
+//   projectId: "testpress-f73d9",
+//   storageBucket: "testpress-f73d9.firebasestorage.app",
+//   messagingSenderId: "9991499805",
+//   appId: "1:9991499805:web:68a68fa946c3e4648556f4",
+// };
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const messaging = firebase.messaging();
+// firebase.initializeApp(firebaseConfig);
+// const messaging = firebase.messaging();
 
 // Precache manifest will be injected here by Vite PWA
 // In development, this might be empty, in production it will contain the app assets
 self.__WB_MANIFEST;
 
 // Handle background messages from Firebase
-messaging.onBackgroundMessage((payload) => {
-  console.log('📱 Messaggio ricevuto in background:', payload);
+// messaging.onBackgroundMessage((payload) => {
+//   console.log('📱 Messaggio ricevuto in background:', payload);
 
-  const notificationTitle = payload.notification?.title || 'Port Press';
-  const notificationOptions = {
-    body: payload.notification?.body || 'Hai una nuova notifica',
-    icon: payload.notification?.icon || '/assets/icons/icon-192.png',
-    badge: '/assets/icons/icon-72.png',
-    tag: payload.data?.tag || 'default',
-    data: payload.data,
-    actions: [
-      {
-        action: 'open',
-        title: 'Apri App'
-      },
-      {
-        action: 'close',
-        title: 'Chiudi'
-      }
-    ]
-  };
+//   const notificationTitle = payload.notification?.title || 'Port Press';
+//   const notificationOptions = {
+//     body: payload.notification?.body || 'Hai una nuova notifica',
+//     icon: payload.notification?.icon || '/assets/icons/icon-192.png',
+//     badge: '/assets/icons/icon-72.png',
+//     tag: payload.data?.tag || 'default',
+//     data: payload.data,
+//     actions: [
+//       {
+//         action: 'open',
+//         title: 'Apri App'
+//       },
+//       {
+//         action: 'close',
+//         title: 'Chiudi'
+//       }
+//     ]
+//   };
 
-  self.registration.showNotification(notificationTitle, notificationOptions);
-});
+//   self.registration.showNotification(notificationTitle, notificationOptions);
+// });
 
 // Handle notification clicks
 self.addEventListener('notificationclick', (event) => {

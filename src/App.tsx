@@ -1,16 +1,15 @@
-import { useEffect } from "react";
+/* import { useEffect } from "react"; */
 import { RouterProvider } from "react-router-dom";
 import { router } from "./routes/AppRoutes.tsx";
 import "./App.module.scss";
 import { InstallPWAButton } from "@components/shared/pwa/InstallPWAButton";
-import { onMessageListener } from "./firebase/firebaseConfig";
-import { useToast } from "@/lib/toast";
+/* import { onMessageListener } from "./firebase/firebaseConfig"; */
+/* import { useToast } from "@/lib/toast"; */
 
 function App() {
-  const toast = useToast();
+  /* const toast = useToast(); */
 
-  useEffect(() => {
-    // ✅ Gestisci messaggi in foreground con Toast invece di alert
+  /* useEffect(() => {
     onMessageListener().then((payload: unknown) => {
       console.log("🔔 Notifica ricevuta in foreground:", payload);
 
@@ -31,7 +30,7 @@ function App() {
       }
     });
   }, [toast]);
-
+ */
   return (
     <>
       <RouterProvider router={router} />
