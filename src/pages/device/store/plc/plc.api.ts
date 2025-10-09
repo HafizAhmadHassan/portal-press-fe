@@ -6,12 +6,17 @@ import type {
   PlcResponse,
   PlcWriteRequest,
   PlcWriteResponse,
+  PlcIo,
 } from "./plc.types";
 import { createCrudEndpoints } from "@root/pages/admin/core/store/api.factory";
 
 export const plcApi = apiSlice.injectEndpoints({
-  endpoints: (builder) =>
-    createCrudEndpoints<PlcItem, PlcQueryParams, PlcResponse>(builder, {
+  endpoints: (builder) => {
+    const crudEndpoints = createCrudEndpoints<
+      PlcItem,
+      PlcQueryParams,
+      PlcResponse
+    >(builder, {
       entity: "Plc",
       baseUrl: "plc/",
       idTag: "Plc",
@@ -26,7 +31,14 @@ export const plcApi = apiSlice.injectEndpoints({
         }
         return res as PlcResponse;
       },
-    }),
+    });
+    return {
+      ...crudEndpoints,
+      getPlcIo: builder.query<PlcIo, number>({
+        query: (id) => `plcio/${id}/`,
+      }),
+    };
+  },
   overrideExisting: false,
 });
 
@@ -64,6 +76,7 @@ export const {
   useDeletePlcMutation,
   useSearchPlcQuery, // presente solo se enableSearch=true
   useGetPlcStatsQuery, // presente solo se enableStats=true
+  useGetPlcIoQuery,
 } = plcApi;
 
 // ✅ Hook per PLC Write dal secondo API slice

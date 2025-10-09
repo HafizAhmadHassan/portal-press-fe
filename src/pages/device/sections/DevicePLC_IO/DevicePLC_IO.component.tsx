@@ -4,8 +4,8 @@ import styles from "../_styles/DevicesPLC.module.scss";
 
 import { SimpleButton } from "@root/components/shared/simple-btn/SimpleButton.component";
 import {
-  useGetPlcByIdQuery,
   useUpdatePlcMutation,
+  useGetPlcIoQuery,
 } from "@store_device/plc/plc.api";
 import type { TableKeyValueObject } from "@root/components/shared/table-key-value/TableKeyValue2.component";
 import TableKeyValue2 from "@root/components/shared/table-key-value/TableKeyValue2.component";
@@ -28,34 +28,43 @@ export default function DevicePLC_IO() {
 
   // RTK Query
   const currentId = deviceId ? Number(deviceId) : undefined;
+  console.log("DevicePLC_IO: deviceId=", deviceId, "currentId=", currentId);
+
   const {
-    data: plcDetail,
-    isLoading,
-    isFetching,
-    error,
-    refetch,
-  } = useGetPlcByIdQuery(currentId!, { skip: !currentId });
+    data: plcIoResponse,
+    isLoading: isLoadingPlcIo,
+    error: errorPlcIo,
+  } = useGetPlcIoQuery(currentId!, { skip: !currentId });
 
-  const [updatePlc] = useUpdatePlcMutation();
-
-  const plcIo = (plcDetail as any)?.plc_io ?? null;
-
-  // inizializza righe quando cambia il dato
   useEffect(() => {
-    if (isLoading || isFetching) return;
-
-    if (error) {
-      console.error("[DevicePLC_IO] errore plc/:id →", error);
+    if (isLoadingPlcIo) return;
+    if (errorPlcIo) {
+      console.error("[DevicePLC_IO] errore plc_io/:id →", errorPlcIo);
       setRows({});
       setOriginal({});
       return;
     }
-
-    if (plcIo) {
-      setRows(plcIo);
-      setOriginal(JSON.parse(JSON.stringify(plcIo)));
+    if (plcIoResponse) {
+      // Transform PlcIo to TableKeyValueObject
+      const tableRows: TableKeyValueObject = {};
+      Object.entries(plcIoResponse.plc_io).forEach(([key, value]) => {
+        if (
+          value !== null &&
+          typeof value === "object" &&
+          "label" in value &&
+          "value" in value &&
+          "unit" in value
+        ) {
+          tableRows[key] = value;
+        }
+      });
+      setRows(tableRows);
+      setOriginal(JSON.parse(JSON.stringify(tableRows)));
+      console.log("[DevicePLC_IO] plc_io →", plcIoResponse, tableRows);
     }
-  }, [plcIo, isLoading, isFetching, error]);
+  }, [plcIoResponse, isLoadingPlcIo, errorPlcIo]);
+
+  const [updatePlc] = useUpdatePlcMutation();
 
   const dirty = useMemo(
     () => JSON.stringify(rows) !== JSON.stringify(original),
@@ -75,14 +84,13 @@ export default function DevicePLC_IO() {
 
         setOriginal(JSON.parse(JSON.stringify(updated)));
         setRows(updated);
-        refetch();
       } catch (error) {
         console.error("[DevicePLC_IO] saveAll error:", error);
       } finally {
         setSaving(false);
       }
     },
-    [currentId, updatePlc, refetch]
+    [currentId, updatePlc]
   );
 
   const cancelAll = useCallback(() => {
@@ -105,17 +113,15 @@ export default function DevicePLC_IO() {
           ...prev,
           [rowKey]: JSON.parse(JSON.stringify(rowData)),
         }));
-
-        refetch();
       } catch (error) {
         console.error("[DevicePLC_IO] saveRow error:", error);
       }
     },
-    [currentId, rows, updatePlc, refetch]
+    [currentId, rows, updatePlc]
   );
 
   const cancelRow = useCallback(
-    (rowKey: string, _row: TableKeyValueObject[string]) => {
+    (rowKey: string) => {
       setRows((prev) => ({
         ...prev,
         [rowKey]: JSON.parse(JSON.stringify(original[rowKey])),
@@ -141,7 +147,7 @@ export default function DevicePLC_IO() {
           onSave={saveAll}
           onCancel={cancelAll}
           saving={saving}
-          loading={isLoading || isFetching}
+          loading={isLoadingPlcIo}
           compact
           editable={isEdit}
           showActionsColumn
