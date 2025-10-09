@@ -75,10 +75,10 @@ export const getGroupedLogsOuterColumns = (): Array<
         return (
           <div>
             <div style={{ fontSize: "14px", color: "var(--text-primary)" }}>
-              BTE: {row.info.matricola_Bte || "N/A"}
+              BTE: {(row.info as any).matricola_Bte || "N/A"}
             </div>
             <div style={{ fontSize: "14px", color: "var(--text-primary)" }}>
-              KGN: {row.info.matricola_Kgn || "N/A"}
+              KGN: {(row.info as any).matricola_Kgn || "N/A"}
             </div>
           </div>
         );
@@ -93,10 +93,10 @@ export const getGroupedLogsOuterColumns = (): Array<
       render: (_v, row) => (
         <div>
           <div style={{ fontWeight: 600, fontSize: 14, color: tPrimary }}>
-            {row.info.gps.address || "—"}
+            {(row.info as any).gps.address || "—"}
           </div>
           <div style={{ fontSize: 12, color: tSecondary }}>
-            {row.info.gps.municipility || "—"}
+            {(row.info as any).gps.municipility || "—"}
           </div>
         </div>
       ),

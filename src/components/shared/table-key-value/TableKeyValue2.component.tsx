@@ -174,6 +174,7 @@ export default function TableKeyValue2({
               </div>
             )}
           </div>
+          <div className={styles.colUnit}>Unit</div>
           {hasActions && editable && (
             <div className={styles.colActions}>Azioni</div>
           )}
@@ -238,10 +239,7 @@ export default function TableKeyValue2({
                   ) : r.type === "number" ? (
                     readonly ? (
                       <div className={styles.readonlyValue}>
-                        {String(r.value)}{" "}
-                        {r.unit ? (
-                          <span className={styles.unit}>{r.unit}</span>
-                        ) : null}
+                        {String(r.value)}
                       </div>
                     ) : (
                       <div className={styles.fieldInline}>
@@ -261,9 +259,6 @@ export default function TableKeyValue2({
                           containerClassName={styles.inputContainer}
                           inputClassName={styles.inputField}
                         />
-                        {r.unit && (
-                          <span className={styles.unit}>{r.unit}</span>
-                        )}
                       </div>
                     )
                   ) : r.type === "multiline" ? (
@@ -304,28 +299,34 @@ export default function TableKeyValue2({
                       {String(r.value) || "—"}
                     </div>
                   ) : (
-                    <Input
-                      label="Valore"
-                      hideLabel
-                      name={`txt-${rowKey}`}
-                      type="text"
-                      value={String(r.value)}
-                      placeholder={r.placeholder}
-                      onChange={(e) =>
-                        handleValue(
-                          rowKey,
-                          (e.target as HTMLInputElement).value
-                        )
-                      }
-                      size="sm"
-                      containerClassName={styles.inputContainer}
-                      inputClassName={styles.inputField}
-                    />
+                    <div className={styles.fieldInline}>
+                      <Input
+                        label="Valore"
+                        hideLabel
+                        name={`txt-${rowKey}`}
+                        type="text"
+                        value={String(r.value)}
+                        placeholder={r.placeholder}
+                        onChange={(e) =>
+                          handleValue(
+                            rowKey,
+                            (e.target as HTMLInputElement).value
+                          )
+                        }
+                        size="sm"
+                        containerClassName={styles.inputContainer}
+                        inputClassName={styles.inputField}
+                      />
+                    </div>
                   )}
-
                   {errorMsg && !readonly && (
                     <div className={styles.errorMsg}>{errorMsg}</div>
                   )}
+                </div>
+
+                {/* UNIT */}
+                <div className={styles.colUnit}>
+                  {r.unit ? <span className={styles.unit}>{r.unit}</span> : "—"}
                 </div>
 
                 {/* ACTIONS */}

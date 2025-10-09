@@ -1,0 +1,307 @@
+/* 🍞 Toast Styles - Sistema completo di notifiche */
+
+/* ========================================
+   CONTAINER - Posizionamento toast
+   ======================================== */
+.kgn-toast-container {
+  position: fixed;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  pointer-events: none;
+  max-height: 100vh;
+  overflow: hidden;
+
+  /* Top positions */
+  &--top-left {
+    top: 0;
+    left: 0;
+  }
+
+  &--top-center {
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  &--top-right {
+    top: 0;
+    right: 0;
+  }
+
+  /* Bottom positions */
+  &--bottom-left {
+    bottom: 0;
+    left: 0;
+    flex-direction: column-reverse;
+  }
+
+  &--bottom-center {
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    flex-direction: column-reverse;
+  }
+
+  &--bottom-right {
+    bottom: 0;
+    right: 0;
+    flex-direction: column-reverse;
+  }
+}
+
+/* ========================================
+   TOAST - Singola notifica
+   ======================================== */
+.kgn-toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 300px;
+  max-width: 500px;
+  padding: 16px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  pointer-events: all;
+  cursor: default;
+  border-left: 4px solid;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Mobile responsive */
+  @media (max-width: 640px) {
+    min-width: calc(100vw - 40px);
+    max-width: calc(100vw - 40px);
+  }
+
+  /* Icon */
+  &__icon {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 50%;
+    color: white;
+  }
+
+  /* Content */
+  &__content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__title {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 4px;
+    color: #1f2937;
+  }
+
+  &__message {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #4b5563;
+    word-wrap: break-word;
+  }
+
+  /* Close button */
+  &__close {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    padding: 0;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #4b5563;
+    }
+
+    &:focus {
+      outline: 2px solid currentColor;
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
+  }
+
+  /* ========================================
+     VARIANTS - Success, Error, Warning, Info
+     ======================================== */
+  &--success {
+    border-left-color: #10b981;
+
+    .kgn-toast__icon {
+      background: #10b981;
+    }
+  }
+
+  &--error {
+    border-left-color: #ef4444;
+
+    .kgn-toast__icon {
+      background: #ef4444;
+    }
+  }
+
+  &--warning {
+    border-left-color: #f59e0b;
+
+    .kgn-toast__icon {
+      background: #f59e0b;
+    }
+  }
+
+  &--info {
+    border-left-color: #3b82f6;
+
+    .kgn-toast__icon {
+      background: #3b82f6;
+    }
+  }
+
+  /* ========================================
+     ANIMATIONS - Entrance & Exit
+     ======================================== */
+  &--entering {
+    animation: kgn-toast-slide-in 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &--exiting {
+    animation: kgn-toast-slide-out 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+/* Animations per posizioni top */
+.kgn-toast-container--top-left .kgn-toast--entering,
+.kgn-toast-container--top-center .kgn-toast--entering,
+.kgn-toast-container--top-right .kgn-toast--entering {
+  animation: kgn-toast-slide-in-top 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.kgn-toast-container--top-left .kgn-toast--exiting,
+.kgn-toast-container--top-center .kgn-toast--exiting,
+.kgn-toast-container--top-right .kgn-toast--exiting {
+  animation: kgn-toast-slide-out-top 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Animations per posizioni bottom */
+.kgn-toast-container--bottom-left .kgn-toast--entering,
+.kgn-toast-container--bottom-center .kgn-toast--entering,
+.kgn-toast-container--bottom-right .kgn-toast--entering {
+  animation: kgn-toast-slide-in-bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.kgn-toast-container--bottom-left .kgn-toast--exiting,
+.kgn-toast-container--bottom-center .kgn-toast--exiting,
+.kgn-toast-container--bottom-right .kgn-toast--exiting {
+  animation: kgn-toast-slide-out-bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ========================================
+   KEYFRAMES
+   ======================================== */
+@keyframes kgn-toast-slide-in-top {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes kgn-toast-slide-out-top {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes kgn-toast-slide-in-bottom {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes kgn-toast-slide-out-bottom {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes kgn-toast-slide-in {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes kgn-toast-slide-out {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+}
+
+/* ========================================
+   DARK MODE (Opzionale)
+   ======================================== */
+@media (prefers-color-scheme: dark) {
+  .kgn-toast {
+    background: #1f2937;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+
+    &__title {
+      color: #f9fafb;
+    }
+
+    &__message {
+      color: #d1d5db;
+    }
+
+    &__close {
+      color: #9ca3af;
+
+      &:hover {
+        color: #f9fafb;
+      }
+    }
+  }
+}

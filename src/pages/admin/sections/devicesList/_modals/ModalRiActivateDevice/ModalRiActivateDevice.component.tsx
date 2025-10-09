@@ -24,7 +24,7 @@ export const ModalRiActiveDevice: React.FC<Props> = ({
   const handleConfirm = async () => {
     // payload per “riattiva”
     const payload: any = {
-      status_Machine_Block: 0,
+      status_PULSANTE_RESET_MACCHINA_D_75_3_2: 1,
       // se il backend richiede un identificatore del device, sblocca uno di questi:
       // device_id: device.id,
       // id: device.id,
@@ -32,7 +32,6 @@ export const ModalRiActiveDevice: React.FC<Props> = ({
 
     await writePlc(payload).unwrap();
 
-    // dopo il POST, rinfresca tutto tramite callback passata dalla pagina
     if (onConfirm) await onConfirm(device);
   };
 

@@ -6,12 +6,17 @@ import type {
   PlcResponse,
   PlcWriteRequest,
   PlcWriteResponse,
+  PlcIo,
 } from "./plc.types";
 import { createCrudEndpoints } from "@root/pages/admin/core/store/api.factory";
 
 export const plcApi = apiSlice.injectEndpoints({
-  endpoints: (builder) =>
-    createCrudEndpoints<PlcItem, PlcQueryParams, PlcResponse>(builder, {
+  endpoints: (builder) => {
+    const crudEndpoints = createCrudEndpoints<
+      PlcItem,
+      PlcQueryParams,
+      PlcResponse
+    >(builder, {
       entity: "Plc",
       baseUrl: "plc/",
       idTag: "Plc",
@@ -26,7 +31,14 @@ export const plcApi = apiSlice.injectEndpoints({
         }
         return res as PlcResponse;
       },
-    }),
+    });
+    return {
+      ...crudEndpoints,
+      getPlcIo: builder.query<PlcIo, number>({
+        query: (id) => `plcio/${id}/`,
+      }),
+    };
+  },
   overrideExisting: false,
 });
 
@@ -40,7 +52,6 @@ export const plcWriteApi = apiSlice.injectEndpoints({
         body,
       }),
       invalidatesTags: [{ type: "LIST" as const, id: "LIST" }],
-      // Ottimistic update opzionale
       async onQueryStarted(args, { queryFulfilled }) {
         console.log("PLC Write command sent:", args);
 
@@ -65,7 +76,8 @@ export const {
   useDeletePlcMutation,
   useSearchPlcQuery, // presente solo se enableSearch=true
   useGetPlcStatsQuery, // presente solo se enableStats=true
-} = plcApi;
+  useGetPlcIoQuery,
+} = plcApi as any;
 
 // ✅ Hook per PLC Write dal secondo API slice
 export const { useWritePlcMutation } = plcWriteApi;

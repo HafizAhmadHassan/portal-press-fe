@@ -44,8 +44,12 @@ export function useInfiniteDevices({
 
   // reset quando cambia la key/filtri "scopanti"
   const prevKeyRef = useRef<string>("");
+  // Memoize filters to ensure stability
+  const stringifiedFilters = useMemo(() => JSON.stringify(filters), [filters]);
+  const memoizedFilters = useMemo(() => filters, [stringifiedFilters]);
+
   useEffect(() => {
-    const currentKey = key ?? JSON.stringify(filters);
+    const currentKey = key ?? stringifiedFilters;
 
     if (currentKey !== prevKeyRef.current) {
       prevKeyRef.current = currentKey;
@@ -54,18 +58,18 @@ export function useInfiniteDevices({
       setAllDevices([]);
       setPage(1);
     }
-  }, [key, filters]);
+  }, [key, stringifiedFilters]);
 
   // query params per la pagina corrente
-  const queryParams: any = useMemo(
+  const queryParams: Partial<any> = useMemo(
     () => ({
-      ...filters,
+      ...memoizedFilters,
       sortBy,
       sortOrder,
       page,
       page_size: pageSize,
     }),
-    [filters, sortBy, sortOrder, page, pageSize]
+    [memoizedFilters, sortBy, sortOrder, page, pageSize]
   );
 
   const {
