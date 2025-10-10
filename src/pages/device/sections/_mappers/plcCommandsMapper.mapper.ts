@@ -145,14 +145,9 @@ export function determineOperation(currentValue: any): "0" | "1" {
 export function getMachineId(plcItem: PlcItem | undefined): string {
   if (!plcItem) return "UNKNOWN";
 
+  console.log("[PCL ITEM] data:", plcItem);
   // Prova vari campi dove potrebbe essere il machine_id
-  const possibleIds = [
-    plcItem.plc_status?.status_CODICE_GPS,
-    plcItem.plc_data?.machine_id,
-    plcItem.plc_data?.codice,
-    plcItem.plc_status?.machine_name,
-    `MCH${plcItem.plc_data?.id?.toString().padStart(3, "0")}`, // MCH001, MCH002, etc.
-  ];
+  const possibleIds = [plcItem.plc_data?.id];
 
   const machineId = possibleIds.find((id) => id && String(id).trim() !== "");
   return machineId ? String(machineId) : "UNKNOWN";

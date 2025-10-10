@@ -24,7 +24,7 @@ export const DevicesBox: React.FC<DevicesBoxProps> = ({
   const navigate = useNavigate();
 
   const isActive = device.status === 1;
-  const isBlocked = device.status_Machine_Blocked;
+  const isBlocked = device.status_READY_D75_3_7 === false;
   const [createTicket, { isLoading: isCreating }] = useCreateTicketMutation();
 
   // Helper functions
@@ -108,7 +108,7 @@ export const DevicesBox: React.FC<DevicesBoxProps> = ({
 
       <DevicesBoxFooter
         device={device}
-        isActive={isActive}
+        isActive={!isBlocked}
         isCreating={isCreating}
         onGoToPLC={handleGoToPLC}
         onTicketSave={handleTicketSave}
