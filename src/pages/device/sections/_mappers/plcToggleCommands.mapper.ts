@@ -5,6 +5,20 @@ import {
 } from "./plcCommandsMapper.mapper";
 
 /**
+ * Individual command definition for separate buttons
+ */
+export interface PlcIndividualCommand {
+  /** Unique id for UI component */
+  id: string;
+  /** Display label */
+  label: string;
+  /** Command key to execute */
+  commandKey: string;
+  /** Optional custom status translator */
+  statusMapper?: (value: any) => string;
+}
+
+/**
  * Logical toggle groups merge two legacy commands (ex open-door/close-door) into a single UI concept.
  */
 export interface PlcToggleGroup {
@@ -21,134 +35,131 @@ export interface PlcToggleGroup {
 }
 
 /**
- * List of logical toggle groups. Each group merges two low-level PLC command keys into
- * a higher level semantic UI switch. Add future pairs here (es: manutenzione on/off if ever
- * becomes split) without touching the rest of the UI.
+ * Individual commands - separate buttons for each action
  */
-export const TOGGLE_GROUPS: PlcToggleGroup[] = [
+export const INDIVIDUAL_COMMANDS: PlcIndividualCommand[] = [
+  // Serranda - separated
   {
-    id: "door",
-    label: "Serranda",
-    onKey: "open-door",
-    offKey: "close-door",
-    statusMapper: (active) =>
-      active === undefined
-        ? "Stato serranda sconosciuto"
-        : active
-        ? "Serranda aperta"
-        : "Serranda chiusa",
+    id: "open-door",
+    label: "Apri Serranda",
+    commandKey: "open-door",
+    statusMapper: (value) =>
+      value ? "Apertura in corso..." : "Pronto ad aprire",
   },
   {
-    id: "list",
-    label: "Lista",
-    onKey: "open-list",
-    offKey: "close-list",
-    statusMapper: (active) =>
-      active === undefined
-        ? "Stato lista sconosciuto"
-        : active
-        ? "Lista aperta"
-        : "Lista chiusa",
+    id: "close-door",
+    label: "Chiudi Serranda",
+    commandKey: "close-door",
+    statusMapper: (value) =>
+      value ? "Chiusura in corso..." : "Pronto a chiudere",
   },
-  // Self toggle groups for mono-comandi: usiamo lo stesso key per on/off (il back-end li interpreta come flip)
+  // Lista - separated
   {
-    id: "press",
-    label: "Pressa",
-    onKey: "press-forward",
-    offKey: "press-backward",
-    statusMapper: (a) =>
-      a === undefined
-        ? "Stato pressa sconosciuto"
-        : a
-        ? "Movimento avanti"
-        : "Movimento indietro",
+    id: "open-list",
+    label: "Apri Lista",
+    commandKey: "open-list",
+    statusMapper: (value) =>
+      value ? "Apertura lista..." : "Pronto ad aprire lista",
   },
+  {
+    id: "close-list",
+    label: "Chiudi Lista",
+    commandKey: "close-list",
+    statusMapper: (value) =>
+      value ? "Chiusura lista..." : "Pronto a chiudere lista",
+  },
+  // Pressa - separated
+  {
+    id: "press-forward",
+    label: "Pressa Avanti",
+    commandKey: "press-forward",
+    statusMapper: (value) =>
+      value ? "Movimento avanti..." : "Pronto movimento avanti",
+  },
+  {
+    id: "press-backward",
+    label: "Pressa Indietro",
+    commandKey: "press-backward",
+    statusMapper: (value) =>
+      value ? "Movimento indietro..." : "Pronto movimento indietro",
+  },
+  // Single action commands
   {
     id: "basket-download",
     label: "Scarica Cesta",
-    onKey: "basket-download",
-    offKey: "basket-download",
-    statusMapper: (a) =>
-      a === undefined
-        ? "Stato scarico sconosciuto"
-        : a
-        ? "Scarico attivo"
-        : "Scarico inattivo",
+    commandKey: "basket-download",
+    statusMapper: (value) => (value ? "Scarico attivo" : "Scarico inattivo"),
   },
   {
     id: "basket-rotate",
     label: "Ruota Cesta",
-    onKey: "basket-rotate",
-    offKey: "basket-rotate",
-    statusMapper: (a) =>
-      a === undefined
-        ? "Stato rotazione sconosciuto"
-        : a
-        ? "Rotazione attiva"
-        : "Rotazione inattiva",
+    commandKey: "basket-rotate",
+    statusMapper: (value) =>
+      value ? "Rotazione attiva" : "Rotazione inattiva",
   },
   {
     id: "reset-weight",
     label: "Azzera Peso",
-    onKey: "reset-weight",
-    offKey: "reset-weight",
-    statusMapper: (a) =>
-      a === undefined
-        ? "Stato azzeramento sconosciuto"
-        : a
-        ? "Peso azzerato"
-        : "Peso non azzerato",
+    commandKey: "reset-weight",
+    statusMapper: (value) => (value ? "Peso azzerato" : "Peso non azzerato"),
   },
   {
     id: "tare",
     label: "Tara",
-    onKey: "tare",
-    offKey: "tare",
-    statusMapper: (a) =>
-      a === undefined
-        ? "Stato tara sconosciuto"
-        : a
-        ? "Tara eseguita"
-        : "Tara non eseguita",
+    commandKey: "tare",
+    statusMapper: (value) => (value ? "Tara eseguita" : "Tara non eseguita"),
   },
   {
     id: "send-data",
     label: "Invia Dati",
-    onKey: "send-data",
-    offKey: "send-data",
-    statusMapper: (a) =>
-      a === undefined
-        ? "Stato invio sconosciuto"
-        : a
-        ? "Dati inviati"
-        : "Pronto invio dati",
+    commandKey: "send-data",
+    statusMapper: (value) => (value ? "Dati inviati" : "Pronto invio dati"),
   },
   {
     id: "maintenance",
     label: "Manutenzione",
-    onKey: "maintenance",
-    offKey: "maintenance",
-    statusMapper: (a) =>
-      a === undefined
-        ? "Stato manutenzione sconosciuto"
-        : a
-        ? "In manutenzione"
-        : "Operativo",
+    commandKey: "maintenance",
+    statusMapper: (value) => (value ? "In manutenzione" : "Operativo"),
   },
   {
     id: "restart",
     label: "Riavvia PLC",
-    onKey: "restart",
-    offKey: "restart",
-    statusMapper: (a) =>
-      a === undefined
-        ? "Stato riavvio sconosciuto"
-        : a
-        ? "Riavvio effettuato"
-        : "Pronto al riavvio",
+    commandKey: "restart",
+    statusMapper: (value) =>
+      value ? "Riavvio effettuato" : "Pronto al riavvio",
   },
 ];
 
+export interface IndividualCommandState {
+  id: string;
+  label: string;
+  commandKey: string;
+  currentValue: unknown;
+  statusDescription: string;
+}
+
+/**
+ * Compute individual command states from PlcItem
+ */
+export function getIndividualCommandsState(
+  plcItem: PlcItem | undefined
+): IndividualCommandState[] {
+  return INDIVIDUAL_COMMANDS.map((cmd) => {
+    const currentValue = getCommandCurrentValue(plcItem, cmd.commandKey);
+    const statusDescription = cmd.statusMapper
+      ? cmd.statusMapper(currentValue)
+      : getCommandStatusDescription(plcItem, cmd.commandKey);
+    return {
+      id: cmd.id,
+      label: cmd.label,
+      commandKey: cmd.commandKey,
+      currentValue,
+      statusDescription,
+    };
+  });
+}
+
+// Keep backward compatibility - deprecated, use getIndividualCommandsState instead
 export interface ToggleComputedState {
   id: string;
   label: string;
@@ -159,26 +170,19 @@ export interface ToggleComputedState {
 }
 
 /**
- * Compute toggle descriptors from PlcItem. It inspects only the "on" command current value.
- * If that value is truthy we consider toggle active.
+ * @deprecated Use getIndividualCommandsState instead
  */
 export function getToggleGroupsState(
   plcItem: PlcItem | undefined
 ): ToggleComputedState[] {
-  return TOGGLE_GROUPS.map((g) => {
-    const currentOnValue = getCommandCurrentValue(plcItem, g.onKey);
-    const isActive =
-      currentOnValue === undefined ? undefined : Boolean(currentOnValue);
-    const statusDescription = g.statusMapper
-      ? g.statusMapper(isActive)
-      : getCommandStatusDescription(plcItem, g.onKey);
-    return {
-      id: g.id,
-      label: g.label,
-      isActive,
-      onCommandKey: g.onKey,
-      offCommandKey: g.offKey,
-      statusDescription,
-    };
-  });
+  // Convert individual commands to old format for backward compatibility
+  const individualStates = getIndividualCommandsState(plcItem);
+  return individualStates.map((cmd) => ({
+    id: cmd.id,
+    label: cmd.label,
+    isActive: Boolean(cmd.currentValue),
+    onCommandKey: cmd.commandKey,
+    offCommandKey: cmd.commandKey, // Same key for both actions
+    statusDescription: cmd.statusDescription,
+  }));
 }

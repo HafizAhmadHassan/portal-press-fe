@@ -8,7 +8,7 @@ import EmptyState from "./_components/DeviceEmptyState/DeviceEmptyState.componen
 import DeviceStatus from "./_components/DeviceStatus/Devicestatus.component";
 import { useGetPlcByIdQuery } from "@store_device/plc/plc.api";
 import type { PlcItem } from "@store_device/plc/plc.types";
-import { getToggleGroupsState } from "../_mappers/plcToggleCommands.mapper";
+import { getIndividualCommandsState } from "../_mappers/plcToggleCommands.mapper";
 import { ToggleCommandCard } from "./_components/DeviceCommands/_components/ToggleCommandCard/ToggleCommandCard.component";
 import cmdStyles from "./_components/DeviceCommands/DeviceCommands.module.scss";
 import { RefreshCw, AlertTriangle } from "lucide-react";
@@ -80,9 +80,9 @@ export default function DeviceOverview() {
   }, [plcDetail]);
 
   // Converte i comandi PLC in formato CommandItem per il componente UI
-  // Compute toggle groups state (tutti i comandi ora espressi come toggle)
-  const toggleGroups = useMemo(
-    () => getToggleGroupsState(plcDetail),
+  // Compute individual commands state (comandi separati)
+  const individualCommands = useMemo(
+    () => getIndividualCommandsState(plcDetail),
     [plcDetail]
   );
 
@@ -135,7 +135,7 @@ export default function DeviceOverview() {
       />
 
       <div className={layoutStyles.twoCol}>
-        {toggleGroups.length > 0 && (
+        {individualCommands.length > 0 && (
           <div
             className={[cmdStyles.card, layoutStyles.commandsCard].join(" ")}
           >
@@ -152,23 +152,20 @@ export default function DeviceOverview() {
             <div
               className={[cmdStyles.cmdGrid, layoutStyles.scrollArea].join(" ")}
             >
-              {toggleGroups.map((tg) => {
-                const isExecuting =
-                  isCommandExecuting(tg.onCommandKey) ||
-                  (tg.offCommandKey !== tg.onCommandKey &&
-                    isCommandExecuting(tg.offCommandKey));
+              {individualCommands.map((cmd) => {
+                const isExecuting = isCommandExecuting(cmd.commandKey);
                 return (
                   <ToggleCommandCard
                     compact
-                    key={tg.id}
+                    key={cmd.id}
                     descriptor={{
-                      id: tg.id,
-                      label: tg.label,
-                      isActive: tg.isActive,
+                      id: cmd.id,
+                      label: cmd.label,
+                      isActive: Boolean(cmd.currentValue),
                       isExecuting,
-                      onCommandKey: tg.onCommandKey,
-                      offCommandKey: tg.offCommandKey,
-                      statusDescription: tg.statusDescription,
+                      onCommandKey: cmd.commandKey,
+                      offCommandKey: cmd.commandKey, // Same key for individual commands
+                      statusDescription: cmd.statusDescription,
                     }}
                     execute={async (k) => {
                       await handleCommand(k);
@@ -186,30 +183,3 @@ export default function DeviceOverview() {
     </section>
   );
 }
-
-/**
-
-
-#!/bin/bash
-
-TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-BACKUP_DIR="/tmp/backups"
-DB_NAME="production_db"
-CLOUD_BUCKET="s3://company-backups/production"
-
-# Backup database
-pg_dump $DB_NAME | gzip > $BACKUP_DIR/db_$TIMESTAMP.sql.gz
-
-# Crittografia
-gpg --encrypt --recipient backup@company.com $BACKUP_DIR/db_$TIMESTAMP.sql.gz
-
-# Upload su cloud
-aws s3 cp $BACKUP_DIR/db_$TIMESTAMP.sql.gz.gpg $CLOUD_BUCKET/
-
-# Pulizia locale
-find $BACKUP_DIR -name "*.sql.gz*" -mtime +7 -delete
-
-
-
-
-*/

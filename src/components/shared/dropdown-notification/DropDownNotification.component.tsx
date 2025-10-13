@@ -16,6 +16,8 @@ export interface EmailLog {
   preview?: string;
   unread?: boolean;
   severity?: LogSeverity;
+  address?: string;
+  municipality?: string;
 }
 
 type Props = {
@@ -96,7 +98,9 @@ export function DropDownNotification({
     if (!query || disableLocalFilter) return logs;
     const q = query.toLowerCase();
     return logs.filter((l) =>
-      [l.subject, l.preview].some((s) => (s || "").toLowerCase().includes(q))
+      [l.subject, l.preview, l.gps?.address, l.gps?.municipility].some((s) =>
+        (s || "").toLowerCase().includes(q)
+      )
     );
   }, [logs, query, disableLocalFilter]);
 
@@ -233,6 +237,13 @@ export function DropDownNotification({
                   {log.preview ? (
                     <div className={styles.preview}>{log.preview}</div>
                   ) : null}
+                  {
+                    <div className={styles.location}>
+                      {log?.address && <span>{log.address}</span>}
+                      {log?.address && log?.municipality && <span>, </span>}
+                      {log?.municipality && <span>{log.municipality}</span>}
+                    </div>
+                  }
                 </div>
                 <div className={styles.time} aria-label="timestamp">
                   {formatTime(log.timestamp)}

@@ -112,6 +112,8 @@ export default function UserActions({
         subject: `${item?.name_alarm} (${item?.code_alarm})`,
         preview: `${item?.machine_ip} • ${item?.customer_Name}`,
         timestamp: item?.date_and_time,
+        address: item?.gps.address,
+        municipality: item?.gps.municipility,
         unread,
         severity: computeSeverity(item?.name_alarm, item?.code_alarm),
       };
