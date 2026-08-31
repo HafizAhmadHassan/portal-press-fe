@@ -1,3 +1,22 @@
-# Portal Press (Frontend)
+# Portal Press — Frontend
 
-React + TypeScript frontend for the Portal Press application, built with Vite. A client-side SPA that talks to a backend API and is configured for deployment on AWS S3 + CloudFront. Setup and environment instructions are in the README (Italian).
+React + TypeScript frontend for the **Portal Press** content/press application, built with **Vite**.
+
+## Overview
+
+A client-side single-page application that talks to a backend API. The project is configured for deployment to **AWS S3 + CloudFront** and includes setup / environment instructions (in Italian) in the README.
+
+## Features
+
+- React + TypeScript SPA
+- Vite build tooling
+- Backend API integration
+- AWS S3 + CloudFront deployment config
+
+## Tech Stack
+
+React, TypeScript, Vite, AWS.
+
+## Status
+
+Professional / freelance frontend project.
